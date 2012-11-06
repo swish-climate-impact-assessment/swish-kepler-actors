@@ -38,6 +38,7 @@ namespace Swish.Tests
 		{
 			try
 			{
+				new MergeAdapterTests().RemoveMergeColoumn();
 				new MergeAdapterTests().MergeSorted();
 				new StataFunctionsTests().StataBatchMode();
 				new ArgumentFunctionsTests().GetSwitch();
@@ -55,20 +56,11 @@ namespace Swish.Tests
 
 
 			/// 
-			/// to drop variables 
-			/// drop varlist
-			/// 
 			/// to set the current working directory
 			/// cd "C:\Users\kurt\Documents"
 			/// 
 			/// "generate creates a new variable 
 			/// generate gnppc2 = gnppc^ 2
-			/// 
-			/// 
-			/// To run Stata in batch mode us 
-			///    "C:\Program Files\Stata12\StataMP" /e do c:\data\bigjob.do
-			/// a log will be saved in the working directory
-			/// the log will have the same name as the do file eg bigjob.log
 			/// 
 			/// 
 			/// 

@@ -88,6 +88,7 @@ namespace Swish.Tests
 			return fileName;
 		}
 
+		public const string MergeVariable = "head4";
 		internal static void GenerateMergeInputFiles(out string inputFileName1, out string inputFileName2)
 		{
 			inputFileName1 = Path.GetTempFileName();
@@ -166,6 +167,8 @@ namespace Swish.Tests
 
 			File.WriteAllLines(inputFileName2, lines.ToArray());
 		}
+
+
 
 	}
 }

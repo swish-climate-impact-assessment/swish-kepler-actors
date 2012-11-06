@@ -10,6 +10,7 @@ namespace Swish
 	public static class StataFunctions
 	{
 		public const string BatchArgument = "/e do ";
+		public const string MergeColumnName = "_merge";
 
 		public static void RunScript(List<string> lines, bool useGui)
 		{
@@ -169,7 +170,10 @@ namespace Swish
 			lines.Add("save \"" + intermediateFileName + "\"");
 			lines.Add("clear");
 			lines.Add("insheet using \"" + input1FileName + "\"");
+			 line = SortCommand(variableNames);
+			lines.Add(line);
 			lines.Add("merge " + VariableList(variableNames) + " using \"" + intermediateFileName + "\"");
+			lines.Add("drop " + MergeColumnName);
 			lines.Add("outsheet using \"" + doOutputFileName + "\", comma");
 
 			StataFunctions.RunScript(lines, false);
@@ -220,6 +224,7 @@ namespace Swish
 
 			return line;
 		}
+
 
 	}
 }

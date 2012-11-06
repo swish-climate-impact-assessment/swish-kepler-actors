@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentFunctions.cs" />
+    <Compile Include="CsvFunctions.cs" />
+    <Compile Include="Csv.cs" />
     <Compile Include="StringIO.cs" />
     <Compile Include="SwishFunctions.cs" />
     <Compile Include="StataFunctions.cs" />
