@@ -23,12 +23,59 @@ namespace Swish
 			{
 				return table;
 			}
-			table.Headder = _table[0];
+			table.Header = _table[0];
 			_table.RemoveAt(0);
 			table.Records = _table;
 
 			return table;
 		}
 
+		public static bool Equal(Csv left, Csv right)
+		{
+			if (left  == null)
+			{
+				if (right == null)
+				{
+					return true;
+				}
+				return false;
+			}
+			if (right == null)
+			{
+				return false;
+			}
+			if (left.Header.Count != right.Header.Count || left.Records.Count != right.Records.Count)
+			{
+				return false;
+			}
+
+			for (int headerIndex = 0;  headerIndex < left.Header.Count;  headerIndex++)
+			{
+				string leftName = left.Header[headerIndex];
+				string rightName = right.Header[headerIndex];
+				if (leftName != rightName)
+				{
+					return false;
+				}
+			}
+
+			for (int recordIndex = 0; recordIndex < left.Records.Count; recordIndex++)
+			{
+				List<string> leftRecord = left.Records[recordIndex];
+				List<string> rightRecord = right.Records[recordIndex];
+				for (int valueIndex = 0; valueIndex < leftRecord.Count; valueIndex++)
+				{
+
+					string leftItem = left.Header[valueIndex];
+					string rightItem = right.Header[valueIndex];
+					if (leftItem != rightItem)
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
 	}
 }

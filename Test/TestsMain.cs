@@ -38,6 +38,10 @@ namespace Swish.Tests
 		{
 			try
 			{
+				//new StataFunctionsTests().FailUnknownFileFormat();
+				new StataFunctionsTests().SaveDynamicFileFormat();
+				new StataFunctionsTests().LoadDynamicFileFormat();
+				new StataFunctionsTests().StataFileFormat();
 				new MergeAdapterTests().RemoveMergeColoumn();
 				new MergeAdapterTests().MergeSorted();
 				new StataFunctionsTests().StataBatchMode();
@@ -46,8 +50,6 @@ namespace Swish.Tests
 				new StringIOTests().TryReadStringEscapedCharacters();
 				new ArgumentFunctionsTests().ArgumentInQuotes();
 				new CommandAdapterTests().CommandScript();
-
-
 
 			} catch (Exception error)
 			{

@@ -28,7 +28,7 @@ namespace Swish.CollapseAdapter
 					operation = "mean";
 				}
 
-				string doOutputFileName = Path.GetTempFileName();
+				string doOutputFileName = Path.GetTempFileName() + ".dta";
 				if (File.Exists(doOutputFileName))
 				{
 					// Stata does not overwrite files
@@ -37,13 +37,15 @@ namespace Swish.CollapseAdapter
 
 				List<string> lines = new List<string>();
 				lines.Add("clear");
-				lines.Add("insheet using \"" + inputFileName + "\"");
+				string line = StataFunctions.LoadFileCommand(inputFileName);
+				lines.Add(line);
 
 				// collapse (mean) mean=head4 (median) medium=head4, by(head6)
 
 				lines.Add("collapse " + "(" + operation + ") " + variable + "_" + operation + "=" + variable);
 
-				lines.Add("outsheet using \"" + doOutputFileName + "\", comma");
+				line = StataFunctions.SaveFileCommand(doOutputFileName);
+				lines.Add(line);
 
 				StataFunctions.RunScript(lines, false);
 

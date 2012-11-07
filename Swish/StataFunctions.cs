@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
 using System.Diagnostics;
-using System.Windows.Forms;
+using System.IO;
 
 namespace Swish
 {
@@ -14,7 +12,7 @@ namespace Swish
 
 		public static void RunScript(List<string> lines, bool useGui)
 		{
-			string doFileName = Path.GetTempFileName();
+			string doFileName = Path.GetTempFileName() + ".do";
 			File.WriteAllLines(doFileName, lines.ToArray());
 
 			if (!useGui)
@@ -147,14 +145,14 @@ namespace Swish
 				throw new Exception("Cannot merge the same tables");
 			}
 
-			string doOutputFileName = Path.GetTempFileName();
+			string doOutputFileName = Path.GetTempFileName() + ".csv";
 			if (File.Exists(doOutputFileName))
 			{
 				// Stata does not overwrite files
 				File.Delete(doOutputFileName);
 			}
 
-			string intermediateFileName = Path.GetTempFileName();
+			string intermediateFileName = Path.GetTempFileName() + ".dta";
 			if (File.Exists(intermediateFileName))
 			{
 				File.Delete(intermediateFileName);
@@ -164,17 +162,25 @@ namespace Swish
 			//  merge [varlist] using filename [filename ...] [, options]
 			List<string> lines = new List<string>();
 			lines.Add("clear");
-			lines.Add("insheet using \"" + input2FileName + "\"");
-			string line = SortCommand(variableNames);
+
+			string line = StataFunctions.LoadFileCommand(input2FileName);
 			lines.Add(line);
-			lines.Add("save \"" + intermediateFileName + "\"");
+
+			line = SortCommand(variableNames);
+			lines.Add(line);
+			line = StataFunctions.SaveFileCommand(intermediateFileName);
+			lines.Add(line);
+
 			lines.Add("clear");
-			lines.Add("insheet using \"" + input1FileName + "\"");
-			 line = SortCommand(variableNames);
+			line = StataFunctions.LoadFileCommand(input1FileName);
+			lines.Add(line);
+
+			line = SortCommand(variableNames);
 			lines.Add(line);
 			lines.Add("merge " + VariableList(variableNames) + " using \"" + intermediateFileName + "\"");
 			lines.Add("drop " + MergeColumnName);
-			lines.Add("outsheet using \"" + doOutputFileName + "\", comma");
+			line = StataFunctions.SaveFileCommand(doOutputFileName);
+			lines.Add(line);
 
 			StataFunctions.RunScript(lines, false);
 
@@ -225,7 +231,50 @@ namespace Swish
 			return line;
 		}
 
+		public static string SaveFileCommand(string fileName)
+		{
+			string extension = Path.GetExtension(fileName);
+			if (extension == ".csv")
+			{
+				return "outsheet using \"" + fileName + "\", comma";
+			}
+			return "save \"" + fileName + "\"";
+		}
 
+		public static string LoadFileCommand(string fileName)
+		{
+			string extension = Path.GetExtension(fileName);
+			if (extension == ".csv")
+			{
+				return "insheet using \"" + fileName + "\"";
+			}
+			return "use using \"" + fileName + "\"";
+		}
+
+
+		public static string ConvertToStataFormat(List<string> lines, string fileName)
+		{
+			string extension = Path.GetExtension(fileName);
+			if (extension.ToLower() == ".dta")
+			{
+				return fileName;
+			}
+
+			lines.Add("clear");
+			string line = StataFunctions.LoadFileCommand(fileName);
+			lines.Add(line);
+
+			string intermediateFileName = Path.GetTempFileName() + ".dta";
+			if (File.Exists(intermediateFileName))
+			{
+				File.Delete(intermediateFileName);
+			}
+
+			line = StataFunctions.SaveFileCommand(intermediateFileName);
+			lines.Add(line);
+
+			return intermediateFileName;
+		}
 	}
 }
 

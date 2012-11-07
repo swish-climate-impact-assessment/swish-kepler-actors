@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="ArgumentFunctionsTests.cs" />
     <Compile Include="CommandAdapterTests.cs" />
+    <Compile Include="TestFunctions.cs" />
     <Compile Include="LibraryTypes\CSharpCompiler.cs" />
     <Compile Include="MergeAdapterTests.cs" />
     <Compile Include="StataFunctionsTests.cs" />
@@ -63,6 +64,11 @@
       <Project>{EBB44164-34A5-434F-8EDB-6C0AC6F4BAE4}</Project>
       <Name>Swish</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\carsdata.dta">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

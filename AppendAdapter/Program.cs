@@ -33,41 +33,26 @@ namespace Swish.AppendAdapter
 					File.Delete(outputFileName);
 				}
 
-				string doOutputFileName = Path.GetTempFileName();
-				if (File.Exists(doOutputFileName))
-				{
-					// Stata does not overwrite files
-					File.Delete(doOutputFileName);
-				}
-
-				string intermediateFileName = Path.GetTempFileName();
-				if (File.Exists(intermediateFileName))
-				{
-					File.Delete(intermediateFileName);
-				}
-
 				List<string> lines = new List<string>();
+				string intermediateFileName = StataFunctions.ConvertToStataFormat(lines,input2FileName);
 				lines.Add("clear");
-				lines.Add("insheet using \"" + input2FileName + "\"");
-				lines.Add("save \"" + intermediateFileName + "\"");
-				lines.Add("clear");
-				lines.Add("insheet using \"" + input1FileName + "\"");
+				string line = StataFunctions.LoadFileCommand(input1FileName);
+				lines.Add(line);
 				lines.Add("append using \"" + intermediateFileName + "\"");
-				lines.Add("outsheet using \"" + doOutputFileName + "\", comma");
+				line = StataFunctions.SaveFileCommand(outputFileName);
+				lines.Add(line);
 
-				StataFunctions.RunScript(lines, false);
-
-				if (!File.Exists(doOutputFileName))
-				{
-					throw new Exception("Output file was not created");
-				}
-
-				/// move the output file
 				if (File.Exists(outputFileName))
 				{
 					File.Delete(outputFileName);
 				}
-				File.Move(doOutputFileName, outputFileName);
+
+				StataFunctions.RunScript(lines, false);
+
+				if (!File.Exists(outputFileName))
+				{
+					throw new Exception("Output file was not created");
+				}
 
 				/// delete all the files not needed
 				File.Delete(intermediateFileName);

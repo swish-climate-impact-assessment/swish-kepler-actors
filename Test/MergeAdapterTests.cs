@@ -17,7 +17,7 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2);
 
-			string outputFileName = Path.GetTempFileName();
+			string outputFileName = Path.GetTempFileName() + ".csv";
 			if (File.Exists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -59,7 +59,7 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2);
 
-			string outputFileName = Path.GetTempFileName();
+			string outputFileName = Path.GetTempFileName() + ".csv";
 			if (File.Exists(outputFileName))
 			{
 				File.Delete(outputFileName);

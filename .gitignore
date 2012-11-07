@@ -11,3 +11,4 @@ TestResults
 /SimpleInstaller/SwishBin/Swish.MergeAdapter.exe
 /SimpleInstaller/SwishBin/Swish.SortAdapter.exe
 /SimpleInstaller/SwishBin/Swish.dll
+/Test/*.user

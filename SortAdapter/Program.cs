@@ -30,38 +30,31 @@ namespace Swish.SortAdapter
 					File.Delete(outputFileName);
 				}
 
-				string doOutputFileName = Path.GetTempFileName();
-				if (File.Exists(doOutputFileName))
-				{
-					// Stata does not overwrite files
-					File.Delete(doOutputFileName);
-				}
-
 				/// create the do file
 				List<string> lines = new List<string>();
 				lines.Add("clear");
-				lines.Add("insheet using \"" + inputFileName + "\"");
+				string line = StataFunctions.LoadFileCommand(inputFileName);
+				lines.Add(line);
 
 				/// sort varlist, stable
 				/// add variables names
-				string line = StataFunctions.SortCommand(variableNames);
+				line = StataFunctions.SortCommand(variableNames);
 				lines.Add(line);
 
-				lines.Add("outsheet using \"" + doOutputFileName + "\", comma");
+				line = StataFunctions.SaveFileCommand(outputFileName);
+				lines.Add(line);
 
-				StataFunctions.RunScript(lines, false);
-
-				if (!File.Exists(doOutputFileName))
-				{
-					throw new Exception("Output file was not created");
-				}
-
-				/// move the output file
 				if (File.Exists(outputFileName))
 				{
 					File.Delete(outputFileName);
 				}
-				File.Move(doOutputFileName, outputFileName);
+
+				StataFunctions.RunScript(lines, false);
+
+				if (!File.Exists(outputFileName))
+				{
+					throw new Exception("Output file was not created");
+				}
 
 				Console.Write(outputFileName);
 				return 0;

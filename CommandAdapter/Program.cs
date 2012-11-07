@@ -30,28 +30,18 @@ namespace Swish.CommandAdapter
 					File.Delete(outputFileName);
 				}
 
-				string doOutputFileName = Path.GetTempFileName();
-				if (File.Exists(doOutputFileName))
-				{
-					// Stata does not overwrite files
-					File.Delete(doOutputFileName);
-				}
+				List<string> lines = CreateDoFile(inputFileName, outputFileName, command);
 
-				List<string> lines = CreateDoFile(inputFileName, doOutputFileName, command);
-
-				StataFunctions.RunScript(lines, false);
-
-				if (!File.Exists(doOutputFileName))
-				{
-					throw new Exception("Output file was not created");
-				}
-
-				/// move the output file
 				if (File.Exists(outputFileName))
 				{
 					File.Delete(outputFileName);
 				}
-				File.Move(doOutputFileName, outputFileName);
+				StataFunctions.RunScript(lines, false);
+
+				if (!File.Exists(outputFileName))
+				{
+					throw new Exception("Output file was not created");
+				}
 
 				Console.Write(outputFileName);
 				return 0;	
@@ -68,11 +58,13 @@ namespace Swish.CommandAdapter
 			/// create the do file
 			List<string> lines = new List<string>();
 			lines.Add("clear");
-			lines.Add("insheet using \"" + input + "\"");
+			string line = StataFunctions.LoadFileCommand(input);
+			lines.Add(line);
 
 			lines.Add(command);
 
-			lines.Add("outsheet using \"" + output + "\", comma");
+			 line = StataFunctions.SaveFileCommand(output);
+			lines.Add(line);
 			return lines;
 		}
 

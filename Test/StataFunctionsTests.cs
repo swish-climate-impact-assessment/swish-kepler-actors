@@ -15,7 +15,7 @@ namespace Swish.Tests
 
 			string inputFile = GenerateMeanInputFile();
 
-			string outputFile = Path.GetTempFileName();
+			string outputFile = Path.GetTempFileName() + ".csv";
 			if (File.Exists(outputFile))
 			{
 				File.Delete(outputFile);
@@ -23,11 +23,14 @@ namespace Swish.Tests
 
 			List<string> lines = new List<string>();
 			lines.Add("clear");
-			lines.Add("insheet using \"" + inputFile + "\"");
-			lines.Add("collapse (mean) head4_mean=head4");
-			lines.Add("outsheet using \"" + outputFile + "\", comma");
+			string line = StataFunctions.LoadFileCommand(inputFile);
+			lines.Add(line);
 
-			string doFileName = Path.GetTempFileName();
+			lines.Add("collapse (mean) head4_mean=head4");
+			line = StataFunctions.SaveFileCommand(outputFile);
+			lines.Add(line);
+
+			string doFileName = Path.GetTempFileName() + ".do";
 			File.WriteAllLines(doFileName, lines.ToArray());
 
 			string arguments = StataFunctions.BatchArgument + "\"" + doFileName + "\"";
@@ -47,7 +50,7 @@ namespace Swish.Tests
 
 		internal static string GenerateMeanInputFile()
 		{
-			string fileName = Path.GetTempFileName();
+			string fileName = Path.GetTempFileName() + ".csv";
 			if (File.Exists(fileName))
 			{
 				File.Delete(fileName);
@@ -91,7 +94,7 @@ namespace Swish.Tests
 		public const string MergeVariable = "head4";
 		internal static void GenerateMergeInputFiles(out string inputFileName1, out string inputFileName2)
 		{
-			inputFileName1 = Path.GetTempFileName();
+			inputFileName1 = Path.GetTempFileName() + ".csv";
 			if (File.Exists(inputFileName1))
 			{
 				File.Delete(inputFileName1);
@@ -129,7 +132,7 @@ namespace Swish.Tests
 
 			File.WriteAllLines(inputFileName1, lines.ToArray());
 
-			inputFileName2 = Path.GetTempFileName();
+			inputFileName2 = Path.GetTempFileName() + ".csv";
 			if (File.Exists(inputFileName2))
 			{
 				File.Delete(inputFileName2);
@@ -170,37 +173,167 @@ namespace Swish.Tests
 
 
 
+
+		internal void StataFileFormat()
+		{
+			/// This test verifies that scripts can be written using stata files as input
+			/// 
+
+			Csv expectedTable = CarData();
+
+			List<string> lines = new List<string>();
+			string line = StataFunctions.LoadFileCommand(CarsDataFileName);
+			lines.Add(line);
+
+			string outputFileName = Path.GetTempFileName() + ".csv";
+			if (File.Exists(outputFileName))
+			{
+				// Stata does not overwrite files
+				File.Delete(outputFileName);
+			}
+
+			line = StataFunctions.SaveFileCommand(outputFileName);
+			lines.Add(line);
+			StataFunctions.RunScript(lines, false);
+
+			if (!File.Exists(outputFileName))
+			{
+				throw new Exception("Output not created, script not run");
+			}
+
+			Csv table = CsvFunctions.Read(outputFileName);
+			if (!CsvFunctions.Equal(table, expectedTable))
+			{
+				throw new Exception("");
+			}
+		}
+
+		internal static string CarsDataFileName = TestFunctions.TestDataFileName("carsdata.dta");
+		private static Csv CarData()
+		{
+			Csv expectedTable = new Csv();
+			//List<List<string>> expectedTable = new List<List<string>>();
+
+			expectedTable.Header.Add("cars");
+			expectedTable.Header.Add("hhsize");
+			List<string> list = new List<string>();
+			list.Add("1");
+			list.Add("1");
+			expectedTable.Records.Add(list);
+			list = new List<string>();
+			list.Add("2");
+			list.Add("2");
+			expectedTable.Records.Add(list);
+			list = new List<string>();
+			list.Add("2");
+			list.Add("3");
+			expectedTable.Records.Add(list);
+			list = new List<string>();
+			list.Add("2");
+			list.Add("4");
+			expectedTable.Records.Add(list);
+			list = new List<string>();
+			list.Add("3");
+			list.Add("5");
+			expectedTable.Records.Add(list);
+			return expectedTable;
+		}
+
+
+		internal void LoadDynamicFileFormat()
+		{
+			string fileName = "stata.dta";
+			string line = StataFunctions.LoadFileCommand(fileName);
+
+			if (!line.StartsWith("use"))
+			{
+				throw new Exception("");
+			}
+
+			fileName = "text.csv";
+			line = StataFunctions.LoadFileCommand(fileName);
+
+			if (!line.StartsWith("insheet"))
+			{
+				throw new Exception("");
+			}
+		}
+
+		internal void SaveDynamicFileFormat()
+		{
+			string fileName = "stata.dta";
+			string line = StataFunctions.SaveFileCommand(fileName);
+
+			if (!line.StartsWith("save"))
+			{
+				throw new Exception("");
+			}
+
+			fileName = "text.csv";
+			line = StataFunctions.SaveFileCommand(fileName);
+
+			if (!line.StartsWith("outsheet"))
+			{
+				throw new Exception("");
+			}
+		}
+
+		internal void FailUnknownFileFormat()
+		{
+			throw new NotImplementedException();
+
+			/// this test verifies that the load and save functions only try to operate on file that it knows what to do with
+			/// 
+			/// on second thought I'm not sure if this is a great idea....
+			/// I can't think of any harm in letting it default to stata format
+			/// 
+			/// 
+			/// do I know of any other formats that I need to cover...
+			/// r,
+			/// excell,
+			/// 
+			/// 
+			/// 
+
+/*
+			..... 
+
+			string fileName = "stataFile.dta";
+			string line = StataFunctions.SaveFileCommand(fileName);
+
+			if (string.IsNullOrWhiteSpace(line))
+			{
+				throw new Exception();
+			}
+
+			string fileName = "noFormatFile";
+			string line = StataFunctions.SaveFileCommand(fileName);
+
+			if (string.IsNullOrWhiteSpace(line))
+			{
+				throw new Exception();
+			}
+
+			bool errorReceived;
+			try
+			{
+
+				string fileName = "fileOf.unknownFormat";
+				string line = StataFunctions.SaveFileCommand(fileName);
+
+				errorReceived = false;
+			} catch 
+			{
+				errorReceived = true;
+			}
+
+			if (!errorReceived)
+			{
+				throw new Exception();
+			}
+*/
+		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

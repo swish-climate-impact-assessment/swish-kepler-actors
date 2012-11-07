@@ -7,7 +7,7 @@ namespace Swish
 		private List<string> _headder = new List<string>();
 		private List<List<string>> _records = new List<List<string>>();
 
-		public List<string> Headder
+		public List<string> Header
 		{
 			get { return _headder; }
 			set
@@ -39,9 +39,9 @@ namespace Swish
 		public int ColumnIndex(string name)
 		{
 			int head4Index = -1;
-			for (int columnIndex = 0; columnIndex < Headder.Count; columnIndex++)
+			for (int columnIndex = 0; columnIndex < Header.Count; columnIndex++)
 			{
-				string _name = Headder[columnIndex];
+				string _name = Header[columnIndex];
 				if (_name == name)
 				{
 					head4Index = columnIndex;
