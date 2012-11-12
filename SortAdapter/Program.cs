@@ -49,13 +49,11 @@ namespace Swish.SortAdapter
 					File.Delete(outputFileName);
 				}
 
-				StataFunctions.RunScript(lines, false);
-
+				string log = StataFunctions.RunScript(lines, false);
 				if (!File.Exists(outputFileName))
 				{
-					throw new Exception("Output file was not created");
+					throw new Exception("Output file was not created" + log);
 				}
-
 				Console.Write(outputFileName);
 				return 0;
 			} catch (Exception error)

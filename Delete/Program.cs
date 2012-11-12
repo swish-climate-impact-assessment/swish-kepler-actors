@@ -9,7 +9,7 @@ namespace Delete
 		{
 			try
 			{
-				string fileName = string.Join(" ", arguments);
+				string fileName = string.Join(" ", arguments).Trim('\"');
 				File.Delete(fileName);
 			} catch
 			{

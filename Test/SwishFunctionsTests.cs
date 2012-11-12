@@ -27,7 +27,8 @@ namespace Swish.Tests
 			try
 			{
 				StataFunctions.StataExecutablePath = executableFileName;
-				StataFunctions.RunScript(lines, false);
+
+				string log = StataFunctions.RunScript(lines, false);
 
 				string arguments = File.ReadAllText(argumentsFileName);
 				if (!arguments.StartsWith(expectedArguments))
@@ -39,6 +40,7 @@ namespace Swish.Tests
 				StataFunctions.StataExecutablePath = null;
 			}
 		}
+
 
 
 	}

@@ -19,6 +19,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleInstaller", "SimpleIn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandAdapter", "CommandAdapter\CommandAdapter.csproj", "{26E6AC49-1553-4839-BB82-4F23DA9D5F61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransposeAdapter", "TransposeAdapter\TransposeAdapter.csproj", "{EEB34660-8595-4E0C-A562-8984750162FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelectColumnsAdapter", "SelectColumnsAdapter\SelectColumnsAdapter.csproj", "{75AA6E82-D49D-4BDF-84F3-52097962E22F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelectAdapter", "SelectAdapter\SelectAdapter.csproj", "{DF17C498-90B1-48C3-AA8C-938611D8BFE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -97,6 +103,27 @@ Global
 		{26E6AC49-1553-4839-BB82-4F23DA9D5F61}.Release|x64.ActiveCfg = Debug|x64
 		{26E6AC49-1553-4839-BB82-4F23DA9D5F61}.Release|x64.Build.0 = Debug|x64
 		{26E6AC49-1553-4839-BB82-4F23DA9D5F61}.Release|x86.ActiveCfg = Debug|x64
+		{EEB34660-8595-4E0C-A562-8984750162FF}.Debug|x64.ActiveCfg = Debug|x64
+		{EEB34660-8595-4E0C-A562-8984750162FF}.Debug|x64.Build.0 = Debug|x64
+		{EEB34660-8595-4E0C-A562-8984750162FF}.Debug|x86.ActiveCfg = Debug|x86
+		{EEB34660-8595-4E0C-A562-8984750162FF}.Debug|x86.Build.0 = Debug|x86
+		{EEB34660-8595-4E0C-A562-8984750162FF}.Release|x64.ActiveCfg = Debug|x64
+		{EEB34660-8595-4E0C-A562-8984750162FF}.Release|x64.Build.0 = Debug|x64
+		{EEB34660-8595-4E0C-A562-8984750162FF}.Release|x86.ActiveCfg = Debug|x64
+		{75AA6E82-D49D-4BDF-84F3-52097962E22F}.Debug|x64.ActiveCfg = Debug|x64
+		{75AA6E82-D49D-4BDF-84F3-52097962E22F}.Debug|x64.Build.0 = Debug|x64
+		{75AA6E82-D49D-4BDF-84F3-52097962E22F}.Debug|x86.ActiveCfg = Debug|x86
+		{75AA6E82-D49D-4BDF-84F3-52097962E22F}.Debug|x86.Build.0 = Debug|x86
+		{75AA6E82-D49D-4BDF-84F3-52097962E22F}.Release|x64.ActiveCfg = Debug|x64
+		{75AA6E82-D49D-4BDF-84F3-52097962E22F}.Release|x64.Build.0 = Debug|x64
+		{75AA6E82-D49D-4BDF-84F3-52097962E22F}.Release|x86.ActiveCfg = Debug|x64
+		{DF17C498-90B1-48C3-AA8C-938611D8BFE4}.Debug|x64.ActiveCfg = Debug|x64
+		{DF17C498-90B1-48C3-AA8C-938611D8BFE4}.Debug|x64.Build.0 = Debug|x64
+		{DF17C498-90B1-48C3-AA8C-938611D8BFE4}.Debug|x86.ActiveCfg = Debug|x86
+		{DF17C498-90B1-48C3-AA8C-938611D8BFE4}.Debug|x86.Build.0 = Debug|x86
+		{DF17C498-90B1-48C3-AA8C-938611D8BFE4}.Release|x64.ActiveCfg = Debug|x64
+		{DF17C498-90B1-48C3-AA8C-938611D8BFE4}.Release|x64.Build.0 = Debug|x64
+		{DF17C498-90B1-48C3-AA8C-938611D8BFE4}.Release|x86.ActiveCfg = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

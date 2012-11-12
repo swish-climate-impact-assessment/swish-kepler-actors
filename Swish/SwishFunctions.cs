@@ -102,8 +102,6 @@ namespace Swish
 			return locations;
 		}
 
-
-
 		internal static void MessageTextBox(string message)
 		{
 			string title = "Message";

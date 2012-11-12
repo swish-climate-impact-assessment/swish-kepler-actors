@@ -47,11 +47,10 @@ namespace Swish.CollapseAdapter
 				line = StataFunctions.SaveFileCommand(doOutputFileName);
 				lines.Add(line);
 
-				StataFunctions.RunScript(lines, false);
-
+				string log = StataFunctions.RunScript(lines, false);
 				if (!File.Exists(doOutputFileName))
 				{
-					throw new Exception("Output file was not created");
+					throw new Exception("Output file was not created" + log);
 				}
 
 				string[] resultLines = File.ReadAllLines(doOutputFileName);

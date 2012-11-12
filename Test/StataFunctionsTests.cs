@@ -171,9 +171,6 @@ namespace Swish.Tests
 			File.WriteAllLines(inputFileName2, lines.ToArray());
 		}
 
-
-
-
 		internal void StataFileFormat()
 		{
 			/// This test verifies that scripts can be written using stata files as input
@@ -194,11 +191,11 @@ namespace Swish.Tests
 
 			line = StataFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
-			StataFunctions.RunScript(lines, false);
 
+			string log = StataFunctions.RunScript(lines, false);
 			if (!File.Exists(outputFileName))
 			{
-				throw new Exception("Output not created, script not run");
+				throw new Exception("Output file was not created" + log);
 			}
 
 			Csv table = CsvFunctions.Read(outputFileName);
@@ -278,60 +275,15 @@ namespace Swish.Tests
 			}
 		}
 
-		internal void FailUnknownFileFormat()
+		internal void ReturnLog()
 		{
-			throw new NotImplementedException();
-
-			/// this test verifies that the load and save functions only try to operate on file that it knows what to do with
-			/// 
-			/// on second thought I'm not sure if this is a great idea....
-			/// I can't think of any harm in letting it default to stata format
-			/// 
-			/// 
-			/// do I know of any other formats that I need to cover...
-			/// r,
-			/// excell,
-			/// 
-			/// 
-			/// 
-
-/*
-			..... 
-
-			string fileName = "stataFile.dta";
-			string line = StataFunctions.SaveFileCommand(fileName);
-
-			if (string.IsNullOrWhiteSpace(line))
+			List<string> lines = new List<string>();
+			lines.Add("Bad command");
+			string log = StataFunctions.RunScript(lines, false);
+			if (!log.Contains("unrecognized command"))
 			{
 				throw new Exception();
 			}
-
-			string fileName = "noFormatFile";
-			string line = StataFunctions.SaveFileCommand(fileName);
-
-			if (string.IsNullOrWhiteSpace(line))
-			{
-				throw new Exception();
-			}
-
-			bool errorReceived;
-			try
-			{
-
-				string fileName = "fileOf.unknownFormat";
-				string line = StataFunctions.SaveFileCommand(fileName);
-
-				errorReceived = false;
-			} catch 
-			{
-				errorReceived = true;
-			}
-
-			if (!errorReceived)
-			{
-				throw new Exception();
-			}
-*/
 		}
 	}
 }

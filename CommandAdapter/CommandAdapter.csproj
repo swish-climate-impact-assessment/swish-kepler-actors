@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="Tests\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Swish\Swish.csproj">

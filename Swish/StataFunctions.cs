@@ -10,11 +10,13 @@ namespace Swish
 		public const string BatchArgument = "/e do ";
 		public const string MergeColumnName = "_merge";
 
-		public static void RunScript(List<string> lines, bool useGui)
+		public static string RunScript(List<string> lines, bool useGui)
 		{
-			string doFileName = Path.GetTempFileName() + ".do";
+			string tempFileName = Path.GetTempFileName() ;
+			string doFileName = tempFileName+".do";
 			File.WriteAllLines(doFileName, lines.ToArray());
 
+			string log;
 			if (!useGui)
 			{
 				string arguments = BatchArgument + "\"" + doFileName + "\"";
@@ -25,6 +27,24 @@ namespace Swish
 				int exitCode;
 				string output;
 				SwishFunctions.RunProcess(StataExecutablePath, arguments, workingDirectory, false, out exitCode, out output);
+
+				string logFileName = Path.GetFileName(doFileName);
+				int index = logFileName.IndexOf('.');
+				if (index >= 0)
+				{
+					logFileName = logFileName.Substring(0, index);
+				}
+
+				logFileName = Path.Combine(workingDirectory, logFileName + ".log");
+
+				if (File.Exists(logFileName))
+				{
+					log = File.ReadAllText(logFileName);
+					File.Delete(logFileName);
+				} else
+				{
+					log = string.Empty;
+				}
 			} else
 			{
 				List<string> locations = SwishFunctions.Locations();
@@ -36,9 +56,15 @@ namespace Swish
 				int exitCode;
 				string output;
 				SwishFunctions.RunProcess(runDoFileName, doFileName, Environment.CurrentDirectory, false, out exitCode, out output);
+				log = string.Empty;
 			}
 
+			if (File.Exists(tempFileName))
+			{
+				File.Delete(tempFileName);
+			}
 			File.Delete(doFileName);
+			return log;
 		}
 
 		private static void RunStata()
@@ -145,6 +171,11 @@ namespace Swish
 				throw new Exception("Cannot merge the same tables");
 			}
 
+			if (variableNames.Count == 0)
+			{
+				throw new Exception("Variables missing");
+			}
+
 			string doOutputFileName = Path.GetTempFileName() + ".csv";
 			if (File.Exists(doOutputFileName))
 			{
@@ -163,30 +194,29 @@ namespace Swish
 			List<string> lines = new List<string>();
 			lines.Add("clear");
 
-			string line = StataFunctions.LoadFileCommand(input2FileName);
+			string line = LoadFileCommand(input2FileName);
 			lines.Add(line);
 
 			line = SortCommand(variableNames);
 			lines.Add(line);
-			line = StataFunctions.SaveFileCommand(intermediateFileName);
+			line = SaveFileCommand(intermediateFileName);
 			lines.Add(line);
 
 			lines.Add("clear");
-			line = StataFunctions.LoadFileCommand(input1FileName);
+			line = LoadFileCommand(input1FileName);
 			lines.Add(line);
 
 			line = SortCommand(variableNames);
 			lines.Add(line);
 			lines.Add("merge " + VariableList(variableNames) + " using \"" + intermediateFileName + "\"");
 			lines.Add("drop " + MergeColumnName);
-			line = StataFunctions.SaveFileCommand(doOutputFileName);
+			line = SaveFileCommand(doOutputFileName);
 			lines.Add(line);
 
-			StataFunctions.RunScript(lines, false);
-
-			if (!File.Exists(doOutputFileName))
+			string log = StataFunctions.RunScript(lines, false);
+			if (!File.Exists(outputFileName))
 			{
-				throw new Exception("Output file was not created");
+				throw new Exception("Output file was not created" + log);
 			}
 
 			/// move the output file
@@ -261,7 +291,7 @@ namespace Swish
 			}
 
 			lines.Add("clear");
-			string line = StataFunctions.LoadFileCommand(fileName);
+			string line = LoadFileCommand(fileName);
 			lines.Add(line);
 
 			string intermediateFileName = Path.GetTempFileName() + ".dta";
@@ -270,10 +300,117 @@ namespace Swish
 				File.Delete(intermediateFileName);
 			}
 
-			line = StataFunctions.SaveFileCommand(intermediateFileName);
+			line = SaveFileCommand(intermediateFileName);
 			lines.Add(line);
 
 			return intermediateFileName;
+		}
+
+		public static void Transpose(string inputFileName, string outputFileName)
+		{
+			if (!File.Exists(inputFileName))
+			{
+				throw new Exception("cannot find file \"" + inputFileName + "\"");
+			}
+
+			if (File.Exists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+
+			List<string> lines = new List<string>();
+			lines.Add("clear");
+			string line = LoadFileCommand(inputFileName);
+			lines.Add(line);
+			lines.Add("xpose, clear");
+			line = SaveFileCommand(outputFileName);
+			lines.Add(line);
+
+			if (File.Exists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+
+			string log = StataFunctions.RunScript(lines, false);
+			if (!File.Exists(outputFileName))
+			{
+				throw new Exception("Output file was not created" + log);
+			}
+		}
+
+		public static void Select(string inputFileName, string outputFileName, string expression)
+		{
+			if (!File.Exists(inputFileName))
+			{
+				throw new Exception("cannot find file \"" + inputFileName + "\"");
+			}
+
+			if (string.IsNullOrWhiteSpace(expression))
+			{
+				throw new Exception("Expression missing");
+			}
+
+			if (File.Exists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+
+			List<string> lines = new List<string>();
+			lines.Add("clear");
+			string line = LoadFileCommand(inputFileName);
+			lines.Add(line);
+			lines.Add("keep if " + expression);
+			line = SaveFileCommand(outputFileName);
+			lines.Add(line);
+
+			if (File.Exists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+
+			string log = StataFunctions.RunScript(lines, false);
+			if (!File.Exists(outputFileName))
+			{
+				throw new Exception("Output file was not created" + log);
+			}
+		}
+
+		public static void SelectColumns(string inputFileName, string outputFileName, List<string> variableNames)
+		{
+			if (!File.Exists(inputFileName))
+			{
+				throw new Exception("cannot find file \"" + inputFileName + "\"");
+			}
+
+			if (variableNames.Count == 0)
+			{
+				throw new Exception("Variables missing");
+			}
+
+			if (File.Exists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+
+			List<string> lines = new List<string>();
+			lines.Add("clear");
+			string line = LoadFileCommand(inputFileName);
+			lines.Add(line);
+			line = "keep " + VariableList(variableNames);
+			lines.Add(line);
+			line = SaveFileCommand(outputFileName);
+			lines.Add(line);
+
+			if (File.Exists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+
+			string log = StataFunctions.RunScript(lines, false);
+			if (!File.Exists(outputFileName))
+			{
+				throw new Exception("Output file was not created" + log);
+			}
 		}
 	}
 }

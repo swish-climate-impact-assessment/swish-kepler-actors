@@ -49,8 +49,6 @@
     <Compile Include="SwishFunctions.cs" />
     <Compile Include="StataFunctions.cs" />
     <Compile Include="ExceptionFunctions.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Tests\TestsMain.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

@@ -12,3 +12,8 @@ TestResults
 /SimpleInstaller/SwishBin/Swish.SortAdapter.exe
 /SimpleInstaller/SwishBin/Swish.dll
 /Test/*.user
+/Delete/*.suo
+/MakeDirectory/*.user
+/SimpleInstaller/*.user
+/MakeDirectory/*.suo
+/MakeDirectory/*.sln

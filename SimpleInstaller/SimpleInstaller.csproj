@@ -116,6 +116,9 @@
     <None Include="Actors\TableSum.kar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Actors\TransposeTable.kar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -176,6 +179,7 @@
 copy "..\..\..\CollapseAdapter\bin\Debug\Swish.CollapseAdapter.exe" "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.CollapseAdapter.exe"
 copy "..\..\..\MergeAdapter\bin\Debug\Swish.MergeAdapter.exe"       "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.MergeAdapter.exe"
 copy "..\..\..\SortAdapter\bin\Debug\Swish.SortAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SortAdapter.exe"
+copy "..\..\..\TransposeAdapter\bin\Debug\Swish.TransposeAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SortAdapter.exe"
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

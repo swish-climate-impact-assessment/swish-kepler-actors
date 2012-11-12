@@ -34,7 +34,7 @@ namespace Swish.AppendAdapter
 				}
 
 				List<string> lines = new List<string>();
-				string intermediateFileName = StataFunctions.ConvertToStataFormat(lines,input2FileName);
+				string intermediateFileName = StataFunctions.ConvertToStataFormat(lines, input2FileName);
 				lines.Add("clear");
 				string line = StataFunctions.LoadFileCommand(input1FileName);
 				lines.Add(line);
@@ -47,11 +47,10 @@ namespace Swish.AppendAdapter
 					File.Delete(outputFileName);
 				}
 
-				StataFunctions.RunScript(lines, false);
-
+				string log = StataFunctions.RunScript(lines, false);
 				if (!File.Exists(outputFileName))
 				{
-					throw new Exception("Output file was not created");
+					throw new Exception("Output file was not created" + log);
 				}
 
 				/// delete all the files not needed

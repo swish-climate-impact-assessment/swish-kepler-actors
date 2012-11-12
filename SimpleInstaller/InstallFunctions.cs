@@ -12,7 +12,9 @@ namespace Swish.SimpleInstaller
 
 		internal static void Install(ReportProgressFunction ReportProgress)
 		{
-			List<string> _pending = new List<string>(File.ReadLines("Install.txt"));
+			string fileName = Path.Combine(Application.StartupPath, "Install.txt");
+
+			List<string> _pending = new List<string>(File.ReadLines(fileName));
 			List<string> _completed = new List<string>();
 
 			if (ReportProgress != null)
