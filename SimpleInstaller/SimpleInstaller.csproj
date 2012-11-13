@@ -46,43 +46,43 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="bin\Debug\Controls\FinishedPage.cs">
+    <Compile Include="Controls\FinishedPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="bin\Debug\Controls\FinishedPage.Designer.cs">
+    <Compile Include="Controls\FinishedPage.Designer.cs">
       <DependentUpon>FinishedPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="bin\Debug\Controls\InstallerMain.cs">
+    <Compile Include="Controls\InstallerMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="bin\Debug\Controls\InstallerMain.Designer.cs">
+    <Compile Include="Controls\InstallerMain.Designer.cs">
       <DependentUpon>InstallerMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="bin\Debug\Controls\ProgressPage.cs">
+    <Compile Include="Controls\ProgressPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="bin\Debug\Controls\ProgressPage.Designer.cs">
+    <Compile Include="Controls\ProgressPage.Designer.cs">
       <DependentUpon>ProgressPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="bin\Debug\Controls\WelcomePage.cs">
+    <Compile Include="Controls\WelcomePage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="bin\Debug\Controls\WelcomePage.Designer.cs">
+    <Compile Include="Controls\WelcomePage.Designer.cs">
       <DependentUpon>WelcomePage.cs</DependentUpon>
     </Compile>
     <Compile Include="InstallFunctions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="bin\Debug\Controls\FinishedPage.resx">
+    <EmbeddedResource Include="Controls\FinishedPage.resx">
       <DependentUpon>FinishedPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="bin\Debug\Controls\InstallerMain.resx">
+    <EmbeddedResource Include="Controls\InstallerMain.resx">
       <DependentUpon>InstallerMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="bin\Debug\Controls\ProgressPage.resx">
+    <EmbeddedResource Include="Controls\ProgressPage.resx">
       <DependentUpon>ProgressPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="bin\Debug\Controls\WelcomePage.resx">
+    <EmbeddedResource Include="Controls\WelcomePage.resx">
       <DependentUpon>WelcomePage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
