@@ -17,12 +17,23 @@ namespace Swish.CommandAdapter
 
 				List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
 				string inputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true);
-				string outputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, true);
 				string command = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "command", splitArguments, true);
+				string outputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, false);
+				if (string.IsNullOrWhiteSpace(outputFileName))
+				{
+					outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+				}
 
 				if (!File.Exists(inputFileName))
 				{
 					throw new Exception("cannot find file \"" + inputFileName + "\"");
+				}
+
+				if (
+					Path.GetFullPath(inputFileName) == Path.GetFullPath(outputFileName)
+					)
+				{
+					throw new Exception("Output cannot be the same as input");
 				}
 
 				if (File.Exists(outputFileName))
@@ -44,7 +55,7 @@ namespace Swish.CommandAdapter
 				}
 
 				Console.Write(outputFileName);
-				return 0;	
+				return 0;
 			} catch (Exception error)
 			{
 				string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.WriteException(error, true);
@@ -63,7 +74,7 @@ namespace Swish.CommandAdapter
 
 			lines.Add(command);
 
-			 line = StataFunctions.SaveFileCommand(output);
+			line = StataFunctions.SaveFileCommand(output);
 			lines.Add(line);
 			return lines;
 		}

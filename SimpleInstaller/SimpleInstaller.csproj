@@ -46,43 +46,43 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\FinishedPage.cs">
+    <Compile Include="bin\Debug\Controls\FinishedPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\FinishedPage.Designer.cs">
+    <Compile Include="bin\Debug\Controls\FinishedPage.Designer.cs">
       <DependentUpon>FinishedPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\InstallerMain.cs">
+    <Compile Include="bin\Debug\Controls\InstallerMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\InstallerMain.Designer.cs">
+    <Compile Include="bin\Debug\Controls\InstallerMain.Designer.cs">
       <DependentUpon>InstallerMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProgressPage.cs">
+    <Compile Include="bin\Debug\Controls\ProgressPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\ProgressPage.Designer.cs">
+    <Compile Include="bin\Debug\Controls\ProgressPage.Designer.cs">
       <DependentUpon>ProgressPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WelcomePage.cs">
+    <Compile Include="bin\Debug\Controls\WelcomePage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\WelcomePage.Designer.cs">
+    <Compile Include="bin\Debug\Controls\WelcomePage.Designer.cs">
       <DependentUpon>WelcomePage.cs</DependentUpon>
     </Compile>
     <Compile Include="InstallFunctions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Controls\FinishedPage.resx">
+    <EmbeddedResource Include="bin\Debug\Controls\FinishedPage.resx">
       <DependentUpon>FinishedPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\InstallerMain.resx">
+    <EmbeddedResource Include="bin\Debug\Controls\InstallerMain.resx">
       <DependentUpon>InstallerMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ProgressPage.resx">
+    <EmbeddedResource Include="bin\Debug\Controls\ProgressPage.resx">
       <DependentUpon>ProgressPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\WelcomePage.resx">
+    <EmbeddedResource Include="bin\Debug\Controls\WelcomePage.resx">
       <DependentUpon>WelcomePage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -104,7 +104,19 @@
     <None Include="Actors\MergeTables.kar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Actors\SaveTable.kar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Actors\SelectColumnsFromTable.kar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Actors\SelectFromTable.kar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Actors\SortTable.kar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Actors\StataCommand.kar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Actors\TableMean.kar">
@@ -179,7 +191,12 @@
 copy "..\..\..\CollapseAdapter\bin\Debug\Swish.CollapseAdapter.exe" "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.CollapseAdapter.exe"
 copy "..\..\..\MergeAdapter\bin\Debug\Swish.MergeAdapter.exe"       "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.MergeAdapter.exe"
 copy "..\..\..\SortAdapter\bin\Debug\Swish.SortAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SortAdapter.exe"
-copy "..\..\..\TransposeAdapter\bin\Debug\Swish.TransposeAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SortAdapter.exe"
+copy "..\..\..\CommandAdapter\bin\Debug\Swish.CommandAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.CommandAdapter.exe"
+copy "..\..\..\TransposeAdapter\bin\Debug\Swish.TransposeAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.TransposeAdapter.exe"
+copy "..\..\..\SaveTableAdapter\bin\Debug\Swish.SaveTableAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SaveTableAdapter.exe"
+copy "..\..\..\SelectAdapter\bin\Debug\Swish.SelectAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SelectAdapter.exe"
+copy "..\..\..\SelectColumnsAdapter\bin\Debug\Swish.SelectColumnsAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SelectColumnsAdapter.exe"
+
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

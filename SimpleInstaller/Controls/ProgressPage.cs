@@ -31,7 +31,7 @@ namespace Swish.SimpleInstaller.Controls
 				completedLines.Clear();
 				backgroundWorker1.ReportProgress(0);
 
-				InstallFunctions.Install(ReportProgress);
+				InstallFunctions.Install(Clean, ReportProgress);
 
 				backgroundWorker1.ReportProgress(100);
 			} catch (Exception error)
@@ -64,6 +64,8 @@ namespace Swish.SimpleInstaller.Controls
 		{
 			backgroundWorker1.RunWorkerAsync();
 		}
+
+		public bool Clean { get; set; }
 	}
 }
 

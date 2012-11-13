@@ -140,6 +140,21 @@ namespace Swish
 			}
 		}
 
+		public static string TempoaryOutputFileName(string extension)
+		{
+			string tempOutputFileName = Path.GetTempFileName();
+			if (File.Exists(tempOutputFileName))
+			{
+				File.Delete(tempOutputFileName);
+			}
+			string outputFileName = tempOutputFileName + extension;
+			if (File.Exists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+			return outputFileName;
+		}
+
 
 	}
 }

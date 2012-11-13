@@ -11,8 +11,12 @@ namespace Swish.SelectColumnsAdapter
 			{
 				List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
 				string inputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true);
-				string outputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument, splitArguments, true);
 				List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
+				string outputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, false);
+				if (string.IsNullOrWhiteSpace(outputFileName))
+				{
+					outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+				}
 
 				StataFunctions.SelectColumns(inputFileName, outputFileName, variableNames);
 

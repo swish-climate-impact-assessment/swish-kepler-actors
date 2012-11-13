@@ -161,6 +161,14 @@ namespace Swish
 				throw new Exception("cannot find file \"" + input2FileName + "\"");
 			}
 
+			if (
+			Path.GetFullPath(input1FileName) == Path.GetFullPath(outputFileName)
+			|| Path.GetFullPath(input2FileName) == Path.GetFullPath(outputFileName)
+			)
+			{
+				throw new Exception("Output cannot be the same as input");
+			}
+
 			if (File.Exists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -313,6 +321,13 @@ namespace Swish
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
 
+			if (
+			Path.GetFullPath(inputFileName) == Path.GetFullPath(outputFileName)
+			)
+			{
+				throw new Exception("Output cannot be the same as input");
+			}
+
 			if (File.Exists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -350,6 +365,13 @@ namespace Swish
 				throw new Exception("Expression missing");
 			}
 
+			if (
+		Path.GetFullPath(inputFileName) == Path.GetFullPath(outputFileName)
+		)
+			{
+				throw new Exception("Output cannot be the same as input");
+			}
+
 			if (File.Exists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -385,6 +407,13 @@ namespace Swish
 			if (variableNames.Count == 0)
 			{
 				throw new Exception("Variables missing");
+			}
+
+			if (
+			Path.GetFullPath(inputFileName) == Path.GetFullPath(outputFileName)
+			)
+			{
+				throw new Exception("Output cannot be the same as input");
 			}
 
 			if (File.Exists(outputFileName))

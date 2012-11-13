@@ -16,6 +16,14 @@ namespace Swish
 		public static string GetArgument(string name, List<Tuple<string, string>> splitArguments, bool throwOnMissing)
 		{
 			int listIndex = IndexOf(name, splitArguments);
+			if (listIndex < 0)
+			{
+				if (throwOnMissing)
+				{
+					throw new Exception("Argument missing \"" + name + "\"");
+				}
+				return string.Empty;
+			}
 			string value = splitArguments[listIndex].Item2;
 			if (string.IsNullOrWhiteSpace(value) && throwOnMissing)
 			{

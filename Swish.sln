@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelectColumnsAdapter", "Sel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelectAdapter", "SelectAdapter\SelectAdapter.csproj", "{DF17C498-90B1-48C3-AA8C-938611D8BFE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaveTableAdapter", "SaveTableAdapter\SaveTableAdapter.csproj", "{33B6C9D7-1441-46F6-86EF-7AEC278D7FB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -124,6 +126,13 @@ Global
 		{DF17C498-90B1-48C3-AA8C-938611D8BFE4}.Release|x64.ActiveCfg = Debug|x64
 		{DF17C498-90B1-48C3-AA8C-938611D8BFE4}.Release|x64.Build.0 = Debug|x64
 		{DF17C498-90B1-48C3-AA8C-938611D8BFE4}.Release|x86.ActiveCfg = Debug|x64
+		{33B6C9D7-1441-46F6-86EF-7AEC278D7FB2}.Debug|x64.ActiveCfg = Debug|x64
+		{33B6C9D7-1441-46F6-86EF-7AEC278D7FB2}.Debug|x64.Build.0 = Debug|x64
+		{33B6C9D7-1441-46F6-86EF-7AEC278D7FB2}.Debug|x86.ActiveCfg = Debug|x86
+		{33B6C9D7-1441-46F6-86EF-7AEC278D7FB2}.Debug|x86.Build.0 = Debug|x86
+		{33B6C9D7-1441-46F6-86EF-7AEC278D7FB2}.Release|x64.ActiveCfg = Debug|x64
+		{33B6C9D7-1441-46F6-86EF-7AEC278D7FB2}.Release|x64.Build.0 = Debug|x64
+		{33B6C9D7-1441-46F6-86EF-7AEC278D7FB2}.Release|x86.ActiveCfg = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

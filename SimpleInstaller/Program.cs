@@ -18,64 +18,60 @@ namespace Swish.SimpleInstaller
 			bool silent = ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "silent", splitArguments);
 			bool clean = ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "clean", splitArguments);
 
-			if (clean)
+			string logFileName = Path.Combine(Application.StartupPath, "Error.log.txt");
+			if (File.Exists(logFileName))
 			{
-				string logFileName = Path.Combine(Application.StartupPath, "Error.log.txt");
-				throw new Exception();
-
-
-				/// adding actor process
-				/// 
-				/// 
-				/// Actor
-				///		save actor to installer foldrr
-				///		add actor to project
-				/// 
-				/// Build events
-				///		Exe redirector
-				///		simple installerredirector
-				/// 
-				/// Development locations
-				/// 
-
-				try
-				{
-					if (File.Exists(logFileName))
-					{
-						File.Delete(logFileName);
-					}
-					InstallFunctions.Install(null);
-				} catch (Exception error)
-				{
-					string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.WriteException(error, true);
-					Console.Write(message);
-					File.WriteAllText(logFileName, message);
-					return -1;
-				}
-				return 0;
+				File.Delete(logFileName);
 			}
+			/// adding actor steps
+			/// Adapter
+			///		code
+			///		test
+			/// 
+			/// Actor
+			///		ports
+			///			names
+			///			cmd arguments
+			///			connect up
+			///		save actor to installer foldrr
+			///		
+			///	Installer
+			///		add actor to project
+			///		set copy allways
+			/// 
+			/// Build events
+			///		Exe redirector
+			///			pre build delete
+			///			post build copy
+			///		simple installer
+			///			post build copy
+			/// 
+			/// Development locations 
+			/// 
 
-			if (silent)
+			try
 			{
-				string logFileName = Path.Combine(Application.StartupPath, "Error.log.txt");
-				try
+				if (!silent)
 				{
-					if (File.Exists(logFileName))
+					using (InstallerMain control = new InstallerMain())
 					{
-						File.Delete(logFileName);
+						control.Clean = clean;
+						Application.Run(control);
 					}
-					InstallFunctions.Install(null);
-				} catch (Exception error)
+				} else
 				{
-					string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.WriteException(error, true);
-					Console.Write(message);
-					File.WriteAllText(logFileName, message);
-					return -1;
-				}
-				return 0;
-			}
+					InstallFunctions.Install(clean, null);
+					return 0;
 
-			Application.Run(new InstallerMain());
+				}
+
+			} catch (Exception error)
+			{
+				string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.WriteException(error, true);
+				Console.Write(message);
+				File.WriteAllText(logFileName, message);
+				return -1;
+			}
 			return 0;
 		}
 	}

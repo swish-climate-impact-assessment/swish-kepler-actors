@@ -16,7 +16,13 @@ namespace Swish.AppendAdapter
 				List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
 				string input1FileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "1", splitArguments, true);
 				string input2FileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true);
-				string outputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, true);
+
+
+				string outputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, false);
+				if (string.IsNullOrWhiteSpace(outputFileName))
+				{
+					outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+				}
 
 				if (!File.Exists(input1FileName))
 				{
@@ -26,6 +32,14 @@ namespace Swish.AppendAdapter
 				if (!File.Exists(input2FileName))
 				{
 					throw new Exception("cannot find file \"" + input2FileName + "\"");
+				}
+
+				if (
+					Path.GetFullPath(input1FileName) == Path.GetFullPath(outputFileName)
+					|| Path.GetFullPath(input2FileName) == Path.GetFullPath(outputFileName) 
+					)
+				{
+					throw new Exception("Output cannot be the same as input");
 				}
 
 				if (File.Exists(outputFileName))

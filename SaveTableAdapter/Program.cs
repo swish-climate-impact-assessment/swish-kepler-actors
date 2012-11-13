@@ -5,7 +5,7 @@ using System.Threading;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Swish.SortAdapter
+namespace Swish.SaveTableAdapter
 {
 	static class Program
 	{
@@ -13,27 +13,13 @@ namespace Swish.SortAdapter
 		{
 			try
 			{
-				/// get the arguments
-
 				List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
-				string inputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true);
-				List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
-				string outputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, false);
-				if (string.IsNullOrWhiteSpace(outputFileName))
-				{
-					outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
-				}
+				string inputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true);
+				string outputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, true);
 
 				if (!File.Exists(inputFileName))
 				{
 					throw new Exception("cannot find file \"" + inputFileName + "\"");
-				}
-
-				if (
-				Path.GetFullPath(inputFileName) == Path.GetFullPath(outputFileName)
-				)
-				{
-					throw new Exception("Output cannot be the same as input");
 				}
 
 				if (File.Exists(outputFileName))
@@ -41,17 +27,19 @@ namespace Swish.SortAdapter
 					File.Delete(outputFileName);
 				}
 
-				/// create the do file
+				string inputFileExtension = Path.GetExtension(inputFileName);
+				string outputFileExtension = Path.GetExtension(outputFileName);
+
+				if (inputFileExtension.ToLower() == outputFileExtension.ToLower())
+				{
+					File.Copy(inputFileName, outputFileName);
+					return 0;
+				}
+
 				List<string> lines = new List<string>();
 				lines.Add("clear");
 				string line = StataFunctions.LoadFileCommand(inputFileName);
 				lines.Add(line);
-
-				/// sort varlist, stable
-				/// add variables names
-				line = StataFunctions.SortCommand(variableNames);
-				lines.Add(line);
-
 				line = StataFunctions.SaveFileCommand(outputFileName);
 				lines.Add(line);
 
@@ -65,6 +53,7 @@ namespace Swish.SortAdapter
 				{
 					throw new Exception("Output file was not created" + log);
 				}
+
 				Console.Write(outputFileName);
 				return 0;
 			} catch (Exception error)
@@ -74,7 +63,6 @@ namespace Swish.SortAdapter
 				return -1;
 			}
 		}
-
 
 	}
 }

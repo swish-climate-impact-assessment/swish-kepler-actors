@@ -42,5 +42,11 @@ namespace Swish.SimpleInstaller.Controls
 			welcomePage1.Dock = DockStyle.Fill;
 			Controls.Add(welcomePage1);
 		}
+
+		public bool Clean
+		{
+			get { return progressPage1.Clean; }
+			set { progressPage1.Clean = value; }
+		}
 	}
 }
