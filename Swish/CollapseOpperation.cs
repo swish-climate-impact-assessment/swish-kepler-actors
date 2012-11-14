@@ -6,6 +6,13 @@ namespace Swish
 	{
 		Unknown,
 		Mean,
+		IQR,
+		Min,
+		Max,
+		Count,
+		Median,
+		Sd,
+		Sum,
 
 	}
 }

@@ -88,6 +88,33 @@ namespace Swish
 		{
 			switch (operation)
 			{
+			case CollapseOpperation.IQR:
+				return "iqr";
+
+			case CollapseOpperation.Min:
+				return "min";
+
+
+			case CollapseOpperation.Max:
+				return "max";
+
+
+			case CollapseOpperation.Count:
+				return "count";
+
+
+			case CollapseOpperation.Median:
+				return "median";
+
+
+			case CollapseOpperation.Sd:
+				return "sd";
+
+
+			case CollapseOpperation.Sum:
+				return "sum";
+
+
 			case CollapseOpperation.Mean:
 				return "mean";
 
