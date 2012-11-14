@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace Swish.Tests
 {
-	static class TestFunctions
+	public static class TestFunctions
 	{
 
 		public static string TestDataFileName(string file)

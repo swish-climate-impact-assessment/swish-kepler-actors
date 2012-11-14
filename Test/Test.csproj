@@ -43,17 +43,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentFunctionsTests.cs" />
-    <Compile Include="CommandAdapterTests.cs" />
-    <Compile Include="SelectTests.cs" />
-    <Compile Include="SubsetTests.cs" />
+    <Compile Include="AdapterTests.cs" />
+    <Compile Include="StataScriptFunctionsTests.cs" />
     <Compile Include="TestFunctions.cs" />
     <Compile Include="LibraryTypes\CSharpCompiler.cs" />
-    <Compile Include="MergeAdapterTests.cs" />
     <Compile Include="StataFunctionsTests.cs" />
     <Compile Include="StringIOTests.cs" />
     <Compile Include="SwishFunctionsTests.cs" />
     <Compile Include="TestsMain.cs" />
-    <Compile Include="TransposeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

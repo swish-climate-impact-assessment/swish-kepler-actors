@@ -80,9 +80,9 @@
 			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label3.Location = new System.Drawing.Point(0, 181);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(294, 20);
+			this.label3.Size = new System.Drawing.Size(342, 20);
 			this.label3.TabIndex = 2;
-			this.label3.Text = "Internal release alpha 17 - October 2012";
+			this.label3.Text = "Internal development build - 14 November 2012";
 			// 
 			// panel1
 			// 
@@ -127,6 +127,7 @@
 			this.Controls.Add(this.pictureBox1);
 			this.Name = "WelcomePage";
 			this.Size = new System.Drawing.Size(514, 248);
+			this.Load += new System.EventHandler(this.WelcomePage_Load);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);

@@ -23,7 +23,7 @@ namespace Swish.MergeAdapter
 					outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 				}
 
-				StataFunctions.Merge(input1FileName, input2FileName, variableNames, outputFileName);
+				AdapterFunctions.Merge(input1FileName, input2FileName, variableNames, outputFileName);
 
 				Console.Write(outputFileName);
 				return 0;

@@ -16,59 +16,9 @@ namespace Swish.AppendAdapter
 				List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
 				string input1FileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "1", splitArguments, true);
 				string input2FileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true);
-
-
 				string outputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, false);
-				if (string.IsNullOrWhiteSpace(outputFileName))
-				{
-					outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
-				}
 
-				if (!File.Exists(input1FileName))
-				{
-					throw new Exception("cannot find file \"" + input1FileName + "\"");
-				}
-
-				if (!File.Exists(input2FileName))
-				{
-					throw new Exception("cannot find file \"" + input2FileName + "\"");
-				}
-
-				if (
-					Path.GetFullPath(input1FileName) == Path.GetFullPath(outputFileName)
-					|| Path.GetFullPath(input2FileName) == Path.GetFullPath(outputFileName) 
-					)
-				{
-					throw new Exception("Output cannot be the same as input");
-				}
-
-				if (File.Exists(outputFileName))
-				{
-					File.Delete(outputFileName);
-				}
-
-				List<string> lines = new List<string>();
-				string intermediateFileName = StataFunctions.ConvertToStataFormat(lines, input2FileName);
-				lines.Add("clear");
-				string line = StataFunctions.LoadFileCommand(input1FileName);
-				lines.Add(line);
-				lines.Add("append using \"" + intermediateFileName + "\"");
-				line = StataFunctions.SaveFileCommand(outputFileName);
-				lines.Add(line);
-
-				if (File.Exists(outputFileName))
-				{
-					File.Delete(outputFileName);
-				}
-
-				string log = StataFunctions.RunScript(lines, false);
-				if (!File.Exists(outputFileName))
-				{
-					throw new Exception("Output file was not created" + log);
-				}
-
-				/// delete all the files not needed
-				File.Delete(intermediateFileName);
+				outputFileName = AdapterFunctions.Append(input1FileName, input2FileName, outputFileName);
 
 				Console.Write(outputFileName);
 				return 0;

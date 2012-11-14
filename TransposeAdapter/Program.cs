@@ -21,7 +21,7 @@ namespace Swish.TransposeAdapter
 					outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 				}
 
-				StataFunctions.Transpose(inputFileName, outputFileName);
+				AdapterFunctions.Transpose(inputFileName, outputFileName);
 
 				Console.Write(outputFileName);
 				return 0;

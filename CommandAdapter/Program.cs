@@ -19,40 +19,8 @@ namespace Swish.CommandAdapter
 				string inputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true);
 				string command = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "command", splitArguments, true);
 				string outputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, false);
-				if (string.IsNullOrWhiteSpace(outputFileName))
-				{
-					outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
-				}
 
-				if (!File.Exists(inputFileName))
-				{
-					throw new Exception("cannot find file \"" + inputFileName + "\"");
-				}
-
-				if (
-					Path.GetFullPath(inputFileName) == Path.GetFullPath(outputFileName)
-					)
-				{
-					throw new Exception("Output cannot be the same as input");
-				}
-
-				if (File.Exists(outputFileName))
-				{
-					File.Delete(outputFileName);
-				}
-
-				List<string> lines = CreateDoFile(inputFileName, outputFileName, command);
-
-				if (File.Exists(outputFileName))
-				{
-					File.Delete(outputFileName);
-				}
-
-				string log = StataFunctions.RunScript(lines, false);
-				if (!File.Exists(outputFileName))
-				{
-					throw new Exception("Output file was not created" + log);
-				}
+				AdapterFunctions.StataCommand(inputFileName, outputFileName, command);
 
 				Console.Write(outputFileName);
 				return 0;
@@ -63,22 +31,6 @@ namespace Swish.CommandAdapter
 				return -1;
 			}
 		}
-
-		public static List<string> CreateDoFile(string input, string output, string command)
-		{
-			/// create the do file
-			List<string> lines = new List<string>();
-			lines.Add("clear");
-			string line = StataFunctions.LoadFileCommand(input);
-			lines.Add(line);
-
-			lines.Add(command);
-
-			line = StataFunctions.SaveFileCommand(output);
-			lines.Add(line);
-			return lines;
-		}
-
 
 	}
 }

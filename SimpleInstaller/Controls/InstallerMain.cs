@@ -38,15 +38,27 @@ namespace Swish.SimpleInstaller.Controls
 
 		private void InstallerMain_Load(object sender, EventArgs e)
 		{
+			if (Clean)
+			{
+				this.Text = "Uninstall";
+			} else
+			{
+				this.Text = "Install";
+			}
 			Controls.Clear();
 			welcomePage1.Dock = DockStyle.Fill;
 			Controls.Add(welcomePage1);
+
 		}
 
 		public bool Clean
 		{
 			get { return progressPage1.Clean; }
-			set { progressPage1.Clean = value; }
+			set
+			{
+				progressPage1.Clean = value;
+				this.welcomePage1.Clean = value;
+			}
 		}
 	}
 }

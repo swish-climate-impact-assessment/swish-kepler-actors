@@ -4,9 +4,9 @@ using System.IO;
 
 namespace Swish.Tests
 {
-	class SwishFunctionsTests
+	public class SwishFunctionsTests
 	{
-		internal void TestRunBatchMode()
+		public void TestRunBatchMode()
 		{
 			/// this tests that the executable run is Stata, 
 			/// and that the arguments are correct
@@ -17,7 +17,7 @@ namespace Swish.Tests
 
 			// "C:\Program Files\Stata12\StataMP" /e do c:\data\bigjob.do
 			string argumentsFileName = "ArgumentsOut.txt";
-			string executableFileName = LibraryTypes.BootStrap.CSharpCompiler.MakeExecutable("class Program{static void Main(string[] arguments){System.IO.File.WriteAllText(\"" + argumentsFileName + "\", string.Join(\" \", arguments));}}");
+			string executableFileName = LibraryTypes.BootStrap.CSharpCompiler.MakeExecutable("public class Program{static void Main(string[] arguments){System.IO.File.WriteAllText(\"" + argumentsFileName + "\", string.Join(\" \", arguments));}}");
 
 			string directory = Path.GetTempPath();
 			List<string> lines = new List<string>();

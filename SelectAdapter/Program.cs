@@ -18,7 +18,7 @@ namespace Swish.SelectAdapter
 					outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 				}
 
-				StataFunctions.Select(inputFileName, outputFileName, expression);
+				AdapterFunctions.Select(inputFileName, outputFileName, expression);
 
 				Console.Write(outputFileName);
 				return 0;

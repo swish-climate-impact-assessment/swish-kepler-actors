@@ -2,9 +2,9 @@
 
 namespace Swish.Tests
 {
-	class StringIOTests
+	public class StringIOTests
 	{
-		internal void TryReadStringEscapedCharacters()
+		public void TryReadStringEscapedCharacters()
 		{
 			string expectedString = " \" \\ \r \n \' \t ";
 

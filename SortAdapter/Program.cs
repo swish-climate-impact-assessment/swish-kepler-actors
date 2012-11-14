@@ -19,52 +19,9 @@ namespace Swish.SortAdapter
 				string inputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true);
 				List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
 				string outputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, false);
-				if (string.IsNullOrWhiteSpace(outputFileName))
-				{
-					outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
-				}
 
-				if (!File.Exists(inputFileName))
-				{
-					throw new Exception("cannot find file \"" + inputFileName + "\"");
-				}
+				outputFileName = AdapterFunctions.Sort(inputFileName, variableNames, outputFileName);
 
-				if (
-				Path.GetFullPath(inputFileName) == Path.GetFullPath(outputFileName)
-				)
-				{
-					throw new Exception("Output cannot be the same as input");
-				}
-
-				if (File.Exists(outputFileName))
-				{
-					File.Delete(outputFileName);
-				}
-
-				/// create the do file
-				List<string> lines = new List<string>();
-				lines.Add("clear");
-				string line = StataFunctions.LoadFileCommand(inputFileName);
-				lines.Add(line);
-
-				/// sort varlist, stable
-				/// add variables names
-				line = StataFunctions.SortCommand(variableNames);
-				lines.Add(line);
-
-				line = StataFunctions.SaveFileCommand(outputFileName);
-				lines.Add(line);
-
-				if (File.Exists(outputFileName))
-				{
-					File.Delete(outputFileName);
-				}
-
-				string log = StataFunctions.RunScript(lines, false);
-				if (!File.Exists(outputFileName))
-				{
-					throw new Exception("Output file was not created" + log);
-				}
 				Console.Write(outputFileName);
 				return 0;
 			} catch (Exception error)
@@ -74,6 +31,7 @@ namespace Swish.SortAdapter
 				return -1;
 			}
 		}
+
 
 
 	}

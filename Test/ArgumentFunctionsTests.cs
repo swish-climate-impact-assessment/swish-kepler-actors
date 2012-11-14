@@ -5,9 +5,9 @@ using System.Threading;
 
 namespace Swish.Tests
 {
-	class ArgumentFunctionsTests
+	public class ArgumentFunctionsTests
 	{
-		internal void ArgumentInQuotes()
+		public void ArgumentInQuotes()
 		{
 			// this tests that the arguments can be in quates,
 			// use by the command adapter to specify the command and escape characters
@@ -41,7 +41,7 @@ namespace Swish.Tests
 			}
 		}
 
-		internal void GetSwitch()
+		public void GetSwitch()
 		{
 			/// this is test verifies that gets switch returns true if command argument present
 			/// and false if it is absent

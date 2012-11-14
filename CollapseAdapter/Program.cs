@@ -18,47 +18,14 @@ namespace Swish.CollapseAdapter
 				string variable = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "variable", splitArguments, true);
 				string operation = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "operation", splitArguments, false);
 
-				if (!File.Exists(inputFileName))
-				{
-					throw new Exception("cannot find file \"" + inputFileName + "\"");
-				}
-
 				if (string.IsNullOrWhiteSpace(operation))
 				{
 					operation = "mean";
 				}
 
-				string doOutputFileName = Path.GetTempFileName() + ".dta";
-				if (File.Exists(doOutputFileName))
-				{
-					// Stata does not overwrite files
-					File.Delete(doOutputFileName);
-				}
+				CollapseOpperation operationCode = (CollapseOpperation)Enum.Parse(typeof(CollapseOpperation), operation, true);
 
-				List<string> lines = new List<string>();
-				lines.Add("clear");
-				string line = StataFunctions.LoadFileCommand(inputFileName);
-				lines.Add(line);
-
-				// collapse (mean) mean=head4 (median) medium=head4, by(head6)
-
-				lines.Add("collapse " + "(" + operation + ") " + variable + "_" + operation + "=" + variable);
-
-				line = StataFunctions.SaveFileCommand(doOutputFileName);
-				lines.Add(line);
-
-				string log = StataFunctions.RunScript(lines, false);
-				if (!File.Exists(doOutputFileName))
-				{
-					throw new Exception("Output file was not created" + log);
-				}
-
-				string[] resultLines = File.ReadAllLines(doOutputFileName);
-
-				double result = double.Parse(resultLines[1]);
-
-				/// delete all the files not needed
-				File.Delete(doOutputFileName);
+				double result = AdapterFunctions.Collapse(inputFileName, variable, operationCode);
 
 				Console.Write(result.ToString());
 				return 0;

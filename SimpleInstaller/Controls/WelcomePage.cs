@@ -29,5 +29,15 @@ namespace Swish.SimpleInstaller.Controls
 			}
 		}
 
+		private void WelcomePage_Load(object sender, EventArgs e)
+		{
+			if (Clean)
+			{
+				InstallButton.Text = "Uninstall";
+			}
+		}
+
+
+		public bool Clean { get; set; }
 	}
 }

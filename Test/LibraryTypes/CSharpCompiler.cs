@@ -10,12 +10,12 @@ using Microsoft.CSharp;
 
 namespace LibraryTypes.BootStrap
 {
-	static class CSharpCompiler
+	public static class CSharpCompiler
 	{
 		private static string directoryBase = Path.GetTempFileName() + "_dir";
 		private static int directoryBaseCount = 0;
 
-		internal static string MakeExecutable(string code)
+		public static string MakeExecutable(string code)
 		{
 			string codeDirectory = directoryBase + directoryBaseCount.ToString();
 			directoryBaseCount++;

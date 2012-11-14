@@ -38,9 +38,9 @@ namespace Swish.SaveTableAdapter
 
 				List<string> lines = new List<string>();
 				lines.Add("clear");
-				string line = StataFunctions.LoadFileCommand(inputFileName);
+				string line = StataScriptFunctions.LoadFileCommand(inputFileName);
 				lines.Add(line);
-				line = StataFunctions.SaveFileCommand(outputFileName);
+				line = StataScriptFunctions.SaveFileCommand(outputFileName);
 				lines.Add(line);
 
 				if (File.Exists(outputFileName))
