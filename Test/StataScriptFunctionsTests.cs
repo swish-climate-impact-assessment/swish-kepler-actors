@@ -10,15 +10,18 @@ namespace Swish.Tests
 		public void LoadDynamicFileFormat()
 		{
 			string fileName = "stata.dta";
-			string line = StataScriptFunctions.LoadFileCommand(fileName);
-
+			List<string> lines = new List<string>();
+			StataScriptFunctions.LoadFileCommand(lines, fileName);
+			string line = lines[1];
 			if (!line.StartsWith("use"))
 			{
 				throw new Exception("");
 			}
 
 			fileName = "text.csv";
-			line = StataScriptFunctions.LoadFileCommand(fileName);
+			lines = new List<string>();
+			StataScriptFunctions.LoadFileCommand(lines, fileName);
+			line = lines[1];
 
 			if (!line.StartsWith("insheet"))
 			{
@@ -53,8 +56,7 @@ namespace Swish.Tests
 			Csv expectedTable = StataFunctionsTests.CarData();
 
 			List<string> lines = new List<string>();
-			string line = StataScriptFunctions.LoadFileCommand(StataFunctionsTests.CarsDataFileName);
-			lines.Add(line);
+			StataScriptFunctions.LoadFileCommand(lines, StataFunctionsTests.CarsDataFileName);
 
 			string outputFileName = Path.GetTempFileName() + ".csv";
 			if (File.Exists(outputFileName))
@@ -63,7 +65,7 @@ namespace Swish.Tests
 				File.Delete(outputFileName);
 			}
 
-			line = StataScriptFunctions.SaveFileCommand(outputFileName);
+			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
 			string log = StataFunctions.RunScript(lines, false);
@@ -79,6 +81,34 @@ namespace Swish.Tests
 			}
 		}
 
+		private static void GenerateMergeDoFile(string doFileName)
+		{
+			List<string> variableNames = new List<string>();
+			variableNames.Add("head4");
+			List<string> lines = new List<string>();
+			StataScriptFunctions.WriteHeadder(lines);
+
+			StataScriptFunctions.LoadFileCommand(lines, @"C:\Swish\SampleData\MergeTable1.csv");
+
+			string line = StataScriptFunctions.SortCommand(variableNames);
+			lines.Add(line);
+			line = StataScriptFunctions.SaveFileCommand(@"C:\Swish\SampleData\MergeTableTemp.dta");
+			lines.Add(line);
+
+			lines.Add("clear");
+			StataScriptFunctions.LoadFileCommand(lines, @"C:\Swish\SampleData\MergeTable2.csv");
+
+			line = StataScriptFunctions.SortCommand(variableNames);
+			lines.Add(line);
+			lines.Add("merge 1:1 " + StataScriptFunctions.VariableList(variableNames) + " using \"" + @"C:\Swish\SampleData\MergeTableTemp.dta" + "\"");
+			lines.Add("drop " + StataScriptFunctions.MergeColumnName);
+			line = StataScriptFunctions.SaveFileCommand(@"C:\Swish\SampleData\MergeTableOut.csv");
+			lines.Add(line);
+			File.WriteAllLines(doFileName, lines.ToArray());
+
+
+
+		}
 
 	}
 }

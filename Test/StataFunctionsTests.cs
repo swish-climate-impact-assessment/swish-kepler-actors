@@ -22,12 +22,10 @@ namespace Swish.Tests
 			}
 
 			List<string> lines = new List<string>();
-			lines.Add("clear");
-			string line = StataScriptFunctions.LoadFileCommand(inputFile);
-			lines.Add(line);
+			StataScriptFunctions.LoadFileCommand(lines, inputFile);
 
 			lines.Add("collapse (mean) head4_mean=head4");
-			line = StataScriptFunctions.SaveFileCommand(outputFile);
+			string line = StataScriptFunctions.SaveFileCommand(outputFile);
 			lines.Add(line);
 
 			string doFileName = Path.GetTempFileName() + ".do";

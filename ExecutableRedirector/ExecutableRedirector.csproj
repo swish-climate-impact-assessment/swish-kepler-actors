@@ -62,6 +62,8 @@
 ..\..\Delete.exe "c:\Swish\bin\Swish.SaveTableAdapter.exe"
 ..\..\Delete.exe "c:\Swish\bin\Swish.SelectAdapter.exe"
 ..\..\Delete.exe "c:\Swish\bin\Swish.SelectColumnsAdapter.exe"
+..\..\Delete.exe "c:\Swish\bin\Swish.DoScriptAdapter.exe"
+..\..\Delete.exe "c:\Swish\bin\Swish.Adapter.exe"
 </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
@@ -75,6 +77,8 @@ copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\S
 copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.SaveTableAdapter.exe
 copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.SelectAdapter.exe
 copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.SelectColumnsAdapter.exe
+copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.DoScriptAdapter.exe
+copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.Adapter.exe
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

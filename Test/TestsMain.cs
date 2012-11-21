@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Swish.Tests
 {
@@ -52,6 +53,7 @@ namespace Swish.Tests
 				/// start with a log file that accopanyies the output file with the operation name and input details
 				/// 
 
+
 				new AdapterTests().CommandScript();
 				new AdapterTests().SelectExpression();
 				new AdapterTests().SelectColumns();
@@ -95,6 +97,7 @@ namespace Swish.Tests
 
 
 		}
+
 	}
 }
 

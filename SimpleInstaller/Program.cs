@@ -33,7 +33,7 @@ namespace Swish.SimpleInstaller
 			///			names
 			///			cmd arguments
 			///			connect up
-			///		save actor to installer foldrr
+			///		save actor to installer folder
 			///		
 			///	Installer
 			///		add actor to project

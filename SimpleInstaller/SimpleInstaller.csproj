@@ -101,6 +101,9 @@
     <None Include="Actors\MergeTables.kar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Actors\RunDoScript.kar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Actors\SaveTable.kar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -114,6 +117,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Actors\StataCommand.kar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Actors\TemporaryFileName.kar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Actors\TransposeTable.kar">
@@ -208,7 +214,8 @@ copy "..\..\..\TransposeAdapter\bin\Debug\Swish.TransposeAdapter.exe"         ".
 copy "..\..\..\SaveTableAdapter\bin\Debug\Swish.SaveTableAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SaveTableAdapter.exe"
 copy "..\..\..\SelectAdapter\bin\Debug\Swish.SelectAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SelectAdapter.exe"
 copy "..\..\..\SelectColumnsAdapter\bin\Debug\Swish.SelectColumnsAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SelectColumnsAdapter.exe"
-
+copy "..\..\..\DoScriptAdapter\bin\Debug\Swish.DoScriptAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.DoScriptAdapter.exe"
+copy "..\..\..\Adapter\bin\Debug\Swish.Adapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.Adapter.exe"
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

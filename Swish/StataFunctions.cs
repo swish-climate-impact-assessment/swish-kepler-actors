@@ -15,6 +15,18 @@ namespace Swish
 			string doFileName = tempFileName + ".do";
 			File.WriteAllLines(doFileName, lines.ToArray());
 
+			string log = RunScript(doFileName, useGui);
+
+			if (File.Exists(tempFileName))
+			{
+				File.Delete(tempFileName);
+			}
+			File.Delete(doFileName);
+			return log;
+		}
+
+		public static string RunScript(string doFileName, bool useGui)
+		{
 			string log;
 			if (!useGui)
 			{
@@ -57,12 +69,6 @@ namespace Swish
 				SwishFunctions.RunProcess(runDoFileName, doFileName, Environment.CurrentDirectory, false, out exitCode, out output);
 				log = string.Empty;
 			}
-
-			if (File.Exists(tempFileName))
-			{
-				File.Delete(tempFileName);
-			}
-			File.Delete(doFileName);
 			return log;
 		}
 

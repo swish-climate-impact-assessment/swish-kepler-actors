@@ -50,14 +50,16 @@ namespace Swish
 			return "save \"" + fileName + "\"";
 		}
 
-		public static string LoadFileCommand(string fileName)
+		public static void LoadFileCommand(List<string> lines, string fileName)
 		{
+			lines.Add("clear");
 			string extension = Path.GetExtension(fileName);
 			if (extension == ".csv")
 			{
-				return "insheet using \"" + fileName + "\"";
+				lines.Add("insheet using \"" + fileName + "\"");
+				return;
 			}
-			return "use using \"" + fileName + "\"";
+			lines.Add("use using \"" + fileName + "\"");
 		}
 
 		public static string ConvertToStataFormat(List<string> lines, string fileName)
@@ -68,9 +70,7 @@ namespace Swish
 				return fileName;
 			}
 
-			lines.Add("clear");
-			string line = LoadFileCommand(fileName);
-			lines.Add(line);
+			LoadFileCommand(lines, fileName);
 
 			string intermediateFileName = Path.GetTempFileName() + ".dta";
 			if (File.Exists(intermediateFileName))
@@ -78,7 +78,7 @@ namespace Swish
 				File.Delete(intermediateFileName);
 			}
 
-			line = SaveFileCommand(intermediateFileName);
+			string line = SaveFileCommand(intermediateFileName);
 			lines.Add(line);
 
 			return intermediateFileName;
@@ -94,26 +94,20 @@ namespace Swish
 			case CollapseOpperation.Min:
 				return "min";
 
-
 			case CollapseOpperation.Max:
 				return "max";
-
 
 			case CollapseOpperation.Count:
 				return "count";
 
-
 			case CollapseOpperation.Median:
 				return "median";
-
 
 			case CollapseOpperation.Sd:
 				return "sd";
 
-
 			case CollapseOpperation.Sum:
 				return "sum";
-
 
 			case CollapseOpperation.Mean:
 				return "mean";
@@ -124,6 +118,12 @@ namespace Swish
 			}
 		}
 
+		public static void WriteHeadder(List<string> lines)
+		{
+			lines.Add("set more off");
+			lines.Add("set mem 1g");
+		}
 
 	}
 }
+

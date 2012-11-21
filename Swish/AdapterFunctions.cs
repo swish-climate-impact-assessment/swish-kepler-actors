@@ -25,11 +25,10 @@ namespace Swish
 			}
 
 			List<string> lines = new List<string>();
-			lines.Add("clear");
-			string line = StataScriptFunctions.LoadFileCommand(inputFileName);
-			lines.Add(line);
+			StataScriptFunctions.WriteHeadder(lines);
+			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
 			lines.Add("xpose, clear");
-			line = StataScriptFunctions.SaveFileCommand(outputFileName);
+			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
 			if (File.Exists(outputFileName))
@@ -67,11 +66,10 @@ namespace Swish
 			}
 
 			List<string> lines = new List<string>();
-			lines.Add("clear");
-			string line = StataScriptFunctions.LoadFileCommand(inputFileName);
-			lines.Add(line);
+			StataScriptFunctions.WriteHeadder(lines);
+			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
 			lines.Add("keep if " + expression);
-			line = StataScriptFunctions.SaveFileCommand(outputFileName);
+			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
 			if (File.Exists(outputFileName))
@@ -109,10 +107,9 @@ namespace Swish
 			}
 
 			List<string> lines = new List<string>();
-			lines.Add("clear");
-			string line = StataScriptFunctions.LoadFileCommand(inputFileName);
-			lines.Add(line);
-			line = "keep " + StataScriptFunctions.VariableList(variableNames);
+			StataScriptFunctions.WriteHeadder(lines);
+			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
+			string line = "keep " + StataScriptFunctions.VariableList(variableNames);
 			lines.Add(line);
 			line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
@@ -153,13 +150,12 @@ namespace Swish
 
 			/// create the do file
 			List<string> lines = new List<string>();
-			lines.Add("clear");
-			string line = StataScriptFunctions.LoadFileCommand(inputFileName);
-			lines.Add(line);
+			StataScriptFunctions.WriteHeadder(lines);
+			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
 
 			lines.Add(command);
 
-			line = StataScriptFunctions.SaveFileCommand(outputFileName);
+			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
 
@@ -226,19 +222,17 @@ namespace Swish
 			/// create the do file
 			//  merge [varlist] using filename [filename ...] [, options]
 			List<string> lines = new List<string>();
-			lines.Add("clear");
+			StataScriptFunctions.WriteHeadder(lines);
 
-			string line = StataScriptFunctions.LoadFileCommand(input2FileName);
-			lines.Add(line);
+			StataScriptFunctions.LoadFileCommand(lines, input2FileName);
 
-			line = StataScriptFunctions.SortCommand(variableNames);
+			string line = StataScriptFunctions.SortCommand(variableNames);
 			lines.Add(line);
 			line = StataScriptFunctions.SaveFileCommand(intermediateFileName);
 			lines.Add(line);
 
 			lines.Add("clear");
-			line = StataScriptFunctions.LoadFileCommand(input1FileName);
-			lines.Add(line);
+			StataScriptFunctions.LoadFileCommand(lines, input1FileName);
 
 			line = StataScriptFunctions.SortCommand(variableNames);
 			lines.Add(line);
@@ -296,12 +290,13 @@ namespace Swish
 			}
 
 			List<string> lines = new List<string>();
+
+			StataScriptFunctions.WriteHeadder(lines);
+
 			string intermediateFileName = StataScriptFunctions.ConvertToStataFormat(lines, input2FileName);
-			lines.Add("clear");
-			string line = StataScriptFunctions.LoadFileCommand(input1FileName);
-			lines.Add(line);
+			StataScriptFunctions.LoadFileCommand(lines, input1FileName);
 			lines.Add("append using \"" + intermediateFileName + "\"");
-			line = StataScriptFunctions.SaveFileCommand(outputFileName);
+			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
 			if (File.Exists(outputFileName))
@@ -335,15 +330,15 @@ namespace Swish
 			}
 
 			List<string> lines = new List<string>();
-			lines.Add("clear");
-			string line = StataScriptFunctions.LoadFileCommand(inputFileName);
-			lines.Add(line);
+			StataScriptFunctions.WriteHeadder(lines);
+
+			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
 
 			// collapse (mean) mean=head4 (median) medium=head4, by(head6)
 
 			lines.Add("collapse " + "(" + StataScriptFunctions.Write(operation) + ") " + variable + "_" + StataScriptFunctions.Write(operation) + "=" + variable);
 
-			line = StataScriptFunctions.SaveFileCommand(doOutputFileName);
+			string line = StataScriptFunctions.SaveFileCommand(doOutputFileName);
 			lines.Add(line);
 
 			string log = StataFunctions.RunScript(lines, false);
@@ -385,13 +380,12 @@ namespace Swish
 
 			/// create the do file
 			List<string> lines = new List<string>();
-			lines.Add("clear");
-			string line = StataScriptFunctions.LoadFileCommand(inputFileName);
-			lines.Add(line);
+			StataScriptFunctions.WriteHeadder(lines);
+			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
 
 			/// sort varlist, stable
 			/// add variables names
-			line = StataScriptFunctions.SortCommand(variableNames);
+			string line = StataScriptFunctions.SortCommand(variableNames);
 			lines.Add(line);
 
 			line = StataScriptFunctions.SaveFileCommand(outputFileName);
