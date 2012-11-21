@@ -14,10 +14,10 @@ namespace Swish.MergeAdapter
 			try
 			{
 				List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
-				string input1FileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "1", splitArguments, true);
-				string input2FileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true);
+				string input1FileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "1", splitArguments, true));
+				string input2FileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true));
 				List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
-				string outputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, false);
+				string outputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, false));
 				if (string.IsNullOrWhiteSpace(outputFileName))
 				{
 					outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");

@@ -16,7 +16,7 @@ namespace Swish.Tests
 			string inputFile = GenerateMeanInputFile();
 
 			string outputFile = Path.GetTempFileName() + ".csv";
-			if (File.Exists(outputFile))
+			if (SwishFunctions.FileExists(outputFile))
 			{
 				File.Delete(outputFile);
 			}
@@ -41,7 +41,7 @@ namespace Swish.Tests
 			string stataExecutable = StataFunctions.StataExecutablePath;
 			SwishFunctions.RunProcess(stataExecutable, arguments, workingDirectory, false, out exitCode, out output);
 
-			if (!File.Exists(outputFile))
+			if (!SwishFunctions.FileExists(outputFile))
 			{
 				throw new Exception();
 			}
@@ -50,7 +50,7 @@ namespace Swish.Tests
 		public static string GenerateMeanInputFile()
 		{
 			string fileName = Path.GetTempFileName() + ".csv";
-			if (File.Exists(fileName))
+			if (SwishFunctions.FileExists(fileName))
 			{
 				File.Delete(fileName);
 			}
@@ -94,7 +94,7 @@ namespace Swish.Tests
 		public static void GenerateMergeInputFiles(out string inputFileName1, out string inputFileName2)
 		{
 			inputFileName1 = Path.GetTempFileName() + ".csv";
-			if (File.Exists(inputFileName1))
+			if (SwishFunctions.FileExists(inputFileName1))
 			{
 				File.Delete(inputFileName1);
 			}
@@ -132,7 +132,7 @@ namespace Swish.Tests
 			File.WriteAllLines(inputFileName1, lines.ToArray());
 
 			inputFileName2 = Path.GetTempFileName() + ".csv";
-			if (File.Exists(inputFileName2))
+			if (SwishFunctions.FileExists(inputFileName2))
 			{
 				File.Delete(inputFileName2);
 			}
@@ -227,7 +227,7 @@ namespace Swish.Tests
 		internal static void GenerateAppendInputFile(out string inputFileName1, out string inputFileName2)
 		{
 			inputFileName1 = Path.GetTempFileName() + ".csv";
-			if (File.Exists(inputFileName1))
+			if (SwishFunctions.FileExists(inputFileName1))
 			{
 				File.Delete(inputFileName1);
 			}
@@ -252,7 +252,7 @@ namespace Swish.Tests
 			File.WriteAllLines(inputFileName1, lines.ToArray());
 
 			inputFileName2 = Path.GetTempFileName() + ".csv";
-			if (File.Exists(inputFileName2))
+			if (SwishFunctions.FileExists(inputFileName2))
 			{
 				File.Delete(inputFileName2);
 			}

@@ -9,7 +9,7 @@ namespace Swish
 	{
 		public static void Transpose(string inputFileName, string outputFileName)
 		{
-			if (!File.Exists(inputFileName))
+			if (!SwishFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
@@ -19,7 +19,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -31,13 +31,13 @@ namespace Swish
 			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!File.Exists(outputFileName))
+			if (!SwishFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -45,7 +45,7 @@ namespace Swish
 
 		public static void Select(string inputFileName, string outputFileName, string expression)
 		{
-			if (!File.Exists(inputFileName))
+			if (!SwishFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
@@ -60,7 +60,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -72,13 +72,13 @@ namespace Swish
 			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!File.Exists(outputFileName))
+			if (!SwishFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -86,7 +86,7 @@ namespace Swish
 
 		public static void SelectColumns(string inputFileName, string outputFileName, List<string> variableNames)
 		{
-			if (!File.Exists(inputFileName))
+			if (!SwishFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
@@ -101,7 +101,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -114,13 +114,13 @@ namespace Swish
 			line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!File.Exists(outputFileName))
+			if (!SwishFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -133,7 +133,7 @@ namespace Swish
 				outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			}
 
-			if (!File.Exists(inputFileName))
+			if (!SwishFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
@@ -143,7 +143,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -159,13 +159,13 @@ namespace Swish
 			lines.Add(line);
 
 
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!File.Exists(outputFileName))
+			if (!SwishFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -173,12 +173,12 @@ namespace Swish
 
 		public static void Merge(string input1FileName, string input2FileName, List<string> variableNames, string outputFileName)
 		{
-			if (!File.Exists(input1FileName))
+			if (!SwishFunctions.FileExists(input1FileName))
 			{
 				throw new Exception("cannot find file \"" + input1FileName + "\"");
 			}
 
-			if (!File.Exists(input2FileName))
+			if (!SwishFunctions.FileExists(input2FileName))
 			{
 				throw new Exception("cannot find file \"" + input2FileName + "\"");
 			}
@@ -191,7 +191,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -207,14 +207,14 @@ namespace Swish
 			}
 
 			string doOutputFileName = Path.GetTempFileName() + ".csv";
-			if (File.Exists(doOutputFileName))
+			if (SwishFunctions.FileExists(doOutputFileName))
 			{
 				// Stata does not overwrite files
 				File.Delete(doOutputFileName);
 			}
 
 			string intermediateFileName = Path.GetTempFileName() + ".dta";
-			if (File.Exists(intermediateFileName))
+			if (SwishFunctions.FileExists(intermediateFileName))
 			{
 				File.Delete(intermediateFileName);
 			}
@@ -242,13 +242,13 @@ namespace Swish
 			lines.Add(line);
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!File.Exists(doOutputFileName))
+			if (!SwishFunctions.FileExists(doOutputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
 
 			/// move the output file
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -266,12 +266,12 @@ namespace Swish
 				outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			}
 
-			if (!File.Exists(input1FileName))
+			if (!SwishFunctions.FileExists(input1FileName))
 			{
 				throw new Exception("cannot find file \"" + input1FileName + "\"");
 			}
 
-			if (!File.Exists(input2FileName))
+			if (!SwishFunctions.FileExists(input2FileName))
 			{
 				throw new Exception("cannot find file \"" + input2FileName + "\"");
 			}
@@ -284,7 +284,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -299,13 +299,13 @@ namespace Swish
 			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!File.Exists(outputFileName))
+			if (!SwishFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -317,13 +317,13 @@ namespace Swish
 
 		public static double Collapse(string inputFileName, string variable, CollapseOpperation operation)
 		{
-			if (!File.Exists(inputFileName))
+			if (!SwishFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
 
 			string doOutputFileName = Path.GetTempFileName() + ".csv";
-			if (File.Exists(doOutputFileName))
+			if (SwishFunctions.FileExists(doOutputFileName))
 			{
 				// Stata does not overwrite files
 				File.Delete(doOutputFileName);
@@ -342,7 +342,7 @@ namespace Swish
 			lines.Add(line);
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!File.Exists(doOutputFileName))
+			if (!SwishFunctions.FileExists(doOutputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -363,7 +363,7 @@ namespace Swish
 				outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			}
 
-			if (!File.Exists(inputFileName))
+			if (!SwishFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
@@ -373,7 +373,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -391,13 +391,13 @@ namespace Swish
 			line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!File.Exists(outputFileName))
+			if (!SwishFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}

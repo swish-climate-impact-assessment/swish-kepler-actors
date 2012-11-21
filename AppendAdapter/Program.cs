@@ -14,9 +14,9 @@ namespace Swish.AppendAdapter
 			try
 			{
 				List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
-				string input1FileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "1", splitArguments, true);
-				string input2FileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true);
-				string outputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, false);
+				string input1FileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "1", splitArguments, true));
+				string input2FileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true));
+				string outputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, false));
 
 				outputFileName = AdapterFunctions.Append(input1FileName, input2FileName, outputFileName);
 

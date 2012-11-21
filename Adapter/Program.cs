@@ -38,7 +38,7 @@ namespace Swish.Adapter
 		{
 			splitArguments.Clear();
 			string fileName = Path.GetTempFileName();
-			if (File.Exists(fileName))
+			if (SwishFunctions.FileExists(fileName))
 			{
 				File.Delete(fileName);
 			}

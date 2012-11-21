@@ -124,7 +124,7 @@ namespace Swish.SimpleInstaller
 		{
 			try
 			{
-				if (!File.Exists(fileName))
+				if (!SwishFunctions.FileExists(fileName))
 				{
 					return;
 				}
@@ -160,7 +160,7 @@ namespace Swish.SimpleInstaller
 		{
 			string destinationDirectory = Path.GetDirectoryName(destinationFileName);
 			CreateDirectory(destinationDirectory);
-			if (File.Exists(destinationFileName))
+			if (SwishFunctions.FileExists(destinationFileName))
 			{
 				File.Delete(destinationFileName);
 			}

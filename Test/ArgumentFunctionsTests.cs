@@ -12,7 +12,7 @@ namespace Swish.Tests
 			// this tests that the arguments can be in quates,
 			// use by the command adapter to specify the command and escape characters
 
-			string argument1Name = ArgumentFunctions.ArgumentCharacter+"blah";
+			string argument1Name = ArgumentFunctions.ArgumentCharacter + "blah";
 			string escapedSlash = "\\/";
 			string escapedQuote = "\\\"";
 

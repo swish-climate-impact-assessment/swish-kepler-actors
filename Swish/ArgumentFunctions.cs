@@ -7,7 +7,7 @@ namespace Swish
 {
 	public static class ArgumentFunctions
 	{
-		public const string ArgumentCharacter = "/";
+		public const string ArgumentCharacter = ">";
 
 		public const string ErrorArgument = ArgumentCharacter + "SwishError";
 		public const string InputArgument = ArgumentCharacter + "input";

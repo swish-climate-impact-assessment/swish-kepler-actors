@@ -14,7 +14,7 @@ namespace Swish.CollapseAdapter
 			try
 			{
 				List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
-				string inputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true);
+				string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true));
 				string variable = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "variable", splitArguments, true);
 				string operation = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "operation", splitArguments, false);
 

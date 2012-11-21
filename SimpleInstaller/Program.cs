@@ -19,7 +19,7 @@ namespace Swish.SimpleInstaller
 			bool clean = ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "clean", splitArguments);
 
 			string logFileName = Path.Combine(Application.StartupPath, "Error.log.txt");
-			if (File.Exists(logFileName))
+			if (SwishFunctions.FileExists(logFileName))
 			{
 				File.Delete(logFileName);
 			}

@@ -10,16 +10,11 @@ namespace Swish.DoScriptAdapter
 			try
 			{
 				List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
-				string inputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "filename", splitArguments, true);
+				string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "filename", splitArguments, true));
 
 				string log = StataFunctions.RunScript(inputFileName, false);
-				if (!string.IsNullOrWhiteSpace(log))
-				{
-					Console.Write(log);
-					return -1;
-				}
+				Console.Write(log);
 
-				Console.Write(string.Empty);
 				return 0;
 			} catch (Exception error)
 			{

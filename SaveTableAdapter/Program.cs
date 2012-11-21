@@ -14,15 +14,15 @@ namespace Swish.SaveTableAdapter
 			try
 			{
 				List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
-				string inputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true);
-				string outputFileName = ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, true);
+				string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+				string outputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, true));
 
-				if (!File.Exists(inputFileName))
+				if (!SwishFunctions.FileExists(inputFileName))
 				{
 					throw new Exception("cannot find file \"" + inputFileName + "\"");
 				}
 
-				if (File.Exists(outputFileName))
+				if (SwishFunctions.FileExists(outputFileName))
 				{
 					File.Delete(outputFileName);
 				}
@@ -42,13 +42,13 @@ namespace Swish.SaveTableAdapter
 				string line = StataScriptFunctions.SaveFileCommand(outputFileName);
 				lines.Add(line);
 
-				if (File.Exists(outputFileName))
+				if (SwishFunctions.FileExists(outputFileName))
 				{
 					File.Delete(outputFileName);
 				}
 
 				string log = StataFunctions.RunScript(lines, false);
-				if (!File.Exists(outputFileName))
+				if (!SwishFunctions.FileExists(outputFileName))
 				{
 					throw new Exception("Output file was not created" + log);
 				}

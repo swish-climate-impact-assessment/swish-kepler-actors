@@ -17,7 +17,7 @@ namespace Swish
 
 			string log = RunScript(doFileName, useGui);
 
-			if (File.Exists(tempFileName))
+			if (SwishFunctions.FileExists(tempFileName))
 			{
 				File.Delete(tempFileName);
 			}
@@ -33,10 +33,12 @@ namespace Swish
 				string arguments = BatchArgument + "\"" + doFileName + "\"";
 
 				// there is also the log to deal with
-				string workingDirectory = Path.GetDirectoryName(doFileName);
+				string workingDirectory = Path.GetDirectoryName(Path.GetFullPath(doFileName));
+				//string workingDirectory = Environment.CurrentDirectory;
 
 				int exitCode;
 				string output;
+
 				SwishFunctions.RunProcess(StataExecutablePath, arguments, workingDirectory, false, out exitCode, out output);
 
 				string logFileName = Path.GetFileName(doFileName);
@@ -48,7 +50,7 @@ namespace Swish
 
 				logFileName = Path.Combine(workingDirectory, logFileName + ".log");
 
-				if (File.Exists(logFileName))
+				if (SwishFunctions.FileExists(logFileName))
 				{
 					log = File.ReadAllText(logFileName);
 					File.Delete(logFileName);

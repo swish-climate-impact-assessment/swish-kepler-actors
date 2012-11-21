@@ -8,3 +8,4 @@ D:\Development\swishKAGit\SelectColumnsAdapter\bin\Debug
 D:\Development\swishKAGit\SortAdapter\bin\Debug
 D:\Development\swishKAGit\TransposeAdapter\bin\Debug
 D:\Development\swishKAGit\DoScriptAdapter\bin\Debug
+D:\Development\swishKAGit\Adapter\bin\Debug

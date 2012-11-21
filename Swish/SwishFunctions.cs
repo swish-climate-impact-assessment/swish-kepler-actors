@@ -67,7 +67,7 @@ namespace Swish
 			for (int attemptIndex = 0; attemptIndex < attempts.Count; attemptIndex++)
 			{
 				string path = attempts[attemptIndex];
-				if (File.Exists(path))
+				if (SwishFunctions.FileExists(path))
 				{
 					string realFileName = Path.GetFullPath(path);
 					if (!ignoreApplicationDirectory || realFileName != Application.ExecutablePath)
@@ -143,18 +143,63 @@ namespace Swish
 		public static string TempoaryOutputFileName(string extension)
 		{
 			string tempOutputFileName = Path.GetTempFileName();
-			if (File.Exists(tempOutputFileName))
+			if (SwishFunctions.FileExists(tempOutputFileName))
 			{
 				File.Delete(tempOutputFileName);
 			}
 			string outputFileName = tempOutputFileName + extension;
-			if (File.Exists(outputFileName))
+			if (SwishFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
 			return outputFileName;
 		}
 
+		private static bool _environmentDetected;
+		private static bool _monoEnvironment;
 
+		public static bool MonoEnvironment
+		{
+			get
+			{
+				bool flag = _environmentDetected;
+				if (!flag)
+				{
+					_monoEnvironment = Type.GetType("Mono.Runtime") != null;
+					_environmentDetected = true;
+				}
+				bool flag1 = _monoEnvironment;
+				return flag1;
+			}
+		}
+
+		public static string AdjustFileName(string fileName)
+		{
+			bool monoEnvironment = !MonoEnvironment;
+			if (monoEnvironment)
+			{
+				fileName = fileName.Replace('/', '\\');
+			} else
+			{
+				fileName = fileName.Replace('\\', '/');
+			}
+			string str = fileName;
+			return str;
+		}
+
+		public static bool FileExists(string fileName)
+		{
+			if (File.Exists(fileName))
+			{
+				return true;
+			}
+
+			if (File.Exists(fileName + ".dta"))
+			{
+				return true;
+			}
+
+			return false;
+		}
 	}
 }
