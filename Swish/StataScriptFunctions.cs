@@ -121,7 +121,14 @@ namespace Swish
 		public static void WriteHeadder(List<string> lines)
 		{
 			lines.Add("set more off");
-			lines.Add("set mem 1g");
+			//lines.Add("noisily {");
+			lines.Add("set output proc");
+			//lines.Add("set mem 1g");
+		}
+
+		public static void WriteFooter(List<string> lines)
+		{
+			//lines.Add("}");
 		}
 
 	}

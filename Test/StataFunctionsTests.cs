@@ -39,7 +39,7 @@ namespace Swish.Tests
 			int exitCode;
 			string output;
 			string stataExecutable = StataFunctions.StataExecutablePath;
-			SwishFunctions.RunProcess(stataExecutable, arguments, workingDirectory, false, out exitCode, out output);
+			SwishFunctions.RunProcess(stataExecutable, arguments, workingDirectory, false, TimeSpan.Zero, out exitCode, out output);
 
 			if (!SwishFunctions.FileExists(outputFile))
 			{
@@ -279,6 +279,34 @@ namespace Swish.Tests
 			File.WriteAllLines(inputFileName2, lines.ToArray());
 
 		}
+
+		public static string GenerateReplaceInputFile()
+		{
+			string fileName = Path.GetTempFileName() + ".csv";
+			if (SwishFunctions.FileExists(fileName))
+			{
+				File.Delete(fileName);
+			}
+
+			List<string> lines = new List<string>();
+			lines.Add("head2, head4, head6");
+			lines.Add("1, 2, 6");
+			lines.Add("1, 2, 6");
+			lines.Add("1, 5, 6");
+			lines.Add("1, 5, 6");
+			lines.Add("4, 5, 6");
+			lines.Add("4, 5, 6");
+			lines.Add("4, 5, 3");
+			lines.Add("4, 5, 3");
+			lines.Add("4, 2, 3");
+			lines.Add("4, 2, 3");
+
+			File.WriteAllLines(fileName, lines.ToArray());
+
+			return fileName;
+		}
+
+
 	}
 }
 

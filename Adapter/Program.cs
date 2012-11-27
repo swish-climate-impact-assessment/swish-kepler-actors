@@ -16,15 +16,8 @@ namespace Swish.Adapter
 				List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
 				string operation = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "operation", splitArguments, true);
 
-				switch (operation)
-				{
-				case "temporaryFileName":
-					TemporaryFileName(splitArguments);
-					break;
+				AdapterFunctions.RunOperation(operation, splitArguments);
 
-				default:
-					throw new Exception("Unknown operation");
-				}
 				return 0;
 			} catch (Exception error)
 			{
@@ -32,18 +25,6 @@ namespace Swish.Adapter
 				Console.Write(message);
 				return -1;
 			}
-		}
-
-		private static void TemporaryFileName(List<Tuple<string, string>> splitArguments)
-		{
-			splitArguments.Clear();
-			string fileName = Path.GetTempFileName();
-			if (SwishFunctions.FileExists(fileName))
-			{
-				File.Delete(fileName);
-			}
-			Console.Write(fileName);
-
 		}
 
 	}

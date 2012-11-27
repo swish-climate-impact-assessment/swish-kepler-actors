@@ -10,32 +10,53 @@ namespace Swish
 {
 	public static class SwishFunctions
 	{
-		public static void RunProcess(string fileName, string arguments, string workingDirectory, bool returnBeforeExit, out int exitCode, out string output)
+		public static void RunProcess(string fileName, string arguments, string workingDirectory, bool returnBeforeExit, TimeSpan timeout, out int exitCode, out string output)
 		{
-			Process run = new Process();
-			run.StartInfo.Arguments = arguments;
-			if (!string.IsNullOrWhiteSpace(workingDirectory))
+			using (Process run = new Process())
 			{
-				run.StartInfo.WorkingDirectory = workingDirectory;
-			}
-			run.StartInfo.FileName = fileName;
-			run.StartInfo.RedirectStandardOutput = true;
-			run.StartInfo.UseShellExecute = false;
-			run.Start();
+				run.StartInfo.Arguments = arguments;
+				if (!string.IsNullOrWhiteSpace(workingDirectory))
+				{
+					run.StartInfo.WorkingDirectory = workingDirectory;
+				}
+				run.StartInfo.FileName = fileName;
+				run.StartInfo.RedirectStandardOutput = true;
+				run.StartInfo.RedirectStandardError = true;
+				run.StartInfo.UseShellExecute = false;
+				run.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+				run.Start();
 
-			if (returnBeforeExit)
-			{
-				exitCode = -1;
-				output = null;
-				return;
-			}
+				if (returnBeforeExit)
+				{
+					exitCode = -1;
+					output = null;
+					run.Close();
+					return;
+				}
 
-			while (!run.HasExited)
-			{
-				Thread.Sleep(1);
+				if (timeout != null && timeout > TimeSpan.Zero)
+				{
+					run.WaitForExit((int)timeout.TotalMilliseconds);
+					if (!run.HasExited)
+					{
+						run.Kill();
+						run.WaitForExit();
+						exitCode = run.ExitCode;
+						output = run.StandardOutput.ReadToEnd();
+						output += run.StandardError.ReadToEnd();
+						run.Close();
+						throw new Exception("Process timmed out");
+					}
+				} else
+				{
+					run.WaitForExit();
+				}
+
+				exitCode = run.ExitCode;
+				output = run.StandardError.ReadToEnd();
+				output += run.StandardOutput.ReadToEnd();
+				run.Close();
 			}
-			exitCode = run.ExitCode;
-			output = run.StandardOutput.ReadToEnd();
 		}
 
 		public static string ResloveFileName(string fileName, List<string> possibleLocations, bool ignoreApplicationDirectory, bool ignoreError)

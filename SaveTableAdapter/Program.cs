@@ -47,6 +47,8 @@ namespace Swish.SaveTableAdapter
 					File.Delete(outputFileName);
 				}
 
+				StataScriptFunctions.WriteFooter(lines);
+
 				string log = StataFunctions.RunScript(lines, false);
 				if (!SwishFunctions.FileExists(outputFileName))
 				{

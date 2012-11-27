@@ -22,7 +22,7 @@ namespace Swish.Tests
  				argument1Name , // argument name
  				"\""+argument1Name+" "+ escapedSlash,  // value part 1 of 2
 				 escapedQuote + "value" + "\"", // value part 2 of 2
-				"/other",
+				ArgumentFunctions.ArgumentCharacter+"other",
 				"otherValue"
 			};
 
@@ -35,7 +35,7 @@ namespace Swish.Tests
 			}
 
 			// test that other arguments are not affected
-			if (ArgumentFunctions.GetArgument("/other", splitArguments, true) != "otherValue")
+			if (ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "other", splitArguments, true) != "otherValue")
 			{
 				throw new Exception();
 			}
@@ -46,19 +46,19 @@ namespace Swish.Tests
 			/// this is test verifies that gets switch returns true if command argument present
 			/// and false if it is absent
 
-			string arguments = "/flag /setting";
+			string arguments = ArgumentFunctions.ArgumentCharacter + "flag " + ArgumentFunctions.ArgumentCharacter + "setting";
 			List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
-			if (!ArgumentFunctions.GetSwitch("/flag", splitArguments))
+			if (!ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "flag", splitArguments))
 			{
 				throw new Exception("");
 			}
 
-			if (ArgumentFunctions.GetSwitch("/fake", splitArguments))
+			if (ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "fake", splitArguments))
 			{
 				throw new Exception("");
 			}
 
-			if (!ArgumentFunctions.GetSwitch("/setting", splitArguments))
+			if (!ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "setting", splitArguments))
 			{
 				throw new Exception("");
 			}

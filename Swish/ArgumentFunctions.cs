@@ -35,6 +35,10 @@ namespace Swish
 
 		private static int IndexOf(string name, List<Tuple<string, string>> splitArguments)
 		{
+			if (!name.StartsWith(ArgumentCharacter))
+			{
+				throw new Exception("Invalid argument name \"" + name + "\"");
+			}
 			int listIndex = -1;
 			for (int argumentIndex = 0; argumentIndex < splitArguments.Count; argumentIndex++)
 			{

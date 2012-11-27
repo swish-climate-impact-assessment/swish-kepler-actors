@@ -104,6 +104,9 @@ namespace Swish.Tests
 			lines.Add("drop " + StataScriptFunctions.MergeColumnName);
 			line = StataScriptFunctions.SaveFileCommand(@"C:\Swish\SampleData\MergeTableOut.csv");
 			lines.Add(line);
+
+			StataScriptFunctions.WriteFooter(lines);
+
 			File.WriteAllLines(doFileName, lines.ToArray());
 
 

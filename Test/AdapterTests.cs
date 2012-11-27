@@ -192,7 +192,6 @@ namespace Swish.Tests
 			return false;
 		}
 
-
 		public void Append()
 		{
 			// this tests that appending two tables results in a new table where 
@@ -244,7 +243,59 @@ namespace Swish.Tests
 			List<string> variables = new List<string>();
 			variables.Add("head4");
 			AdapterFunctions.Sort(inputFileName, variables, outputFileName);
+		}
 
+		internal void Replace_1()
+		{
+			string inputFileName = StataFunctionsTests.GenerateReplaceInputFile();
+
+			string outputFileName = Path.GetTempFileName() + ".csv";
+			if (SwishFunctions.FileExists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+			string condition = "head2==4";
+			string value = "head2=1";
+			AdapterFunctions.Replace(inputFileName, outputFileName, condition, value);
+
+			Csv table = CsvFunctions.Read(outputFileName);
+
+			int head2Index = table.ColumnIndex("head2");
+			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
+			{
+				List<string> record = table.Records[recordIndex];
+				int result = int.Parse(record[head2Index]);
+				if (result != 1)
+				{
+					throw new Exception();
+				}
+			}
+		}
+
+		internal void Replace_2()
+		{
+			string inputFileName = StataFunctionsTests.GenerateReplaceInputFile();
+
+			string outputFileName = Path.GetTempFileName() + ".csv";
+			if (SwishFunctions.FileExists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+			string condition = "head2==4";
+			string value = "head2=1";
+
+			List<Tuple<string, string>> splitArguments = new List<Tuple<string, string>>();
+			splitArguments.Add(new Tuple<string, string>(ArgumentFunctions.InputArgument, inputFileName));
+			splitArguments.Add(new Tuple<string, string>(ArgumentFunctions.OutputArgument, outputFileName));
+			splitArguments.Add(new Tuple<string, string>(ArgumentFunctions.ArgumentCharacter + "condition", condition));
+			splitArguments.Add(new Tuple<string, string>(ArgumentFunctions.ArgumentCharacter + "value", value));
+
+			AdapterFunctions.RunOperation(AdapterFunctions.ReplaceOperation, splitArguments);
+
+			if (!File.Exists(outputFileName))
+			{
+				throw new Exception();
+			}
 		}
 
 	}

@@ -95,60 +95,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="Actors\AppendTables.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\MergeTables.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\RunDoScript.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\SaveTable.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\SelectColumnsFromTable.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\SelectFromTable.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\SortTable.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\StataCommand.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\TemporaryFileName.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\TransposeTable.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\VariableCount.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\VariableIQR.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\VariableMaximum.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\VariableMean.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\VariableMedian.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\VariableMinimum.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\VariableStandardDeviation.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Actors\VariableSum.kar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -216,6 +162,8 @@ copy "..\..\..\SelectAdapter\bin\Debug\Swish.SelectAdapter.exe"         "..\..\.
 copy "..\..\..\SelectColumnsAdapter\bin\Debug\Swish.SelectColumnsAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SelectColumnsAdapter.exe"
 copy "..\..\..\DoScriptAdapter\bin\Debug\Swish.DoScriptAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.DoScriptAdapter.exe"
 copy "..\..\..\Adapter\bin\Debug\Swish.Adapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.Adapter.exe"
+copy "..\..\Actors\*"         ".\Actors\"
+
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
