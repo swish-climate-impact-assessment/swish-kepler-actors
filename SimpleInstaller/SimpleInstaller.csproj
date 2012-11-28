@@ -151,19 +151,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "..\..\..\AppendAdapter\bin\Debug\Swish.AppendAdapter.exe"     "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.AppendAdapter.exe"
-copy "..\..\..\CollapseAdapter\bin\Debug\Swish.CollapseAdapter.exe" "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.CollapseAdapter.exe"
-copy "..\..\..\MergeAdapter\bin\Debug\Swish.MergeAdapter.exe"       "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.MergeAdapter.exe"
-copy "..\..\..\SortAdapter\bin\Debug\Swish.SortAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SortAdapter.exe"
-copy "..\..\..\CommandAdapter\bin\Debug\Swish.CommandAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.CommandAdapter.exe"
-copy "..\..\..\TransposeAdapter\bin\Debug\Swish.TransposeAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.TransposeAdapter.exe"
-copy "..\..\..\SaveTableAdapter\bin\Debug\Swish.SaveTableAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SaveTableAdapter.exe"
-copy "..\..\..\SelectAdapter\bin\Debug\Swish.SelectAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SelectAdapter.exe"
-copy "..\..\..\SelectColumnsAdapter\bin\Debug\Swish.SelectColumnsAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.SelectColumnsAdapter.exe"
-copy "..\..\..\DoScriptAdapter\bin\Debug\Swish.DoScriptAdapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.DoScriptAdapter.exe"
-copy "..\..\..\Adapter\bin\Debug\Swish.Adapter.exe"         "..\..\..\SimpleInstaller\bin\Debug\SwishBin\Swish.Adapter.exe"
+    <PostBuildEvent>..\..\MakeDirectory.exe ..\..\Actors
+delete "..\..\Actors\*"         ".\Actors\"
 copy "..\..\Actors\*"         ".\Actors\"
-
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

@@ -9,38 +9,6 @@ namespace Swish.Tests
 	class ActorTests
 	{
 
-		private static string _keplerFileName = null;
-		public static string KeplerFileName
-		{
-			get
-			{
-				if (string.IsNullOrWhiteSpace(_keplerFileName))
-				{
-					List<string> locations = SwishFunctions.Locations();
-					locations.Add(@"C:\Program Files\Kepler-2.3");
-
-					List<string> fileNames = new List<string>();
-					fileNames.Add("kepler.bat");
-
-					for (int fileIndex = 0; fileIndex < fileNames.Count; fileIndex++)
-					{
-						string file = fileNames[fileIndex];
-						string fileName = SwishFunctions.ResloveFileName(file, locations, false, true);
-						if (!string.IsNullOrWhiteSpace(fileName))
-						{
-							_keplerFileName = fileName;
-							return fileName;
-						}
-					}
-
-					throw new Exception("Could not find installed version of Kepler");
-
-				}
-				return _keplerFileName;
-			}
-			set { _keplerFileName = value; }
-		}
-
 		internal void AppendTables()
 		{
 
@@ -71,17 +39,7 @@ namespace Swish.Tests
 			parameters.Add(new Tuple<string, string>("Input2", inputFileName2));
 			parameters.Add(new Tuple<string, string>("Output", outputFileName));
 
-			string arguments = "-runkar -nogui " + worflowFileName;
-			for (int parameterIndex = 0; parameterIndex < parameters.Count; parameterIndex++)
-			{
-				Tuple<string, string> parameter = parameters[parameterIndex];
-				arguments += " -" + parameter.Item1 + " " + parameter.Item2;
-			}
-
-			string workingDirectory = System.IO.Path.GetDirectoryName(KeplerFileName);
-			int exitCode;
-			string output;
-			SwishFunctions.RunProcess(KeplerFileName, arguments, workingDirectory, false, new TimeSpan(0, 0, 0, 8, 0), out exitCode, out output);
+			KeplerFunctions.RunWorkflow(worflowFileName, parameters);
 
 			Csv table = CsvFunctions.Read(outputFileName);
 

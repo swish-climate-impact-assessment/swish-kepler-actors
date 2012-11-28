@@ -39,7 +39,7 @@ namespace Swish
 				int exitCode;
 				string output;
 
-				SwishFunctions.RunProcess(StataExecutablePath, arguments, workingDirectory, false, TimeSpan.Zero, out exitCode, out output);
+				SwishFunctions.RunProcess(ExecutablePath, arguments, workingDirectory, false, TimeSpan.Zero, out exitCode, out output);
 
 				string logFileName = Path.GetFileName(doFileName);
 				int index = logFileName.IndexOf('.');
@@ -64,7 +64,7 @@ namespace Swish
 				string runDoFileName = SwishFunctions.ResloveFileName("rundo.exe", locations, false, false);
 
 				// run Stata
-				RunStata();
+				Run();
 
 				int exitCode;
 				string output;
@@ -74,7 +74,7 @@ namespace Swish
 			return log;
 		}
 
-		private static void RunStata()
+		private static void Run()
 		{
 			Process[] processes = Process.GetProcesses();
 			List<Process> sataProcesses = new List<Process>();
@@ -98,19 +98,19 @@ namespace Swish
 				return;
 			}
 
-			string fileName = StataExecutablePath;
+			string fileName = ExecutablePath;
 
 			int exitCode;
 			string output;
 			SwishFunctions.RunProcess(fileName, "", Environment.CurrentDirectory, true,TimeSpan.Zero, out exitCode, out output);
 		}
 
-		private static string _stataExecutablePath = null;
-		public static string StataExecutablePath
+		private static string _executablePath = null;
+		public static string ExecutablePath
 		{
 			get
 			{
-				if (string.IsNullOrWhiteSpace(_stataExecutablePath))
+				if (string.IsNullOrWhiteSpace(_executablePath))
 				{
 					List<string> locations = SwishFunctions.Locations();
 					locations.Add(@"C:\Program Files\Stata12\");
@@ -149,7 +149,7 @@ namespace Swish
 						string fileName = SwishFunctions.ResloveFileName(file, locations, false, true);
 						if (!string.IsNullOrWhiteSpace(fileName))
 						{
-							_stataExecutablePath = fileName;
+							_executablePath = fileName;
 							return fileName;
 						}
 					}
@@ -157,9 +157,9 @@ namespace Swish
 					throw new Exception("Could not find installed version of Stata");
 
 				}
-				return _stataExecutablePath;
+				return _executablePath;
 			}
-			set { _stataExecutablePath = value; }
+			set { _executablePath = value; }
 		}
 
 	}

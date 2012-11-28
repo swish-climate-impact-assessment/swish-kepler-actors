@@ -61,10 +61,6 @@
       <Project>{B8033E78-6AD7-4C76-A30B-489F5ED82ED3}</Project>
       <Name>Adapter</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CommandAdapter\CommandAdapter.csproj">
-      <Project>{26E6AC49-1553-4839-BB82-4F23DA9D5F61}</Project>
-      <Name>CommandAdapter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Swish\Swish.csproj">
       <Project>{EBB44164-34A5-434F-8EDB-6C0AC6F4BAE4}</Project>
       <Name>Swish</Name>

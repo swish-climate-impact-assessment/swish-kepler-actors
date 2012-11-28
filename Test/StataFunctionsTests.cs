@@ -38,7 +38,7 @@ namespace Swish.Tests
 
 			int exitCode;
 			string output;
-			string stataExecutable = StataFunctions.StataExecutablePath;
+			string stataExecutable = StataFunctions.ExecutablePath;
 			SwishFunctions.RunProcess(stataExecutable, arguments, workingDirectory, false, TimeSpan.Zero, out exitCode, out output);
 
 			if (!SwishFunctions.FileExists(outputFile))
@@ -91,7 +91,7 @@ namespace Swish.Tests
 		}
 
 		public const string MergeVariable = "head4";
-		public static void GenerateMergeInputFiles(out string inputFileName1, out string inputFileName2)
+		public static void GenerateMergeInputFiles(out string inputFileName1, out string inputFileName2, bool missing)
 		{
 			inputFileName1 = Path.GetTempFileName() + ".csv";
 			if (SwishFunctions.FileExists(inputFileName1))
@@ -101,34 +101,42 @@ namespace Swish.Tests
 
 			List<string> lines = new List<string>();
 			lines.Add("head2,head4");
+			// left
 			lines.Add("0.060698805,25");
-			lines.Add("0.40116903,8");
 			lines.Add("0.03954637,11");
-			lines.Add("0.440951591,18");
-			lines.Add("0.891262839,9");
-			lines.Add("0.507699792,15");
-			lines.Add("0.396273631,22");
 			lines.Add("0.565044458,7");
-			lines.Add("0.013508331,24");
 			lines.Add("0.841300741,19");
-			lines.Add("0.126662171,21");
-			lines.Add("0.31771373,26");
-			lines.Add("0.049243499,16");
-			lines.Add("0.920101783,14");
-			lines.Add("0.596324211,10");
-			lines.Add("0.802740035,2");
-			lines.Add("0.876307404,3");
 			lines.Add("0.132879521,1");
-			lines.Add("0.30564522,20");
 			lines.Add("0.273409937,23");
-			lines.Add("0.17312655,4");
 			lines.Add("0.712484717,5");
-			lines.Add("0.282409141,12");
-			lines.Add("0.052300672,0");
 			lines.Add("0.527055285,17");
-			lines.Add("0.320202245,6");
 			lines.Add("0.996521752,13");
 
+			// joint
+			lines.Add("0.891262839,9");
+			lines.Add("0.507699792,15");
+			lines.Add("0.126662171,21");
+			lines.Add("0.876307404,3");
+
+			lines.Add("0.440951591,18");
+			lines.Add("0.013508331,24");
+			lines.Add("0.282409141,12");
+			lines.Add("0.052300672,0");
+			lines.Add("0.320202245,6");
+
+			if (!missing)
+			{
+				// missing
+				lines.Add("0.40116903,8");
+				lines.Add("0.396273631,22");
+				lines.Add("0.31771373,26");
+				lines.Add("0.049243499,16");
+				lines.Add("0.596324211,10");
+				lines.Add("0.802740035,2");
+				lines.Add("0.30564522,20");
+				lines.Add("0.17312655,4");
+
+			}
 			File.WriteAllLines(inputFileName1, lines.ToArray());
 
 			inputFileName2 = Path.GetTempFileName() + ".csv";
@@ -139,33 +147,41 @@ namespace Swish.Tests
 
 			lines = new List<string>();
 			lines.Add("head6,head4");
-			lines.Add("o,15");
-			lines.Add("q,17");
-			lines.Add("j,9");
-			lines.Add("u,21");
-			lines.Add("t,20");
-			lines.Add("x,24");
+			// right
 			lines.Add("c,2");
-			lines.Add("w,23");
-			lines.Add("l,11");
-			lines.Add("g,6");
+			lines.Add("t,20");
 			lines.Add("v,22");
-			lines.Add("b,1");
-			lines.Add("h,7");
-			lines.Add("y,25");
-			lines.Add("s,19");
 			lines.Add("e,4");
 			lines.Add("k,10");
-			lines.Add("r,18");
 			lines.Add("i,8");
-			lines.Add("a,0");
 			lines.Add("p,16");
-			lines.Add("m,12");
-			lines.Add("a,14");
 			lines.Add("z,26");
+
+			// joint
+			lines.Add("o,15");
+			lines.Add("j,9");
+			lines.Add("u,21");
 			lines.Add("d,3");
-			lines.Add("f,5");
-			lines.Add("n,13");
+
+			lines.Add("x,24");
+			lines.Add("g,6");
+			lines.Add("r,18");
+			lines.Add("a,0");
+			lines.Add("m,12");
+
+			if (!missing)
+			{
+				// missing
+				lines.Add("q,17");
+				lines.Add("w,23");
+				lines.Add("l,11");
+				lines.Add("b,1");
+				lines.Add("h,7");
+				lines.Add("y,25");
+				lines.Add("s,19");
+				lines.Add("f,5");
+				lines.Add("n,13");
+			}
 
 			File.WriteAllLines(inputFileName2, lines.ToArray());
 		}
@@ -215,14 +231,12 @@ namespace Swish.Tests
 		public void Stata12FileName()
 		{
 			string expected = @"C:\Program Files (x86)\Stata12\StataSE-64.exe";
-			string stataExecutable = StataFunctions.StataExecutablePath;
+			string stataExecutable = StataFunctions.ExecutablePath;
 			if (Path.GetFullPath(expected) != Path.GetFullPath(stataExecutable))
 			{
 				throw new Exception();
 			}
 		}
-
-
 
 		internal static void GenerateAppendInputFile(out string inputFileName1, out string inputFileName2)
 		{

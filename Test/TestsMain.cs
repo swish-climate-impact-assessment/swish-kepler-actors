@@ -53,6 +53,7 @@ namespace Swish.Tests
 				/// start with a log file that accopanyies the output file with the operation name and input details
 				/// 
 
+				new AdapterTests().MergeZero();
 				new AdapterTests().Replace_1();
 				new AdapterTests().Replace_2();
 				new AdapterTests().CommandScript();

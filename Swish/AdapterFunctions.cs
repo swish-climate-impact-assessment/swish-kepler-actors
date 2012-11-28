@@ -10,11 +10,136 @@ namespace Swish
 		public const string TemporaryFileNameOperation = "temporaryFileName";
 		public const string ReplaceOperation = "replace";
 		public const string TestOperation = "test";
+		public const string DisplayOperation = "display";
+		public const string AppendOperation = "append";
+		public const string RemoveColumnsOperation = "removeColumns";
+		public const string DoScriptOperation = "doScript";
+		public const string CommandOperation = "stataCommand";
+		public const string MergeOperation = "merge";
+		public const string SaveOperation = "save";
+		public const string SelectRecordsOperation = "selectRecords";
+		public const string SelectCloumnsOperation = "selectCloumns";
+		public const string SortOperation = "sort";
+		public const string TransposeOperation = "transpose";
 
 		public static void RunOperation(string operation, List<Tuple<string, string>> splitArguments)
 		{
 			switch (operation)
 			{
+			case TransposeOperation:
+				{
+					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
+					AdapterFunctions.Transpose(inputFileName, outputFileName);
+					Console.Write(outputFileName);
+				}
+				break;
+
+			case SortOperation:
+				{
+					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true));
+					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
+					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
+					outputFileName = AdapterFunctions.Sort(inputFileName, variableNames, outputFileName);
+					Console.Write(outputFileName);
+				}
+				break;
+
+			case SelectCloumnsOperation:
+				{
+					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
+					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
+					AdapterFunctions.SelectColumns(inputFileName, outputFileName, variableNames);
+					Console.Write(outputFileName);
+				}
+				break;
+
+			case SelectRecordsOperation:
+				{
+					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string expression = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "expression", splitArguments, true);
+					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
+					AdapterFunctions.Select(inputFileName, outputFileName, expression);
+					Console.Write(outputFileName);
+				}
+				break;
+
+			case SaveOperation:
+				{
+					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
+					AdapterFunctions.SaveFile(inputFileName, outputFileName);
+					Console.Write(outputFileName);
+				}
+				break;
+
+			case MergeOperation:
+				{
+					string input1FileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "1", splitArguments, true));
+					string input2FileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true));
+					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
+					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
+
+					string keepMergeString = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "keepMerge", splitArguments, false));
+					bool keepMerge;
+					if (!string.IsNullOrWhiteSpace(keepMergeString))
+					{
+						keepMerge = bool.Parse(keepMergeString.ToLower());
+					} else
+					{
+						keepMerge = false;
+					}
+					AdapterFunctions.Merge(input1FileName, input2FileName, variableNames, outputFileName, keepMerge);
+					Console.Write(outputFileName);
+				}
+				break;
+
+			case DoScriptOperation:
+				{
+					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "filename", splitArguments, true));
+					string log = StataFunctions.RunScript(inputFileName, false);
+					Console.Write(log);
+				}
+				break;
+
+			case CommandOperation:
+				{
+					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true));
+					string command = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "command", splitArguments, true);
+					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
+					AdapterFunctions.StataCommand(inputFileName, outputFileName, command);
+					Console.Write(outputFileName);
+				}
+				break;
+
+			case AppendOperation:
+				{
+					string input1FileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "1", splitArguments, true));
+					string input2FileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true));
+					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
+					outputFileName = AdapterFunctions.Append(input1FileName, input2FileName, outputFileName);
+					Console.Write(outputFileName);
+				}
+				break;
+
+			case RemoveColumnsOperation:
+				{
+					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
+					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
+					RemoveColumns(inputFileName, outputFileName, variableNames);
+					Console.Write(outputFileName);
+				}
+				break;
+
+			case DisplayOperation:
+				{
+					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					Display(inputFileName);
+				}
+				break;
+
 			case TestOperation:
 				{
 					string argumentText = string.Empty;
@@ -23,8 +148,7 @@ namespace Swish
 						Tuple<string, string> argument = splitArguments[argumentIndex];
 						argumentText += argument.Item1 + " " + argument.Item2 + " ";
 					}
-					System.Windows.Forms.MessageBox.Show(argumentText);
-					Console.WriteLine();
+					SwishFunctions.MessageTextBox(argumentText);
 				}
 				break;
 
@@ -36,29 +160,83 @@ namespace Swish
 						File.Delete(fileName);
 					}
 					Console.Write(fileName);
-
 				}
 				break;
 
 			case ReplaceOperation:
 				{
 					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
-					string outputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.OutputArgument + "", splitArguments, false));
-					if (string.IsNullOrWhiteSpace(outputFileName))
-					{
-						outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
-					}
+					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
 					string condition = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "condition", splitArguments, true);
 					string value = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "value", splitArguments, true);
-
 					Replace(inputFileName, outputFileName, condition, value);
-
 					Console.Write(outputFileName);
 				}
 				break;
 
 			default:
 				throw new Exception("Unknown operation \"" + operation + "\"");
+			}
+		}
+
+		public static void Display(string inputFileName)
+		{
+			string extension = Path.GetExtension(inputFileName);
+			string useFileName;
+			if (extension.ToLower() == ".csv")
+			{
+				useFileName = inputFileName;
+			} else
+			{
+				useFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+				SaveFile(inputFileName, useFileName);
+			}
+
+			string data = File.ReadAllText(useFileName).Replace(',', '\t');
+			SwishFunctions.MessageTextBox("File: " + inputFileName + Environment.NewLine + data);
+		}
+
+		public static void RemoveColumns(string inputFileName, string outputFileName, List<string> variableNames)
+		{
+			if (!SwishFunctions.FileExists(inputFileName))
+			{
+				throw new Exception("cannot find file \"" + inputFileName + "\"");
+			}
+
+			if (variableNames.Count == 0)
+			{
+				throw new Exception("Variables missing");
+			}
+
+			if (Path.GetFullPath(inputFileName) == Path.GetFullPath(outputFileName))
+			{
+				throw new Exception("Output cannot be the same as input");
+			}
+
+			if (SwishFunctions.FileExists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+
+			List<string> lines = new List<string>();
+			StataScriptFunctions.WriteHeadder(lines);
+			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
+			string line = "drop " + StataScriptFunctions.VariableList(variableNames);
+			lines.Add(line);
+			line = StataScriptFunctions.SaveFileCommand(outputFileName);
+			lines.Add(line);
+
+			if (SwishFunctions.FileExists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+
+			StataScriptFunctions.WriteFooter(lines);
+
+			string log = StataFunctions.RunScript(lines, false);
+			if (!SwishFunctions.FileExists(outputFileName))
+			{
+				throw new Exception("Output file was not created" + log);
 			}
 		}
 
@@ -189,11 +367,6 @@ namespace Swish
 
 		public static void StataCommand(string inputFileName, string outputFileName, string command)
 		{
-			if (string.IsNullOrWhiteSpace(outputFileName))
-			{
-				outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
-			}
-
 			if (!SwishFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
@@ -234,7 +407,7 @@ namespace Swish
 			}
 		}
 
-		public static void Merge(string input1FileName, string input2FileName, List<string> variableNames, string outputFileName)
+		public static void Merge(string input1FileName, string input2FileName, List<string> variableNames, string outputFileName, bool keepMergeColumn)
 		{
 			if (!SwishFunctions.FileExists(input1FileName))
 			{
@@ -299,8 +472,11 @@ namespace Swish
 
 			line = StataScriptFunctions.SortCommand(variableNames);
 			lines.Add(line);
-			lines.Add("merge 1:1 " + StataScriptFunctions.VariableList(variableNames) + " using \"" + intermediateFileName + "\"");
-			lines.Add("drop " + StataScriptFunctions.MergeColumnName);
+			lines.Add("merge 1:1 " + StataScriptFunctions.VariableList(variableNames) + " using \"" + intermediateFileName + "\", force ");
+			if (!keepMergeColumn)
+			{
+				lines.Add("drop " + StataScriptFunctions.MergeColumnName);
+			}
 			line = StataScriptFunctions.SaveFileCommand(doOutputFileName);
 			lines.Add(line);
 
@@ -325,12 +501,6 @@ namespace Swish
 
 		public static string Append(string input1FileName, string input2FileName, string outputFileName)
 		{
-
-			if (string.IsNullOrWhiteSpace(outputFileName))
-			{
-				outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
-			}
-
 			if (!SwishFunctions.FileExists(input1FileName))
 			{
 				throw new Exception("cannot find file \"" + input1FileName + "\"");
@@ -427,11 +597,6 @@ namespace Swish
 
 		public static string Sort(string inputFileName, List<string> variableNames, string outputFileName)
 		{
-			if (string.IsNullOrWhiteSpace(outputFileName))
-			{
-				outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
-			}
-
 			if (!SwishFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
@@ -523,6 +688,43 @@ namespace Swish
 			{
 				throw new Exception("Output file was not created" + log);
 			}
+		}
+
+		public static void SaveFile(string inputFileName, string outputFileName)
+		{
+			if (!SwishFunctions.FileExists(inputFileName))
+			{
+				throw new Exception("cannot find file \"" + inputFileName + "\"");
+			}
+
+			string inputFileExtension = Path.GetExtension(inputFileName);
+			string outputFileExtension = Path.GetExtension(outputFileName);
+
+			if (inputFileExtension.ToLower() == outputFileExtension.ToLower())
+			{
+				File.Copy(inputFileName, outputFileName);
+				//return 0;
+			}
+
+			List<string> lines = new List<string>();
+			StataScriptFunctions.WriteHeadder(lines);
+			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
+			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
+			lines.Add(line);
+
+			if (SwishFunctions.FileExists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+
+			StataScriptFunctions.WriteFooter(lines);
+
+			string log = StataFunctions.RunScript(lines, false);
+			if (!SwishFunctions.FileExists(outputFileName))
+			{
+				throw new Exception("Output file was not created" + log);
+			}
+
 		}
 
 

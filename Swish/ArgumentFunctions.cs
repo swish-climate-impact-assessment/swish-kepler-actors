@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using System.IO;
 
 namespace Swish
 {
@@ -11,7 +12,6 @@ namespace Swish
 
 		public const string ErrorArgument = ArgumentCharacter + "SwishError";
 		public const string InputArgument = ArgumentCharacter + "input";
-		public const string OutputArgument = ArgumentCharacter + "output";
 
 		public static string GetArgument(string name, List<Tuple<string, string>> splitArguments, bool throwOnMissing)
 		{
@@ -30,7 +30,48 @@ namespace Swish
 				throw new Exception("Argument missing \"" + name + "\"");
 			}
 
+			value = Decode(value);
+
 			return value;
+		}
+
+		private static string Decode(string value)
+		{
+			string decodedValue = string.Empty;
+
+			while (true)
+			{
+				if (value.Length == 0)
+				{
+					break;
+				}
+
+				if (StringIO.TryRead("<", ref value))
+				{
+					if (value.Length < 3)
+					{
+						throw new Exception();
+					}
+
+					string code = value.Substring(0, 3);
+					value = value.Substring(3, value.Length - 3);
+					char character = (char)uint.Parse(code);
+					decodedValue += character;
+					continue;
+				}
+
+				string buffer;
+				string stopString;
+				if (!StringIO.TryReadUntill(out buffer, out stopString, new string[] { "<" }, ref value))
+				{
+					decodedValue += value;
+					value = string.Empty;
+					continue;
+				}
+				decodedValue += buffer;
+			}
+
+			return decodedValue;
 		}
 
 		private static int IndexOf(string name, List<Tuple<string, string>> splitArguments)
@@ -149,5 +190,20 @@ namespace Swish
 			return true;
 		}
 
+
+		public static string GetOutputFileName(List<Tuple<string, string>> splitArguments)
+		{
+			string outputFileName = ArgumentFunctions.GetArgument(ArgumentCharacter + "output" + "", splitArguments, false);
+			outputFileName = SwishFunctions.AdjustFileName(outputFileName);
+			if (string.IsNullOrWhiteSpace(outputFileName) || outputFileName.ToLower() == "none" || outputFileName.ToLower() == "temp")
+			{
+				outputFileName = SwishFunctions.TempoaryOutputFileName(".dta");
+			}
+			if (SwishFunctions.FileExists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+			return outputFileName;
+		}
 	}
 }

@@ -26,7 +26,7 @@ namespace Swish.Tests
 			string expectedArguments = StataFunctions.BatchArgument;
 			try
 			{
-				StataFunctions.StataExecutablePath = executableFileName;
+				StataFunctions.ExecutablePath = executableFileName;
 
 				string log = StataFunctions.RunScript(lines, false);
 
@@ -37,7 +37,7 @@ namespace Swish.Tests
 				}
 			} finally
 			{
-				StataFunctions.StataExecutablePath = null;
+				StataFunctions.ExecutablePath = null;
 			}
 		}
 

@@ -53,31 +53,13 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>..\..\MakeDirectory.exe c:\Swish\bin\
-..\..\Delete.exe "c:\Swish\bin\Swish.SortAdapter.exe"
-..\..\Delete.exe "c:\Swish\bin\Swish.MergeAdapter.exe"
-..\..\Delete.exe "c:\Swish\bin\Swish.AppendAdapter.exe"
 ..\..\Delete.exe "c:\Swish\bin\Swish.CollapseAdapter.exe"
-..\..\Delete.exe "c:\Swish\bin\Swish.CommandAdapter.exe"
-..\..\Delete.exe "c:\Swish\bin\Swish.TransposeAdapter.exe"
-..\..\Delete.exe "c:\Swish\bin\Swish.SaveTableAdapter.exe"
-..\..\Delete.exe "c:\Swish\bin\Swish.SelectAdapter.exe"
-..\..\Delete.exe "c:\Swish\bin\Swish.SelectColumnsAdapter.exe"
-..\..\Delete.exe "c:\Swish\bin\Swish.DoScriptAdapter.exe"
 ..\..\Delete.exe "c:\Swish\bin\Swish.Adapter.exe"
 </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.dll C:\Swish\bin\Swish.dll
-copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.SortAdapter.exe
-copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.MergeAdapter.exe
-copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.AppendAdapter.exe
 copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.CollapseAdapter.exe
-copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.CommandAdapter.exe
-copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.TransposeAdapter.exe
-copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.SaveTableAdapter.exe
-copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.SelectAdapter.exe
-copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.SelectColumnsAdapter.exe
-copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.DoScriptAdapter.exe
 copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.Adapter.exe
 </PostBuildEvent>
   </PropertyGroup>

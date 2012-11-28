@@ -17,6 +17,7 @@ namespace Swish.SimpleInstaller
 			List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
 			bool silent = ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "silent", splitArguments);
 			bool clean = ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "clean", splitArguments);
+			bool luanch = ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "luanch", splitArguments);
 
 			string logFileName = Path.Combine(Application.StartupPath, "Error.log.txt");
 			if (SwishFunctions.FileExists(logFileName))
@@ -61,10 +62,12 @@ namespace Swish.SimpleInstaller
 				} else
 				{
 					InstallFunctions.Install(clean, null);
-					return 0;
-
 				}
 
+				if (luanch)
+				{
+					KeplerFunctions.Run();
+				}
 			} catch (Exception error)
 			{
 				string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.WriteException(error, true);

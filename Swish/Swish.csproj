@@ -45,6 +45,7 @@
     <Compile Include="ArgumentFunctions.cs" />
     <Compile Include="AdapterFunctions.cs" />
     <Compile Include="CollapseOpperation.cs" />
+    <Compile Include="KeplerFunctions.cs" />
     <Compile Include="StataScriptFunctions.cs" />
     <Compile Include="CsvFunctions.cs" />
     <Compile Include="Csv.cs" />

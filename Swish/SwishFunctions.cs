@@ -123,7 +123,7 @@ namespace Swish
 			return locations;
 		}
 
-		internal static void MessageTextBox(string message)
+		public static void MessageTextBox(string message)
 		{
 			string title = "Message";
 
