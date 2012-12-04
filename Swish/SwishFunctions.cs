@@ -59,70 +59,6 @@ namespace Swish
 			}
 		}
 
-		public static string ResloveFileName(string fileName, List<string> possibleLocations, bool ignoreApplicationDirectory, bool ignoreError)
-		{
-			List<string> attempts = new List<string>();
-
-			for (int locationIndex = 0; locationIndex < possibleLocations.Count; locationIndex++)
-			{
-				string location = possibleLocations[locationIndex];
-
-				string path = Path.Combine(location, fileName);
-				attempts.Add(path);
-			}
-
-			attempts.Add(fileName);
-
-			string file = Path.Combine(Environment.CurrentDirectory, fileName);
-			attempts.Add(file);
-
-			file = Path.Combine(Application.StartupPath, fileName);
-			attempts.Add(file);
-
-			file = Path.Combine(Application.StartupPath, fileName);
-			attempts.Add(file);
-
-			file = Path.Combine(Path.GetTempPath(), fileName);
-			attempts.Add(file);
-
-			for (int attemptIndex = 0; attemptIndex < attempts.Count; attemptIndex++)
-			{
-				string path = attempts[attemptIndex];
-				if (SwishFunctions.FileExists(path))
-				{
-					string realFileName = Path.GetFullPath(path);
-					if (!ignoreApplicationDirectory || realFileName != Application.ExecutablePath)
-					{
-						return realFileName;
-					}
-				}
-			}
-
-			if (!ignoreError)
-			{
-				throw new Exception("Could not find location of \"" + fileName + "\"" + Environment.NewLine + string.Join(Environment.NewLine, attempts));
-			}
-
-			return string.Empty;
-		}
-
-		public static List<string> Locations()
-		{
-			List<string> binaryLocations = new List<string>(new string[]{
-					@"C:\Swish\bin"
-				});
-
-			string fileName = SwishFunctions.ResloveFileName("DevelopmentLocations.txt", binaryLocations, false, true);
-			if (string.IsNullOrWhiteSpace(fileName))
-			{
-				return binaryLocations;
-			}
-
-			List<string> locations = new List<string>(File.ReadAllLines(fileName));
-			locations.AddRange(binaryLocations);
-			return locations;
-		}
-
 		public static void MessageTextBox(string message)
 		{
 			string title = "Message";
@@ -164,12 +100,12 @@ namespace Swish
 		public static string TempoaryOutputFileName(string extension)
 		{
 			string tempOutputFileName = Path.GetTempFileName();
-			if (SwishFunctions.FileExists(tempOutputFileName))
+			if (FileFunctions.FileExists(tempOutputFileName))
 			{
 				File.Delete(tempOutputFileName);
 			}
 			string outputFileName = tempOutputFileName + extension;
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -194,33 +130,5 @@ namespace Swish
 			}
 		}
 
-		public static string AdjustFileName(string fileName)
-		{
-			bool monoEnvironment = !MonoEnvironment;
-			if (monoEnvironment)
-			{
-				fileName = fileName.Replace('/', '\\');
-			} else
-			{
-				fileName = fileName.Replace('\\', '/');
-			}
-			string str = fileName;
-			return str;
-		}
-
-		public static bool FileExists(string fileName)
-		{
-			if (File.Exists(fileName))
-			{
-				return true;
-			}
-
-			if (File.Exists(fileName + ".dta"))
-			{
-				return true;
-			}
-
-			return false;
-		}
 	}
 }

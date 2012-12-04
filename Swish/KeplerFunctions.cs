@@ -35,7 +35,7 @@ namespace Swish
 		{
 			get
 			{
-				List<string> locations = SwishFunctions.Locations();
+				List<string> locations = FileFunctions.Locations();
 				locations.Add(@"C:\Program Files\Kepler-2.3\");
 				locations.Add(@"C:\Program Files (x86)\Kepler-2.3\");
 				locations.Add(@"C:\Kepler-2.3\");
@@ -58,7 +58,7 @@ namespace Swish
 					for (int fileIndex = 0; fileIndex < fileNames.Count; fileIndex++)
 					{
 						string file = fileNames[fileIndex];
-						string fileName = SwishFunctions.ResloveFileName(file, PotentialKeplerPaths, false, true);
+						string fileName = FileFunctions.ResloveFileName(file, PotentialKeplerPaths, false, true);
 						if (!string.IsNullOrWhiteSpace(fileName))
 						{
 							_cmdExecutablePath = fileName;
@@ -87,7 +87,7 @@ namespace Swish
 					for (int fileIndex = 0; fileIndex < fileNames.Count; fileIndex++)
 					{
 						string file = fileNames[fileIndex];
-						string fileName = SwishFunctions.ResloveFileName(file, PotentialKeplerPaths, false, true);
+						string fileName = FileFunctions.ResloveFileName(file, PotentialKeplerPaths, false, true);
 						if (!string.IsNullOrWhiteSpace(fileName))
 						{
 							_executablePath = fileName;

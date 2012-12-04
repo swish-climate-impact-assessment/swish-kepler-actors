@@ -59,7 +59,7 @@ namespace Swish.Tests
 			StataScriptFunctions.LoadFileCommand(lines, StataFunctionsTests.CarsDataFileName);
 
 			string outputFileName = Path.GetTempFileName() + ".csv";
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				// Stata does not overwrite files
 				File.Delete(outputFileName);
@@ -69,7 +69,7 @@ namespace Swish.Tests
 			lines.Add(line);
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!SwishFunctions.FileExists(outputFileName))
+			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}

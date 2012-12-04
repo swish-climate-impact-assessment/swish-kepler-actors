@@ -35,16 +35,25 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentFunctions.cs" />
     <Compile Include="AdapterFunctions.cs" />
     <Compile Include="CollapseOpperation.cs" />
+    <Compile Include="EqualFunctions.cs" />
+    <Compile Include="KarFile.cs" />
+    <Compile Include="StreamFunctions.cs" />
+    <Compile Include="FileFunctions.cs" />
+    <Compile Include="KarFunctions.cs" />
     <Compile Include="KeplerFunctions.cs" />
     <Compile Include="StataScriptFunctions.cs" />
     <Compile Include="CsvFunctions.cs" />

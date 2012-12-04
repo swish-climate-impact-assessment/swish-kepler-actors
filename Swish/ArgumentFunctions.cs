@@ -194,12 +194,12 @@ namespace Swish
 		public static string GetOutputFileName(List<Tuple<string, string>> splitArguments)
 		{
 			string outputFileName = ArgumentFunctions.GetArgument(ArgumentCharacter + "output" + "", splitArguments, false);
-			outputFileName = SwishFunctions.AdjustFileName(outputFileName);
+			outputFileName = FileFunctions.AdjustFileName(outputFileName);
 			if (string.IsNullOrWhiteSpace(outputFileName) || outputFileName.ToLower() == "none" || outputFileName.ToLower() == "temp")
 			{
 				outputFileName = SwishFunctions.TempoaryOutputFileName(".dta");
 			}
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}

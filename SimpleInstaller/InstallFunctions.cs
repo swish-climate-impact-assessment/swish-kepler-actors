@@ -7,7 +7,6 @@ namespace Swish.SimpleInstaller
 {
 	internal static class InstallFunctions
 	{
-
 		internal delegate void ReportProgressFunction(int progress, string line);
 
 		internal static void Install(bool clean, ReportProgressFunction ReportProgress)
@@ -45,7 +44,6 @@ namespace Swish.SimpleInstaller
 			}
 		}
 
-
 		internal static void RunLine(string _line, bool clean)
 		{
 			string line = _line;
@@ -81,10 +79,10 @@ namespace Swish.SimpleInstaller
 
 					if (!clean)
 					{
-						CopyFile(sourceFileName, destinationFileName);
+						FileFunctions.CopyFile(sourceFileName, destinationFileName);
 					} else
 					{
-						DeleteFile(destinationFileName);
+						FileFunctions.DeleteFile(destinationFileName);
 					}
 				}
 			} else if (StringIO.TryRead("Copy", ref line))
@@ -106,10 +104,10 @@ namespace Swish.SimpleInstaller
 
 				if (!clean)
 				{
-					CopyFile(sourceFileName, destinationFileName);
+					FileFunctions.CopyFile(sourceFileName, destinationFileName);
 				} else
 				{
-					DeleteFile(destinationFileName);
+					FileFunctions.DeleteFile(destinationFileName);
 				}
 			} else if (string.IsNullOrWhiteSpace(line) || StringIO.TryRead("//", ref line))
 			{
@@ -118,66 +116,6 @@ namespace Swish.SimpleInstaller
 			{
 				throw new Exception("could not read line \"" + _line + "\"");
 			}
-		}
-
-		private static void DeleteFile(string fileName)
-		{
-			try
-			{
-				if (!SwishFunctions.FileExists(fileName))
-				{
-					return;
-				}
-				File.SetAttributes(fileName, FileAttributes.Normal);
-				File.Delete(fileName);
-				string destinationDirectory = Path.GetDirectoryName(fileName);
-				DeleteDirectory(destinationDirectory);
-			} catch { }
-		}
-
-		private static void DeleteDirectory(string directory)
-		{
-			try
-			{
-				if (!Directory.Exists(directory))
-				{
-					return;
-				}
-				string[] files = Directory.GetFiles(directory);
-				if (files.Length > 0)
-				{
-					return;
-				}
-
-				Directory.Delete(directory);
-				string baseDirectory = Path.GetDirectoryName(directory);
-				DeleteDirectory(baseDirectory);
-			} catch { }
-
-		}
-
-		private static void CopyFile(string sourceFileName, string destinationFileName)
-		{
-			string destinationDirectory = Path.GetDirectoryName(destinationFileName);
-			CreateDirectory(destinationDirectory);
-			if (SwishFunctions.FileExists(destinationFileName))
-			{
-				File.Delete(destinationFileName);
-			}
-			File.Copy(sourceFileName, destinationFileName);
-		}
-
-		private static void CreateDirectory(string directory)
-		{
-			if (Directory.Exists(directory))
-			{
-				return;
-			}
-
-			string baseDirectory = Path.GetDirectoryName(directory);
-			CreateDirectory(baseDirectory);
-
-			Directory.CreateDirectory(directory);
 		}
 
 	}

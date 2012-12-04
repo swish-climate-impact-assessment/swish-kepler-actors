@@ -53,6 +53,18 @@ namespace Swish.Tests
 				/// start with a log file that accopanyies the output file with the operation name and input details
 				/// 
 
+				new KarFunctionsTests().RemovePort();
+				new KarFunctionsTests().DumpContents();
+				new ArgumentFunctionsTests().GetSwitch();
+				new SwishFunctionsTests().TestRunBatchMode();
+				new StringIOTests().TryReadStringEscapedCharacters();
+				new ArgumentFunctionsTests().ArgumentInQuotes();
+
+				if (!StataFunctions.StataInstalled)
+				{
+					return;
+				}
+
 				new AdapterTests().MergeZero();
 				new AdapterTests().Replace_1();
 				new AdapterTests().Replace_2();
@@ -71,10 +83,6 @@ namespace Swish.Tests
 				new StataScriptFunctionsTests().StataFileFormat();
 				new AdapterTests().RemoveMergeColoumn();
 				new StataFunctionsTests().StataBatchMode();
-				new ArgumentFunctionsTests().GetSwitch();
-				new SwishFunctionsTests().TestRunBatchMode();
-				new StringIOTests().TryReadStringEscapedCharacters();
-				new ArgumentFunctionsTests().ArgumentInQuotes();
 
 			} catch (Exception error)
 			{
@@ -96,10 +104,7 @@ namespace Swish.Tests
 			/// 
 			/// 
 			/// 
-
-
 		}
-
 	}
 }
 

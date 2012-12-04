@@ -17,7 +17,7 @@ namespace Swish
 
 			string log = RunScript(doFileName, useGui);
 
-			if (SwishFunctions.FileExists(tempFileName))
+			if (FileFunctions.FileExists(tempFileName))
 			{
 				File.Delete(tempFileName);
 			}
@@ -50,7 +50,7 @@ namespace Swish
 
 				logFileName = Path.Combine(workingDirectory, logFileName + ".log");
 
-				if (SwishFunctions.FileExists(logFileName))
+				if (FileFunctions.FileExists(logFileName))
 				{
 					log = File.ReadAllText(logFileName);
 					File.Delete(logFileName);
@@ -60,8 +60,8 @@ namespace Swish
 				}
 			} else
 			{
-				List<string> locations = SwishFunctions.Locations();
-				string runDoFileName = SwishFunctions.ResloveFileName("rundo.exe", locations, false, false);
+				List<string> locations = FileFunctions.Locations();
+				string runDoFileName = FileFunctions.ResloveFileName("rundo.exe", locations, false, false);
 
 				// run Stata
 				Run();
@@ -102,66 +102,89 @@ namespace Swish
 
 			int exitCode;
 			string output;
-			SwishFunctions.RunProcess(fileName, "", Environment.CurrentDirectory, true,TimeSpan.Zero, out exitCode, out output);
+			SwishFunctions.RunProcess(fileName, "", Environment.CurrentDirectory, true, TimeSpan.Zero, out exitCode, out output);
 		}
 
-		private static string _executablePath = null;
 		public static string ExecutablePath
 		{
 			get
 			{
 				if (string.IsNullOrWhiteSpace(_executablePath))
 				{
-					List<string> locations = SwishFunctions.Locations();
-					locations.Add(@"C:\Program Files\Stata12\");
-					locations.Add(@"C:\Program Files (x86)\Stata12\");
-					locations.Add(@"C:\Stata12\");
-					locations.Add(@"C:\Program Files\Stata11\");
-					locations.Add(@"C:\Program Files (x86)\Stata11\");
-					locations.Add(@"C:\Stata11\");
-					locations.Add(@"C:\Program Files\Stata10\");
-					locations.Add(@"C:\Program Files (x86)\Stata10\");
-					locations.Add(@"C:\Stata10\");
-					locations.Add(@"C:\Program Files\Stata9\");
-					locations.Add(@"C:\Program Files (x86)\Stata9\");
-					locations.Add(@"C:\Stata9\");
-					locations.Add(@"C:\Program Files\Stata8\");
-					locations.Add(@"C:\Program Files (x86)\Stata8\");
-					locations.Add(@"C:\Stata8\");
-
-					List<string> fileNames = new List<string>();
-					fileNames.Add("StataSE-64.exe");
-					fileNames.Add("StataSE-32.exe");
-					fileNames.Add("StataSE.exe");
-					fileNames.Add("StataMP-64.exe");
-					fileNames.Add("StataMP-32.exe");
-					fileNames.Add("StataMP.exe");
-					fileNames.Add("wsestata-64.exe");
-					fileNames.Add("wsestata-32.exe");
-					fileNames.Add("wsestata.exe");
-					fileNames.Add("wstata-64.exe");
-					fileNames.Add("wstata-32.exe");
-					fileNames.Add("wstata.exe");
-
-					for (int fileIndex = 0; fileIndex < fileNames.Count; fileIndex++)
+					FindExecutablePath();
+					if (string.IsNullOrWhiteSpace(_executablePath))
 					{
-						string file = fileNames[fileIndex];
-						string fileName = SwishFunctions.ResloveFileName(file, locations, false, true);
-						if (!string.IsNullOrWhiteSpace(fileName))
-						{
-							_executablePath = fileName;
-							return fileName;
-						}
+						throw new Exception("Could not find installed version of Stata");
 					}
-
-					throw new Exception("Could not find installed version of Stata");
-
 				}
 				return _executablePath;
 			}
 			set { _executablePath = value; }
 		}
 
+		private static string _executablePath = null;
+		private static void FindExecutablePath()
+		{
+			List<string> locations = FileFunctions.Locations();
+			locations.Add(@"C:\Program Files\Stata12\");
+			locations.Add(@"C:\Program Files (x86)\Stata12\");
+			locations.Add(@"C:\Stata12\");
+			locations.Add(@"C:\Program Files\Stata11\");
+			locations.Add(@"C:\Program Files (x86)\Stata11\");
+			locations.Add(@"C:\Stata11\");
+			locations.Add(@"C:\Program Files\Stata10\");
+			locations.Add(@"C:\Program Files (x86)\Stata10\");
+			locations.Add(@"C:\Stata10\");
+			locations.Add(@"C:\Program Files\Stata9\");
+			locations.Add(@"C:\Program Files (x86)\Stata9\");
+			locations.Add(@"C:\Stata9\");
+			locations.Add(@"C:\Program Files\Stata8\");
+			locations.Add(@"C:\Program Files (x86)\Stata8\");
+			locations.Add(@"C:\Stata8\");
+
+			List<string> fileNames = new List<string>();
+			fileNames.Add("StataSE-64.exe");
+			fileNames.Add("StataSE-32.exe");
+			fileNames.Add("StataSE.exe");
+			fileNames.Add("StataMP-64.exe");
+			fileNames.Add("StataMP-32.exe");
+			fileNames.Add("StataMP.exe");
+			fileNames.Add("wsestata-64.exe");
+			fileNames.Add("wsestata-32.exe");
+			fileNames.Add("wsestata.exe");
+			fileNames.Add("wstata-64.exe");
+			fileNames.Add("wstata-32.exe");
+			fileNames.Add("wstata.exe");
+
+			for (int fileIndex = 0; fileIndex < fileNames.Count; fileIndex++)
+			{
+				string file = fileNames[fileIndex];
+				string fileName = FileFunctions.ResloveFileName(file, locations, false, true);
+				if (!string.IsNullOrWhiteSpace(fileName))
+				{
+					_executablePath = fileName;
+					return;
+				}
+			}
+
+			_executablePath = null;
+		}
+
+		public static bool StataInstalled
+		{
+			get
+			{
+				if (string.IsNullOrWhiteSpace(_executablePath))
+				{
+					FindExecutablePath();
+					if (string.IsNullOrWhiteSpace(_executablePath))
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+		}
 	}
 }
 

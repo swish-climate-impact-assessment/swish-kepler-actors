@@ -13,10 +13,10 @@ namespace Swish.ExecutableRedirector
 		{
 			try
 			{
-				List<string> locations = SwishFunctions.Locations();
+				List<string> locations = FileFunctions.Locations();
 				string executableName = Path.GetFileName(Application.ExecutablePath);
 
-				string toolFileName = SwishFunctions.ResloveFileName(executableName, locations, true, false);
+				string toolFileName = FileFunctions.ResloveFileName(executableName, locations, true, false);
 
 				if (toolFileName  == Application.ExecutablePath)
 				{

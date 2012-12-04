@@ -28,7 +28,7 @@ namespace Swish
 			{
 			case TransposeOperation:
 				{
-					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
 					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
 					AdapterFunctions.Transpose(inputFileName, outputFileName);
 					Console.Write(outputFileName);
@@ -37,7 +37,7 @@ namespace Swish
 
 			case SortOperation:
 				{
-					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true));
+					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true));
 					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
 					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
 					outputFileName = AdapterFunctions.Sort(inputFileName, variableNames, outputFileName);
@@ -47,7 +47,7 @@ namespace Swish
 
 			case SelectCloumnsOperation:
 				{
-					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
 					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
 					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
 					AdapterFunctions.SelectColumns(inputFileName, outputFileName, variableNames);
@@ -57,7 +57,7 @@ namespace Swish
 
 			case SelectRecordsOperation:
 				{
-					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
 					string expression = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "expression", splitArguments, true);
 					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
 					AdapterFunctions.Select(inputFileName, outputFileName, expression);
@@ -67,7 +67,7 @@ namespace Swish
 
 			case SaveOperation:
 				{
-					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
 					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
 					AdapterFunctions.SaveFile(inputFileName, outputFileName);
 					Console.Write(outputFileName);
@@ -76,12 +76,12 @@ namespace Swish
 
 			case MergeOperation:
 				{
-					string input1FileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "1", splitArguments, true));
-					string input2FileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true));
+					string input1FileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "1", splitArguments, true));
+					string input2FileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true));
 					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
 					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
 
-					string keepMergeString = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "keepMerge", splitArguments, false));
+					string keepMergeString = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "keepMerge", splitArguments, false));
 					bool keepMerge;
 					if (!string.IsNullOrWhiteSpace(keepMergeString))
 					{
@@ -97,7 +97,7 @@ namespace Swish
 
 			case DoScriptOperation:
 				{
-					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "filename", splitArguments, true));
+					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "filename", splitArguments, true));
 					string log = StataFunctions.RunScript(inputFileName, false);
 					Console.Write(log);
 				}
@@ -105,7 +105,7 @@ namespace Swish
 
 			case CommandOperation:
 				{
-					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true));
+					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true));
 					string command = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "command", splitArguments, true);
 					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
 					AdapterFunctions.StataCommand(inputFileName, outputFileName, command);
@@ -115,8 +115,8 @@ namespace Swish
 
 			case AppendOperation:
 				{
-					string input1FileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "1", splitArguments, true));
-					string input2FileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true));
+					string input1FileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "1", splitArguments, true));
+					string input2FileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true));
 					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
 					outputFileName = AdapterFunctions.Append(input1FileName, input2FileName, outputFileName);
 					Console.Write(outputFileName);
@@ -125,7 +125,7 @@ namespace Swish
 
 			case RemoveColumnsOperation:
 				{
-					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
 					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
 					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
 					RemoveColumns(inputFileName, outputFileName, variableNames);
@@ -135,7 +135,7 @@ namespace Swish
 
 			case DisplayOperation:
 				{
-					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
 					Display(inputFileName);
 				}
 				break;
@@ -155,7 +155,7 @@ namespace Swish
 			case TemporaryFileNameOperation:
 				{
 					string fileName = Path.GetTempFileName();
-					if (SwishFunctions.FileExists(fileName))
+					if (FileFunctions.FileExists(fileName))
 					{
 						File.Delete(fileName);
 					}
@@ -165,7 +165,7 @@ namespace Swish
 
 			case ReplaceOperation:
 				{
-					string inputFileName = SwishFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
 					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
 					string condition = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "condition", splitArguments, true);
 					string value = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "value", splitArguments, true);
@@ -198,7 +198,7 @@ namespace Swish
 
 		public static void RemoveColumns(string inputFileName, string outputFileName, List<string> variableNames)
 		{
-			if (!SwishFunctions.FileExists(inputFileName))
+			if (!FileFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
@@ -213,7 +213,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -226,7 +226,7 @@ namespace Swish
 			line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -234,7 +234,7 @@ namespace Swish
 			StataScriptFunctions.WriteFooter(lines);
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!SwishFunctions.FileExists(outputFileName))
+			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -242,7 +242,7 @@ namespace Swish
 
 		public static void Transpose(string inputFileName, string outputFileName)
 		{
-			if (!SwishFunctions.FileExists(inputFileName))
+			if (!FileFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
@@ -252,7 +252,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -264,7 +264,7 @@ namespace Swish
 			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -272,7 +272,7 @@ namespace Swish
 			StataScriptFunctions.WriteFooter(lines);
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!SwishFunctions.FileExists(outputFileName))
+			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -280,7 +280,7 @@ namespace Swish
 
 		public static void Select(string inputFileName, string outputFileName, string expression)
 		{
-			if (!SwishFunctions.FileExists(inputFileName))
+			if (!FileFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
@@ -295,7 +295,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -307,7 +307,7 @@ namespace Swish
 			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -315,7 +315,7 @@ namespace Swish
 			StataScriptFunctions.WriteFooter(lines);
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!SwishFunctions.FileExists(outputFileName))
+			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -323,7 +323,7 @@ namespace Swish
 
 		public static void SelectColumns(string inputFileName, string outputFileName, List<string> variableNames)
 		{
-			if (!SwishFunctions.FileExists(inputFileName))
+			if (!FileFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
@@ -338,7 +338,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -351,7 +351,7 @@ namespace Swish
 			line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -359,7 +359,7 @@ namespace Swish
 			StataScriptFunctions.WriteFooter(lines);
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!SwishFunctions.FileExists(outputFileName))
+			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -367,7 +367,7 @@ namespace Swish
 
 		public static void StataCommand(string inputFileName, string outputFileName, string command)
 		{
-			if (!SwishFunctions.FileExists(inputFileName))
+			if (!FileFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
@@ -377,7 +377,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -393,7 +393,7 @@ namespace Swish
 			lines.Add(line);
 
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -401,7 +401,7 @@ namespace Swish
 			StataScriptFunctions.WriteFooter(lines);
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!SwishFunctions.FileExists(outputFileName))
+			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -409,12 +409,12 @@ namespace Swish
 
 		public static void Merge(string input1FileName, string input2FileName, List<string> variableNames, string outputFileName, bool keepMergeColumn)
 		{
-			if (!SwishFunctions.FileExists(input1FileName))
+			if (!FileFunctions.FileExists(input1FileName))
 			{
 				throw new Exception("cannot find file \"" + input1FileName + "\"");
 			}
 
-			if (!SwishFunctions.FileExists(input2FileName))
+			if (!FileFunctions.FileExists(input2FileName))
 			{
 				throw new Exception("cannot find file \"" + input2FileName + "\"");
 			}
@@ -427,7 +427,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -443,14 +443,14 @@ namespace Swish
 			}
 
 			string doOutputFileName = Path.GetTempFileName() + ".csv";
-			if (SwishFunctions.FileExists(doOutputFileName))
+			if (FileFunctions.FileExists(doOutputFileName))
 			{
 				// Stata does not overwrite files
 				File.Delete(doOutputFileName);
 			}
 
 			string intermediateFileName = Path.GetTempFileName() + ".dta";
-			if (SwishFunctions.FileExists(intermediateFileName))
+			if (FileFunctions.FileExists(intermediateFileName))
 			{
 				File.Delete(intermediateFileName);
 			}
@@ -483,13 +483,13 @@ namespace Swish
 			StataScriptFunctions.WriteFooter(lines);
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!SwishFunctions.FileExists(doOutputFileName))
+			if (!FileFunctions.FileExists(doOutputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
 
 			/// move the output file
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -501,12 +501,12 @@ namespace Swish
 
 		public static string Append(string input1FileName, string input2FileName, string outputFileName)
 		{
-			if (!SwishFunctions.FileExists(input1FileName))
+			if (!FileFunctions.FileExists(input1FileName))
 			{
 				throw new Exception("cannot find file \"" + input1FileName + "\"");
 			}
 
-			if (!SwishFunctions.FileExists(input2FileName))
+			if (!FileFunctions.FileExists(input2FileName))
 			{
 				throw new Exception("cannot find file \"" + input2FileName + "\"");
 			}
@@ -519,7 +519,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -534,7 +534,7 @@ namespace Swish
 			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -542,7 +542,7 @@ namespace Swish
 			StataScriptFunctions.WriteFooter(lines);
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!SwishFunctions.FileExists(outputFileName))
+			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -554,13 +554,13 @@ namespace Swish
 
 		public static double Collapse(string inputFileName, string variable, CollapseOpperation operation)
 		{
-			if (!SwishFunctions.FileExists(inputFileName))
+			if (!FileFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
 
 			string doOutputFileName = Path.GetTempFileName() + ".csv";
-			if (SwishFunctions.FileExists(doOutputFileName))
+			if (FileFunctions.FileExists(doOutputFileName))
 			{
 				// Stata does not overwrite files
 				File.Delete(doOutputFileName);
@@ -581,7 +581,7 @@ namespace Swish
 			StataScriptFunctions.WriteFooter(lines);
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!SwishFunctions.FileExists(doOutputFileName))
+			if (!FileFunctions.FileExists(doOutputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -597,7 +597,7 @@ namespace Swish
 
 		public static string Sort(string inputFileName, List<string> variableNames, string outputFileName)
 		{
-			if (!SwishFunctions.FileExists(inputFileName))
+			if (!FileFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
@@ -607,7 +607,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -625,7 +625,7 @@ namespace Swish
 			line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -633,7 +633,7 @@ namespace Swish
 			StataScriptFunctions.WriteFooter(lines);
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!SwishFunctions.FileExists(outputFileName))
+			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -642,7 +642,7 @@ namespace Swish
 
 		public static void Replace(string inputFileName, string outputFileName, string condition, string value)
 		{
-			if (!SwishFunctions.FileExists(inputFileName))
+			if (!FileFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
@@ -662,7 +662,7 @@ namespace Swish
 				throw new Exception("Output cannot be the same as input");
 			}
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -676,7 +676,7 @@ namespace Swish
 			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -684,7 +684,7 @@ namespace Swish
 			StataScriptFunctions.WriteFooter(lines);
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!SwishFunctions.FileExists(outputFileName))
+			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}
@@ -692,7 +692,7 @@ namespace Swish
 
 		public static void SaveFile(string inputFileName, string outputFileName)
 		{
-			if (!SwishFunctions.FileExists(inputFileName))
+			if (!FileFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
@@ -712,7 +712,7 @@ namespace Swish
 			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
 			lines.Add(line);
 
-			if (SwishFunctions.FileExists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
@@ -720,7 +720,7 @@ namespace Swish
 			StataScriptFunctions.WriteFooter(lines);
 
 			string log = StataFunctions.RunScript(lines, false);
-			if (!SwishFunctions.FileExists(outputFileName))
+			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("Output file was not created" + log);
 			}

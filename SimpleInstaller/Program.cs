@@ -20,7 +20,7 @@ namespace Swish.SimpleInstaller
 			bool luanch = ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "luanch", splitArguments);
 
 			string logFileName = Path.Combine(Application.StartupPath, "Error.log.txt");
-			if (SwishFunctions.FileExists(logFileName))
+			if (FileFunctions.FileExists(logFileName))
 			{
 				File.Delete(logFileName);
 			}

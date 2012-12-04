@@ -31,7 +31,6 @@ namespace MakeDirectory
 			MakeDirectory(basePath);
 
 			Directory.CreateDirectory(path);
-			MessageBox.Show(path);
 		}
 
 	}

@@ -73,7 +73,7 @@ namespace Swish
 			LoadFileCommand(lines, fileName);
 
 			string intermediateFileName = Path.GetTempFileName() + ".dta";
-			if (SwishFunctions.FileExists(intermediateFileName))
+			if (FileFunctions.FileExists(intermediateFileName))
 			{
 				File.Delete(intermediateFileName);
 			}
