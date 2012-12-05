@@ -24,7 +24,7 @@ namespace Swish.Tests
 				}
 			}
 
-			string outputFileName = Path.GetTempFileName() + ".csv";
+			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -43,7 +43,7 @@ namespace Swish.Tests
 		{
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 
-			string outputFileName = Path.GetTempFileName() + ".csv";
+			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -73,7 +73,7 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2, false);
 
-			string outputFileName = Path.GetTempFileName() + ".csv";
+			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -115,7 +115,7 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2, false);
 
-			string outputFileName = Path.GetTempFileName() + ".csv";
+			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -142,7 +142,7 @@ namespace Swish.Tests
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 			Csv table = CsvFunctions.Read(inputFileName);
 
-			string outputFileName = Path.GetTempFileName() + ".csv";
+			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -168,7 +168,7 @@ namespace Swish.Tests
 			// this is a test that the outputted script contains the command
 
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
-			string outputFileName = Path.GetTempFileName() + ".csv";
+			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -201,7 +201,7 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateAppendInputFile(out inputFileName1, out inputFileName2);
 
-			string outputFileName = Path.GetTempFileName() + ".csv";
+			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -235,7 +235,7 @@ namespace Swish.Tests
 		{
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 
-			string outputFileName = Path.GetTempFileName() + ".csv";
+			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -249,7 +249,7 @@ namespace Swish.Tests
 		{
 			string inputFileName = StataFunctionsTests.GenerateReplaceInputFile();
 
-			string outputFileName = Path.GetTempFileName() + ".csv";
+			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -276,7 +276,7 @@ namespace Swish.Tests
 		{
 			string inputFileName = StataFunctionsTests.GenerateReplaceInputFile();
 
-			string outputFileName = Path.GetTempFileName() + ".csv";
+			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -307,19 +307,19 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2, true);
 
-			string intermediateFileName1 = Path.GetTempFileName() + ".csv";
+			string intermediateFileName1 = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(intermediateFileName1))
 			{
 				File.Delete(intermediateFileName1);
 			}
 
-			string intermediateFileName2 = Path.GetTempFileName() + ".csv";
+			string intermediateFileName2 = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(intermediateFileName2))
 			{
 				File.Delete(intermediateFileName2);
 			}
 
-			string outputFileName = Path.GetTempFileName() + ".csv";
+			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);

@@ -59,7 +59,7 @@ namespace Swish
 				lines.Add("insheet using \"" + fileName + "\"");
 				return;
 			}
-			lines.Add("use using \"" + fileName + "\"");
+			lines.Add("use \"" + fileName + "\"");
 		}
 
 		public static string ConvertToStataFormat(List<string> lines, string fileName)
@@ -72,7 +72,7 @@ namespace Swish
 
 			LoadFileCommand(lines, fileName);
 
-			string intermediateFileName = Path.GetTempFileName() + ".dta";
+			string intermediateFileName = SwishFunctions.TempoaryOutputFileName(".dta");
 			if (FileFunctions.FileExists(intermediateFileName))
 			{
 				File.Delete(intermediateFileName);

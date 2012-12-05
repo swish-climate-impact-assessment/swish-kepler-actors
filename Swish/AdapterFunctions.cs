@@ -18,7 +18,7 @@ namespace Swish
 		public const string MergeOperation = "merge";
 		public const string SaveOperation = "save";
 		public const string SelectRecordsOperation = "selectRecords";
-		public const string SelectCloumnsOperation = "selectCloumns";
+		public const string SelectCloumnsOperation = "selectColumns";
 		public const string SortOperation = "sort";
 		public const string TransposeOperation = "transpose";
 
@@ -154,7 +154,7 @@ namespace Swish
 
 			case TemporaryFileNameOperation:
 				{
-					string fileName = Path.GetTempFileName();
+					string fileName = SwishFunctions.TempoaryOutputFileName(string.Empty);
 					if (FileFunctions.FileExists(fileName))
 					{
 						File.Delete(fileName);
@@ -236,7 +236,7 @@ namespace Swish
 			string log = StataFunctions.RunScript(lines, false);
 			if (!FileFunctions.FileExists(outputFileName))
 			{
-				throw new Exception("Output file was not created" + log);
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
 		}
 
@@ -272,9 +272,10 @@ namespace Swish
 			StataScriptFunctions.WriteFooter(lines);
 
 			string log = StataFunctions.RunScript(lines, false);
+
 			if (!FileFunctions.FileExists(outputFileName))
 			{
-				throw new Exception("Output file was not created" + log);
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
 		}
 
@@ -317,7 +318,7 @@ namespace Swish
 			string log = StataFunctions.RunScript(lines, false);
 			if (!FileFunctions.FileExists(outputFileName))
 			{
-				throw new Exception("Output file was not created" + log);
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
 		}
 
@@ -361,7 +362,7 @@ namespace Swish
 			string log = StataFunctions.RunScript(lines, false);
 			if (!FileFunctions.FileExists(outputFileName))
 			{
-				throw new Exception("Output file was not created" + log);
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
 		}
 
@@ -403,7 +404,7 @@ namespace Swish
 			string log = StataFunctions.RunScript(lines, false);
 			if (!FileFunctions.FileExists(outputFileName))
 			{
-				throw new Exception("Output file was not created" + log);
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
 		}
 
@@ -442,14 +443,14 @@ namespace Swish
 				throw new Exception("Variables missing");
 			}
 
-			string doOutputFileName = Path.GetTempFileName() + ".csv";
+			string doOutputFileName = SwishFunctions.TempoaryOutputFileName(Path.GetExtension(outputFileName));
 			if (FileFunctions.FileExists(doOutputFileName))
 			{
 				// Stata does not overwrite files
 				File.Delete(doOutputFileName);
 			}
 
-			string intermediateFileName = Path.GetTempFileName() + ".dta";
+			string intermediateFileName = SwishFunctions.TempoaryOutputFileName(".dta");
 			if (FileFunctions.FileExists(intermediateFileName))
 			{
 				File.Delete(intermediateFileName);
@@ -485,7 +486,7 @@ namespace Swish
 			string log = StataFunctions.RunScript(lines, false);
 			if (!FileFunctions.FileExists(doOutputFileName))
 			{
-				throw new Exception("Output file was not created" + log);
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
 
 			/// move the output file
@@ -544,7 +545,7 @@ namespace Swish
 			string log = StataFunctions.RunScript(lines, false);
 			if (!FileFunctions.FileExists(outputFileName))
 			{
-				throw new Exception("Output file was not created" + log);
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
 
 			/// delete all the files not needed
@@ -559,7 +560,7 @@ namespace Swish
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
 
-			string doOutputFileName = Path.GetTempFileName() + ".csv";
+			string doOutputFileName = SwishFunctions.TempoaryOutputFileName(".dta");
 			if (FileFunctions.FileExists(doOutputFileName))
 			{
 				// Stata does not overwrite files
@@ -583,7 +584,7 @@ namespace Swish
 			string log = StataFunctions.RunScript(lines, false);
 			if (!FileFunctions.FileExists(doOutputFileName))
 			{
-				throw new Exception("Output file was not created" + log);
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
 
 			string[] resultLines = File.ReadAllLines(doOutputFileName);
@@ -635,7 +636,7 @@ namespace Swish
 			string log = StataFunctions.RunScript(lines, false);
 			if (!FileFunctions.FileExists(outputFileName))
 			{
-				throw new Exception("Output file was not created" + log);
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
 			return outputFileName;
 		}
@@ -686,7 +687,7 @@ namespace Swish
 			string log = StataFunctions.RunScript(lines, false);
 			if (!FileFunctions.FileExists(outputFileName))
 			{
-				throw new Exception("Output file was not created" + log);
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
 		}
 
@@ -703,7 +704,7 @@ namespace Swish
 			if (inputFileExtension.ToLower() == outputFileExtension.ToLower())
 			{
 				File.Copy(inputFileName, outputFileName);
-				//return 0;
+				return;
 			}
 
 			List<string> lines = new List<string>();
@@ -722,9 +723,8 @@ namespace Swish
 			string log = StataFunctions.RunScript(lines, false);
 			if (!FileFunctions.FileExists(outputFileName))
 			{
-				throw new Exception("Output file was not created" + log);
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
-
 		}
 
 

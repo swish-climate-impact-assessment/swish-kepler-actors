@@ -11,16 +11,13 @@ namespace Swish
 
 		public static string RunScript(List<string> lines, bool useGui)
 		{
-			string tempFileName = Path.GetTempFileName();
-			string doFileName = tempFileName + ".do";
+			string doFileName = SwishFunctions.TempoaryOutputFileName(".do");
 			File.WriteAllLines(doFileName, lines.ToArray());
+
+			//SwishFunctions.MessageTextBox(string.Join(Environment.NewLine, lines));
 
 			string log = RunScript(doFileName, useGui);
 
-			if (FileFunctions.FileExists(tempFileName))
-			{
-				File.Delete(tempFileName);
-			}
 			File.Delete(doFileName);
 			return log;
 		}

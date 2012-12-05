@@ -131,6 +131,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Adapter\Adapter.csproj">
+      <Project>{B8033E78-6AD7-4C76-A30B-489F5ED82ED3}</Project>
+      <Name>Adapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CollapseAdapter\CollapseAdapter.csproj">
+      <Project>{A2A5F03E-552B-40E3-8956-5E365AEB600F}</Project>
+      <Name>CollapseAdapter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Swish\Swish.csproj">
       <Project>{EBB44164-34A5-434F-8EDB-6C0AC6F4BAE4}</Project>
       <Name>Swish</Name>
@@ -152,9 +160,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>..\..\MakeDirectory.exe Actors
+    <PostBuildEvent>"$(ProjectDir)\MakeDirectory.exe" "Actors"
 del /Q .\Actors\*
-copy "..\..\Actors\*" "Actors\"
+copy "$(ProjectDir)\Actors\*" "Actors\"
+copy "$(TargetDir)\*" "$(TargetDir)\SwishBin\"
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

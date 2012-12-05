@@ -26,7 +26,7 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateAppendInputFile(out inputFileName1, out inputFileName2);
 
-			string outputFileName = Path.GetTempFileName() + ".csv";
+			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);

@@ -58,7 +58,7 @@ namespace Swish.Tests
 			List<string> lines = new List<string>();
 			StataScriptFunctions.LoadFileCommand(lines, StataFunctionsTests.CarsDataFileName);
 
-			string outputFileName = Path.GetTempFileName() + ".csv";
+			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				// Stata does not overwrite files

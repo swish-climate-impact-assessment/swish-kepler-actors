@@ -41,9 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Swish\Swish.csproj">
       <Project>{EBB44164-34A5-434F-8EDB-6C0AC6F4BAE4}</Project>
@@ -52,15 +53,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>..\..\MakeDirectory.exe c:\Swish\bin\
-..\..\Delete.exe "c:\Swish\bin\Swish.CollapseAdapter.exe"
-..\..\Delete.exe "c:\Swish\bin\Swish.Adapter.exe"
+    <PreBuildEvent>"$(ProjectDir)\MakeDirectory.exe" "c:\Swish\bin\"
+"$(ProjectDir)\Delete.exe" "c:\Swish\bin\Swish.CollapseAdapter.exe"
+"$(ProjectDir)\Delete.exe" "c:\Swish\bin\Swish.Adapter.exe"
 </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.dll C:\Swish\bin\Swish.dll
-copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.CollapseAdapter.exe
-copy ..\..\..\ExecutableRedirector\bin\Debug\Swish.ExecutableRedirector.exe C:\Swish\bin\Swish.Adapter.exe
+    <PostBuildEvent>copy "$(TargetDir)*" "C:\Swish\bin\"
+copy "$(TargetPath)" "C:\Swish\bin\Swish.CollapseAdapter.exe"
+copy "$(TargetPath)" "C:\Swish\bin\Swish.Adapter.exe"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
