@@ -8,7 +8,7 @@ namespace Swish
 	{
 		public const string Separator = "----------------------------------------------------------------------------------------------------";
 
-		public static void WriteException(StringBuilder output, Exception exception, bool messageOnly)
+		public static void Write(StringBuilder output, Exception exception, bool messageOnly)
 		{
 			List<Exception> exceptions = new List<Exception>();
 			do
@@ -48,7 +48,7 @@ namespace Swish
 			}
 		}
 
-		public static string WriteException(Exception error, bool messageOnly)
+		public static string Write(Exception error, bool messageOnly)
 		{
 			string empty = string.Empty;
 			while (error != null)

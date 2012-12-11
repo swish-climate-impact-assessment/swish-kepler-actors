@@ -36,7 +36,7 @@ namespace Swish.SimpleInstaller.Controls
 				backgroundWorker1.ReportProgress(100);
 			} catch (Exception error)
 			{
-				string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.WriteException(error, true);
+				string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.Write(error, true);
 				MessageBox.Show(message);
 				Console.Write(message);
 				return;

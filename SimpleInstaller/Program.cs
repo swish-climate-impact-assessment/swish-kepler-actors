@@ -35,20 +35,7 @@ namespace Swish.SimpleInstaller
 			///			cmd arguments
 			///			connect up
 			///		save actor to installer folder
-			///		
-			///	Installer
-			///		add actor to project
-			///		set copy allways
-			/// 
-			/// Build events
-			///		Exe redirector
-			///			pre build delete
-			///			post build copy
-			///		simple installer
-			///			post build copy
-			/// 
-			/// Development locations 
-			/// 
+			///
 
 			try
 			{
@@ -70,7 +57,7 @@ namespace Swish.SimpleInstaller
 				}
 			} catch (Exception error)
 			{
-				string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.WriteException(error, true);
+				string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.Write(error, true);
 				Console.Write(message);
 				File.WriteAllText(logFileName, message);
 				return -1;

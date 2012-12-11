@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System.Drawing;
+using System.Threading;
 
 namespace Swish
 {
@@ -20,14 +19,17 @@ namespace Swish
 					run.StartInfo.WorkingDirectory = workingDirectory;
 				}
 				run.StartInfo.FileName = fileName;
-				run.StartInfo.RedirectStandardOutput = true;
-				run.StartInfo.RedirectStandardError = true;
-				run.StartInfo.UseShellExecute = false;
-				run.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-				run.Start();
 
-				if (returnBeforeExit)
+				run.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+				if (!returnBeforeExit)
 				{
+					run.StartInfo.RedirectStandardOutput = true;
+					run.StartInfo.RedirectStandardError = true;
+					run.StartInfo.UseShellExecute = false;
+					run.Start();
+				} else
+				{
+					run.Start();
 					exitCode = -1;
 					output = null;
 					run.Close();
@@ -49,7 +51,7 @@ namespace Swish
 					}
 				} else
 				{
-					run.WaitForExit();
+					run.WaitForExit(Int32.MaxValue - 1);
 				}
 
 				exitCode = run.ExitCode;
@@ -59,57 +61,72 @@ namespace Swish
 			}
 		}
 
-		public static void MessageTextBox(string message)
+		public static void MessageTextBox(string message, bool returnImediatly)
 		{
-			string title = "Message";
+			MessageTextBox("Message", message.Split('\r', '\n'), returnImediatly);
+		}
 
-			using (TextBox textBox = new TextBox())
-			using (Form form = new Form())
+		internal static void MessageTextBox(string title, string[] lines, bool returnImediatly)
+		{
+			TextBox textBox = new TextBox();
+			Form form = new Form();
+
+			textBox.Multiline = true;
+			int limit = 1000;
+			if (lines.Length <= limit)
 			{
-				try
+				textBox.Lines = lines;
+			} else
+			{
+				string[] shortLines = new string[limit + 2];
+				for (int lineIndex = 0; lineIndex < limit; lineIndex++)
 				{
-					textBox.Multiline = true;
-					textBox.Text = message;
-					textBox.SelectionStart = 0;
-					textBox.SelectionLength = 0;
-					textBox.Size = new Size(400, 400);
-					textBox.Dock = DockStyle.Fill;
-					Size size = textBox.Size;
-					int controlHeight = size.Height;
+					shortLines[lineIndex] = lines[lineIndex];
+				}
+				shortLines[limit] = string.Empty;
+				shortLines[limit + 1] = "Note, text truncated at 1000 lines.";
 
-					form.ControlBox = true;
+				textBox.Lines = shortLines;
+			}
+			textBox.SelectionStart = 0;
+			textBox.SelectionLength = 0;
+			textBox.ScrollBars = ScrollBars.Both;
+			textBox.Size = new Size(400, 400);
+			textBox.Dock = DockStyle.Fill;
+			Size size = textBox.Size;
+			int controlHeight = size.Height;
 
-					form.Text = title;
-					size = textBox.Size;
-					form.ClientSize = new Size(size.Width, controlHeight);
-					form.Controls.Add(textBox);
-					textBox.BringToFront();
+			form.ControlBox = true;
 
-					form.ShowDialog();
-				} finally
+			form.Text = title;
+			size = textBox.Size;
+			form.ClientSize = new Size(size.Width, controlHeight);
+			form.Controls.Add(textBox);
+			textBox.BringToFront();
+
+			if (returnImediatly)
+			{
+				form.Show();
+				Application.DoEvents();
+				Thread.Sleep(100);
+			} else
+			{
+				using (textBox)
+				using (form)
 				{
-					bool flag = form == null;
-					if (!flag)
+					try
 					{
-						form.Dispose();
+						form.ShowDialog();
+					} finally
+					{
+						bool flag = form == null;
+						if (!flag)
+						{
+							form.Dispose();
+						}
 					}
 				}
 			}
-		}
-
-		public static string TempoaryOutputFileName(string extension)
-		{
-			string tempOutputFileName = Path.GetTempFileName();
-			if (FileFunctions.FileExists(tempOutputFileName))
-			{
-				File.Delete(tempOutputFileName);
-			}
-			string outputFileName = tempOutputFileName + extension;
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
-			return outputFileName;
 		}
 
 		private static bool _environmentDetected;
@@ -130,5 +147,22 @@ namespace Swish
 			}
 		}
 
+
+		public static Form GetForm(object sender)
+		{
+			Control parent = (Control)sender;
+			while (true)
+			{
+				if (parent == null)
+				{
+					return null;
+				}
+				if (parent is Form)
+				{
+					return parent as Form;
+				}
+				parent = parent.Parent;
+			}
+		}
 	}
 }

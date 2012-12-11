@@ -31,7 +31,7 @@ namespace Swish.CollapseAdapter
 				return 0;
 			} catch (Exception error)
 			{
-				string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.WriteException(error, true);
+				string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.Write(error, true);
 				Console.Write(message);
 				return -1;
 			}

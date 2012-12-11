@@ -11,7 +11,7 @@ namespace Swish
 
 		public static string RunScript(List<string> lines, bool useGui)
 		{
-			string doFileName = SwishFunctions.TempoaryOutputFileName(".do");
+			string doFileName = FileFunctions.TempoaryOutputFileName(".do");
 			File.WriteAllLines(doFileName, lines.ToArray());
 
 			//SwishFunctions.MessageTextBox(string.Join(Environment.NewLine, lines));

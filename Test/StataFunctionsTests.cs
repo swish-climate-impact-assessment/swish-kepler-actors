@@ -15,7 +15,7 @@ namespace Swish.Tests
 
 			string inputFile = GenerateMeanInputFile();
 
-			string outputFile = SwishFunctions.TempoaryOutputFileName(".csv");
+			string outputFile = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFile))
 			{
 				File.Delete(outputFile);
@@ -28,7 +28,7 @@ namespace Swish.Tests
 			string line = StataScriptFunctions.SaveFileCommand(outputFile);
 			lines.Add(line);
 
-			string doFileName = SwishFunctions.TempoaryOutputFileName(".do");
+			string doFileName = FileFunctions.TempoaryOutputFileName(".do");
 			File.WriteAllLines(doFileName, lines.ToArray());
 
 			string arguments = StataFunctions.BatchArgument + "\"" + doFileName + "\"";
@@ -49,7 +49,7 @@ namespace Swish.Tests
 
 		public static string GenerateMeanInputFile()
 		{
-			string fileName = SwishFunctions.TempoaryOutputFileName(".csv");
+			string fileName = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(fileName))
 			{
 				File.Delete(fileName);
@@ -93,7 +93,7 @@ namespace Swish.Tests
 		public const string MergeVariable = "head4";
 		public static void GenerateMergeInputFiles(out string inputFileName1, out string inputFileName2, bool missing)
 		{
-			inputFileName1 = SwishFunctions.TempoaryOutputFileName(".csv");
+			inputFileName1 = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(inputFileName1))
 			{
 				File.Delete(inputFileName1);
@@ -139,7 +139,7 @@ namespace Swish.Tests
 			}
 			File.WriteAllLines(inputFileName1, lines.ToArray());
 
-			inputFileName2 = SwishFunctions.TempoaryOutputFileName(".csv");
+			inputFileName2 = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(inputFileName2))
 			{
 				File.Delete(inputFileName2);
@@ -240,7 +240,7 @@ namespace Swish.Tests
 
 		internal static void GenerateAppendInputFile(out string inputFileName1, out string inputFileName2)
 		{
-			inputFileName1 = SwishFunctions.TempoaryOutputFileName(".csv");
+			inputFileName1 = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(inputFileName1))
 			{
 				File.Delete(inputFileName1);
@@ -265,7 +265,7 @@ namespace Swish.Tests
 
 			File.WriteAllLines(inputFileName1, lines.ToArray());
 
-			inputFileName2 = SwishFunctions.TempoaryOutputFileName(".csv");
+			inputFileName2 = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(inputFileName2))
 			{
 				File.Delete(inputFileName2);
@@ -296,7 +296,7 @@ namespace Swish.Tests
 
 		public static string GenerateReplaceInputFile()
 		{
-			string fileName = SwishFunctions.TempoaryOutputFileName(".csv");
+			string fileName = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(fileName))
 			{
 				File.Delete(fileName);

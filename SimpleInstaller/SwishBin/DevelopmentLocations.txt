@@ -1,11 +1,2 @@
-D:\Development\swishKAGit\AppendAdapter\bin\Debug
 D:\Development\swishKAGit\CollapseAdapter\bin\Debug
-D:\Development\swishKAGit\CommandAdapter\bin\Debug
-D:\Development\swishKAGit\MergeAdapter\bin\Debug
-D:\Development\swishKAGit\SaveTableAdapter\bin\Debug
-D:\Development\swishKAGit\SelectAdapter\bin\Debug
-D:\Development\swishKAGit\SelectColumnsAdapter\bin\Debug
-D:\Development\swishKAGit\SortAdapter\bin\Debug
-D:\Development\swishKAGit\TransposeAdapter\bin\Debug
-D:\Development\swishKAGit\DoScriptAdapter\bin\Debug
 D:\Development\swishKAGit\Adapter\bin\Debug

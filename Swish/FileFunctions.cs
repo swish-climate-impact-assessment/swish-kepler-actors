@@ -172,5 +172,20 @@ namespace Swish
 			return directory;
 		}
 
+		public static string TempoaryOutputFileName(string extension)
+		{
+			string tempOutputFileName = Path.GetTempFileName();
+			if (FileFunctions.FileExists(tempOutputFileName))
+			{
+				File.Delete(tempOutputFileName);
+			}
+			string outputFileName = tempOutputFileName + extension;
+			if (FileFunctions.FileExists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+			return outputFileName;
+		}
+
 	}
 }

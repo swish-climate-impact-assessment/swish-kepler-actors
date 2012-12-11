@@ -24,7 +24,7 @@ namespace Swish.Tests
 				}
 			}
 
-			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -43,7 +43,7 @@ namespace Swish.Tests
 		{
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 
-			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -73,7 +73,7 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2, false);
 
-			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -115,7 +115,7 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2, false);
 
-			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -142,7 +142,7 @@ namespace Swish.Tests
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 			Csv table = CsvFunctions.Read(inputFileName);
 
-			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -168,7 +168,7 @@ namespace Swish.Tests
 			// this is a test that the outputted script contains the command
 
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
-			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -201,7 +201,7 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateAppendInputFile(out inputFileName1, out inputFileName2);
 
-			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -235,7 +235,7 @@ namespace Swish.Tests
 		{
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 
-			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -249,7 +249,7 @@ namespace Swish.Tests
 		{
 			string inputFileName = StataFunctionsTests.GenerateReplaceInputFile();
 
-			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -276,7 +276,7 @@ namespace Swish.Tests
 		{
 			string inputFileName = StataFunctionsTests.GenerateReplaceInputFile();
 
-			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -307,19 +307,19 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2, true);
 
-			string intermediateFileName1 = SwishFunctions.TempoaryOutputFileName(".csv");
+			string intermediateFileName1 = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(intermediateFileName1))
 			{
 				File.Delete(intermediateFileName1);
 			}
 
-			string intermediateFileName2 = SwishFunctions.TempoaryOutputFileName(".csv");
+			string intermediateFileName2 = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(intermediateFileName2))
 			{
 				File.Delete(intermediateFileName2);
 			}
 
-			string outputFileName = SwishFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -329,9 +329,9 @@ namespace Swish.Tests
 			variables.Add(StataFunctionsTests.MergeVariable);
 			AdapterFunctions.Merge(inputFileName1, inputFileName2, variables, intermediateFileName1, true);
 
-//"matched (3)"
-//"master only (1)"
-//"using only (2)"
+			//"matched (3)"
+			//"master only (1)"
+			//"using only (2)"
 
 			AdapterFunctions.Replace(intermediateFileName1, intermediateFileName2, "_merge==\"using only (2)\"", "head2=0");
 
@@ -406,6 +406,37 @@ namespace Swish.Tests
 				}
 			}
 
+		}
+
+		internal void Generate()
+		{
+
+			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
+			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string variableName = "testVariable";
+			AdapterFunctions.Generate(inputFileName, outputFileName, variableName, "-head4");
+			if (!FileFunctions.FileExists(outputFileName))
+			{
+				throw new Exception();
+			}
+			Csv table = CsvFunctions.Read(outputFileName);
+
+			int index = table.ColumnIndex(variableName);
+			if (index < 0)
+			{
+				throw new Exception();
+			}
+
+			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
+			{
+				List<string> record = table.Records[recordIndex];
+
+				int value = int.Parse(record[index]);
+				if (value > 0)
+				{
+					throw new Exception();
+				}
+			}
 		}
 	}
 }

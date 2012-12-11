@@ -12,6 +12,7 @@ namespace Swish
 
 		public const string ErrorArgument = ArgumentCharacter + "SwishError";
 		public const string InputArgument = ArgumentCharacter + "input";
+		public const string OperationArgument = ArgumentCharacter + "operation";
 
 		public static string GetArgument(string name, List<Tuple<string, string>> splitArguments, bool throwOnMissing)
 		{
@@ -197,7 +198,7 @@ namespace Swish
 			outputFileName = FileFunctions.AdjustFileName(outputFileName);
 			if (string.IsNullOrWhiteSpace(outputFileName) || outputFileName.ToLower() == "none" || outputFileName.ToLower() == "temp")
 			{
-				outputFileName = SwishFunctions.TempoaryOutputFileName(".dta");
+				outputFileName = FileFunctions.TempoaryOutputFileName(".dta");
 			}
 			if (FileFunctions.FileExists(outputFileName))
 			{
@@ -205,5 +206,6 @@ namespace Swish
 			}
 			return outputFileName;
 		}
-	}
+
+}
 }

@@ -2,30 +2,53 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Windows.Forms;
+using System.Drawing;
 
 namespace Swish
 {
 	public static class AdapterFunctions
 	{
-		public const string TemporaryFileNameOperation = "temporaryFileName";
-		public const string ReplaceOperation = "replace";
-		public const string TestOperation = "test";
-		public const string DisplayOperation = "display";
 		public const string AppendOperation = "append";
-		public const string RemoveColumnsOperation = "removeColumns";
-		public const string DoScriptOperation = "doScript";
 		public const string CommandOperation = "stataCommand";
+		public const string DisplayClientOperation = "displayClient";
+		public const string DisplayOperation = "display";
+		public const string DoScriptOperation = "doScript";
+		public const string GenerateOperation = "generate";
 		public const string MergeOperation = "merge";
+		public const string PasswordOperation = "password";
+		public const string RemoveColumnsOperation = "removeColumns";
+		public const string ReplaceOperation = "replace";
 		public const string SaveOperation = "save";
-		public const string SelectRecordsOperation = "selectRecords";
 		public const string SelectCloumnsOperation = "selectColumns";
+		public const string SelectRecordsOperation = "selectRecords";
 		public const string SortOperation = "sort";
+		public const string TemporaryFileNameOperation = "temporaryFileName";
+		public const string TestOperation = "test";
 		public const string TransposeOperation = "transpose";
 
 		public static void RunOperation(string operation, List<Tuple<string, string>> splitArguments)
 		{
 			switch (operation)
 			{
+			case GenerateOperation:
+				{
+					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
+					string variableName = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "variable", splitArguments, true);
+					string expression = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "expression", splitArguments, true);
+					AdapterFunctions.Generate(inputFileName, outputFileName, variableName, expression);
+					Console.Write(outputFileName);
+				}
+				break;
+
+			case PasswordOperation:
+				{
+					string password = AdapterFunctions.Password();
+					Console.Write(password);
+				}
+				break;
+
 			case TransposeOperation:
 				{
 					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
@@ -140,6 +163,13 @@ namespace Swish
 				}
 				break;
 
+			case DisplayClientOperation:
+				{
+					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					DisplayClient(inputFileName);
+				}
+				break;
+
 			case TestOperation:
 				{
 					string argumentText = string.Empty;
@@ -148,13 +178,13 @@ namespace Swish
 						Tuple<string, string> argument = splitArguments[argumentIndex];
 						argumentText += argument.Item1 + " " + argument.Item2 + " ";
 					}
-					SwishFunctions.MessageTextBox(argumentText);
+					SwishFunctions.MessageTextBox(argumentText, false);
 				}
 				break;
 
 			case TemporaryFileNameOperation:
 				{
-					string fileName = SwishFunctions.TempoaryOutputFileName(string.Empty);
+					string fileName = FileFunctions.TempoaryOutputFileName(string.Empty);
 					if (FileFunctions.FileExists(fileName))
 					{
 						File.Delete(fileName);
@@ -179,21 +209,150 @@ namespace Swish
 			}
 		}
 
+		public static void Generate(string inputFileName, string outputFileName, string variableName, string expression)
+		{
+
+			if (!FileFunctions.FileExists(inputFileName))
+			{
+				throw new Exception("cannot find file \"" + inputFileName + "\"");
+			}
+
+			if (string.IsNullOrWhiteSpace(variableName))
+			{
+				throw new Exception("Variable missing");
+			}
+
+			if (string.IsNullOrWhiteSpace(expression))
+			{
+				throw new Exception("Expression missing");
+			}
+
+			string extension = Path.GetExtension(outputFileName);
+			string intermaidateOutput = FileFunctions.TempoaryOutputFileName(extension);
+
+			List<string> lines = new List<string>();
+			StataScriptFunctions.WriteHeadder(lines);
+
+			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
+
+			lines.Add(" generate " + variableName + " =" + expression);
+
+			string line = StataScriptFunctions.SaveFileCommand(intermaidateOutput);
+			lines.Add(line);
+
+			StataScriptFunctions.WriteFooter(lines);
+
+			string log = StataFunctions.RunScript(lines, false);
+			if (!FileFunctions.FileExists(intermaidateOutput))
+			{
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
+			}
+
+			if (FileFunctions.FileExists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+
+			File.Move(intermaidateOutput, outputFileName);
+		}
+
+		private static string Password()
+		{
+
+			using (MaskedTextBox textBox = new MaskedTextBox())
+			using (Panel panel = new Panel())
+			using (Button buton = new Button())
+			using (Form form = new Form())
+			{
+				textBox.SuspendLayout();
+				buton.SuspendLayout();
+				panel.SuspendLayout();
+				form.SuspendLayout();
+
+				textBox.UseSystemPasswordChar = true;
+				textBox.Multiline = true;
+				textBox.SelectionStart = 0;
+				textBox.SelectionLength = 0;
+				textBox.Size = new Size(150, textBox.Height);
+				textBox.Dock = DockStyle.Top;
+				textBox.Font = new Font(textBox.Font, FontStyle.Bold);
+				textBox.TabIndex = 0;
+
+				buton.Click += new EventHandler(buton_Click);
+				buton.Dock = DockStyle.Left;
+				buton.Text = "Ok";
+				buton.Size = new Size(75, 23);
+				buton.TabIndex = 0;
+
+				panel.Height = 23;
+				panel.Controls.Add(buton);
+				panel.Dock = DockStyle.Fill;
+				panel.TabIndex = 1;
+
+				form.ControlBox = false;
+				form.Text = "Enter password";
+				form.ClientSize = new Size(100, 43);
+				form.Controls.Add(panel);
+				form.Controls.Add(textBox);
+				form.AcceptButton = buton;
+
+				textBox.ResumeLayout();
+				buton.ResumeLayout();
+				panel.ResumeLayout();
+				form.ResumeLayout();
+
+				textBox.Focus();
+				form.ShowDialog();
+
+				return textBox.Text;
+			}
+		}
+
+		static void buton_Click(object sender, EventArgs e)
+		{
+			Form form = SwishFunctions.GetForm(sender);
+			if (form != null)
+			{
+				form.Close();
+			}
+		}
+
 		public static void Display(string inputFileName)
+		{
+			int exitCode;
+			string output;
+			string arguments = string.Join(" ", ArgumentFunctions.OperationArgument, DisplayClientOperation, ArgumentFunctions.InputArgument, inputFileName);
+			SwishFunctions.RunProcess(Application.ExecutablePath, arguments, Environment.CurrentDirectory, true, TimeSpan.Zero, out exitCode, out output);
+		}
+
+		public static void DisplayClient(string inputFileName)
 		{
 			string extension = Path.GetExtension(inputFileName);
 			string useFileName;
-			if (extension.ToLower() == ".csv")
+
+			try
 			{
-				useFileName = inputFileName;
-			} else
+				if (extension.ToLower() == ".csv")
+				{
+					useFileName = inputFileName;
+				} else
+				{
+					useFileName = FileFunctions.TempoaryOutputFileName(".csv");
+					SaveFile(inputFileName, useFileName);
+				}
+
+				string[] lines = File.ReadAllLines(useFileName);
+				for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
+				{
+					lines[lineIndex] = lines[lineIndex].Replace(',', '\t');
+				}
+
+				SwishFunctions.MessageTextBox("File: " + inputFileName + Environment.NewLine, lines, false);
+			} catch (Exception error)
 			{
-				useFileName = SwishFunctions.TempoaryOutputFileName(".csv");
-				SaveFile(inputFileName, useFileName);
+				SwishFunctions.MessageTextBox("failed to display " + inputFileName + Environment.NewLine + ExceptionFunctions.Write(error, true), false);
 			}
 
-			string data = File.ReadAllText(useFileName).Replace(',', '\t');
-			SwishFunctions.MessageTextBox("File: " + inputFileName + Environment.NewLine + data);
 		}
 
 		public static void RemoveColumns(string inputFileName, string outputFileName, List<string> variableNames)
@@ -443,14 +602,14 @@ namespace Swish
 				throw new Exception("Variables missing");
 			}
 
-			string doOutputFileName = SwishFunctions.TempoaryOutputFileName(Path.GetExtension(outputFileName));
+			string doOutputFileName = FileFunctions.TempoaryOutputFileName(Path.GetExtension(outputFileName));
 			if (FileFunctions.FileExists(doOutputFileName))
 			{
 				// Stata does not overwrite files
 				File.Delete(doOutputFileName);
 			}
 
-			string intermediateFileName = SwishFunctions.TempoaryOutputFileName(".dta");
+			string intermediateFileName = FileFunctions.TempoaryOutputFileName(".dta");
 			if (FileFunctions.FileExists(intermediateFileName))
 			{
 				File.Delete(intermediateFileName);
@@ -560,7 +719,7 @@ namespace Swish
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
 
-			string doOutputFileName = SwishFunctions.TempoaryOutputFileName(".dta");
+			string doOutputFileName = FileFunctions.TempoaryOutputFileName(".dta");
 			if (FileFunctions.FileExists(doOutputFileName))
 			{
 				// Stata does not overwrite files

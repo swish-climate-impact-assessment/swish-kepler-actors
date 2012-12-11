@@ -65,6 +65,7 @@ namespace Swish.Tests
 					return;
 				}
 
+				new AdapterTests().Generate();
 				new AdapterTests().MergeZero();
 				new AdapterTests().Replace_1();
 				new AdapterTests().Replace_2();
@@ -86,24 +87,10 @@ namespace Swish.Tests
 
 			} catch (Exception error)
 			{
-				Console.WriteLine(ExceptionFunctions.WriteException(error, false));
+				Console.WriteLine(ExceptionFunctions.Write(error, false));
 			}
 
 
-			/// 
-			/// to set the current working directory
-			/// cd "C:\Users\kurt\Documents"
-			/// 
-			/// "generate creates a new variable 
-			/// generate gnppc2 = gnppc^ 2
-			/// 
-			/// 
-			/// 
-			/// 
-			/// 
-			/// 
-			/// 
-			/// 
 		}
 	}
 }
