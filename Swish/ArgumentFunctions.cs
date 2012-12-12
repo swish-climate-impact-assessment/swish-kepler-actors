@@ -100,7 +100,7 @@ namespace Swish
 		public static List<string> GetArgumentItems(string name, List<Tuple<string, string>> splitArguments, bool throwOnMissing, bool throwOnEmpty)
 		{
 			string value = GetArgument(name, splitArguments, throwOnMissing);
-			List<string> values = new List<string>(value.Split(' '));
+			List<string> values = new List<string>(value.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
 			if (values.Count == 0 && throwOnEmpty)
 			{
 				throw new Exception("Argument empty: \"" + name + "\", expected space seperated argument values");
@@ -207,5 +207,24 @@ namespace Swish
 			return outputFileName;
 		}
 
-}
+
+		public static List<T> GetArgumentFlags<T>(string name, List<Tuple<string, string>> splitArguments, bool throwOnMissing, bool throwOnEmpty)
+		{
+			List<string> items = GetArgumentItems(name, splitArguments, throwOnMissing, throwOnEmpty);
+
+			List<T> results = new List<T>();
+			for (int itemIndex = 0; itemIndex < items.Count; itemIndex++)
+			{
+				string item = items[itemIndex].Trim();
+				if (string.IsNullOrWhiteSpace(item))
+				{
+					continue;
+				}
+				T value = (T)Enum.Parse(typeof(T), item, true);
+				results.Add(value);
+			}
+
+			return results;
+		}
+	}
 }

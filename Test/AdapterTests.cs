@@ -80,7 +80,7 @@ namespace Swish.Tests
 			}
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			AdapterFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false);
+			AdapterFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, null);
 
 			Csv table = CsvFunctions.Read(outputFileName);
 			string name = StataFunctionsTests.MergeVariable;
@@ -122,7 +122,7 @@ namespace Swish.Tests
 			}
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			AdapterFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false);
+			AdapterFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, null);
 
 			Csv table = CsvFunctions.Read(outputFileName);
 
@@ -327,7 +327,7 @@ namespace Swish.Tests
 
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			AdapterFunctions.Merge(inputFileName1, inputFileName2, variables, intermediateFileName1, true);
+			AdapterFunctions.Merge(inputFileName1, inputFileName2, variables, intermediateFileName1, true, null);
 
 			//"matched (3)"
 			//"master only (1)"
@@ -414,7 +414,7 @@ namespace Swish.Tests
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			string variableName = "testVariable";
-			AdapterFunctions.Generate(inputFileName, outputFileName, variableName, "-head4");
+			AdapterFunctions.Generate(inputFileName, outputFileName, variableName, string.Empty, "-head4");
 			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new Exception();
@@ -437,6 +437,43 @@ namespace Swish.Tests
 					throw new Exception();
 				}
 			}
+		}
+
+		internal void MergeKeep()
+		{
+			string input1FileName;
+			string input2FileName;
+			StataFunctionsTests.GenerateMergeInputFiles(out input1FileName, out input2FileName, true);
+
+			List<string> variableNames = new List<string>();
+			variableNames.Add(StataFunctionsTests.MergeVariable);
+			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			List<MergeRecordResult> keep = new List<MergeRecordResult>();
+			keep.Add(MergeRecordResult.Match);
+
+			AdapterFunctions.Merge(input1FileName, input2FileName, variableNames, outputFileName, false, keep);
+
+			Csv table = CsvFunctions.Read(outputFileName);
+
+			int columnIndex = table.ColumnIndex(StataFunctionsTests.MergeVariable);
+			List<int> values = table.ColunmAsInts(columnIndex);
+
+
+			if (table.Records.Count != 9
+				|| !values.Contains(9)
+				|| !values.Contains(15)
+				|| !values.Contains(21)
+				|| !values.Contains(3)
+				|| !values.Contains(18)
+				|| !values.Contains(24)
+				|| !values.Contains(12)
+				|| !values.Contains(0)
+				|| !values.Contains(6)
+				)
+			{
+				throw new Exception();
+			}
+
 		}
 	}
 }

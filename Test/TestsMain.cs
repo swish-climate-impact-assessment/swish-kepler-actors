@@ -53,6 +53,7 @@ namespace Swish.Tests
 				/// start with a log file that accopanyies the output file with the operation name and input details
 				/// 
 
+				new ArgumentFunctionsTests().GetFlags();
 				new KarFunctionsTests().RemovePort();
 				new KarFunctionsTests().DumpContents();
 				new ArgumentFunctionsTests().GetSwitch();
@@ -65,6 +66,7 @@ namespace Swish.Tests
 					return;
 				}
 
+				new AdapterTests().MergeKeep();
 				new AdapterTests().Generate();
 				new AdapterTests().MergeZero();
 				new AdapterTests().Replace_1();
@@ -77,6 +79,7 @@ namespace Swish.Tests
 				new AdapterTests().Append();
 				new AdapterTests().Mean();
 				new AdapterTests().Sort();
+
 				new StataFunctionsTests().Stata12FileName();
 				new StataFunctionsTests().ReturnLog();
 				new StataScriptFunctionsTests().SaveDynamicFileFormat();

@@ -11,9 +11,11 @@ namespace Swish
 	{
 		public const string AppendOperation = "append";
 		public const string CommandOperation = "stataCommand";
+		public const string CompressOperation = "compress";
 		public const string DisplayClientOperation = "displayClient";
 		public const string DisplayOperation = "display";
 		public const string DoScriptOperation = "doScript";
+		public const string FormatOperation = "format";
 		public const string GenerateOperation = "generate";
 		public const string MergeOperation = "merge";
 		public const string PasswordOperation = "password";
@@ -31,13 +33,34 @@ namespace Swish
 		{
 			switch (operation)
 			{
+			case FormatOperation:
+				{
+					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
+					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
+					string format = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "format", splitArguments, true);
+					AdapterFunctions.Format(inputFileName, outputFileName, variableNames, format);
+					Console.Write(outputFileName);
+				}
+				break;
+
+			case CompressOperation:
+				{
+					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
+					AdapterFunctions.Compress(inputFileName, outputFileName);
+					Console.Write(outputFileName);
+				}
+				break;
+
 			case GenerateOperation:
 				{
 					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
 					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
 					string variableName = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "variable", splitArguments, true);
 					string expression = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "expression", splitArguments, true);
-					AdapterFunctions.Generate(inputFileName, outputFileName, variableName, expression);
+					string type = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "type", splitArguments, false);
+					AdapterFunctions.Generate(inputFileName, outputFileName, variableName, type, expression);
 					Console.Write(outputFileName);
 				}
 				break;
@@ -103,6 +126,7 @@ namespace Swish
 					string input2FileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true));
 					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
 					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
+					List<MergeRecordResult> keep = ArgumentFunctions.GetArgumentFlags<MergeRecordResult>(ArgumentFunctions.ArgumentCharacter + "keep", splitArguments, false, false);
 
 					string keepMergeString = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "keepMerge", splitArguments, false));
 					bool keepMerge;
@@ -113,7 +137,7 @@ namespace Swish
 					{
 						keepMerge = false;
 					}
-					AdapterFunctions.Merge(input1FileName, input2FileName, variableNames, outputFileName, keepMerge);
+					AdapterFunctions.Merge(input1FileName, input2FileName, variableNames, outputFileName, keepMerge, keep);
 					Console.Write(outputFileName);
 				}
 				break;
@@ -209,9 +233,91 @@ namespace Swish
 			}
 		}
 
-		public static void Generate(string inputFileName, string outputFileName, string variableName, string expression)
+		private static void Format(string inputFileName, string outputFileName, List<string> variableNames, string format)
 		{
+			if (!FileFunctions.FileExists(inputFileName))
+			{
+				throw new Exception("cannot find file \"" + inputFileName + "\"");
+			}
 
+			if (variableNames.Count == 0)
+			{
+				throw new Exception("Variables missing");
+			}
+
+			if (string.IsNullOrWhiteSpace(format))
+			{
+				throw new Exception("Format missing");
+			}
+
+
+			string extension = Path.GetExtension(outputFileName);
+			string intermaidateOutput = FileFunctions.TempoaryOutputFileName(extension);
+
+			List<string> lines = new List<string>();
+			StataScriptFunctions.WriteHeadder(lines);
+
+			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
+
+			lines.Add("format " + StataScriptFunctions.VariableList(variableNames) + " " + format);
+
+			string line = StataScriptFunctions.SaveFileCommand(intermaidateOutput);
+			lines.Add(line);
+
+			StataScriptFunctions.WriteFooter(lines);
+
+			string log = StataFunctions.RunScript(lines, false);
+			if (!FileFunctions.FileExists(intermaidateOutput))
+			{
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
+			}
+
+			if (FileFunctions.FileExists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+
+			File.Move(intermaidateOutput, outputFileName);
+		}
+
+		private static void Compress(string inputFileName, string outputFileName)
+		{
+			if (!FileFunctions.FileExists(inputFileName))
+			{
+				throw new Exception("cannot find file \"" + inputFileName + "\"");
+			}
+
+			string extension = Path.GetExtension(outputFileName);
+			string intermaidateOutput = FileFunctions.TempoaryOutputFileName(extension);
+
+			List<string> lines = new List<string>();
+			StataScriptFunctions.WriteHeadder(lines);
+
+			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
+
+			lines.Add("compress");
+
+			string line = StataScriptFunctions.SaveFileCommand(intermaidateOutput);
+			lines.Add(line);
+
+			StataScriptFunctions.WriteFooter(lines);
+
+			string log = StataFunctions.RunScript(lines, false);
+			if (!FileFunctions.FileExists(intermaidateOutput))
+			{
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
+			}
+
+			if (FileFunctions.FileExists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+
+			File.Move(intermaidateOutput, outputFileName);
+		}
+
+		public static void Generate(string inputFileName, string outputFileName, string variableName, string type, string expression)
+		{
 			if (!FileFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
@@ -235,7 +341,13 @@ namespace Swish
 
 			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
 
-			lines.Add(" generate " + variableName + " =" + expression);
+			if (string.IsNullOrWhiteSpace(type))
+			{
+				lines.Add(" generate " + variableName + " =" + expression);
+			} else
+			{
+				lines.Add(" generate " + type + " " + variableName + " =" + expression);
+			}
 
 			string line = StataScriptFunctions.SaveFileCommand(intermaidateOutput);
 			lines.Add(line);
@@ -567,7 +679,8 @@ namespace Swish
 			}
 		}
 
-		public static void Merge(string input1FileName, string input2FileName, List<string> variableNames, string outputFileName, bool keepMergeColumn)
+		public static void Merge(string input1FileName, string input2FileName,
+			List<string> variableNames, string outputFileName, bool keepMergeColumn, List<MergeRecordResult> keep)
 		{
 			if (!FileFunctions.FileExists(input1FileName))
 			{
@@ -632,7 +745,32 @@ namespace Swish
 
 			line = StataScriptFunctions.SortCommand(variableNames);
 			lines.Add(line);
-			lines.Add("merge 1:1 " + StataScriptFunctions.VariableList(variableNames) + " using \"" + intermediateFileName + "\", force ");
+
+			line = "merge 1:1 " + StataScriptFunctions.VariableList(variableNames) + " using \"" + intermediateFileName + "\", force ";
+			if (keep != null && keep.Count > 0)
+			{
+				line += "keep(";
+
+				if (keep.Contains(MergeRecordResult.Match))
+				{
+					line += "match ";
+				}
+				if (keep.Contains(MergeRecordResult.MatchConflict))
+				{
+					line += "match_conflict ";
+				}
+				if (keep.Contains(MergeRecordResult.MatchUpdate))
+				{
+					line += "match_update ";
+				}
+				if (keep.Contains(MergeRecordResult.Using))
+				{
+					line += "using ";
+				}
+
+				line += ") ";
+			}
+			lines.Add(line);
 			if (!keepMergeColumn)
 			{
 				lines.Add("drop " + StataScriptFunctions.MergeColumnName);
@@ -719,7 +857,7 @@ namespace Swish
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
 
-			string doOutputFileName = FileFunctions.TempoaryOutputFileName(".dta");
+			string doOutputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			if (FileFunctions.FileExists(doOutputFileName))
 			{
 				// Stata does not overwrite files
@@ -747,6 +885,10 @@ namespace Swish
 			}
 
 			string[] resultLines = File.ReadAllLines(doOutputFileName);
+			if (resultLines.Length < 2)
+			{
+				throw new Exception("Unexpected format");
+			}
 
 			double result = double.Parse(resultLines[1]);
 

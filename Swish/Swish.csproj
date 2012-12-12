@@ -51,6 +51,7 @@
     <Compile Include="CollapseOpperation.cs" />
     <Compile Include="EqualFunctions.cs" />
     <Compile Include="KarFile.cs" />
+    <Compile Include="MergeRecordResult.cs" />
     <Compile Include="StreamFunctions.cs" />
     <Compile Include="FileFunctions.cs" />
     <Compile Include="KarFunctions.cs" />

@@ -64,5 +64,25 @@ namespace Swish.Tests
 			}
 
 		}
+
+		enum TestFlags
+		{
+			Unknown = 0,
+			One,
+			Two,
+			Three,
+		}
+		internal void GetFlags()
+		{
+			string name = "flag";
+			string arguments = ArgumentFunctions.ArgumentCharacter + name + " " + TestFlags.One.ToString() + " " + TestFlags.Two.ToString().ToLower() + " ";
+			List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
+			List<TestFlags> flags = ArgumentFunctions.GetArgumentFlags<TestFlags>(ArgumentFunctions.ArgumentCharacter + name, splitArguments, true, true);
+
+			if (flags.Count != 2 || flags[0] != TestFlags.One || flags[1] != TestFlags.Two)
+			{
+				throw new Exception();
+			}
+		}
 	}
 }
