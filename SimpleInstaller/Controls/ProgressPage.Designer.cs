@@ -45,8 +45,10 @@
 			this.CompleteBox.Multiline = true;
 			this.CompleteBox.Name = "CompleteBox";
 			this.CompleteBox.ReadOnly = true;
+			this.CompleteBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
 			this.CompleteBox.Size = new System.Drawing.Size(474, 283);
 			this.CompleteBox.TabIndex = 1;
+			this.CompleteBox.Text = "Installing...";
 			// 
 			// ProgressBar
 			// 

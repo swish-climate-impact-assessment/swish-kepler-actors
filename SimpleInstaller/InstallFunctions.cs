@@ -7,7 +7,11 @@ namespace Swish.SimpleInstaller
 {
 	internal static class InstallFunctions
 	{
-		internal delegate void ReportProgressFunction(int progress, string line);
+		static InstallFunctions()
+		{
+			_symbols.Add(new Tuple<string, string>("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)));
+			_symbols.Add(new Tuple<string, string>("%StartupPath%", Application.StartupPath));
+		}
 
 		internal static void Install(bool clean, ReportProgressFunction ReportProgress)
 		{
@@ -18,7 +22,15 @@ namespace Swish.SimpleInstaller
 
 			if (ReportProgress != null)
 			{
-				ReportProgress(0, "");
+				ReportProgress(0, "Installing...");
+
+				for (int symbolIndex = 0; symbolIndex < _symbols.Count; symbolIndex++)
+				{
+					string symbol = _symbols[symbolIndex].Item1;
+					string value = _symbols[symbolIndex].Item2;
+
+					ReportProgress(-1, "Symbol: " + symbol + " -> " + value);
+				}
 			}
 
 			while (_pending.Count > 0)
@@ -35,21 +47,36 @@ namespace Swish.SimpleInstaller
 				}
 				_completed.Add(line);
 
-				RunLine(line, clean);
+				RunLine(line, clean, ReportProgress);
 
 				if (ReportProgress != null)
 				{
-					ReportProgress(100 * (_completed.Count) / (_completed.Count + _pending.Count), line);
+					ReportProgress(100 * (_completed.Count) / (_completed.Count + _pending.Count), string.Empty);
 				}
 			}
+			if (ReportProgress != null)
+			{
+				ReportProgress(100, "Done.");
+			}
+
 		}
 
-		internal static void RunLine(string _line, bool clean)
+		internal static void RunLine(string _line, bool clean, ReportProgressFunction ReportProgress)
 		{
-			string line = _line;
+			if (ReportProgress != null)
+			{
+				ReportProgress(-1, _line);
+			}
 
-			line = line.Replace("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
-			line = line.Replace("%StartupPath%", Application.StartupPath);
+			string line = ResloveSymbols(_line);
+
+			if (line != _line)
+			{
+				if (ReportProgress != null)
+				{
+					ReportProgress(-1, "Changed to: " + line);
+				}
+			}
 
 			string whiteSpace;
 			StringIO.SkipWhiteSpace(out whiteSpace, ref line);
@@ -70,7 +97,6 @@ namespace Swish.SimpleInstaller
 				}
 
 				string[] files = Directory.GetFiles(sourceDirectory, "*");
-
 				for (int fileIndex = 0; fileIndex < files.Length; fileIndex++)
 				{
 					string sourceFileName = files[fileIndex];
@@ -79,10 +105,10 @@ namespace Swish.SimpleInstaller
 
 					if (!clean)
 					{
-						FileFunctions.CopyFile(sourceFileName, destinationFileName);
+						FileFunctions.CopyFile(sourceFileName, destinationFileName, ReportProgress);
 					} else
 					{
-						FileFunctions.DeleteFile(destinationFileName);
+						FileFunctions.DeleteFile(destinationFileName, ReportProgress);
 					}
 				}
 			} else if (StringIO.TryRead("Copy", ref line))
@@ -104,10 +130,10 @@ namespace Swish.SimpleInstaller
 
 				if (!clean)
 				{
-					FileFunctions.CopyFile(sourceFileName, destinationFileName);
+					FileFunctions.CopyFile(sourceFileName, destinationFileName, ReportProgress);
 				} else
 				{
-					FileFunctions.DeleteFile(destinationFileName);
+					FileFunctions.DeleteFile(destinationFileName, ReportProgress);
 				}
 			} else if (string.IsNullOrWhiteSpace(line) || StringIO.TryRead("//", ref line))
 			{
@@ -116,6 +142,20 @@ namespace Swish.SimpleInstaller
 			{
 				throw new Exception("could not read line \"" + _line + "\"");
 			}
+		}
+
+		private static List<Tuple<string, string>> _symbols = new List<Tuple<string, string>>();
+
+		private static string ResloveSymbols(string line)
+		{
+			for (int symbolIndex = 0; symbolIndex < _symbols.Count; symbolIndex++)
+			{
+				string symbol = _symbols[symbolIndex].Item1;
+				string value = StringIO.Escape(_symbols[symbolIndex].Item2);
+				line = line.Replace(symbol, value);
+			}
+
+			return line;
 		}
 
 	}

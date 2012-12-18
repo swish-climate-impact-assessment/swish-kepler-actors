@@ -36,7 +36,7 @@ namespace Swish.SimpleInstaller.Controls
 				backgroundWorker1.ReportProgress(100);
 			} catch (Exception error)
 			{
-				string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.Write(error, true);
+				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, true);
 				MessageBox.Show(message);
 				Console.Write(message);
 				return;
@@ -45,13 +45,24 @@ namespace Swish.SimpleInstaller.Controls
 
 		private void ReportProgress(int progress, string line)
 		{
+			if ((progress >= 0 || ExceptionFunctions.ForceVerbose) && !string.IsNullOrWhiteSpace(line))
+			{
+				completedLines.Add(line);
+			}
 			backgroundWorker1.ReportProgress(progress);
 		}
 
 		private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
-			CompleteBox.Lines = completedLines.ToArray();
-			ProgressBar.Value = e.ProgressPercentage;
+			if (e.ProgressPercentage >= 0 || ExceptionFunctions.ForceVerbose)
+			{
+				CompleteBox.Lines = completedLines.ToArray();
+			}
+			if (e.ProgressPercentage >= 0)
+			{
+				CompleteBox.Lines = completedLines.ToArray();
+				ProgressBar.Value = e.ProgressPercentage;
+			}
 		}
 
 		private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

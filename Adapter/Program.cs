@@ -13,15 +13,15 @@ namespace Swish.Adapter
 		{
 			try
 			{
-				List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
-				string operation = ArgumentFunctions.GetArgument(ArgumentFunctions.OperationArgument, splitArguments, true);
+				Arguments splitArguments = new Arguments(arguments);
+				string operation = splitArguments.String(Arguments.OperationArgument, true);
 
 				AdapterFunctions.RunOperation(operation, splitArguments);
 
 				return 0;
 			} catch (Exception error)
 			{
-				string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.Write(error, true);
+				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, true);
 				Console.Write(message);
 				return -1;
 			}

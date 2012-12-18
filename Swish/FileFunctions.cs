@@ -100,7 +100,7 @@ namespace Swish
 			return false;
 		}
 
-		public static void DeleteFile(string fileName)
+		public static void DeleteFile(string fileName, ReportProgressFunction ReportProgress)
 		{
 			try
 			{
@@ -109,13 +109,17 @@ namespace Swish
 					return;
 				}
 				File.SetAttributes(fileName, FileAttributes.Normal);
+				if (ReportProgress != null)
+				{
+					ReportProgress(-1, "delete file: " + fileName);
+				}
 				File.Delete(fileName);
 				string destinationDirectory = Path.GetDirectoryName(fileName);
-				DeleteDirectory(destinationDirectory);
+				DeleteDirectory(destinationDirectory, ReportProgress);
 			} catch { }
 		}
 
-		public static void DeleteDirectory(string directory)
+		public static void DeleteDirectory(string directory, ReportProgressFunction ReportProgress)
 		{
 			try
 			{
@@ -129,40 +133,95 @@ namespace Swish
 					return;
 				}
 
+				if (ReportProgress != null)
+				{
+					ReportProgress(-1, "delete directory: " + directory);
+				}
 				Directory.Delete(directory);
 				string baseDirectory = Path.GetDirectoryName(directory);
-				DeleteDirectory(baseDirectory);
+				DeleteDirectory(baseDirectory, ReportProgress);
 			} catch { }
 
 		}
 
-		public static void CopyFile(string sourceFileName, string destinationFileName)
+		public static void CopyFile(string sourceFileName, string destinationFileName, ReportProgressFunction ReportProgress)
 		{
-			string destinationDirectory = Path.GetDirectoryName(destinationFileName);
-			CreateDirectory(destinationDirectory);
-			if (FileExists(destinationFileName))
+			try
 			{
-				File.Delete(destinationFileName);
+				string destinationDirectory = Path.GetDirectoryName(destinationFileName);
+				CreateDirectory(destinationDirectory, ReportProgress);
+				if (FileExists(destinationFileName))
+				{
+					if (ReportProgress != null)
+					{
+						ReportProgress(-1, "delete: " + destinationFileName);
+					}
+					File.Delete(destinationFileName);
+				}
+
+				if (ReportProgress != null)
+				{
+					ReportProgress(-1, "copy: " + sourceFileName + " -> " + destinationFileName);
+				}
+				File.Copy(sourceFileName, destinationFileName);
+			} catch (Exception error)
+			{
+				string errorMessage = "Failed copying file \"" + sourceFileName + "\" -> \"" + destinationFileName + "\"";
+				if (ReportProgress != null)
+				{
+					ReportProgress(-1, errorMessage);
+				}
+				throw new Exception(errorMessage, error);
 			}
-			File.Copy(sourceFileName, destinationFileName);
 		}
 
-		public static void CreateDirectory(string directory)
+		public static void CreateDirectory(string directory, ReportProgressFunction ReportProgress)
 		{
-			if (Directory.Exists(directory))
+			try
 			{
-				return;
+				if (Directory.Exists(directory))
+				{
+					return;
+				}
+
+				string baseDirectory = Path.GetDirectoryName(directory);
+				CreateDirectory(baseDirectory, ReportProgress);
+
+				if (ReportProgress != null)
+				{
+					ReportProgress(-1, "Create directory: " + directory);
+				}
+				Directory.CreateDirectory(directory);
+			} catch (Exception error)
+			{
+				string errorMessage = "Failed create directory \"" + directory + "\"";
+				if (ReportProgress != null)
+				{
+					ReportProgress(-1, errorMessage);
+				}
+				throw new Exception(errorMessage, error);
 			}
+		}
 
-			string baseDirectory = Path.GetDirectoryName(directory);
-			CreateDirectory(baseDirectory);
-
-			Directory.CreateDirectory(directory);
+		private static string _tempoaryFileBase = string.Empty;
+		private static int _tempoaryFileCount = 0;
+		private static string TempoaryFileName()
+		{
+			if (string.IsNullOrWhiteSpace(_tempoaryFileBase))
+			{
+				_tempoaryFileBase = Path.GetTempFileName();
+				if (File.Exists(_tempoaryFileBase))
+				{
+					File.Delete(_tempoaryFileBase);
+				}
+			}
+			_tempoaryFileCount++;
+			return _tempoaryFileBase + _tempoaryFileCount;
 		}
 
 		public static string CreateTempoaryDirectory()
 		{
-			string tempFileName = Path.GetTempFileName();
+			string tempFileName = TempoaryFileName();
 			if (File.Exists(tempFileName))
 			{
 				File.Delete(tempFileName);
@@ -172,9 +231,10 @@ namespace Swish
 			return directory;
 		}
 
+
 		public static string TempoaryOutputFileName(string extension)
 		{
-			string tempOutputFileName = Path.GetTempFileName();
+			string tempOutputFileName = TempoaryFileName();
 			if (FileFunctions.FileExists(tempOutputFileName))
 			{
 				File.Delete(tempOutputFileName);

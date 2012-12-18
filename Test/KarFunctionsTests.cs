@@ -12,7 +12,7 @@ namespace Swish.Tests
 			string fileName = TestFunctions.TestDataFile("DumpKar.kar", directory);
 			string outputDirectory = Path.Combine(directory, Path.GetFileNameWithoutExtension(fileName));
 
-			KarFunctions.DumpContents(fileName, outputDirectory);
+			KarFunctions.DumpContents(fileName, outputDirectory, null);
 
 			List<string> contents = new List<string>(new string[]{
 					"AppendTables.urn.lsid.kepler-project.org.ns..26898.57.672.xml",

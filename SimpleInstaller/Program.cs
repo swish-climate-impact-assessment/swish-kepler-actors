@@ -12,33 +12,37 @@ namespace Swish.SimpleInstaller
 		[STAThread]
 		static int Main(string[] arguments)
 		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
-			bool silent = ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "silent", splitArguments);
-			bool clean = ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "clean", splitArguments);
-			bool luanch = ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "luanch", splitArguments);
-
-			string logFileName = Path.Combine(Application.StartupPath, "Error.log.txt");
-			if (FileFunctions.FileExists(logFileName))
-			{
-				File.Delete(logFileName);
-			}
-			/// adding actor steps
-			/// Adapter
-			///		code
-			///		test
-			/// 
-			/// Actor
-			///		ports
-			///			names
-			///			cmd arguments
-			///			connect up
-			///		save actor to installer folder
-			///
-
+			string logFileName = string.Empty;
 			try
 			{
+				Application.EnableVisualStyles();
+				Application.SetCompatibleTextRenderingDefault(false);
+
+				logFileName = Path.Combine(Application.StartupPath, "Error.log.txt");
+				if (FileFunctions.FileExists(logFileName))
+				{
+					File.Delete(logFileName);
+				}
+
+				Arguments splitArguments = new Arguments(arguments);
+				ExceptionFunctions.ForceVerbose = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "verbose");
+				bool silent = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "silent");
+				bool clean = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "clean");
+				bool luanch = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "luanch");
+
+				/// adding actor steps
+				/// Adapter
+				///		code
+				///		test
+				/// 
+				/// Actor
+				///		ports
+				///			names
+				///			cmd arguments
+				///			connect up
+				///		save actor to installer folder
+				///
+
 				if (!silent)
 				{
 					using (InstallerMain control = new InstallerMain())
@@ -57,9 +61,16 @@ namespace Swish.SimpleInstaller
 				}
 			} catch (Exception error)
 			{
-				string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.Write(error, true);
+				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, true);
 				Console.Write(message);
-				File.WriteAllText(logFileName, message);
+				if (!string.IsNullOrWhiteSpace(logFileName))
+				{
+					File.WriteAllText(logFileName, message);
+				}
+				if (ExceptionFunctions.ForceVerbose)
+				{
+					SwishFunctions.MessageTextBox(message, false);
+				}
 				return -1;
 			}
 			return 0;

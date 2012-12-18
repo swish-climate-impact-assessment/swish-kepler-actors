@@ -10,6 +10,10 @@ namespace Swish
 
 		public static void Write(StringBuilder output, Exception exception, bool messageOnly)
 		{
+			if (ForceVerbose)
+			{
+				messageOnly = false;
+			}
 			List<Exception> exceptions = new List<Exception>();
 			do
 			{
@@ -48,8 +52,14 @@ namespace Swish
 			}
 		}
 
+		public static bool ForceVerbose = false;
+
 		public static string Write(Exception error, bool messageOnly)
 		{
+			if (ForceVerbose)
+			{
+				messageOnly = false;
+			}
 			string empty = string.Empty;
 			while (error != null)
 			{

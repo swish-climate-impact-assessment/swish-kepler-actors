@@ -12,7 +12,7 @@ namespace Swish.Tests
 			// this tests that the arguments can be in quates,
 			// use by the command adapter to specify the command and escape characters
 
-			string argument1Name = ArgumentFunctions.ArgumentCharacter + "blah";
+			string argument1Name = Arguments.DefaultArgumentPrefix + "blah";
 			string escapedSlash = "\\/";
 			string escapedQuote = "\\\"";
 
@@ -22,20 +22,20 @@ namespace Swish.Tests
  				argument1Name , // argument name
  				"\""+argument1Name+" "+ escapedSlash,  // value part 1 of 2
 				 escapedQuote + "value" + "\"", // value part 2 of 2
-				ArgumentFunctions.ArgumentCharacter+"other",
+				Arguments.DefaultArgumentPrefix+"other",
 				"otherValue"
 			};
 
 			// when I get the 'blah' argument value I expect a single string, with no surronding ", and escaped characters converted
-			List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
-			string argument1Value = ArgumentFunctions.GetArgument(argument1Name, splitArguments, true);
+			Arguments splitArguments = new Arguments(arguments);
+			string argument1Value = splitArguments.String(argument1Name, true);
 			if (argument1Value != expectedArgument1Value)
 			{
 				throw new Exception();
 			}
 
 			// test that other arguments are not affected
-			if (ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "other", splitArguments, true) != "otherValue")
+			if (splitArguments.String(Arguments.DefaultArgumentPrefix + "other", true) != "otherValue")
 			{
 				throw new Exception();
 			}
@@ -46,19 +46,19 @@ namespace Swish.Tests
 			/// this is test verifies that gets switch returns true if command argument present
 			/// and false if it is absent
 
-			string arguments = ArgumentFunctions.ArgumentCharacter + "flag " + ArgumentFunctions.ArgumentCharacter + "setting";
-			List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
-			if (!ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "flag", splitArguments))
+			string arguments = Arguments.DefaultArgumentPrefix + "flag " + Arguments.DefaultArgumentPrefix + "setting";
+			Arguments splitArguments = new Arguments(arguments);
+			if (!splitArguments.Exists(Arguments.DefaultArgumentPrefix + "flag"))
 			{
 				throw new Exception("");
 			}
 
-			if (ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "fake", splitArguments))
+			if (splitArguments.Exists(Arguments.DefaultArgumentPrefix + "fake"))
 			{
 				throw new Exception("");
 			}
 
-			if (!ArgumentFunctions.GetSwitch(ArgumentFunctions.ArgumentCharacter + "setting", splitArguments))
+			if (!splitArguments.Exists(Arguments.DefaultArgumentPrefix + "setting"))
 			{
 				throw new Exception("");
 			}
@@ -75,9 +75,9 @@ namespace Swish.Tests
 		internal void GetFlags()
 		{
 			string name = "flag";
-			string arguments = ArgumentFunctions.ArgumentCharacter + name + " " + TestFlags.One.ToString() + " " + TestFlags.Two.ToString().ToLower() + " ";
-			List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
-			List<TestFlags> flags = ArgumentFunctions.GetArgumentFlags<TestFlags>(ArgumentFunctions.ArgumentCharacter + name, splitArguments, true, true);
+			string arguments = Arguments.DefaultArgumentPrefix + name + " " + TestFlags.One.ToString() + " " + TestFlags.Two.ToString().ToLower() + " ";
+			Arguments splitArguments = new Arguments(arguments);
+			List<TestFlags> flags = splitArguments.EnumList<TestFlags>(Arguments.DefaultArgumentPrefix + name, true, true);
 
 			if (flags.Count != 2 || flags[0] != TestFlags.One || flags[1] != TestFlags.Two)
 			{

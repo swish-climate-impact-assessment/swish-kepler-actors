@@ -7,7 +7,7 @@ namespace Swish
 {
 	public class KarFile: IDisposable
 	{
-		public KarFile(string fileName)
+		public KarFile(string fileName, ReportProgressFunction ReportProgress)
 		{
 			_fileName = fileName;
 			_directory = FileFunctions.CreateTempoaryDirectory();
@@ -26,10 +26,10 @@ namespace Swish
 					string itemName = Path.GetFileName(item.Name);
 
 					string outputDirectory = Path.Combine(_directory, itemDirectory);
-					FileFunctions.CreateDirectory(outputDirectory);
+					FileFunctions.CreateDirectory(outputDirectory, ReportProgress);
 
 					string outputName = Path.Combine(outputDirectory, itemName);
-					StreamFunctions.ExportUntilFail(outputName, zip);
+					StreamFunctions.ExportUntilFail(outputName, zip, ReportProgress);
 				}
 
 				zip.Close();
@@ -148,8 +148,8 @@ namespace Swish
 		private static XmlDocument OpenDocument(string fileName)
 		{
 			string contents = File.ReadAllText(fileName);
-			contents= contents.Replace("<!DOCTYPE entity PUBLIC \"-//UC Berkeley//DTD MoML 1//EN\"", string.Empty);
-			contents= contents.Replace("\"http://ptolemy.eecs.berkeley.edu/xml/dtd/MoML_1.dtd\">", string.Empty);
+			contents = contents.Replace("<!DOCTYPE entity PUBLIC \"-//UC Berkeley//DTD MoML 1//EN\"", string.Empty);
+			contents = contents.Replace("\"http://ptolemy.eecs.berkeley.edu/xml/dtd/MoML_1.dtd\">", string.Empty);
 			File.WriteAllText(fileName, contents);
 
 			XmlDocument _document = new XmlDocument();

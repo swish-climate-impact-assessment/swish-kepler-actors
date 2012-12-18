@@ -46,12 +46,14 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArgumentFunctions.cs" />
     <Compile Include="AdapterFunctions.cs" />
     <Compile Include="CollapseOpperation.cs" />
+    <Compile Include="Arguments.cs" />
+    <Compile Include="ByteArrayAsStream.cs" />
     <Compile Include="EqualFunctions.cs" />
     <Compile Include="KarFile.cs" />
     <Compile Include="MergeRecordResult.cs" />
+    <Compile Include="ReportProgressFunction.cs" />
     <Compile Include="StreamFunctions.cs" />
     <Compile Include="FileFunctions.cs" />
     <Compile Include="KarFunctions.cs" />
@@ -63,6 +65,8 @@
     <Compile Include="SwishFunctions.cs" />
     <Compile Include="StataFunctions.cs" />
     <Compile Include="ExceptionFunctions.cs" />
+    <Compile Include="TextAsStream.cs" />
+    <Compile Include="TextCodedStream.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

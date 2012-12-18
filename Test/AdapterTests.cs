@@ -284,11 +284,11 @@ namespace Swish.Tests
 			string condition = "head2==4";
 			string value = "head2=1";
 
-			List<Tuple<string, string>> splitArguments = new List<Tuple<string, string>>();
-			splitArguments.Add(new Tuple<string, string>(ArgumentFunctions.InputArgument, inputFileName));
-			splitArguments.Add(new Tuple<string, string>(ArgumentFunctions.ArgumentCharacter + "output", outputFileName));
-			splitArguments.Add(new Tuple<string, string>(ArgumentFunctions.ArgumentCharacter + "condition", condition));
-			splitArguments.Add(new Tuple<string, string>(ArgumentFunctions.ArgumentCharacter + "value", value));
+			Arguments splitArguments = new  Arguments();
+			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.InputArgument, inputFileName));
+			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.DefaultArgumentPrefix + "output", outputFileName));
+			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.DefaultArgumentPrefix + "condition", condition));
+			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.DefaultArgumentPrefix + "value", value));
 
 			AdapterFunctions.RunOperation(AdapterFunctions.ReplaceOperation, splitArguments);
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Diagnostics;
+using System.Text;
 
 namespace Swish.Tests
 {
@@ -41,7 +43,67 @@ namespace Swish.Tests
 			}
 		}
 
+		internal void Password()
+		{
+			if (DateTime.MinValue < DateTime.MaxValue)
+			{
+				// this is a manual test
+				return;
+			}
 
+			string prompt = "Enter a password";
+			string prompt2 = "Enter another password";
 
+			string password = AdapterFunctions.Password(prompt, false);
+
+			string password2 = AdapterFunctions.Password(prompt, false);
+
+			string password3 = AdapterFunctions.Password(prompt2, false);
+
+			string password4 = AdapterFunctions.Password(prompt, false);
+
+			string password5 = AdapterFunctions.Password(prompt2, false);
+		}
+
+		internal void EncodeDecodePassword()
+		{
+			Process process = Process.GetCurrentProcess();
+			string password = "this is the password text";
+
+			string encodedPassword = SwishFunctions.EncodePassword(password, process);
+
+			if (encodedPassword == password)
+			{
+				throw new Exception();
+			}
+
+			string decodedPassword = SwishFunctions.DecodePassword(encodedPassword, process);
+
+			if (decodedPassword != password)
+			{
+				throw new Exception();
+			}
+		}
+
+		internal void EncodeDecodePasswordBytes()
+		{
+			Process process = Process.GetCurrentProcess();
+			string password = "this is the password text";
+			byte[] bytes = ASCIIEncoding.ASCII.GetBytes(password);
+
+			byte[] encodedBytes = SwishFunctions.MangleBytes(bytes, process);
+
+			if (EqualFunctions.Equal(bytes, encodedBytes))
+			{
+				throw new Exception();
+			}
+
+			byte[] decodedBytes = SwishFunctions.MangleBytes(encodedBytes, process);
+
+			if (!EqualFunctions.Equal(bytes, decodedBytes))
+			{
+				throw new Exception();
+			}
+		}
 	}
 }

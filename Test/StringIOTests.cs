@@ -6,9 +6,9 @@ namespace Swish.Tests
 	{
 		public void TryReadStringEscapedCharacters()
 		{
-			string expectedString = " \" \\ \r \n \' \t ";
+			string expectedString = " \" \\ \r \n \' \t \\ ";
 
-			string stringLine = "\" \\\" \\\\ \\r \\n \\\' \\t \"";
+			string stringLine = "\" \\\" \\\\ \\r \\n \\\' \\t \\\\ \"";
 
 			string readString;
 			if (!StringIO.TryReadString(out readString, ref stringLine))

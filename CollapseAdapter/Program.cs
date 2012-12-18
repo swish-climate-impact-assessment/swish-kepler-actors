@@ -13,10 +13,10 @@ namespace Swish.CollapseAdapter
 		{
 			try
 			{
-				List<Tuple<string, string>> splitArguments = ArgumentFunctions.SplitArguments(arguments);
-				string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true));
-				string variable = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "variable", splitArguments, true);
-				string operation = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "operation", splitArguments, false);
+				Arguments splitArguments = new Arguments(arguments);
+				string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+				string variable = splitArguments.String(Arguments.DefaultArgumentPrefix + "variable", true);
+				string operation = splitArguments.String(Arguments.DefaultArgumentPrefix + "operation", false);
 
 				if (string.IsNullOrWhiteSpace(operation))
 				{
@@ -31,7 +31,7 @@ namespace Swish.CollapseAdapter
 				return 0;
 			} catch (Exception error)
 			{
-				string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.Write(error, true);
+				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, true);
 				Console.Write(message);
 				return -1;
 			}

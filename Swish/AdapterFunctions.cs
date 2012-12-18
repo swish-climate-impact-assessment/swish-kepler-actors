@@ -29,106 +29,108 @@ namespace Swish
 		public const string TestOperation = "test";
 		public const string TransposeOperation = "transpose";
 
-		public static void RunOperation(string operation, List<Tuple<string, string>> splitArguments)
+		public static void RunOperation(string operation, Arguments splitArguments)
 		{
 			switch (operation)
 			{
 			case FormatOperation:
 				{
-					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
-					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
-					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
-					string format = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "format", splitArguments, true);
-					AdapterFunctions.Format(inputFileName, outputFileName, variableNames, format);
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+					string outputFileName = splitArguments.OutputFileName();
+					List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
+					string format = splitArguments.String(Arguments.DefaultArgumentPrefix + "format", true);
+					Format(inputFileName, outputFileName, variableNames, format);
 					Console.Write(outputFileName);
 				}
 				break;
 
 			case CompressOperation:
 				{
-					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
-					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
-					AdapterFunctions.Compress(inputFileName, outputFileName);
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+					string outputFileName = splitArguments.OutputFileName();
+					Compress(inputFileName, outputFileName);
 					Console.Write(outputFileName);
 				}
 				break;
 
 			case GenerateOperation:
 				{
-					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
-					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
-					string variableName = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "variable", splitArguments, true);
-					string expression = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "expression", splitArguments, true);
-					string type = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "type", splitArguments, false);
-					AdapterFunctions.Generate(inputFileName, outputFileName, variableName, type, expression);
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+					string outputFileName = splitArguments.OutputFileName();
+					string variableName = splitArguments.String(Arguments.DefaultArgumentPrefix + "variable", true);
+					string expression = splitArguments.String(Arguments.DefaultArgumentPrefix + "expression", true);
+					string type = splitArguments.String(Arguments.DefaultArgumentPrefix + "type", false);
+					Generate(inputFileName, outputFileName, variableName, type, expression);
 					Console.Write(outputFileName);
 				}
 				break;
 
 			case PasswordOperation:
 				{
-					string password = AdapterFunctions.Password();
+					string prompt = splitArguments.String(Arguments.DefaultArgumentPrefix + "prompt", false);
+					bool requireEntry = splitArguments.Bool(Arguments.DefaultArgumentPrefix + "ignoreCache", false);
+					string password = Password(prompt, requireEntry);
 					Console.Write(password);
 				}
 				break;
 
 			case TransposeOperation:
 				{
-					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
-					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
-					AdapterFunctions.Transpose(inputFileName, outputFileName);
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+					string outputFileName = splitArguments.OutputFileName();
+					Transpose(inputFileName, outputFileName);
 					Console.Write(outputFileName);
 				}
 				break;
 
 			case SortOperation:
 				{
-					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true));
-					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
-					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
-					outputFileName = AdapterFunctions.Sort(inputFileName, variableNames, outputFileName);
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+					List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
+					string outputFileName = splitArguments.OutputFileName();
+					outputFileName = Sort(inputFileName, variableNames, outputFileName);
 					Console.Write(outputFileName);
 				}
 				break;
 
 			case SelectCloumnsOperation:
 				{
-					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
-					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
-					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
-					AdapterFunctions.SelectColumns(inputFileName, outputFileName, variableNames);
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+					List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
+					string outputFileName = splitArguments.OutputFileName();
+					SelectColumns(inputFileName, outputFileName, variableNames);
 					Console.Write(outputFileName);
 				}
 				break;
 
 			case SelectRecordsOperation:
 				{
-					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
-					string expression = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "expression", splitArguments, true);
-					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
-					AdapterFunctions.Select(inputFileName, outputFileName, expression);
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+					string expression = splitArguments.String(Arguments.DefaultArgumentPrefix + "expression", true);
+					string outputFileName = splitArguments.OutputFileName();
+					Select(inputFileName, outputFileName, expression);
 					Console.Write(outputFileName);
 				}
 				break;
 
 			case SaveOperation:
 				{
-					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
-					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
-					AdapterFunctions.SaveFile(inputFileName, outputFileName);
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+					string outputFileName = splitArguments.OutputFileName();
+					SaveFile(inputFileName, outputFileName);
 					Console.Write(outputFileName);
 				}
 				break;
 
 			case MergeOperation:
 				{
-					string input1FileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "1", splitArguments, true));
-					string input2FileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true));
-					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
-					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
-					List<MergeRecordResult> keep = ArgumentFunctions.GetArgumentFlags<MergeRecordResult>(ArgumentFunctions.ArgumentCharacter + "keep", splitArguments, false, false);
+					string input1FileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument + "1", true));
+					string input2FileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument + "2", true));
+					List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
+					string outputFileName = splitArguments.OutputFileName();
+					List<MergeRecordResult> keep = splitArguments.EnumList<MergeRecordResult>(Arguments.DefaultArgumentPrefix + "keep", false, false);
 
-					string keepMergeString = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "keepMerge", splitArguments, false));
+					string keepMergeString = FileFunctions.AdjustFileName(splitArguments.String(Arguments.DefaultArgumentPrefix + "keepMerge", false));
 					bool keepMerge;
 					if (!string.IsNullOrWhiteSpace(keepMergeString))
 					{
@@ -137,14 +139,14 @@ namespace Swish
 					{
 						keepMerge = false;
 					}
-					AdapterFunctions.Merge(input1FileName, input2FileName, variableNames, outputFileName, keepMerge, keep);
+					Merge(input1FileName, input2FileName, variableNames, outputFileName, keepMerge, keep);
 					Console.Write(outputFileName);
 				}
 				break;
 
 			case DoScriptOperation:
 				{
-					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "filename", splitArguments, true));
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.DefaultArgumentPrefix + "filename", true));
 					string log = StataFunctions.RunScript(inputFileName, false);
 					Console.Write(log);
 				}
@@ -152,29 +154,29 @@ namespace Swish
 
 			case CommandOperation:
 				{
-					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "", splitArguments, true));
-					string command = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "command", splitArguments, true);
-					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
-					AdapterFunctions.StataCommand(inputFileName, outputFileName, command);
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+					string command = splitArguments.String(Arguments.DefaultArgumentPrefix + "command", true);
+					string outputFileName = splitArguments.OutputFileName();
+					StataCommand(inputFileName, outputFileName, command);
 					Console.Write(outputFileName);
 				}
 				break;
 
 			case AppendOperation:
 				{
-					string input1FileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "1", splitArguments, true));
-					string input2FileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument + "2", splitArguments, true));
-					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
-					outputFileName = AdapterFunctions.Append(input1FileName, input2FileName, outputFileName);
+					string input1FileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument + "1", true));
+					string input2FileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument + "2", true));
+					string outputFileName = splitArguments.OutputFileName();
+					outputFileName = Append(input1FileName, input2FileName, outputFileName);
 					Console.Write(outputFileName);
 				}
 				break;
 
 			case RemoveColumnsOperation:
 				{
-					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
-					List<string> variableNames = ArgumentFunctions.GetArgumentItems(ArgumentFunctions.ArgumentCharacter + "variables", splitArguments, true, true);
-					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+					List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
+					string outputFileName = splitArguments.OutputFileName();
 					RemoveColumns(inputFileName, outputFileName, variableNames);
 					Console.Write(outputFileName);
 				}
@@ -182,27 +184,21 @@ namespace Swish
 
 			case DisplayOperation:
 				{
-					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
 					Display(inputFileName);
 				}
 				break;
 
 			case DisplayClientOperation:
 				{
-					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
 					DisplayClient(inputFileName);
 				}
 				break;
 
 			case TestOperation:
 				{
-					string argumentText = string.Empty;
-					for (int argumentIndex = 0; argumentIndex < splitArguments.Count; argumentIndex++)
-					{
-						Tuple<string, string> argument = splitArguments[argumentIndex];
-						argumentText += argument.Item1 + " " + argument.Item2 + " ";
-					}
-					SwishFunctions.MessageTextBox(argumentText, false);
+					SwishFunctions.MessageTextBox(splitArguments.ArgumentString, false);
 				}
 				break;
 
@@ -219,10 +215,10 @@ namespace Swish
 
 			case ReplaceOperation:
 				{
-					string inputFileName = FileFunctions.AdjustFileName(ArgumentFunctions.GetArgument(ArgumentFunctions.InputArgument, splitArguments, true));
-					string outputFileName = ArgumentFunctions.GetOutputFileName(splitArguments);
-					string condition = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "condition", splitArguments, true);
-					string value = ArgumentFunctions.GetArgument(ArgumentFunctions.ArgumentCharacter + "value", splitArguments, true);
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+					string outputFileName = splitArguments.OutputFileName();
+					string condition = splitArguments.String(Arguments.DefaultArgumentPrefix + "condition", true);
+					string value = splitArguments.String(Arguments.DefaultArgumentPrefix + "value", true);
 					Replace(inputFileName, outputFileName, condition, value);
 					Console.Write(outputFileName);
 				}
@@ -368,8 +364,58 @@ namespace Swish
 			File.Move(intermaidateOutput, outputFileName);
 		}
 
-		private static string Password()
+		/// <summary>
+		/// force means ignore any cache and require the user to enter a password
+		/// </summary>
+		/// <param name="prompt"></param>
+		/// <param name="force"></param>
+		/// <returns></returns>
+		public static string Password(string prompt, bool requireEntry)
 		{
+			string passwordFileName;
+			Process kepler = null;
+			if (!string.IsNullOrWhiteSpace(prompt))
+			{
+				Process current = Process.GetCurrentProcess();
+
+				while (true)
+				{
+					Process parent = SwishFunctions.GetParentProcess(current);
+					if (parent == null)
+					{
+						break;
+					}
+					string parentName = parent.ProcessName.ToLower();
+					if (parentName.Contains("java") || parentName.Contains("kepler") || parentName.Contains("vcsexpress"))
+					{
+						kepler = parent;
+						break;
+					}
+					current = parent;
+				}
+
+				if (kepler != null)
+				{
+					passwordFileName = SwishFunctions.GeneratePasswordFileName(prompt, kepler);
+					passwordFileName = Path.Combine(Path.GetTempPath(), passwordFileName);
+
+					if (!requireEntry && FileFunctions.FileExists(passwordFileName))
+					{
+						string _encodedPassword = File.ReadAllText(passwordFileName);
+						string _password = SwishFunctions.DecodePassword(_encodedPassword, kepler);
+						return _password;
+					}
+				} else
+				{
+					passwordFileName = string.Empty;
+				}
+			} else
+			{
+				prompt = "Please enter password";
+				passwordFileName = string.Empty;
+			}
+
+			string password;
 
 			using (MaskedTextBox textBox = new MaskedTextBox())
 			using (Panel panel = new Panel())
@@ -402,7 +448,7 @@ namespace Swish
 				panel.TabIndex = 1;
 
 				form.ControlBox = false;
-				form.Text = "Enter password";
+				form.Text = prompt;
 				form.ClientSize = new Size(100, 43);
 				form.Controls.Add(panel);
 				form.Controls.Add(textBox);
@@ -416,8 +462,27 @@ namespace Swish
 				textBox.Focus();
 				form.ShowDialog();
 
-				return textBox.Text;
+				password = textBox.Text;
 			}
+
+			if (string.IsNullOrWhiteSpace(password))
+			{
+				return string.Empty;
+			}
+
+			if (string.IsNullOrWhiteSpace(passwordFileName))
+			{
+				return password;
+			}
+
+			string encodedPassword = SwishFunctions.EncodePassword(password, kepler);
+			if (File.Exists(passwordFileName))
+			{
+				FileFunctions.DeleteFile(passwordFileName, null);
+			}
+			File.WriteAllText(passwordFileName, encodedPassword);
+
+			return password;
 		}
 
 		static void buton_Click(object sender, EventArgs e)
@@ -433,7 +498,7 @@ namespace Swish
 		{
 			int exitCode;
 			string output;
-			string arguments = string.Join(" ", ArgumentFunctions.OperationArgument, DisplayClientOperation, ArgumentFunctions.InputArgument, inputFileName);
+			string arguments = string.Join(" ", Arguments.OperationArgument, DisplayClientOperation, Arguments.InputArgument, inputFileName);
 			SwishFunctions.RunProcess(Application.ExecutablePath, arguments, Environment.CurrentDirectory, true, TimeSpan.Zero, out exitCode, out output);
 		}
 

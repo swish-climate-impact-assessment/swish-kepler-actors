@@ -32,7 +32,7 @@ namespace Swish.ExecutableRedirector
 				return exitCode;
 			} catch (Exception error)
 			{
-				string message = ArgumentFunctions.ErrorArgument + " " + ExceptionFunctions.Write(error, false);
+				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, false);
 				MessageBox.Show(message);
 				Console.Write(message);
 				return -1;

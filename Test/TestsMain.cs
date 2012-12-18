@@ -40,6 +40,7 @@ namespace Swish.Tests
 			try
 			{
 
+
 				/// Input / output 
 				/// 
 				/// The idea is that the data source is dynamicly resloved and can be:
@@ -53,6 +54,9 @@ namespace Swish.Tests
 				/// start with a log file that accopanyies the output file with the operation name and input details
 				/// 
 
+				new SwishFunctionsTests().EncodeDecodePasswordBytes();
+				new SwishFunctionsTests().EncodeDecodePassword();
+				new SwishFunctionsTests().Password();
 				new ArgumentFunctionsTests().GetFlags();
 				new KarFunctionsTests().RemovePort();
 				new KarFunctionsTests().DumpContents();

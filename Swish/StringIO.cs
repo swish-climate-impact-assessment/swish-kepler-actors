@@ -112,7 +112,7 @@ namespace Swish
 				string testStopString = stopStrings[stopIndex];
 
 				int charIndex = line.IndexOf(testStopString);
-				if (charIndex >=0 && (
+				if (charIndex >= 0 && (
 					(charIndex < minimumCharIndex) ||
 					(charIndex == minimumCharIndex && testStopString.Length > minimumStopString.Length)
 					))
@@ -135,5 +135,16 @@ namespace Swish
 			return true;
 		}
 
+		public static string Escape(string value)
+		{
+			string _value = value.Replace("\\", "\\\\");
+			_value = _value.Replace("\"", "\\\"");
+			_value = _value.Replace("\'", "\\\'");
+			_value = _value.Replace("\r", "\\\r");
+			_value = _value.Replace("\n", "\\\n");
+			_value = _value.Replace("\t", "\\\t");
+
+			return _value;
+		}
 	}
 }

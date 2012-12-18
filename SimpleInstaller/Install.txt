@@ -1,6 +1,4 @@
-﻿// %UserProfile% C:\Users\u5265691
-// %StartupPath% C:\Users\u5265691\Desktop\Swish\SimpleInstaller\bin\Debug
-CopyFiles "%StartupPath%\\Actors\\" "%UserProfile%\\KeplerData\\workflows\\MyWorkflows\\"
+﻿CopyFiles "%StartupPath%\\Actors\\" "%UserProfile%\\KeplerData\\workflows\\MyWorkflows\\"
 Copy "%StartupPath%\\Swish.dll" "C:\\Swish\\bin\\Swish.dll"
 CopyFiles "%StartupPath%\\SwishBin\\" "C:\\Swish\\bin\\"
 CopyFiles "%StartupPath%\\SampleData\\" "C:\\Swish\\SampleData\\"
