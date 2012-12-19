@@ -45,6 +45,7 @@
     <Compile Include="ActorTests.cs" />
     <Compile Include="ArgumentFunctionsTests.cs" />
     <Compile Include="AdapterTests.cs" />
+    <Compile Include="TestException.cs" />
     <Compile Include="KarFunctionsTests.cs" />
     <Compile Include="StataScriptFunctionsTests.cs" />
     <Compile Include="TestFunctions.cs" />

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Swish
@@ -65,7 +65,7 @@ namespace Swish
 
 			if (!ignoreError)
 			{
-				throw new Exception("Could not find location of \"" + fileName + "\"" + Environment.NewLine + string.Join(Environment.NewLine, attempts));
+				throw new Exception("Could not find location of \"" + fileName + "\"" + Environment.NewLine + "Paths searched:" + Environment.NewLine + string.Join(Environment.NewLine, attempts) + "End paths searched:" + Environment.NewLine);
 			}
 
 			return string.Empty;

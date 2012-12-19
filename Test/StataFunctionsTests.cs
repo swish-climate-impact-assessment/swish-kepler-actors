@@ -43,7 +43,7 @@ namespace Swish.Tests
 
 			if (!FileFunctions.FileExists(outputFile))
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 		}
 
@@ -224,7 +224,7 @@ namespace Swish.Tests
 			string log = StataFunctions.RunScript(lines, false);
 			if (!log.Contains("unrecognized command"))
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 		}
 
@@ -234,7 +234,7 @@ namespace Swish.Tests
 			string stataExecutable = StataFunctions.ExecutablePath;
 			if (Path.GetFullPath(expected) != Path.GetFullPath(stataExecutable))
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 		}
 

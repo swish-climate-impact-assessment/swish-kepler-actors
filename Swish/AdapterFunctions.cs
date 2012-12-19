@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace Swish
 {
@@ -198,7 +197,31 @@ namespace Swish
 
 			case TestOperation:
 				{
-					SwishFunctions.MessageTextBox(splitArguments.ArgumentString, false);
+					bool silent = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "silent");
+
+					List<string> lines = new List<string>();
+					lines.Add("Arguments: " + splitArguments.ArgumentString);
+					lines.Add("Startup path: " + Application.StartupPath);
+					lines.Add("Working directory: " + Environment.CurrentDirectory);
+
+					if (SwishFunctions.KeplerProcess != null)
+					{
+						lines.Add("Keper process:");
+						lines.Add(SwishFunctions.WriteProcessInformation(SwishFunctions.KeplerProcess));
+					} else
+					{
+						lines.Add("Keper process: Not found");
+					}
+
+					lines.Add("Current process heritage: ");
+
+					lines.AddRange(SwishFunctions.WriteProcessHeritage().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
+					//lines.AddRange(SwishFunctions.WriteSystemVariables().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
+					if (!silent)
+					{
+						SwishFunctions.MessageTextBox("Test display", lines, false);
+					}
+					Console.Write(string.Join(Environment.NewLine, lines));
 				}
 				break;
 
@@ -373,36 +396,17 @@ namespace Swish
 		public static string Password(string prompt, bool requireEntry)
 		{
 			string passwordFileName;
-			Process kepler = null;
 			if (!string.IsNullOrWhiteSpace(prompt))
 			{
-				Process current = Process.GetCurrentProcess();
-
-				while (true)
+				if (SwishFunctions.KeplerProcess != null)
 				{
-					Process parent = SwishFunctions.GetParentProcess(current);
-					if (parent == null)
-					{
-						break;
-					}
-					string parentName = parent.ProcessName.ToLower();
-					if (parentName.Contains("java") || parentName.Contains("kepler") || parentName.Contains("vcsexpress"))
-					{
-						kepler = parent;
-						break;
-					}
-					current = parent;
-				}
-
-				if (kepler != null)
-				{
-					passwordFileName = SwishFunctions.GeneratePasswordFileName(prompt, kepler);
+					passwordFileName = SwishFunctions.GeneratePasswordFileName(prompt, SwishFunctions.KeplerProcess);
 					passwordFileName = Path.Combine(Path.GetTempPath(), passwordFileName);
 
 					if (!requireEntry && FileFunctions.FileExists(passwordFileName))
 					{
 						string _encodedPassword = File.ReadAllText(passwordFileName);
-						string _password = SwishFunctions.DecodePassword(_encodedPassword, kepler);
+						string _password = SwishFunctions.DecodePassword(_encodedPassword, SwishFunctions.KeplerProcess);
 						return _password;
 					}
 				} else
@@ -431,7 +435,7 @@ namespace Swish
 				textBox.Multiline = true;
 				textBox.SelectionStart = 0;
 				textBox.SelectionLength = 0;
-				textBox.Size = new Size(150, textBox.Height);
+				textBox.Size = new Size(300, textBox.Height);
 				textBox.Dock = DockStyle.Top;
 				textBox.Font = new Font(textBox.Font, FontStyle.Bold);
 				textBox.TabIndex = 0;
@@ -449,7 +453,7 @@ namespace Swish
 
 				form.ControlBox = false;
 				form.Text = prompt;
-				form.ClientSize = new Size(100, 43);
+				form.ClientSize = new Size(300, 43);
 				form.Controls.Add(panel);
 				form.Controls.Add(textBox);
 				form.AcceptButton = buton;
@@ -475,7 +479,7 @@ namespace Swish
 				return password;
 			}
 
-			string encodedPassword = SwishFunctions.EncodePassword(password, kepler);
+			string encodedPassword = SwishFunctions.EncodePassword(password, SwishFunctions.KeplerProcess);
 			if (File.Exists(passwordFileName))
 			{
 				FileFunctions.DeleteFile(passwordFileName, null);
@@ -527,7 +531,14 @@ namespace Swish
 				SwishFunctions.MessageTextBox("File: " + inputFileName + Environment.NewLine, lines, false);
 			} catch (Exception error)
 			{
-				SwishFunctions.MessageTextBox("failed to display " + inputFileName + Environment.NewLine + ExceptionFunctions.Write(error, true), false);
+				string message = "failed to display " + inputFileName + Environment.NewLine + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
+				if (ExceptionFunctions.ForceVerbose)
+				{
+					message += SwishFunctions.WriteProcessHeritage();
+					message += SwishFunctions.WriteSystemVariables();
+				}
+
+				SwishFunctions.MessageTextBox(message, false);
 			}
 
 		}

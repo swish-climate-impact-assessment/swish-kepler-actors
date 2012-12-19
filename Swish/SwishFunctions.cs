@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
-using System.Threading;
 using System.Text;
-using System.Collections.Generic;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace Swish
 {
@@ -68,16 +68,16 @@ namespace Swish
 			MessageTextBox("Message", message.Split('\r', '\n'), returnImediatly);
 		}
 
-		internal static void MessageTextBox(string title, string[] lines, bool returnImediatly)
+		internal static void MessageTextBox(string title, IList<string> lines, bool returnImediatly)
 		{
 			TextBox textBox = new TextBox();
 			Form form = new Form();
 
 			textBox.Multiline = true;
 			int limit = 1000;
-			if (lines.Length <= limit)
+			if (lines.Count <= limit)
 			{
-				textBox.Lines = lines;
+				textBox.Lines = new List<string>(lines).ToArray();
 			} else
 			{
 				string[] shortLines = new string[limit + 2];
@@ -166,7 +166,7 @@ namespace Swish
 			}
 		}
 
-		public static Process GetParentProcess(Process process)
+		public static Process ParentProcess(Process process)
 		{
 			if (process == null)
 			{
@@ -205,7 +205,6 @@ namespace Swish
 				return null;
 			}
 
-
 			PerformanceCounter parentAccess;
 			try
 			{
@@ -214,10 +213,10 @@ namespace Swish
 			{
 				return null;
 			}
-			int parentId = (int)parentAccess.NextValue();
 			Process parent;
 			try
 			{
+				int parentId = (int)parentAccess.NextValue();
 				parent = Process.GetProcessById(parentId);
 			} catch
 			{
@@ -260,7 +259,7 @@ namespace Swish
 			byte[] passwordBytes = ASCIIEncoding.ASCII.GetBytes(password);
 			byte[] encodedBytes = MangleBytes(passwordBytes, process);
 
-			string encodedPassword ;
+			string encodedPassword;
 			using (MemoryStream _stream = new MemoryStream())
 			{
 				using (TextCodedStream stream = new TextCodedStream(_stream, true, true))
@@ -319,6 +318,140 @@ namespace Swish
 			return password;
 		}
 
+		private static Process _keplerProcess;
+		public static Process KeplerProcess
+		{
+			get
+			{
+				if (_keplerProcess == null)
+				{
+					Process current = Process.GetCurrentProcess();
+					while (true)
+					{
+						Process parent = SwishFunctions.ParentProcess(current);
+						if (parent == null)
+						{
+							break;
+						}
+						string parentName = parent.ProcessName.ToLower();
+						if (parentName.Contains("java") || parentName.Contains("kepler") || parentName.Contains("vcsexpress"))
+						{
+							_keplerProcess = parent;
+							break;
+						}
+						current = parent;
+					}
+				}
+				return _keplerProcess;
+			}
+		}
 
+		public static string WriteProcessInformation(Process process)
+		{
+			string message = string.Empty;
+			try { string value = process.Id.ToString(); if (!string.IsNullOrWhiteSpace(value)) { message += "Process id: " + value + Environment.NewLine; } } catch { }
+			try { string value = process.ProcessName; if (!string.IsNullOrWhiteSpace(value)) { message += "\tProcess name: " + value + Environment.NewLine; } } catch { }
+			try { string value = process.StartTime.ToShortTimeString(); if (!string.IsNullOrWhiteSpace(value)) { message += "\tStart time: " + value + Environment.NewLine; } } catch { }
+			try { string value = process.StartInfo.FileName; if (!string.IsNullOrWhiteSpace(value)) { message += "\tFile name: " + value + Environment.NewLine; } } catch { }
+			try { string value = process.StartInfo.Arguments; if (!string.IsNullOrWhiteSpace(value)) { message += "\tArguments: " + value + Environment.NewLine; } } catch { }
+			try { string value = process.StartInfo.WorkingDirectory; if (!string.IsNullOrWhiteSpace(value)) { message += "\tWorking directory: " + value + Environment.NewLine; } } catch { }
+			try { string value = process.MachineName; if (!string.IsNullOrWhiteSpace(value)) { message += "\tMachine name: " + value + Environment.NewLine; } } catch { }
+			try { string value = process.SessionId.ToString(); if (!string.IsNullOrWhiteSpace(value)) { message += "\tSession id: " + value + Environment.NewLine; } } catch { }
+
+			try
+			{
+				ProcessModule module = process.MainModule;
+				try { string value = module.FileName; if (!string.IsNullOrWhiteSpace(value)) { message += "\tFile name: " + value + Environment.NewLine; } } catch { }
+				try { string value = module.ModuleName; if (!string.IsNullOrWhiteSpace(value)) { message += "\tModule name: " + value + Environment.NewLine; } } catch { }
+				try { string value = module.FileVersionInfo.FileName; if (!string.IsNullOrWhiteSpace(value)) { message += "\tFile name: " + value + Environment.NewLine; } } catch { }
+			} catch { }
+
+			return message;
+		}
+
+		public static string WriteProcessHeritage()
+		{
+			string message = string.Empty;
+			Process process = Process.GetCurrentProcess();
+			while (process != null)
+			{
+				message += SwishFunctions.WriteProcessInformation(process);
+				process = SwishFunctions.ParentProcess(process);
+			}
+			return message;
+		}
+
+		public static string WriteSystemVariables()
+		{
+			//if (DateTime.MinValue < DateTime.MaxValue)
+			//{
+			//    return "";
+			//}
+
+			List<string> lines = new List<string>();
+
+			lines.Add("Paths: ");
+			List<string> paths = new List<string>();
+			paths.Add("~");
+			paths.Add("\\");
+			paths.Add("/");
+			//paths.Add("\\\\");
+			//paths.Add("//");
+			paths.Add("..\\");
+			paths.Add("../");
+			paths.Add(".\\");
+			paths.Add("./");
+
+			for (int index = 0; index < paths.Count; index++)
+			{
+				try
+				{
+					lines.Add("\"" + paths[index] + "\" -> \"" + Path.GetFullPath(paths[index]) + "\"");
+				} catch
+				{
+					lines.Add("\"" + paths[index] + "\" Failed");
+				}
+			}
+
+			lines.Add("System directory: " + Environment.SystemDirectory);
+			lines.Add("Logical drives: ");
+			string[] drives = Environment.GetLogicalDrives();
+			for (int index = 0; index < drives.Length; index++)
+			{
+				lines.Add(index.ToString("d2") + ": " + drives[index]);
+			}
+
+			lines.Add("Special folders: ");
+			string[] specialFolderNames = Enum.GetNames(typeof(Environment.SpecialFolder));
+			string[] specialFolderOptionNames = Enum.GetNames(typeof(Environment.SpecialFolderOption));
+			for (int index1 = 0; index1 < specialFolderOptionNames.Length; index1++)
+			{
+				lines.Add("Special folders option: " + specialFolderOptionNames[index1]);
+				Environment.SpecialFolderOption option = (Environment.SpecialFolderOption)Enum.Parse(typeof(Environment.SpecialFolderOption), specialFolderOptionNames[index1], false);
+				for (int index2 = 0; index2 < specialFolderNames.Length; index2++)
+				{
+					Environment.SpecialFolder folder = (Environment.SpecialFolder)Enum.Parse(typeof(Environment.SpecialFolder), specialFolderNames[index2], false);
+					lines.Add(specialFolderNames[index2] + ": " + Environment.GetFolderPath(folder, option));
+				}
+			}
+
+			lines.Add("Environment variables: ");
+			string[] environmentVariableTargetNames = Enum.GetNames(typeof(EnvironmentVariableTarget));
+			for (int index1 = 0; index1 < environmentVariableTargetNames.Length; index1++)
+			{
+				lines.Add("Environment target: " + environmentVariableTargetNames[index1]);
+				EnvironmentVariableTarget target = (EnvironmentVariableTarget)Enum.Parse(typeof(EnvironmentVariableTarget), environmentVariableTargetNames[index1], false);
+				System.Collections.IDictionary variables = Environment.GetEnvironmentVariables(target);
+				foreach (string key in variables.Keys)
+				{
+					string value = (string)variables[key];
+					lines.Add(key + ": " + value);
+				}
+			}
+
+			string message = string.Join(Environment.NewLine, lines);
+
+			return message;
+		}
 	}
 }

@@ -110,7 +110,7 @@ namespace Swish
 			}
 			if (value < 0)
 			{
-				throw new Exception("");
+				throw new ArgumentOutOfRangeException("value");
 			}
 			if (value < Length)
 			{

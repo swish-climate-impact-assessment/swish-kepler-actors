@@ -35,7 +35,7 @@ namespace Swish.Tests
 
 			if (!CsvFunctions.Equal(table, result))
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 		}
 
@@ -58,7 +58,7 @@ namespace Swish.Tests
 			Csv result = CsvFunctions.Read(outputFileName);
 			if (result.Header.Count != 2 || !result.Header.Contains("head4") || !result.Header.Contains("head6"))
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 
 			File.Delete(outputFileName);
@@ -87,7 +87,7 @@ namespace Swish.Tests
 			int head4Index = table.ColumnIndex(name);
 			if (head4Index == -1)
 			{
-				throw new Exception("column not found");
+				throw new TestException("column not found");
 			}
 
 			List<int> values = table.ColunmAsInts(head4Index);
@@ -98,7 +98,7 @@ namespace Swish.Tests
 
 				if (value1 <= value0)
 				{
-					throw new Exception("records not sorted");
+					throw new TestException("records not sorted");
 				}
 			}
 
@@ -130,7 +130,7 @@ namespace Swish.Tests
 			int head4Index = table.ColumnIndex(name);
 			if (head4Index != -1)
 			{
-				throw new Exception("merge column not removed");
+				throw new TestException("merge column not removed");
 			}
 		}
 
@@ -157,7 +157,7 @@ namespace Swish.Tests
 				{
 					if (result.Records[x][y] != table.Records[y][x])
 					{
-						throw new Exception();
+						throw new TestException();
 					}
 				}
 			}
@@ -213,7 +213,7 @@ namespace Swish.Tests
 
 			if (table.Records.Count != 14 - 1 + 15 - 1)
 			{
-				throw new Exception("append failed");
+				throw new TestException("append failed");
 			}
 		}
 
@@ -227,7 +227,7 @@ namespace Swish.Tests
 			double value = AdapterFunctions.Collapse(inputFile, "head4", CollapseOpperation.Mean);
 			if (double.IsNaN(value))
 			{
-				throw new Exception("");
+				throw new TestException();
 			}
 		}
 
@@ -267,7 +267,7 @@ namespace Swish.Tests
 				int result = int.Parse(record[head2Index]);
 				if (result != 1)
 				{
-					throw new Exception();
+					throw new TestException();
 				}
 			}
 		}
@@ -294,7 +294,7 @@ namespace Swish.Tests
 
 			if (!File.Exists(outputFileName))
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 		}
 
@@ -341,7 +341,7 @@ namespace Swish.Tests
 
 			if (table.Records.Count != 26)
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 
 			string name = StataFunctionsTests.MergeVariable;
@@ -350,7 +350,7 @@ namespace Swish.Tests
 			int head6Index = table.ColumnIndex("head6");
 			if (head4Index == -1 || head2Index == -1 || head6Index == -1)
 			{
-				throw new Exception("column not found");
+				throw new TestException("column not found");
 			}
 
 			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
@@ -389,19 +389,19 @@ namespace Swish.Tests
 				{
 					if (value2 == 0 || value6 == '0')
 					{
-						throw new Exception();
+						throw new TestException();
 					}
 				} else if ((value4 % 2) == 0)
 				{
 					if (value2 != 0 || value6 == '0')
 					{
-						throw new Exception();
+						throw new TestException();
 					}
 				} else //  if ((value4 % 2 ) == 1)
 				{
 					if (value2 == 0 || value6 != '0')
 					{
-						throw new Exception();
+						throw new TestException();
 					}
 				}
 			}
@@ -417,14 +417,14 @@ namespace Swish.Tests
 			AdapterFunctions.Generate(inputFileName, outputFileName, variableName, string.Empty, "-head4");
 			if (!FileFunctions.FileExists(outputFileName))
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 			Csv table = CsvFunctions.Read(outputFileName);
 
 			int index = table.ColumnIndex(variableName);
 			if (index < 0)
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 
 			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
@@ -434,7 +434,7 @@ namespace Swish.Tests
 				int value = int.Parse(record[index]);
 				if (value > 0)
 				{
-					throw new Exception();
+					throw new TestException();
 				}
 			}
 		}
@@ -471,7 +471,7 @@ namespace Swish.Tests
 				|| !values.Contains(6)
 				)
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 
 		}

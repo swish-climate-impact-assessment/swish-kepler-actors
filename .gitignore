@@ -17,3 +17,4 @@ TestResults
 /SimpleInstaller/*.user
 /MakeDirectory/*.suo
 /MakeDirectory/*.sln
+/Swish/*.user

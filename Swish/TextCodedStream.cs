@@ -17,11 +17,11 @@ namespace Swish
 			{
 				if (!stream.CanWrite)
 				{
-					throw new Exception("");
+					throw new Exception("Encoding requires writable stream");
 				}
 			} else if (!stream.CanRead)
 			{
-				throw new Exception("");
+				throw new Exception("Decoding requires readable stream");
 			}
 
 			_encode = encode;
@@ -128,12 +128,12 @@ namespace Swish
 
 		public override long Seek(long offset, SeekOrigin origin)
 		{
-			throw new Exception("");
+			throw new NotSupportedException("Cannot Seek of " + typeof(TextCodedStream).FullName);
 		}
 
 		public override void SetLength(long value)
 		{
-			throw new Exception("");
+			throw new NotSupportedException("Cannot SetLength of " + typeof(TextCodedStream).FullName);
 		}
 
 		public override void Write(byte[] buffer, int offset, int count)
@@ -148,7 +148,7 @@ namespace Swish
 			}
 			if (!_encode)
 			{
-				throw new Exception("");
+				throw new Exception("Cannot write when stream not open for encodeing");
 			}
 
 			int value;
@@ -185,7 +185,7 @@ namespace Swish
 			}
 			if (_encode)
 			{
-				throw new Exception("");
+				throw new Exception("Cannot read when stream open for encodeing");
 			}
 
 			if (_stage >= 4)

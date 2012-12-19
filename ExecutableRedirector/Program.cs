@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
 using System.IO;
 using System.Windows.Forms;
 
@@ -18,7 +16,7 @@ namespace Swish.ExecutableRedirector
 
 				string toolFileName = FileFunctions.ResloveFileName(executableName, locations, true, false);
 
-				if (toolFileName  == Application.ExecutablePath)
+				if (toolFileName == Application.ExecutablePath)
 				{
 					throw new Exception("Current executable path mistaken for path to " + executableName);
 				}
@@ -32,8 +30,10 @@ namespace Swish.ExecutableRedirector
 				return exitCode;
 			} catch (Exception error)
 			{
-				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, false);
-				MessageBox.Show(message);
+				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
+				message += SwishFunctions.WriteProcessHeritage();
+				message += SwishFunctions.WriteSystemVariables();
+				SwishFunctions.MessageTextBox(message, false);
 				Console.Write(message);
 				return -1;
 			}

@@ -35,7 +35,7 @@ namespace Swish.Tests
 				string arguments = File.ReadAllText(argumentsFileName);
 				if (!arguments.StartsWith(expectedArguments))
 				{
-					throw new Exception();
+					throw new TestException();
 				}
 			} finally
 			{
@@ -74,14 +74,14 @@ namespace Swish.Tests
 
 			if (encodedPassword == password)
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 
 			string decodedPassword = SwishFunctions.DecodePassword(encodedPassword, process);
 
 			if (decodedPassword != password)
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 		}
 
@@ -95,14 +95,14 @@ namespace Swish.Tests
 
 			if (EqualFunctions.Equal(bytes, encodedBytes))
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 
 			byte[] decodedBytes = SwishFunctions.MangleBytes(encodedBytes, process);
 
 			if (!EqualFunctions.Equal(bytes, decodedBytes))
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 		}
 	}

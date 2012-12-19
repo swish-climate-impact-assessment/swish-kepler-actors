@@ -12,7 +12,7 @@ namespace Swish
 		{
 			if (stream is System.Net.Sockets.NetworkStream)
 			{
-				throw new Exception("");
+				throw new InvalidOperationException("Cannot use " + typeof(System.Net.Sockets.NetworkStream).FullName);
 			}
 
 			if (ReportProgress != null)
@@ -24,14 +24,9 @@ namespace Swish
 			{
 				// CopyUntilFail(Stream destination, Stream source)
 				{
-					if (destination == null || stream == null)
-					{
-						throw new Exception("");
-					}
-
 					if (stream is MemoryStream && stream.Position == stream.Length)
 					{
-						throw new Exception("this will block execution");
+						throw new Exception("waiting on a MemoryStream will block execution indefinatly");
 					}
 
 					int bufferSize = 8192;

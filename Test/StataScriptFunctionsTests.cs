@@ -15,7 +15,7 @@ namespace Swish.Tests
 			string line = lines[1];
 			if (!line.StartsWith("use"))
 			{
-				throw new Exception("");
+				throw new TestException();
 			}
 
 			fileName = "text.csv";
@@ -25,7 +25,7 @@ namespace Swish.Tests
 
 			if (!line.StartsWith("insheet"))
 			{
-				throw new Exception("");
+				throw new TestException();
 			}
 		}
 
@@ -36,7 +36,7 @@ namespace Swish.Tests
 
 			if (!line.StartsWith("save"))
 			{
-				throw new Exception("");
+				throw new TestException();
 			}
 
 			fileName = "text.csv";
@@ -44,7 +44,7 @@ namespace Swish.Tests
 
 			if (!line.StartsWith("outsheet"))
 			{
-				throw new Exception("");
+				throw new TestException();
 			}
 		}
 
@@ -71,13 +71,13 @@ namespace Swish.Tests
 			string log = StataFunctions.RunScript(lines, false);
 			if (!FileFunctions.FileExists(outputFileName))
 			{
-				throw new Exception("Output file was not created" + log);
+				throw new TestException("Output file was not created" + log);
 			}
 
 			Csv table = CsvFunctions.Read(outputFileName);
 			if (!CsvFunctions.Equal(table, expectedTable))
 			{
-				throw new Exception("");
+				throw new TestException();
 			}
 		}
 

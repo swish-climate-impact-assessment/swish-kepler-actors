@@ -94,11 +94,15 @@ namespace Swish.Tests
 
 			} catch (Exception error)
 			{
-				Console.WriteLine(ExceptionFunctions.Write(error, false));
+				string message = ExceptionFunctions.Write(error, false);
+				message += SwishFunctions.WriteProcessHeritage();
+				message += SwishFunctions.WriteSystemVariables();
+				Console.WriteLine(message);
 			}
 
 
 		}
+
 	}
 }
 

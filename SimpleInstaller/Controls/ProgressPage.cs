@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
-using System.IO;
-using System.Collections.Generic;
 
 namespace Swish.SimpleInstaller.Controls
 {
@@ -36,8 +35,13 @@ namespace Swish.SimpleInstaller.Controls
 				backgroundWorker1.ReportProgress(100);
 			} catch (Exception error)
 			{
-				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, true);
-				MessageBox.Show(message);
+				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
+				if (ExceptionFunctions.ForceVerbose)
+				{
+					message += SwishFunctions.WriteProcessHeritage();
+					message += SwishFunctions.WriteSystemVariables();
+				}
+				SwishFunctions.MessageTextBox(message, false);
 				Console.Write(message);
 				return;
 			}

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace Swish.Tests
@@ -14,7 +12,7 @@ namespace Swish.Tests
 
 			if (DateTime.MaxValue > DateTime.MinValue)
 			{
-				throw new Exception("this test does not work, but left here for documentation ");
+				throw new TestException("this test does not work, but left here for documentation ");
 
 				/// the actors do not run by them self as they do not have a director 
 				/// the actors are embeded in the parent work flow, this wouldn't work for
@@ -45,7 +43,7 @@ namespace Swish.Tests
 
 			if (table.Records.Count != 14 - 1 + 15 - 1)
 			{
-				throw new Exception("append failed");
+				throw new TestException("append failed");
 			}
 		}
 

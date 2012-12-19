@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Windows.Forms;
 using Swish.SimpleInstaller.Controls;
-using System.IO;
 
 namespace Swish.SimpleInstaller
 {
@@ -61,7 +59,12 @@ namespace Swish.SimpleInstaller
 				}
 			} catch (Exception error)
 			{
-				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, true);
+				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
+				if (ExceptionFunctions.ForceVerbose)
+				{
+					message += SwishFunctions.WriteProcessHeritage();
+					message += SwishFunctions.WriteSystemVariables();
+				}
 				Console.Write(message);
 				if (!string.IsNullOrWhiteSpace(logFileName))
 				{

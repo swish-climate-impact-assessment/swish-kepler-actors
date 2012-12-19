@@ -157,7 +157,7 @@ namespace Swish
 
 			if (_document.DocumentElement.Name != "entity")
 			{
-				throw new Exception();
+				throw new Exception("Expected first element to be nammed \"entity\"");
 			}
 			return _document;
 		}

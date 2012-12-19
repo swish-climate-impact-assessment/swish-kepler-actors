@@ -7,6 +7,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.CSharp;
+using Swish.Tests;
 
 namespace LibraryTypes.BootStrap
 {
@@ -70,7 +71,7 @@ namespace LibraryTypes.BootStrap
 			AddCodeDirectory(codeDirectory, sourceFiles);
 			if (sourceFiles.Count == 0)
 			{
-				throw new Exception("No code files found");
+				throw new TestException("No code files found");
 			}
 
 			CompilerParameters options = new CompilerParameters();
@@ -83,7 +84,7 @@ namespace LibraryTypes.BootStrap
 
 			//		if (!outputFileName.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
 			//		{
-			//			throw new Exception("library file name must end with \".dll\"");
+			//			throw new TestException("library file name must end with \".dll\"");
 			//		}
 			if (!generateInMemory)
 			{
@@ -113,7 +114,7 @@ namespace LibraryTypes.BootStrap
 
 			if (results.Errors.HasErrors || !flag)
 			{
-				throw new Exception("Build failed." + Environment.NewLine + message);
+				throw new TestException("Build failed." + Environment.NewLine + message);
 			}
 
 			return results.CompiledAssembly;

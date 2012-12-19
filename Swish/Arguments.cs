@@ -148,7 +148,7 @@ namespace Swish
 				{
 					if (value.Length < 3)
 					{
-						throw new Exception();
+						throw new Exception("Expected ### following escape character '<'");
 					}
 
 					string code = value.Substring(0, 3);
@@ -236,11 +236,6 @@ namespace Swish
 			}
 
 			string value = _splitArguments[listIndex].Item2;
-
-			if (!string.IsNullOrWhiteSpace(value))
-			{
-				throw new Exception();
-			}
 
 			return true;
 		}

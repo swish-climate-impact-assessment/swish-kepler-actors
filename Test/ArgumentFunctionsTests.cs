@@ -31,13 +31,13 @@ namespace Swish.Tests
 			string argument1Value = splitArguments.String(argument1Name, true);
 			if (argument1Value != expectedArgument1Value)
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 
 			// test that other arguments are not affected
 			if (splitArguments.String(Arguments.DefaultArgumentPrefix + "other", true) != "otherValue")
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 		}
 
@@ -50,17 +50,17 @@ namespace Swish.Tests
 			Arguments splitArguments = new Arguments(arguments);
 			if (!splitArguments.Exists(Arguments.DefaultArgumentPrefix + "flag"))
 			{
-				throw new Exception("");
+				throw new TestException();
 			}
 
 			if (splitArguments.Exists(Arguments.DefaultArgumentPrefix + "fake"))
 			{
-				throw new Exception("");
+				throw new TestException();
 			}
 
 			if (!splitArguments.Exists(Arguments.DefaultArgumentPrefix + "setting"))
 			{
-				throw new Exception("");
+				throw new TestException();
 			}
 
 		}
@@ -81,7 +81,7 @@ namespace Swish.Tests
 
 			if (flags.Count != 2 || flags[0] != TestFlags.One || flags[1] != TestFlags.Two)
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 		}
 	}

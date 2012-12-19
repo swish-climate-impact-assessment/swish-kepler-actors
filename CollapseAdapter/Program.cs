@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
-using System.IO;
-using System.Windows.Forms;
 
 namespace Swish.CollapseAdapter
 {
@@ -14,6 +9,7 @@ namespace Swish.CollapseAdapter
 			try
 			{
 				Arguments splitArguments = new Arguments(arguments);
+				ExceptionFunctions.ForceVerbose = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "verbose");
 				string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
 				string variable = splitArguments.String(Arguments.DefaultArgumentPrefix + "variable", true);
 				string operation = splitArguments.String(Arguments.DefaultArgumentPrefix + "operation", false);
@@ -31,8 +27,17 @@ namespace Swish.CollapseAdapter
 				return 0;
 			} catch (Exception error)
 			{
-				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, true);
+				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
+				if (ExceptionFunctions.ForceVerbose)
+				{
+					message += SwishFunctions.WriteProcessHeritage();
+					message += SwishFunctions.WriteSystemVariables();
+				}
 				Console.Write(message);
+				if (ExceptionFunctions.ForceVerbose)
+				{
+					SwishFunctions.MessageTextBox(message, false);
+				}
 				return -1;
 			}
 		}

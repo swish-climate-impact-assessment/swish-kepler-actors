@@ -13,12 +13,12 @@ namespace Swish.Tests
 			string readString;
 			if (!StringIO.TryReadString(out readString, ref stringLine))
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 
 			if (readString != expectedString)
 			{
-				throw new Exception();
+				throw new TestException();
 			}
 		}
 	}

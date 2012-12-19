@@ -26,7 +26,7 @@ namespace Swish.Tests
 
 				if (!File.Exists(expectedFileName))
 				{
-					throw new Exception();
+					throw new TestException();
 				}
 			}
 		}
@@ -47,7 +47,7 @@ namespace Swish.Tests
 				// the xml comes out with different white space etc
 				//if (!EqualFunctions.FilesEqual(fileName, expectedFileName))
 				//{
-				//    throw new Exception();
+				//    throw new TestException();
 				//}
 			}
 
