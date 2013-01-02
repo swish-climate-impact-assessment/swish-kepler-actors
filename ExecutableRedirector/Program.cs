@@ -24,7 +24,7 @@ namespace Swish.ExecutableRedirector
 				string runArguments = string.Join(" ", arguments);
 				int exitCode;
 				string output;
-				SwishFunctions.RunProcess(toolFileName, runArguments, Environment.CurrentDirectory, false, TimeSpan.Zero, out exitCode, out output);
+				SwishFunctions.RunProcess(toolFileName, runArguments, Environment.CurrentDirectory, false, TimeSpan.Zero, true, out exitCode, out output);
 
 				Console.Write(output);
 				return exitCode;

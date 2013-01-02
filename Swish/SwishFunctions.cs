@@ -11,7 +11,7 @@ namespace Swish
 {
 	public static class SwishFunctions
 	{
-		public static void RunProcess(string fileName, string arguments, string workingDirectory, bool returnBeforeExit, TimeSpan timeout, out int exitCode, out string output)
+		public static void RunProcess(string fileName, string arguments, string workingDirectory, bool returnBeforeExit, TimeSpan timeout, bool readOutput, out int exitCode, out string output)
 		{
 			using (Process run = new Process())
 			{
@@ -57,8 +57,15 @@ namespace Swish
 				}
 
 				exitCode = run.ExitCode;
-				output = run.StandardError.ReadToEnd();
-				output += run.StandardOutput.ReadToEnd();
+
+				if (readOutput)
+				{
+					output = run.StandardError.ReadToEnd();
+					output += run.StandardOutput.ReadToEnd();
+				} else
+				{
+					output = null;
+				}
 				run.Close();
 			}
 		}

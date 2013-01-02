@@ -269,7 +269,6 @@ namespace Swish
 				throw new Exception("Format missing");
 			}
 
-
 			string extension = Path.GetExtension(outputFileName);
 			string intermaidateOutput = FileFunctions.TempoaryOutputFileName(extension);
 
@@ -297,6 +296,26 @@ namespace Swish
 			}
 
 			File.Move(intermaidateOutput, outputFileName);
+
+			List<MetadataRecord> metadata = new List<MetadataRecord>();
+			if (MetadataFunctions.Exists(inputFileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			MetadataRecord record = new MetadataRecord();
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
+			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
+			record.Arguments.Add(new Tuple<string, string>("format", format));
+			record.ComputerName = Environment.MachineName;
+			record.Operation = "Format";
+			record.Time = DateTime.Now;
+			record.User = Environment.UserName;
+
+			metadata.Add(record);
+			MetadataFunctions.Save(outputFileName, metadata);
 		}
 
 		private static void Compress(string inputFileName, string outputFileName)
@@ -333,7 +352,25 @@ namespace Swish
 			}
 
 			File.Move(intermaidateOutput, outputFileName);
-		}
+	
+					List<MetadataRecord> metadata = new List<MetadataRecord>();
+			if (MetadataFunctions.Exists(inputFileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			MetadataRecord record = new MetadataRecord();
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
+			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.ComputerName = Environment.MachineName;
+			record.Operation = "Compress";
+			record.Time = DateTime.Now;
+			record.User = Environment.UserName;
+
+			metadata.Add(record);
+			MetadataFunctions.Save(outputFileName, metadata);
+}
 
 		public static void Generate(string inputFileName, string outputFileName, string variableName, string type, string expression)
 		{
@@ -385,6 +422,27 @@ namespace Swish
 			}
 
 			File.Move(intermaidateOutput, outputFileName);
+
+			List<MetadataRecord> metadata = new List<MetadataRecord>();
+			if (MetadataFunctions.Exists(inputFileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			MetadataRecord record = new MetadataRecord();
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
+			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.Arguments.Add(new Tuple<string, string>("Variable", variableName));
+			record.Arguments.Add(new Tuple<string, string>("Type", type));
+			record.Arguments.Add(new Tuple<string, string>("Expression", expression));
+			record.ComputerName = Environment.MachineName;
+			record.Operation = "Generate";
+			record.Time = DateTime.Now;
+			record.User = Environment.UserName;
+
+			metadata.Add(record);
+			MetadataFunctions.Save(outputFileName, metadata);
 		}
 
 		/// <summary>
@@ -503,7 +561,7 @@ namespace Swish
 			int exitCode;
 			string output;
 			string arguments = string.Join(" ", Arguments.OperationArgument, DisplayClientOperation, Arguments.InputArgument, inputFileName);
-			SwishFunctions.RunProcess(Application.ExecutablePath, arguments, Environment.CurrentDirectory, true, TimeSpan.Zero, out exitCode, out output);
+			SwishFunctions.RunProcess(Application.ExecutablePath, arguments, Environment.CurrentDirectory, true, TimeSpan.Zero, false, out exitCode, out output);
 		}
 
 		public static void DisplayClient(string inputFileName)
@@ -585,6 +643,25 @@ namespace Swish
 			{
 				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
+
+			List<MetadataRecord> metadata = new List<MetadataRecord>();
+			if (MetadataFunctions.Exists(inputFileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			MetadataRecord record = new MetadataRecord();
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
+			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
+			record.ComputerName = Environment.MachineName;
+			record.Operation = "RemoveColumns";
+			record.Time = DateTime.Now;
+			record.User = Environment.UserName;
+
+			metadata.Add(record);
+			MetadataFunctions.Save(outputFileName, metadata);
 		}
 
 		public static void Transpose(string inputFileName, string outputFileName)
@@ -624,7 +701,25 @@ namespace Swish
 			{
 				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
-		}
+
+				List<MetadataRecord> metadata = new List<MetadataRecord>();
+			if (MetadataFunctions.Exists(inputFileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			MetadataRecord record = new MetadataRecord();
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
+			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.ComputerName = Environment.MachineName;
+			record.Operation = "Transpose";
+			record.Time = DateTime.Now;
+			record.User = Environment.UserName;
+
+			metadata.Add(record);
+			MetadataFunctions.Save(outputFileName, metadata);
+	}
 
 		public static void Select(string inputFileName, string outputFileName, string expression)
 		{
@@ -667,7 +762,26 @@ namespace Swish
 			{
 				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
-		}
+	
+					List<MetadataRecord> metadata = new List<MetadataRecord>();
+			if (MetadataFunctions.Exists(inputFileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			MetadataRecord record = new MetadataRecord();
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
+			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.Arguments.Add(new Tuple<string, string>("Expression", expression));
+			record.ComputerName = Environment.MachineName;
+			record.Operation = "Select";
+			record.Time = DateTime.Now;
+			record.User = Environment.UserName;
+
+			metadata.Add(record);
+			MetadataFunctions.Save(outputFileName, metadata);
+}
 
 		public static void SelectColumns(string inputFileName, string outputFileName, List<string> variableNames)
 		{
@@ -711,7 +825,26 @@ namespace Swish
 			{
 				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
-		}
+
+				List<MetadataRecord> metadata = new List<MetadataRecord>();
+			if (MetadataFunctions.Exists(inputFileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			MetadataRecord record = new MetadataRecord();
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
+			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
+			record.ComputerName = Environment.MachineName;
+			record.Operation = "SelectColumns";
+			record.Time = DateTime.Now;
+			record.User = Environment.UserName;
+
+			metadata.Add(record);
+			MetadataFunctions.Save(outputFileName, metadata);
+	}
 
 		public static void StataCommand(string inputFileName, string outputFileName, string command)
 		{
@@ -753,10 +886,28 @@ namespace Swish
 			{
 				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
+	
+			List<MetadataRecord> metadata = new List<MetadataRecord>();
+			if (MetadataFunctions.Exists(inputFileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			MetadataRecord record = new MetadataRecord();
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
+			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.Arguments.Add(new Tuple<string, string>("Command", command));
+			record.ComputerName = Environment.MachineName;
+			record.Operation = "StataCommand";
+			record.Time = DateTime.Now;
+			record.User = Environment.UserName;
+
+			metadata.Add(record);
+			MetadataFunctions.Save(outputFileName, metadata);
 		}
 
-		public static void Merge(string input1FileName, string input2FileName,
-			List<string> variableNames, string outputFileName, bool keepMergeColumn, List<MergeRecordResult> keep)
+		public static void Merge(string input1FileName, string input2FileName, List<string> variableNames, string outputFileName, bool keepMergeColumn, List<MergeRecordResult> keep)
 		{
 			if (!FileFunctions.FileExists(input1FileName))
 			{
@@ -871,6 +1022,38 @@ namespace Swish
 
 			/// delete all the files not needed
 			File.Delete(intermediateFileName);
+
+			List<MetadataRecord> metadata = new List<MetadataRecord>();
+			if (MetadataFunctions.Exists(input1FileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(input1FileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			if (MetadataFunctions.Exists(input2FileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(input2FileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			MetadataRecord record = new MetadataRecord();
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", input1FileName));
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", input2FileName));
+			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
+			record.Arguments.Add(new Tuple<string, string>("KeepMergeColumn", keepMergeColumn.ToString()));
+			if (keep != null)
+			{
+				string keepString = string.Join(" ", keep);
+				record.Arguments.Add(new Tuple<string, string>("Keep", keepString));
+			}
+			record.ComputerName = Environment.MachineName;
+			record.Operation = "Merge";
+			record.Time = DateTime.Now;
+			record.User = Environment.UserName;
+
+			metadata.Add(record);
+			MetadataFunctions.Save(outputFileName, metadata);
 		}
 
 		public static string Append(string input1FileName, string input2FileName, string outputFileName)
@@ -923,6 +1106,33 @@ namespace Swish
 
 			/// delete all the files not needed
 			File.Delete(intermediateFileName);
+
+			List<MetadataRecord> metadata = new List<MetadataRecord>();
+			
+			if (MetadataFunctions.Exists(input1FileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(input1FileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			if (MetadataFunctions.Exists(input2FileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(input2FileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			MetadataRecord record = new MetadataRecord();
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", input1FileName));
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", input2FileName));
+			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.ComputerName = Environment.MachineName;
+			record.Operation = "Append";
+			record.Time = DateTime.Now;
+			record.User = Environment.UserName;
+
+			metadata.Add(record);
+			MetadataFunctions.Save(outputFileName, metadata);
+
 			return outputFileName;
 		}
 
@@ -970,6 +1180,26 @@ namespace Swish
 
 			/// delete all the files not needed
 			File.Delete(doOutputFileName);
+
+			List<MetadataRecord> metadata = new List<MetadataRecord>();
+			if (MetadataFunctions.Exists(inputFileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			MetadataRecord record = new MetadataRecord();
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
+			record.Arguments.Add(new Tuple<string, string>("Variable", variable));
+			record.Arguments.Add(new Tuple<string, string>("Operation", operation.ToString()));
+			record.ComputerName = Environment.MachineName;
+			record.Operation = "Collapse";
+			record.Time = DateTime.Now;
+			record.User = Environment.UserName;
+
+			metadata.Add(record);
+			MetadataFunctions.Save(inputFileName + "out", metadata);
+
 			return result;
 		}
 
@@ -1015,11 +1245,37 @@ namespace Swish
 			{
 				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
+
+			List<MetadataRecord> metadata = new List<MetadataRecord>();
+			if (MetadataFunctions.Exists(inputFileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			MetadataRecord record = new MetadataRecord();
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
+			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
+			record.ComputerName = Environment.MachineName;
+			record.Operation = "Sort";
+			record.Time = DateTime.Now;
+			record.User = Environment.UserName;
+
+			metadata.Add(record);
+			MetadataFunctions.Save(outputFileName, metadata);
+
 			return outputFileName;
 		}
 
 		public static void Replace(string inputFileName, string outputFileName, string condition, string value)
 		{
+			//SwishFunctions.MessageTextBox(""
+			//+ "inputFileName: " + inputFileName + Environment.NewLine
+			//+ "outputFileName: " + outputFileName + Environment.NewLine
+			//+ "condition: " + condition + Environment.NewLine
+			//+ "value: " + value + Environment.NewLine, false);
+
 			if (!FileFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
@@ -1066,6 +1322,27 @@ namespace Swish
 			{
 				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
+
+			List<MetadataRecord> metadata = new List<MetadataRecord>();
+			if (MetadataFunctions.Exists(inputFileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			MetadataRecord record = new MetadataRecord();
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
+			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.Arguments.Add(new Tuple<string, string>("Condition", condition));
+			record.Arguments.Add(new Tuple<string, string>("Value", value));
+			record.ComputerName = Environment.MachineName;
+			record.Operation = "Replace";
+			record.Time = DateTime.Now;
+			record.User = Environment.UserName;
+
+			metadata.Add(record);
+			MetadataFunctions.Save(outputFileName, metadata);
+
 		}
 
 		public static void SaveFile(string inputFileName, string outputFileName)
@@ -1102,8 +1379,25 @@ namespace Swish
 			{
 				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
+
+			List<MetadataRecord> metadata = new List<MetadataRecord>();
+			if (MetadataFunctions.Exists(inputFileName))
+			{
+				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
+				metadata.AddRange(inputMetadata);
+			}
+
+			MetadataRecord record = new MetadataRecord();
+			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
+			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.ComputerName = Environment.MachineName;
+			record.Operation = "Save";
+			record.Time = DateTime.Now;
+			record.User = Environment.UserName;
+
+			metadata.Add(record);
+			MetadataFunctions.Save(outputFileName, metadata);
 		}
-
-
 	}
 }
+

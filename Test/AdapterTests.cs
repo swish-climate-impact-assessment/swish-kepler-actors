@@ -74,10 +74,7 @@ namespace Swish.Tests
 			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2, false);
 
 			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
+
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
 			AdapterFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, null);

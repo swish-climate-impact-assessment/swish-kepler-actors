@@ -16,7 +16,7 @@ namespace Swish.Adapter
 				return 0;
 			} catch (Exception error)
 			{
-				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose) ;
+				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
 				if (ExceptionFunctions.ForceVerbose)
 				{
 					message += SwishFunctions.WriteProcessHeritage();

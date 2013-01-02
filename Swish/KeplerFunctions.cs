@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 namespace Swish
@@ -13,22 +12,30 @@ namespace Swish
 
 			int exitCode;
 			string output;
-			SwishFunctions.RunProcess(fileName, "", Environment.CurrentDirectory, true, TimeSpan.Zero, out exitCode, out output);
+			SwishFunctions.RunProcess(fileName, "", Environment.CurrentDirectory, true, TimeSpan.Zero, false, out exitCode, out output);
 		}
 
-		public static void RunWorkflow(string worflowFileName, List<Tuple<string, string>> parameters)
+		public static void RunWorkflow(string workflowFileName, List<Tuple<string, string>> parameters)
 		{
-			string arguments = "-runkar -nogui " + worflowFileName;
-			for (int parameterIndex = 0; parameterIndex < parameters.Count; parameterIndex++)
+			if (!File.Exists(workflowFileName))
 			{
-				Tuple<string, string> parameter = parameters[parameterIndex];
-				arguments += " -" + parameter.Item1 + " " + parameter.Item2;
+				throw new Exception("cannot find workflow file: \"" + workflowFileName + "\"");
 			}
 
-			string workingDirectory = System.IO.Path.GetDirectoryName(ExecutablePath);
+			string arguments = "-runkar -nogui " + workflowFileName;
+			if (parameters != null)
+			{
+				for (int parameterIndex = 0; parameterIndex < parameters.Count; parameterIndex++)
+				{
+					Tuple<string, string> parameter = parameters[parameterIndex];
+					arguments += " -" + parameter.Item1 + " " + parameter.Item2;
+				}
+			}
+
+			string workingDirectory = Path.GetDirectoryName(ExecutablePath);
 			int exitCode;
 			string output;
-			SwishFunctions.RunProcess(ExecutablePath, arguments, workingDirectory, false, new TimeSpan(0, 0, 0, 8, 0), out exitCode, out output);
+			SwishFunctions.RunProcess(ExecutablePath, arguments, workingDirectory, false, new TimeSpan(0, 0, 0, 8, 0), false, out exitCode, out output);
 		}
 
 		private static List<string> PotentialKeplerPaths
@@ -45,6 +52,7 @@ namespace Swish
 				return locations;
 			}
 		}
+
 		private static string _cmdExecutablePath = null;
 		public static string CmdExecutablePath
 		{

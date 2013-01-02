@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Swish;
 using System.IO;
 
 namespace Swish.Tests
@@ -39,7 +38,7 @@ namespace Swish.Tests
 			int exitCode;
 			string output;
 			string stataExecutable = StataFunctions.ExecutablePath;
-			SwishFunctions.RunProcess(stataExecutable, arguments, workingDirectory, false, TimeSpan.Zero, out exitCode, out output);
+			SwishFunctions.RunProcess(stataExecutable, arguments, workingDirectory, false, TimeSpan.Zero, false, out exitCode, out output);
 
 			if (!FileFunctions.FileExists(outputFile))
 			{

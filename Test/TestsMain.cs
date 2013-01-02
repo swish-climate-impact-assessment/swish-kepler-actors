@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Swish.Tests
 {
@@ -39,8 +35,6 @@ namespace Swish.Tests
 		{
 			try
 			{
-
-
 				/// Input / output 
 				/// 
 				/// The idea is that the data source is dynamicly resloved and can be:
@@ -50,10 +44,11 @@ namespace Swish.Tests
 				///		web service of some kind
 				/// 
 				/// 
-				/// Generate metadata 
-				/// start with a log file that accopanyies the output file with the operation name and input details
-				/// 
 
+				new MetadataTests().LoadMetadata();
+				new MetadataTests().ValuesWritten();
+				new MetadataTests().MetadataFileName();
+				new MetadataTests().MetadataExists();
 				new SwishFunctionsTests().EncodeDecodePasswordBytes();
 				new SwishFunctionsTests().EncodeDecodePassword();
 				new SwishFunctionsTests().Password();
@@ -70,6 +65,8 @@ namespace Swish.Tests
 					return;
 				}
 
+				new MetadataTests().MergeMetadata();
+				new MetadataTests().SequanceHasMetadata();
 				new AdapterTests().MergeKeep();
 				new AdapterTests().Generate();
 				new AdapterTests().MergeZero();

@@ -35,8 +35,7 @@ namespace Swish
 
 				int exitCode;
 				string output;
-
-				SwishFunctions.RunProcess(ExecutablePath, arguments, workingDirectory, false, TimeSpan.Zero, out exitCode, out output);
+				SwishFunctions.RunProcess(ExecutablePath, arguments, workingDirectory, false, TimeSpan.Zero, false, out exitCode, out output);
 
 				string logFileName = Path.GetFileName(doFileName);
 				int index = logFileName.IndexOf('.');
@@ -65,7 +64,7 @@ namespace Swish
 
 				int exitCode;
 				string output;
-				SwishFunctions.RunProcess(runDoFileName, doFileName, Environment.CurrentDirectory, false, TimeSpan.Zero, out exitCode, out output);
+				SwishFunctions.RunProcess(runDoFileName, doFileName, Environment.CurrentDirectory, false, TimeSpan.Zero, false, out exitCode, out output);
 				log = string.Empty;
 			}
 			return log;
@@ -99,7 +98,7 @@ namespace Swish
 
 			int exitCode;
 			string output;
-			SwishFunctions.RunProcess(fileName, "", Environment.CurrentDirectory, true, TimeSpan.Zero, out exitCode, out output);
+			SwishFunctions.RunProcess(fileName, "", Environment.CurrentDirectory, true, TimeSpan.Zero, false, out exitCode, out output);
 		}
 
 		public static string ExecutablePath

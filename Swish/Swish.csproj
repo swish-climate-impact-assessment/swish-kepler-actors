@@ -50,9 +50,11 @@
     <Compile Include="CollapseOpperation.cs" />
     <Compile Include="Arguments.cs" />
     <Compile Include="ByteArrayAsStream.cs" />
+    <Compile Include="MetadataFunctions.cs" />
     <Compile Include="EqualFunctions.cs" />
     <Compile Include="KarFile.cs" />
     <Compile Include="MergeRecordResult.cs" />
+    <Compile Include="MetadataRecord.cs" />
     <Compile Include="ReportProgressFunction.cs" />
     <Compile Include="StreamFunctions.cs" />
     <Compile Include="FileFunctions.cs" />
