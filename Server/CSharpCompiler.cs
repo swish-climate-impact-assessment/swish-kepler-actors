@@ -7,7 +7,6 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.CSharp;
-using Swish.Tests;
 
 namespace LibraryTypes.BootStrap
 {
@@ -52,13 +51,13 @@ namespace LibraryTypes.BootStrap
 			}
 		}
 
-		private static Assembly _Compile(string codeDirectory, string outputFileName, bool generateInMemory)
+		public static Assembly _Compile(string codeDirectory, string outputFileName, bool generateInMemory)
 		{
 			List<string> dllFileNames = new List<string>(new string[]{
 				Assembly.GetAssembly(typeof(_AppDomain)).Location,
 				Assembly.GetAssembly(typeof(FileStyleUriParser)).Location,
 	//			Assembly.GetAssembly(typeof(ConformanceLevel)).Location,
-				Assembly.GetAssembly(typeof(EventSchemaTraceListener)).Location,
+				Assembly.GetAssembly(typeof(HandleInheritability)).Location,
 				Assembly.GetAssembly(typeof(Bitmap)).Location,
 				Assembly.GetAssembly(typeof(AccessibleEvents)).Location,
 				Assembly.GetAssembly(typeof(TimeZoneInfo)).Location,
@@ -71,7 +70,7 @@ namespace LibraryTypes.BootStrap
 			AddCodeDirectory(codeDirectory, sourceFiles);
 			if (sourceFiles.Count == 0)
 			{
-				throw new TestException("No code files found");
+				throw new Exception("No code files found");
 			}
 
 			CompilerParameters options = new CompilerParameters();
@@ -114,7 +113,7 @@ namespace LibraryTypes.BootStrap
 
 			if (results.Errors.HasErrors || !flag)
 			{
-				throw new TestException("Build failed." + Environment.NewLine + message);
+				throw new Exception("Build failed." + Environment.NewLine + message);
 			}
 
 			return results.CompiledAssembly;

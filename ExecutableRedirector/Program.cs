@@ -22,17 +22,15 @@ namespace Swish.ExecutableRedirector
 				}
 
 				string runArguments = string.Join(" ", arguments);
-				int exitCode;
-				string output;
-				SwishFunctions.RunProcess(toolFileName, runArguments, Environment.CurrentDirectory, false, TimeSpan.Zero, true, out exitCode, out output);
+				ProcessResult result = ProcessFunctions.RunProcess(toolFileName, runArguments, Environment.CurrentDirectory, false, TimeSpan.Zero, true, true, true);
 
-				Console.Write(output);
-				return exitCode;
+				Console.Write(result.Output);
+				return result.ExitCode;
 			} catch (Exception error)
 			{
 				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
-				message += SwishFunctions.WriteProcessHeritage();
-				message += SwishFunctions.WriteSystemVariables();
+				message += ProcessFunctions.WriteProcessHeritage();
+				message += ProcessFunctions.WriteSystemVariables();
 				SwishFunctions.MessageTextBox(message, false);
 				Console.Write(message);
 				return -1;

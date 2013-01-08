@@ -85,5 +85,33 @@ namespace Swish
 			}
 		}
 
+		public static void ReadUntilComplete(Stream stream, byte[] buffer, int offset, int count)
+		{
+			if (stream is MemoryStream && stream.Length == stream.Position)
+			{
+				throw new Exception();
+			}
+
+			DateTime startTime = DateTime.Now;
+			while (count > 0)
+			{
+				int countRead = stream.Read(buffer, offset, count);
+				offset += countRead;
+				count -= countRead;
+				if (countRead == 0)
+				{
+					Thread.Sleep(1);
+				}
+			}
+		}
+
+		public static void Import(Stream stream, string fileName)
+		{
+			using (Stream fileIn = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+			{
+				CopyStream(stream, fileIn, fileIn.Length);
+			}
+		}
+
 	}
 }

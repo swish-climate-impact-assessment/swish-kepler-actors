@@ -70,5 +70,59 @@ namespace Swish
 
 			return true;
 		}
+
+		public static bool Equal(Type left, Type right)
+		{
+#if !MONO
+			return left == right;
+#else
+			if ((left as object) == null)
+			{
+				if ((right as object) == null)
+				{
+					return true;
+				}
+				return false;
+			}
+			if ((right as object) == null)
+			{
+				return false;
+			}
+
+			return left.Name == right.Name;
+#endif
+		}
+
+		public static bool Equal(byte[] left, byte[] right, int count)
+		{
+			if (left == null)
+			{
+				if (right == null)
+				{
+					return true;
+				}
+				return false;
+			}
+			if (right == null)
+			{
+				return false;
+			}
+
+			if (left.Length < count || right.Length < count)
+			{
+				throw new Exception();
+			}
+
+			for (int index = 0; index < count; index++)
+			{
+				if (left[index] != right[index])
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
 	}
 }

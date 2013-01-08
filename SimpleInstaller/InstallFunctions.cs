@@ -13,24 +13,21 @@ namespace Swish.SimpleInstaller
 			_symbols.Add(new Tuple<string, string>("%StartupPath%", Application.StartupPath));
 		}
 
-		internal static void Install(bool clean, ReportProgressFunction ReportProgress)
+		internal static void Install(bool clean, ReportProgressFunction ReportMessage)
 		{
 			string fileName = Path.Combine(Application.StartupPath, "Install.txt");
 
 			List<string> _pending = new List<string>(File.ReadLines(fileName));
 			List<string> _completed = new List<string>();
 
-			if (ReportProgress != null)
+			_ReportMessage(ReportMessage, 0, "Installing...");
+
+			for (int symbolIndex = 0; symbolIndex < _symbols.Count; symbolIndex++)
 			{
-				ReportProgress(0, "Installing...");
+				string symbol = _symbols[symbolIndex].Item1;
+				string value = _symbols[symbolIndex].Item2;
 
-				for (int symbolIndex = 0; symbolIndex < _symbols.Count; symbolIndex++)
-				{
-					string symbol = _symbols[symbolIndex].Item1;
-					string value = _symbols[symbolIndex].Item2;
-
-					ReportProgress(-1, "Symbol: " + symbol + " -> " + value);
-				}
+				_ReportMessage(ReportMessage, -1, "Symbol: " + symbol + " -> " + value);
 			}
 
 			while (_pending.Count > 0)
@@ -47,35 +44,22 @@ namespace Swish.SimpleInstaller
 				}
 				_completed.Add(line);
 
-				RunLine(line, clean, ReportProgress);
+				RunLine(line, clean, ReportMessage);
 
-				if (ReportProgress != null)
-				{
-					ReportProgress(100 * (_completed.Count) / (_completed.Count + _pending.Count), string.Empty);
-				}
+				_ReportMessage(ReportMessage, 100 * (_completed.Count) / (_completed.Count + _pending.Count), string.Empty);
 			}
-			if (ReportProgress != null)
-			{
-				ReportProgress(100, "Done.");
-			}
-
+			_ReportMessage(ReportMessage, 100, "Done.");
 		}
 
-		internal static void RunLine(string _line, bool clean, ReportProgressFunction ReportProgress)
+		internal static void RunLine(string _line, bool clean, ReportProgressFunction ReportMessage)
 		{
-			if (ReportProgress != null)
-			{
-				ReportProgress(-1, _line);
-			}
+				_ReportMessage(ReportMessage, -1, _line);
 
 			string line = ResloveSymbols(_line);
 
 			if (line != _line)
 			{
-				if (ReportProgress != null)
-				{
-					ReportProgress(-1, "Changed to: " + line);
-				}
+					_ReportMessage(ReportMessage, -1, "Changed to: " + line);
 			}
 
 			string whiteSpace;
@@ -105,10 +89,10 @@ namespace Swish.SimpleInstaller
 
 					if (!clean)
 					{
-						FileFunctions.CopyFile(sourceFileName, destinationFileName, ReportProgress);
+						FileFunctions.CopyFile(sourceFileName, destinationFileName, ReportMessage);
 					} else
 					{
-						FileFunctions.DeleteFile(destinationFileName, ReportProgress);
+						FileFunctions.DeleteFile(destinationFileName, ReportMessage);
 					}
 				}
 			} else if (StringIO.TryRead("Copy", ref line))
@@ -130,10 +114,10 @@ namespace Swish.SimpleInstaller
 
 				if (!clean)
 				{
-					FileFunctions.CopyFile(sourceFileName, destinationFileName, ReportProgress);
+					FileFunctions.CopyFile(sourceFileName, destinationFileName, ReportMessage);
 				} else
 				{
-					FileFunctions.DeleteFile(destinationFileName, ReportProgress);
+					FileFunctions.DeleteFile(destinationFileName, ReportMessage);
 				}
 			} else if (string.IsNullOrWhiteSpace(line) || StringIO.TryRead("//", ref line))
 			{
@@ -156,6 +140,21 @@ namespace Swish.SimpleInstaller
 			}
 
 			return line;
+		}
+
+		private static void _ReportMessage(ReportProgressFunction ReportMessage, int progress, string message)
+		{
+			if (ReportMessage != null)
+			{
+				ReportMessage(progress, message);
+			} else if (progress >= 0)
+			{
+				Console.WriteLine(progress + "%" + message);
+			} else
+			{
+				Console.WriteLine(message);
+			}
+
 		}
 
 	}

@@ -19,8 +19,8 @@ namespace Swish.Adapter
 				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
 				if (ExceptionFunctions.ForceVerbose)
 				{
-					message += SwishFunctions.WriteProcessHeritage();
-					message += SwishFunctions.WriteSystemVariables();
+					message += ProcessFunctions.WriteProcessHeritage();
+					message += ProcessFunctions.WriteSystemVariables();
 				}
 				Console.Write(message);
 				if (ExceptionFunctions.ForceVerbose)

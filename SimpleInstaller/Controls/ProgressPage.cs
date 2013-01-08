@@ -38,8 +38,8 @@ namespace Swish.SimpleInstaller.Controls
 				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
 				if (ExceptionFunctions.ForceVerbose)
 				{
-					message += SwishFunctions.WriteProcessHeritage();
-					message += SwishFunctions.WriteSystemVariables();
+					message += ProcessFunctions.WriteProcessHeritage();
+					message += ProcessFunctions.WriteSystemVariables();
 				}
 				SwishFunctions.MessageTextBox(message, false);
 				Console.Write(message);

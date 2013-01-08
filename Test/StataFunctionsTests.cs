@@ -35,10 +35,8 @@ namespace Swish.Tests
 			// there is also the log to deal with
 			string workingDirectory = Path.GetDirectoryName(doFileName);
 
-			int exitCode;
-			string output;
 			string stataExecutable = StataFunctions.ExecutablePath;
-			SwishFunctions.RunProcess(stataExecutable, arguments, workingDirectory, false, TimeSpan.Zero, false, out exitCode, out output);
+			ProcessFunctions.RunProcess(stataExecutable, arguments, workingDirectory, false, TimeSpan.Zero, false, false, false);
 
 			if (!FileFunctions.FileExists(outputFile))
 			{

@@ -6,6 +6,7 @@ namespace Swish.Tests
 {
 	public class TestsMain
 	{
+#if !MONO
 		[DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		private static extern bool IsWow64Process([In] IntPtr process, [Out] out bool wow64Process);
@@ -30,6 +31,7 @@ namespace Swish.Tests
 
 			return false; // not on 64-bit Windows
 		}
+#endif
 
 		static void Main(string[] arguments)
 		{
@@ -44,6 +46,9 @@ namespace Swish.Tests
 				///		web service of some kind
 				/// 
 				/// 
+				new VersionFunctionsTests().Test();
+				new ServerUpdateTests().ExchangeFiles();
+				new TcpServerTests().GetIndex();
 
 				new MetadataTests().LoadMetadata();
 				new MetadataTests().ValuesWritten();
@@ -62,6 +67,8 @@ namespace Swish.Tests
 
 				if (!StataFunctions.StataInstalled)
 				{
+					Console.WriteLine("Stata not found!");
+					Console.WriteLine("Ignoring stata tests");
 					return;
 				}
 
@@ -92,8 +99,8 @@ namespace Swish.Tests
 			} catch (Exception error)
 			{
 				string message = ExceptionFunctions.Write(error, false);
-				message += SwishFunctions.WriteProcessHeritage();
-				message += SwishFunctions.WriteSystemVariables();
+				message += ProcessFunctions.WriteProcessHeritage();
+				message += ProcessFunctions.WriteSystemVariables();
 				Console.WriteLine(message);
 			}
 

@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleInstaller", "SimpleIn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter", "Adapter\Adapter.csproj", "{B8033E78-6AD7-4C76-A30B-489F5ED82ED3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{12B64F61-9325-4FB1-8F2A-0962AD31955B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateServer", "UpdateServer\UpdateServer.csproj", "{0BBFBC93-4E19-493B-B71E-0E9835EF612D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -41,7 +45,16 @@ Global
 		{00E06061-E315-4ECD-BEBC-FCE4631F7FF7}.Release|x86.Build.0 = Release|x86
 		{B8033E78-6AD7-4C76-A30B-489F5ED82ED3}.Debug|x86.ActiveCfg = Debug|x86
 		{B8033E78-6AD7-4C76-A30B-489F5ED82ED3}.Debug|x86.Build.0 = Debug|x86
-		{B8033E78-6AD7-4C76-A30B-489F5ED82ED3}.Release|x86.ActiveCfg = Debug|x64
+		{B8033E78-6AD7-4C76-A30B-489F5ED82ED3}.Release|x86.ActiveCfg = Debug|x86
+		{B8033E78-6AD7-4C76-A30B-489F5ED82ED3}.Release|x86.Build.0 = Debug|x86
+		{12B64F61-9325-4FB1-8F2A-0962AD31955B}.Debug|x86.ActiveCfg = Debug|x86
+		{12B64F61-9325-4FB1-8F2A-0962AD31955B}.Debug|x86.Build.0 = Debug|x86
+		{12B64F61-9325-4FB1-8F2A-0962AD31955B}.Release|x86.ActiveCfg = Release|x86
+		{12B64F61-9325-4FB1-8F2A-0962AD31955B}.Release|x86.Build.0 = Release|x86
+		{0BBFBC93-4E19-493B-B71E-0E9835EF612D}.Debug|x86.ActiveCfg = Debug|x86
+		{0BBFBC93-4E19-493B-B71E-0E9835EF612D}.Debug|x86.Build.0 = Debug|x86
+		{0BBFBC93-4E19-493B-B71E-0E9835EF612D}.Release|x86.ActiveCfg = Release|x86
+		{0BBFBC93-4E19-493B-B71E-0E9835EF612D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

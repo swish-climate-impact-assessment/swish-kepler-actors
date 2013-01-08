@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using System.Security.Cryptography;
 
 namespace Swish
 {
@@ -73,7 +74,7 @@ namespace Swish
 
 		public static string AdjustFileName(string fileName)
 		{
-			bool monoEnvironment = !SwishFunctions.MonoEnvironment;
+			bool monoEnvironment = !ProcessFunctions.MonoEnvironment;
 			if (monoEnvironment)
 			{
 				fileName = fileName.Replace('/', '\\');
@@ -100,7 +101,7 @@ namespace Swish
 			return false;
 		}
 
-		public static void DeleteFile(string fileName, ReportProgressFunction ReportProgress)
+		public static void DeleteFile(string fileName, ReportProgressFunction ReportMessage)
 		{
 			try
 			{
@@ -109,17 +110,14 @@ namespace Swish
 					return;
 				}
 				File.SetAttributes(fileName, FileAttributes.Normal);
-				if (ReportProgress != null)
-				{
-					ReportProgress(-1, "delete file: " + fileName);
-				}
+				_ReportMessage(ReportMessage, -1, "delete file: " + fileName);
 				File.Delete(fileName);
 				string destinationDirectory = Path.GetDirectoryName(fileName);
-				DeleteDirectory(destinationDirectory, ReportProgress);
+				DeleteDirectory(destinationDirectory, ReportMessage);
 			} catch { }
 		}
 
-		public static void DeleteDirectory(string directory, ReportProgressFunction ReportProgress)
+		public static void DeleteDirectory(string directory, ReportProgressFunction ReportMessage)
 		{
 			try
 			{
@@ -133,49 +131,37 @@ namespace Swish
 					return;
 				}
 
-				if (ReportProgress != null)
-				{
-					ReportProgress(-1, "delete directory: " + directory);
-				}
+				_ReportMessage(ReportMessage, -1, "delete directory: " + directory);
 				Directory.Delete(directory);
 				string baseDirectory = Path.GetDirectoryName(directory);
-				DeleteDirectory(baseDirectory, ReportProgress);
+				DeleteDirectory(baseDirectory, ReportMessage);
 			} catch { }
 
 		}
 
-		public static void CopyFile(string sourceFileName, string destinationFileName, ReportProgressFunction ReportProgress)
+		public static void CopyFile(string sourceFileName, string destinationFileName, ReportProgressFunction ReportMessage)
 		{
 			try
 			{
 				string destinationDirectory = Path.GetDirectoryName(destinationFileName);
-				CreateDirectory(destinationDirectory, ReportProgress);
+				CreateDirectory(destinationDirectory, ReportMessage);
 				if (FileExists(destinationFileName))
 				{
-					if (ReportProgress != null)
-					{
-						ReportProgress(-1, "delete: " + destinationFileName);
-					}
+					_ReportMessage(ReportMessage, -1, "delete: " + destinationFileName);
 					File.Delete(destinationFileName);
 				}
 
-				if (ReportProgress != null)
-				{
-					ReportProgress(-1, "copy: " + sourceFileName + " -> " + destinationFileName);
-				}
+				_ReportMessage(ReportMessage, -1, "copy: " + sourceFileName + " -> " + destinationFileName);
 				File.Copy(sourceFileName, destinationFileName);
 			} catch (Exception error)
 			{
 				string errorMessage = "Failed copying file \"" + sourceFileName + "\" -> \"" + destinationFileName + "\"";
-				if (ReportProgress != null)
-				{
-					ReportProgress(-1, errorMessage);
-				}
+				_ReportMessage(ReportMessage, -1, errorMessage);
 				throw new Exception(errorMessage, error);
 			}
 		}
 
-		public static void CreateDirectory(string directory, ReportProgressFunction ReportProgress)
+		public static void CreateDirectory(string directory, ReportProgressFunction ReportMessage)
 		{
 			try
 			{
@@ -185,20 +171,14 @@ namespace Swish
 				}
 
 				string baseDirectory = Path.GetDirectoryName(directory);
-				CreateDirectory(baseDirectory, ReportProgress);
+				CreateDirectory(baseDirectory, ReportMessage);
 
-				if (ReportProgress != null)
-				{
-					ReportProgress(-1, "Create directory: " + directory);
-				}
+				_ReportMessage(ReportMessage, -1, "Create directory: " + directory);
 				Directory.CreateDirectory(directory);
 			} catch (Exception error)
 			{
 				string errorMessage = "Failed create directory \"" + directory + "\"";
-				if (ReportProgress != null)
-				{
-					ReportProgress(-1, errorMessage);
-				}
+				_ReportMessage(ReportMessage, -1, errorMessage);
 				throw new Exception(errorMessage, error);
 			}
 		}
@@ -231,7 +211,6 @@ namespace Swish
 			return directory;
 		}
 
-
 		public static string TempoaryOutputFileName(string extension)
 		{
 			string tempOutputFileName = TempoaryFileName();
@@ -245,6 +224,161 @@ namespace Swish
 				File.Delete(outputFileName);
 			}
 			return outputFileName;
+		}
+
+		private static void _ReportMessage(ReportProgressFunction ReportMessage, int progress, string message)
+		{
+			if (ReportMessage != null)
+			{
+				ReportMessage(progress, message);
+			} else if (progress >= 0)
+			{
+				Console.WriteLine(progress + "%" + message);
+			} else
+			{
+				Console.WriteLine(message);
+			}
+
+		}
+
+		public static void GetFilesAndDirectories(out List<string> directoryList, out List<string> fileList, string directory, List<string> excludeDirectories)
+		{
+			directoryList = new List<string>();
+			fileList = new List<string>();
+
+			directoryList.Add(directory);
+			for (int index = 0; index < directoryList.Count; index++)
+			{
+				string directoryName = directoryList[index];
+				string name = Path.GetFileName(directoryName).ToLower();
+				if (excludeDirectories != null && excludeDirectories.Contains(name))
+				{
+					continue;
+				}
+
+				try
+				{
+					directoryList.AddRange(Directory.GetDirectories(directoryName));
+					fileList.AddRange(Directory.GetFiles(directoryName));
+				} catch (Exception error)
+				{
+					Console.Write(ExceptionFunctions.Write(error, true));
+				}
+			}
+		}
+
+		public static string GetRelativePath(string destinationPath, string sourceDirectory)
+		{
+			//string fullDestination = Path.GetFullPath(destinationPath);
+			//string fullSource = Path.GetFullPath(sourceDirectory);
+
+			//List<string> destinationFragments = GetPathFragments(fullDestination);
+			//List<string> sourceFragments = GetPathFragments(fullSource);
+
+			List<string> destinationFragments = GetPathFragments(destinationPath);
+			List<string> sourceFragments = GetPathFragments(sourceDirectory);
+
+			if (destinationFragments.Count == 0 || sourceFragments.Count == 0 || destinationFragments[0].ToLower() != sourceFragments[0].ToLower())
+			{
+				return destinationPath;
+			}
+
+			string FileExtensionSeparatorChar = ".";
+			if (destinationPath.ToLower() == sourceDirectory.ToLower())
+			{
+				string fileNameFragment = destinationFragments[destinationFragments.Count - 1];
+				if (File.Exists(destinationPath) || fileNameFragment.Contains(FileExtensionSeparatorChar))
+				{
+					return fileNameFragment;
+				}
+			}
+
+			int index;
+			for (index = 0; index < destinationFragments.Count && index < sourceFragments.Count; index++)
+			{
+				if (string.Compare(destinationFragments[index], sourceFragments[index], true) != 0)
+				{
+					break;
+				}
+			}
+
+			List<string> fragments = new List<string>();
+			string previousDirectorySymbol = "..";
+
+			for (int sourceIndex = index; sourceIndex < sourceFragments.Count; sourceIndex++)
+			{
+				fragments.Add(previousDirectorySymbol);
+			}
+
+			for (int destinationIndex = index; destinationIndex < destinationFragments.Count; destinationIndex++)
+			{
+				fragments.Add(destinationFragments[destinationIndex]);
+			}
+
+			string result = Path.Combine(fragments.ToArray());
+
+			return result;
+		}
+
+		internal static List<string> GetPathFragments(string path)
+		{
+			if (path == Path.DirectorySeparatorChar.ToString() || path == Path.AltDirectorySeparatorChar.ToString())
+			{
+				return new List<string>();
+			}
+
+			bool rooted = Path.IsPathRooted(path);
+			string root;
+			if (rooted)
+			{
+				root = Path.GetPathRoot(path);
+
+				if (path.ToLower() == root.ToLower())
+				{
+					return new List<string>() { root };
+				}
+			} else
+			{
+				root = string.Empty;
+			}
+
+			if (path.EndsWith(Path.DirectorySeparatorChar.ToString()) || path.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+			{
+				path = Path.GetDirectoryName(path);
+			}
+
+			List<string> fragments = new List<string>();
+			while (true)
+			{
+				if (string.IsNullOrEmpty(path))
+				{
+					break;
+				}
+				if (rooted && path.ToLower() == root.ToLower())
+				{
+					fragments.Add(root);
+					break;
+				}
+
+				string fragment = Path.GetFileName(path);
+				fragments.Add(fragment);
+				path = Path.GetDirectoryName(path);
+			}
+			fragments.Reverse();
+			return fragments;
+		}
+
+		public static byte[] GetMd5(string fileName)
+		{
+			if (string.IsNullOrEmpty(fileName))
+			{
+				throw new ArgumentNullException("fileName");
+			}
+			using (BufferedStream input = new BufferedStream(new FileStream(fileName, FileMode.Open, FileAccess.Read)))
+			using (MD5CryptoServiceProvider encoder = new MD5CryptoServiceProvider())
+			{
+				return encoder.ComputeHash(input);
+			}
 		}
 
 	}

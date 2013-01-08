@@ -13,8 +13,6 @@ namespace Swish.SimpleInstaller
 			string logFileName = string.Empty;
 			try
 			{
-				Application.EnableVisualStyles();
-				Application.SetCompatibleTextRenderingDefault(false);
 
 				logFileName = Path.Combine(Application.StartupPath, "Error.log.txt");
 				if (FileFunctions.FileExists(logFileName))
@@ -24,7 +22,7 @@ namespace Swish.SimpleInstaller
 
 				Arguments splitArguments = new Arguments(arguments);
 				ExceptionFunctions.ForceVerbose = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "verbose");
-				bool silent = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "silent");
+				bool noGui = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "silent")||splitArguments.Exists(Arguments.DefaultArgumentPrefix + "nogui");
 				bool clean = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "clean");
 				bool luanch = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "luanch");
 
@@ -41,8 +39,10 @@ namespace Swish.SimpleInstaller
 				///		save actor to installer folder
 				///
 
-				if (!silent)
+				if (!noGui)
 				{
+					Application.EnableVisualStyles();
+					Application.SetCompatibleTextRenderingDefault(false);
 					using (InstallerMain control = new InstallerMain())
 					{
 						control.Clean = clean;
@@ -50,6 +50,7 @@ namespace Swish.SimpleInstaller
 					}
 				} else
 				{
+					Console.WriteLine("Installing");
 					InstallFunctions.Install(clean, null);
 				}
 
@@ -62,8 +63,8 @@ namespace Swish.SimpleInstaller
 				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
 				if (ExceptionFunctions.ForceVerbose)
 				{
-					message += SwishFunctions.WriteProcessHeritage();
-					message += SwishFunctions.WriteSystemVariables();
+					message += ProcessFunctions.WriteProcessHeritage();
+					message += ProcessFunctions.WriteSystemVariables();
 				}
 				Console.Write(message);
 				if (!string.IsNullOrWhiteSpace(logFileName))

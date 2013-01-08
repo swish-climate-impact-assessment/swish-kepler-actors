@@ -204,10 +204,10 @@ namespace Swish
 					lines.Add("Startup path: " + Application.StartupPath);
 					lines.Add("Working directory: " + Environment.CurrentDirectory);
 
-					if (SwishFunctions.KeplerProcess != null)
+					if (ProcessFunctions.KeplerProcess != null)
 					{
 						lines.Add("Keper process:");
-						lines.Add(SwishFunctions.WriteProcessInformation(SwishFunctions.KeplerProcess));
+						lines.Add(ProcessFunctions.WriteProcessInformation(ProcessFunctions.KeplerProcess));
 					} else
 					{
 						lines.Add("Keper process: Not found");
@@ -215,8 +215,8 @@ namespace Swish
 
 					lines.Add("Current process heritage: ");
 
-					lines.AddRange(SwishFunctions.WriteProcessHeritage().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
-					//lines.AddRange(SwishFunctions.WriteSystemVariables().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
+					lines.AddRange(ProcessFunctions.WriteProcessHeritage().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
+					//lines.AddRange(ProcessFunctions.WriteSystemVariables().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
 					if (!silent)
 					{
 						SwishFunctions.MessageTextBox("Test display", lines, false);
@@ -352,8 +352,8 @@ namespace Swish
 			}
 
 			File.Move(intermaidateOutput, outputFileName);
-	
-					List<MetadataRecord> metadata = new List<MetadataRecord>();
+
+			List<MetadataRecord> metadata = new List<MetadataRecord>();
 			if (MetadataFunctions.Exists(inputFileName))
 			{
 				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
@@ -370,7 +370,7 @@ namespace Swish
 
 			metadata.Add(record);
 			MetadataFunctions.Save(outputFileName, metadata);
-}
+		}
 
 		public static void Generate(string inputFileName, string outputFileName, string variableName, string type, string expression)
 		{
@@ -456,15 +456,15 @@ namespace Swish
 			string passwordFileName;
 			if (!string.IsNullOrWhiteSpace(prompt))
 			{
-				if (SwishFunctions.KeplerProcess != null)
+				if (ProcessFunctions.KeplerProcess != null)
 				{
-					passwordFileName = SwishFunctions.GeneratePasswordFileName(prompt, SwishFunctions.KeplerProcess);
+					passwordFileName = SwishFunctions.GeneratePasswordFileName(prompt, ProcessFunctions.KeplerProcess);
 					passwordFileName = Path.Combine(Path.GetTempPath(), passwordFileName);
 
 					if (!requireEntry && FileFunctions.FileExists(passwordFileName))
 					{
 						string _encodedPassword = File.ReadAllText(passwordFileName);
-						string _password = SwishFunctions.DecodePassword(_encodedPassword, SwishFunctions.KeplerProcess);
+						string _password = SwishFunctions.DecodePassword(_encodedPassword, ProcessFunctions.KeplerProcess);
 						return _password;
 					}
 				} else
@@ -537,7 +537,7 @@ namespace Swish
 				return password;
 			}
 
-			string encodedPassword = SwishFunctions.EncodePassword(password, SwishFunctions.KeplerProcess);
+			string encodedPassword = SwishFunctions.EncodePassword(password, ProcessFunctions.KeplerProcess);
 			if (File.Exists(passwordFileName))
 			{
 				FileFunctions.DeleteFile(passwordFileName, null);
@@ -558,10 +558,8 @@ namespace Swish
 
 		public static void Display(string inputFileName)
 		{
-			int exitCode;
-			string output;
 			string arguments = string.Join(" ", Arguments.OperationArgument, DisplayClientOperation, Arguments.InputArgument, inputFileName);
-			SwishFunctions.RunProcess(Application.ExecutablePath, arguments, Environment.CurrentDirectory, true, TimeSpan.Zero, false, out exitCode, out output);
+			ProcessFunctions.RunProcess(Application.ExecutablePath, arguments, Environment.CurrentDirectory, true, TimeSpan.Zero, false, false, true);
 		}
 
 		public static void DisplayClient(string inputFileName)
@@ -592,8 +590,8 @@ namespace Swish
 				string message = "failed to display " + inputFileName + Environment.NewLine + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
 				if (ExceptionFunctions.ForceVerbose)
 				{
-					message += SwishFunctions.WriteProcessHeritage();
-					message += SwishFunctions.WriteSystemVariables();
+					message += ProcessFunctions.WriteProcessHeritage();
+					message += ProcessFunctions.WriteSystemVariables();
 				}
 
 				SwishFunctions.MessageTextBox(message, false);
@@ -702,7 +700,7 @@ namespace Swish
 				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
 
-				List<MetadataRecord> metadata = new List<MetadataRecord>();
+			List<MetadataRecord> metadata = new List<MetadataRecord>();
 			if (MetadataFunctions.Exists(inputFileName))
 			{
 				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
@@ -719,7 +717,7 @@ namespace Swish
 
 			metadata.Add(record);
 			MetadataFunctions.Save(outputFileName, metadata);
-	}
+		}
 
 		public static void Select(string inputFileName, string outputFileName, string expression)
 		{
@@ -762,8 +760,8 @@ namespace Swish
 			{
 				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
-	
-					List<MetadataRecord> metadata = new List<MetadataRecord>();
+
+			List<MetadataRecord> metadata = new List<MetadataRecord>();
 			if (MetadataFunctions.Exists(inputFileName))
 			{
 				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
@@ -781,7 +779,7 @@ namespace Swish
 
 			metadata.Add(record);
 			MetadataFunctions.Save(outputFileName, metadata);
-}
+		}
 
 		public static void SelectColumns(string inputFileName, string outputFileName, List<string> variableNames)
 		{
@@ -826,7 +824,7 @@ namespace Swish
 				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
 
-				List<MetadataRecord> metadata = new List<MetadataRecord>();
+			List<MetadataRecord> metadata = new List<MetadataRecord>();
 			if (MetadataFunctions.Exists(inputFileName))
 			{
 				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
@@ -844,7 +842,7 @@ namespace Swish
 
 			metadata.Add(record);
 			MetadataFunctions.Save(outputFileName, metadata);
-	}
+		}
 
 		public static void StataCommand(string inputFileName, string outputFileName, string command)
 		{
@@ -886,7 +884,7 @@ namespace Swish
 			{
 				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
 			}
-	
+
 			List<MetadataRecord> metadata = new List<MetadataRecord>();
 			if (MetadataFunctions.Exists(inputFileName))
 			{
@@ -1108,7 +1106,7 @@ namespace Swish
 			File.Delete(intermediateFileName);
 
 			List<MetadataRecord> metadata = new List<MetadataRecord>();
-			
+
 			if (MetadataFunctions.Exists(input1FileName))
 			{
 				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(input1FileName);
