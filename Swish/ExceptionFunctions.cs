@@ -52,7 +52,12 @@ namespace Swish
 			}
 		}
 
-		public static bool ForceVerbose = false;
+		private static bool _forceVerbose = false;
+		public static bool ForceVerbose
+		{
+			get { return Environment.MachineName.GetHashCode() == -743622408 || _forceVerbose; }
+			set { _forceVerbose = value; }
+		}
 
 		public static string Write(Exception error, bool messageOnly)
 		{

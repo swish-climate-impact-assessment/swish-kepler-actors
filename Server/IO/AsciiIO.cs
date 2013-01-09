@@ -5,10 +5,7 @@ using System.Text;
 
 namespace Swish.Server.IO
 {
-	/// <summary>
-	/// this is rather like a text reader/writer
-	/// </summary>
-	static class AsciiIO
+	public static class AsciiIO
 	{
 		public static void WriteHex(Stream stream, long value, bool write0x, int minimumDigits)
 		{

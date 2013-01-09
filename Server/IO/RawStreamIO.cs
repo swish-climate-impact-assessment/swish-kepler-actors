@@ -144,5 +144,29 @@ namespace Swish.Server.IO
 			stream.Write(value, 0, value.Length);
 		}
 
+
+		internal static t ReadEnum<t>(Stream stream)
+		{
+			string value = ReadString(stream);
+			t result = (t)Enum.Parse(typeof(t), value);
+			return result;
+		}
+
+		internal static void WriteEnum<t>(Stream stream, t value)
+		{
+			Write(stream, value.ToString());
+		}
+
+		internal static TimeSpan ReadTimeSpan(Stream stream)
+		{
+			long value = ReadLong(stream);
+			TimeSpan result = new TimeSpan(value);
+			return result;
+		}
+
+		internal static void Write(Stream stream, TimeSpan timeout)
+		{
+			Write(stream, timeout.Ticks);
+		}
 	}
 }

@@ -19,7 +19,6 @@ namespace Swish.Server
 			Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Method: " + method + " " + "Url: " + url);
 			if (!method.Equals("GET"))
 			{
-				Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Bad method");
 				//WriteOk(stream, "text/html");
 				//ServeFile(stream, "index.html");
 				return;
@@ -29,7 +28,6 @@ namespace Swish.Server
 			string cleanUrl = url.Trim().ToLower();
 			if (string.IsNullOrWhiteSpace(cleanUrl) || cleanUrl.Length == 0 || cleanUrl == "/" || cleanUrl == "\\")
 			{
-				Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Bad url");
 				if (File.Exists("index.html"))
 				{
 					WriteOk(stream, "text/html");
@@ -41,19 +39,16 @@ namespace Swish.Server
 
 			if (url == "/menu")
 			{
-				Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Menu");
 				ServeMenu(stream);
 				return;
 			} else if (url.StartsWith("/command"))
 			{
-				Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Command");
 				ServerCommandFunctions.ServeCommand(stream, url, server);
 				return;
 			}
 
 			if (url.Contains(".."))
 			{
-				Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Bad url");
 				if (File.Exists("index.html"))
 				{
 					WriteOk(stream, "text/html");

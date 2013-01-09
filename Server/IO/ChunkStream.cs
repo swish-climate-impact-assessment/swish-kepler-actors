@@ -70,6 +70,8 @@ namespace Swish.Server.IO
 		{
 			if (!disposing)
 			{
+				_readStream = null;
+				_writeStream = null;
 				return;
 			}
 			if (!_readMode)
@@ -79,9 +81,9 @@ namespace Swish.Server.IO
 				AsciiIO.Write(_writeStream, CRLFString);
 				AsciiIO.Write(_writeStream, CRLFString);
 			}
+			using (_readStream) { }
 			if (!_leaveOpen)
 			{
-				using (_readStream) { }
 				using (_writeStream) { }
 			}
 			_readStream = null;

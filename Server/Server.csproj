@@ -68,6 +68,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Server.cs" />
+    <Compile Include="ServerCommands\RunProcessCommand.cs" />
+    <Compile Include="ServerCommands\GetVersionServerCommand.cs" />
+    <Compile Include="ServerCommands\SendFileServerCommand.cs" />
     <Compile Include="ServerCommands\TerminateServerCommand.cs" />
     <Compile Include="ServerCommands\CreateDirectoryServerCommand.cs" />
     <Compile Include="ServerCommands\RunCodeServerCommand.cs" />

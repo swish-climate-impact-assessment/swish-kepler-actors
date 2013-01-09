@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using System.Diagnostics;
+using Swish.Server.IO;
 
 namespace Swish.ExecutableRedirector
 {
@@ -22,9 +24,15 @@ namespace Swish.ExecutableRedirector
 				}
 
 				string runArguments = string.Join(" ", arguments);
-				ProcessResult result = ProcessFunctions.RunProcess(toolFileName, runArguments, Environment.CurrentDirectory, false, TimeSpan.Zero, true, true, true);
+				//TimeSpan timeOut = new TimeSpan(0, 0, 24);
+				TimeSpan timeOut = TimeSpan.Zero;
+				ProcessResult result = ProcessFunctions.Run(toolFileName, runArguments, Environment.CurrentDirectory, false, timeOut, false, true, true);
 
 				Console.Write(result.Output);
+				if (!string.IsNullOrWhiteSpace(result.Error))
+				{
+					AsciiIO.Write(Process.GetCurrentProcess().StandardError.BaseStream, result.Error);
+				}
 				return result.ExitCode;
 			} catch (Exception error)
 			{

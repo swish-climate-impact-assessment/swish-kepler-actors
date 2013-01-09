@@ -36,19 +36,19 @@ namespace Swish
 		}
 
 
-		public int ColumnIndex(string name)
+		public int ColumnIndex(string variableName)
 		{
-			int head4Index = -1;
+			int headderIndex = -1;
 			for (int columnIndex = 0; columnIndex < Header.Count; columnIndex++)
 			{
 				string _name = Header[columnIndex];
-				if (_name == name)
+				if (_name == variableName)
 				{
-					head4Index = columnIndex;
+					headderIndex = columnIndex;
 					break;
 				}
 			}
-			return head4Index;
+			return headderIndex;
 		}
 
 		public List<int> ColunmAsInts(int columnIndex)
@@ -59,6 +59,17 @@ namespace Swish
 				string valueString = Records[recordIndex][columnIndex];
 				int value = int.Parse(valueString);
 				values.Add(value);
+			}
+			return values;
+		}
+
+		public List<string> ColunmValues(int columnIndex)
+		{
+			List<string> values = new List<string>();
+			for (int recordIndex = 0; recordIndex < Records.Count; recordIndex++)
+			{
+				string valueString = Records[recordIndex][columnIndex];
+				values.Add(valueString);
 			}
 			return values;
 		}

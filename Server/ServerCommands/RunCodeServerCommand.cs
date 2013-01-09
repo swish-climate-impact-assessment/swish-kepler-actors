@@ -1,16 +1,14 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Forms;
-using LibraryTypes.BootStrap;
-using Swish.Server.IO;
 using System.Net.Sockets;
+using Swish.Server.IO;
 
 namespace Swish.Server.ServerCommands
 {
 	public class RunCodeServerCommand: IServerCommand
 	{
-		public const string RunCodeCommand = "RunCode";
-		public string Name { get { return RunCodeCommand; } }
+		public const string Command = "RunCode";
+		public string Name { get { return Command; } }
 
 		public void Run(string command, Stream stream, TcpServer server)
 		{
@@ -19,24 +17,10 @@ namespace Swish.Server.ServerCommands
 			RawStreamIO.Write(stream, output);
 		}
 
-		private static string directoryBase = Path.GetTempFileName() + "_dir";
-		private static int directoryBaseCount = 0;
 		public static string RunCode(string code)
 		{
-			string codeDirectory = directoryBase + directoryBaseCount.ToString();
-			directoryBaseCount++;
-
-			string baseFileName = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
-
-			Directory.CreateDirectory(codeDirectory);
-			string codeFileName = Path.Combine(codeDirectory, baseFileName + ".cs");
-			File.WriteAllText(codeFileName, code);
-
-			string exeName = Path.Combine(codeDirectory, baseFileName + ".exe");
-			CSharpCompiler._Compile(codeDirectory, exeName, false);
-
-			ProcessResult result = ProcessFunctions.RunProcess(exeName, string.Empty, null, false, new TimeSpan(0, 1, 0), false, true, true);
-
+			string exeName = CSharpCompiler.MakeExecutable(code, true);
+			ProcessResult result = ProcessFunctions.Run(exeName, string.Empty, null, false, new TimeSpan(0, 1, 0), false, true, true);
 			return result.Output;
 		}
 
@@ -47,7 +31,7 @@ namespace Swish.Server.ServerCommands
 			using (TcpClient connection = new TcpClient(host, port))
 			using (NetworkStream stream = connection.GetStream())
 			{
-				string url = "/command?" + RunCodeServerCommand.RunCodeCommand;
+				string url = "/command?" + RunCodeServerCommand.Command;
 
 				IanServerFunctions.WriteLine(stream, "GET" + " " + url + " " + "HTTP1.1");
 				IanServerFunctions.WriteLine(stream, string.Empty);

@@ -129,7 +129,7 @@ namespace Swish
 					string outputFileName = splitArguments.OutputFileName();
 					List<MergeRecordResult> keep = splitArguments.EnumList<MergeRecordResult>(Arguments.DefaultArgumentPrefix + "keep", false, false);
 
-					string keepMergeString = FileFunctions.AdjustFileName(splitArguments.String(Arguments.DefaultArgumentPrefix + "keepMerge", false));
+				string keepMergeString = FileFunctions.AdjustFileName(splitArguments.String(Arguments.DefaultArgumentPrefix + "keepMerge", false));
 					bool keepMerge;
 					if (!string.IsNullOrWhiteSpace(keepMergeString))
 					{
@@ -138,6 +138,7 @@ namespace Swish
 					{
 						keepMerge = false;
 					}
+
 					Merge(input1FileName, input2FileName, variableNames, outputFileName, keepMerge, keep);
 					Console.Write(outputFileName);
 				}
@@ -216,7 +217,7 @@ namespace Swish
 					lines.Add("Current process heritage: ");
 
 					lines.AddRange(ProcessFunctions.WriteProcessHeritage().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
-					//lines.AddRange(ProcessFunctions.WriteSystemVariables().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
+					lines.AddRange(ProcessFunctions.WriteSystemVariables().Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
 					if (!silent)
 					{
 						SwishFunctions.MessageTextBox("Test display", lines, false);
@@ -309,6 +310,8 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
 			record.Arguments.Add(new Tuple<string, string>("format", format));
+			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Format";
 			record.Time = DateTime.Now;
@@ -363,6 +366,7 @@ namespace Swish
 			MetadataRecord record = new MetadataRecord();
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Compress";
 			record.Time = DateTime.Now;
@@ -436,6 +440,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("Variable", variableName));
 			record.Arguments.Add(new Tuple<string, string>("Type", type));
 			record.Arguments.Add(new Tuple<string, string>("Expression", expression));
+			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Generate";
 			record.Time = DateTime.Now;
@@ -559,7 +564,7 @@ namespace Swish
 		public static void Display(string inputFileName)
 		{
 			string arguments = string.Join(" ", Arguments.OperationArgument, DisplayClientOperation, Arguments.InputArgument, inputFileName);
-			ProcessFunctions.RunProcess(Application.ExecutablePath, arguments, Environment.CurrentDirectory, true, TimeSpan.Zero, false, false, true);
+			ProcessFunctions.Run(Application.ExecutablePath, arguments, Environment.CurrentDirectory, true, TimeSpan.Zero, false, false, true);
 		}
 
 		public static void DisplayClient(string inputFileName)
@@ -588,11 +593,11 @@ namespace Swish
 			} catch (Exception error)
 			{
 				string message = "failed to display " + inputFileName + Environment.NewLine + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
-				if (ExceptionFunctions.ForceVerbose)
-				{
-					message += ProcessFunctions.WriteProcessHeritage();
-					message += ProcessFunctions.WriteSystemVariables();
-				}
+				//if (ExceptionFunctions.ForceVerbose)
+				//{
+				//    message += ProcessFunctions.WriteProcessHeritage();
+				//    message += ProcessFunctions.WriteSystemVariables();
+				//}
 
 				SwishFunctions.MessageTextBox(message, false);
 			}
@@ -653,6 +658,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
+			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "RemoveColumns";
 			record.Time = DateTime.Now;
@@ -710,6 +716,7 @@ namespace Swish
 			MetadataRecord record = new MetadataRecord();
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Transpose";
 			record.Time = DateTime.Now;
@@ -772,6 +779,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("Expression", expression));
+			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Select";
 			record.Time = DateTime.Now;
@@ -835,6 +843,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
+			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "SelectColumns";
 			record.Time = DateTime.Now;
@@ -896,6 +905,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("Command", command));
+			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "StataCommand";
 			record.Time = DateTime.Now;
@@ -1040,6 +1050,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
 			record.Arguments.Add(new Tuple<string, string>("KeepMergeColumn", keepMergeColumn.ToString()));
+			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
 			if (keep != null)
 			{
 				string keepString = string.Join(" ", keep);
@@ -1123,6 +1134,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", input1FileName));
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", input2FileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Append";
 			record.Time = DateTime.Now;
@@ -1190,6 +1202,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("Variable", variable));
 			record.Arguments.Add(new Tuple<string, string>("Operation", operation.ToString()));
+			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Collapse";
 			record.Time = DateTime.Now;
@@ -1255,6 +1268,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
+			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Sort";
 			record.Time = DateTime.Now;
@@ -1333,6 +1347,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("Condition", condition));
 			record.Arguments.Add(new Tuple<string, string>("Value", value));
+			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Replace";
 			record.Time = DateTime.Now;
@@ -1388,6 +1403,7 @@ namespace Swish
 			MetadataRecord record = new MetadataRecord();
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
+			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Save";
 			record.Time = DateTime.Now;

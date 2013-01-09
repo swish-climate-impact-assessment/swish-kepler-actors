@@ -94,7 +94,7 @@ namespace Swish.Server
 			}
 		}
 
-		private static string BestDirectory
+		internal static string BestDirectory
 		{
 			get
 			{

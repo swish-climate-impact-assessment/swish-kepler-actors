@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Swish.Server;
+using System.Collections.Generic;
 
 namespace Swish.Tests
 {
@@ -37,6 +39,20 @@ namespace Swish.Tests
 		{
 			try
 			{
+
+				string leftFileName = @"C:\Users\u5265691\Desktop\FinalWorking\Replace1.csv";
+				string rightFileName = @"C:\Users\u5265691\Desktop\FinalWorking\Replace1Stata.csv";
+
+				if (!TablesSomewhatEqulivilent(leftFileName, rightFileName))
+				{
+					throw new Exception();
+				}
+
+				// missing argument
+				// Arguments splitArguments = new Arguments(@">operation merge >input1 D:\HEALTH FORECASTING\FINAL\../TAPM/Brisbane/dataset1/x >input2  >variables date zone group >keepMerge true");
+				// string operation = splitArguments.String(Arguments.OperationArgument, true);
+				// AdapterFunctions.RunOperation(operation, splitArguments);
+
 				/// Input / output 
 				/// 
 				/// The idea is that the data source is dynamicly resloved and can be:
@@ -46,10 +62,10 @@ namespace Swish.Tests
 				///		web service of some kind
 				/// 
 				/// 
+				new ProcessorFunctionsTests().ReceiveOutput();
 				new VersionFunctionsTests().Test();
 				new ServerUpdateTests().ExchangeFiles();
 				new TcpServerTests().GetIndex();
-
 				new MetadataTests().LoadMetadata();
 				new MetadataTests().ValuesWritten();
 				new MetadataTests().MetadataFileName();
@@ -105,6 +121,48 @@ namespace Swish.Tests
 			}
 
 
+		}
+
+		private static bool TablesSomewhatEqulivilent(string leftFileName, string rightFileName)
+		{
+			Csv left = CsvFunctions.Read(leftFileName);
+			Csv right = CsvFunctions.Read(rightFileName);
+
+			if (false
+				|| left.Header.Count != right.Header.Count
+				|| left.Records.Count != right.Records.Count
+				)
+			{
+				throw new Exception();
+			}
+
+			for (int leftIndex = 0; leftIndex < left.Header.Count; leftIndex++)
+			{
+				string leftVariable = left.Header[leftIndex];
+				int rightIndex = right.ColumnIndex(leftVariable);
+				if (rightIndex < 0)
+				{
+					throw new Exception();
+				}
+			}
+
+			for (int leftIndex = 0; leftIndex < left.Header.Count; leftIndex++)
+			{
+				string leftVariable = left.Header[leftIndex];
+				int rightIndex = right.ColumnIndex(leftVariable);
+
+				List<string> leftValues = left.ColunmValues(leftIndex);
+				List<string> rightValues = right.ColunmValues(rightIndex);
+
+				leftValues.Sort();
+				rightValues.Sort();
+				if (!EqualFunctions.Equal(leftValues, rightValues))
+				{
+					throw new Exception();
+				}
+			}
+
+			return true;
 		}
 
 	}

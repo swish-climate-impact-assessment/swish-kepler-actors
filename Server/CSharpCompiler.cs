@@ -1,31 +1,25 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.CSharp;
 
-namespace LibraryTypes.BootStrap
+namespace Swish.Server
 {
 	public static class CSharpCompiler
 	{
-		private static string directoryBase = Path.GetTempFileName() + "_dir";
-		private static int directoryBaseCount = 0;
-
-		public static string MakeExecutable(string code)
+		public static string MakeExecutable(string code, bool consoleApplication)
 		{
-			string codeDirectory = directoryBase + directoryBaseCount.ToString();
-			directoryBaseCount++;
+			string codeDirectory = FileFunctions.TempoaryDirectory();
 			Directory.CreateDirectory(codeDirectory);
-			File.WriteAllText(Path.Combine(codeDirectory, "Program.cs"), code);
-
-			string exeName = Path.Combine(codeDirectory, "Program.exe");
-
-			_Compile(codeDirectory, exeName, false);
-			return exeName;
+			string codeFileName =Path.Combine(codeDirectory, "Program.cs");
+			File.WriteAllText(codeFileName, code);
+			string executableName = Path.Combine(codeDirectory, "Program.exe");
+			Compile(codeDirectory, executableName, false, consoleApplication);
+			return executableName;
 		}
 
 		private static void AddCodeDirectory(string codeDirectory, List<string> sourceFiles)
@@ -51,7 +45,7 @@ namespace LibraryTypes.BootStrap
 			}
 		}
 
-		public static Assembly _Compile(string codeDirectory, string outputFileName, bool generateInMemory)
+		public static Assembly Compile(string codeDirectory, string outputFileName, bool generateInMemory, bool consoleApplication)
 		{
 			List<string> dllFileNames = new List<string>(new string[]{
 				Assembly.GetAssembly(typeof(_AppDomain)).Location,
@@ -77,7 +71,13 @@ namespace LibraryTypes.BootStrap
 			CSharpCodeProvider provider = new CSharpCodeProvider();
 
 			options.IncludeDebugInformation = false;
-			options.CompilerOptions = "/optimize /unsafe+ /target:winexe";
+			if (!consoleApplication)
+			{
+				options.CompilerOptions = "/optimize /unsafe+ /target:winexe";
+			} else
+			{
+				options.CompilerOptions = "/optimize /unsafe+";
+			}
 			options.WarningLevel = 0;
 			options.TreatWarningsAsErrors = false;
 

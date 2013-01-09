@@ -42,7 +42,7 @@ namespace Swish.Server.IO
 			{
 				if (_stream != null)
 				{
-					throw new Exception("Ascii stream not closed ");
+					throw new Exception("Stream not closed ");
 				}
 				return;
 			}

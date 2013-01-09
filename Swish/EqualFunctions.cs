@@ -1,10 +1,13 @@
 ﻿using System.IO;
 using System;
+using System.Collections.Generic;
 
 namespace Swish
 {
 	public static class EqualFunctions
 	{
+		public delegate bool EqualFunction<t>(t left, t right);
+
 		public static bool FilesEqual(string leftFileName, string rightFileName)
 		{
 			using (FileStream left = new FileStream(leftFileName, FileMode.Open, FileAccess.Read))
@@ -123,6 +126,51 @@ namespace Swish
 
 			return true;
 		}
+
+
+		public static bool Equal<t>(List<t> left, List<t> right, EqualFunction<t> equalFunction)
+		{
+			if (left == null)
+			{
+				if (right != null)
+				{
+					return false;
+				}
+				return true;
+			} else
+			{
+				if (right == null)
+				{
+					return false;
+				}
+			}
+
+			if (left.Count != right.Count)
+			{
+				return false;
+			}
+
+			for (int itemIndex = 0; itemIndex < left.Count; itemIndex++)
+			{
+				if (!equalFunction(left[itemIndex], right[itemIndex]))
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		public static bool Equal(List<string> left, List<string> right)
+		{
+			return Equal(left, right, Equal);
+		}
+
+		public static bool Equal(string left, string right)
+		{
+			return left == right;
+		}
+
 
 	}
 }

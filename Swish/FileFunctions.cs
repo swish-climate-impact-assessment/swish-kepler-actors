@@ -185,7 +185,22 @@ namespace Swish
 
 		private static string _tempoaryFileBase = string.Empty;
 		private static int _tempoaryFileCount = 0;
+
 		private static string TempoaryFileName()
+		{
+			if (string.IsNullOrWhiteSpace(_tempoaryFileBase))
+			{
+				_tempoaryFileBase = Path.GetTempFileName();
+				if (File.Exists(_tempoaryFileBase))
+				{
+					File.Delete(_tempoaryFileBase);
+				}
+			}
+			_tempoaryFileCount++;
+			return _tempoaryFileBase + _tempoaryFileCount;
+		}
+
+		public static string TempoaryDirectory()
 		{
 			if (string.IsNullOrWhiteSpace(_tempoaryFileBase))
 			{
@@ -234,11 +249,10 @@ namespace Swish
 			} else if (progress >= 0)
 			{
 				Console.WriteLine(progress + "%" + message);
-			} else
+			} else if (ExceptionFunctions.ForceVerbose)
 			{
 				Console.WriteLine(message);
 			}
-
 		}
 
 		public static void GetFilesAndDirectories(out List<string> directoryList, out List<string> fileList, string directory, List<string> excludeDirectories)
@@ -262,7 +276,10 @@ namespace Swish
 					fileList.AddRange(Directory.GetFiles(directoryName));
 				} catch (Exception error)
 				{
-					Console.Write(ExceptionFunctions.Write(error, true));
+					if (ExceptionFunctions.ForceVerbose)
+					{
+						Console.Write(ExceptionFunctions.Write(error, true));
+					}
 				}
 			}
 		}

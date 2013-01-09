@@ -14,6 +14,9 @@ namespace Swish.Server.ServerCommands
 			operations.Add(new RunCodeServerCommand());
 			operations.Add(new CreateDirectoryServerCommand());
 			operations.Add(new TerminateServerCommand());
+			operations.Add(new SendFileServerCommand());
+			operations.Add(new GetVersionServerCommand());
+			operations.Add(new RunProcessCommand());
 		}
 
 		public static void ServeCommand(Stream stream, string url, TcpServer server)
@@ -33,7 +36,6 @@ namespace Swish.Server.ServerCommands
 				IServerCommand runCommand = operations[operationIndex];
 				if (runCommand.Name.ToLower() == command.ToLower())
 				{
-					Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Command: \"" + command + "\"");
 					string commandArguments = command.Substring(runCommand.Name.Length);
 
 					runCommand.Run(commandArguments, stream, server);

@@ -10,7 +10,7 @@ namespace Swish
 		{
 			string fileName = ExecutablePath;
 
-			ProcessFunctions.RunProcess(fileName, "", Environment.CurrentDirectory, true, TimeSpan.Zero, false, false, false);
+			ProcessFunctions.Run(fileName, "", Environment.CurrentDirectory, true, TimeSpan.Zero, false, false, false);
 		}
 
 		public static void RunWorkflow(string workflowFileName, List<Tuple<string, string>> parameters)
@@ -31,7 +31,7 @@ namespace Swish
 			}
 
 			string workingDirectory = Path.GetDirectoryName(ExecutablePath);
-			ProcessFunctions.RunProcess(ExecutablePath, arguments, workingDirectory, false, new TimeSpan(0, 0, 0, 8, 0), false, false, false);
+			ProcessFunctions.Run(ExecutablePath, arguments, workingDirectory, false, new TimeSpan(0, 0, 0, 8, 0), false, false, false);
 		}
 
 		private static List<string> PotentialKeplerPaths

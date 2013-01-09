@@ -28,11 +28,11 @@ namespace Swish.CollapseAdapter
 			} catch (Exception error)
 			{
 				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
-				if (ExceptionFunctions.ForceVerbose)
-				{
-					message += ProcessFunctions.WriteProcessHeritage();
-					message += ProcessFunctions.WriteSystemVariables();
-				}
+				//if (ExceptionFunctions.ForceVerbose)
+				//{
+				//    message += ProcessFunctions.WriteProcessHeritage();
+				//    message += ProcessFunctions.WriteSystemVariables();
+				//}
 				Console.Write(message);
 				if (ExceptionFunctions.ForceVerbose)
 				{

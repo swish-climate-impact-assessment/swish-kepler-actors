@@ -10,27 +10,26 @@ namespace Swish.Server.ServerCommands
 {
 	public class UpdateServerCommand: IServerCommand
 	{
-		public const string UpdateServer2Command = "UpdateServer2";
-		public string Name { get { return UpdateServer2Command; } }
+		public const string Command = "UpdateServer2";
+		public string Name { get { return Command; } }
 
 		public void Run(string command, Stream stream, TcpServer server)
 		{
-			string directoryBase = VersionFunctions.NextDirectory;
+			string directory = VersionFunctions.NextDirectory;
 
-			if (Directory.Exists(directoryBase))
+			if (Directory.Exists(directory))
 			{
-				Directory.Delete(directoryBase, true);
+				Directory.Delete(directory, true);
 			}
-			Directory.CreateDirectory(directoryBase);
+			Directory.CreateDirectory(directory);
 
 			int fileCount = RawStreamIO.ReadInt(stream);
-
 			for (int fileIndex = 0; fileIndex < fileCount; fileIndex++)
 			{
-				ReceiveFile(stream, directoryBase);
+				SendFileServerCommand.ReceiveFile(stream, directory);
 			}
 
-			ProcessFunctions.RunProcess(VersionFunctions.NextExecutable, "HttpServer", null, true, TimeSpan.Zero, true, false, true);
+			ProcessFunctions.Run(VersionFunctions.NextExecutable, "HttpServer", null, true, TimeSpan.Zero, true, false, true);
 
 			string endFileName = Path.Combine(Application.StartupPath, "End");
 			File.WriteAllText(endFileName, string.Empty);
@@ -43,82 +42,48 @@ namespace Swish.Server.ServerCommands
 			} catch { }
 		}
 
-		public static void ReceiveFile(Stream stream, string baseDirectory)
+		public static void UpdateServer2(string host, string directory)
 		{
-			string relatativeFileName = RawStreamIO.ReadString(stream);
+			string versionDirectory = GetVersionServerCommand.GetVersion(host, GetVersionServerCommand.VersionType.Next);
+			CreateDirectoryServerCommand.CreateDirectory(host, versionDirectory);
 
-
-			byte[] remoteMd5 = RawStreamIO.ReadByteArray(stream);
-
-			string localFileName = Path.Combine(Application.StartupPath, relatativeFileName);
-			string newFileName = Path.Combine(baseDirectory, relatativeFileName);
-
-			if (File.Exists(localFileName))
+			List<string> files = GetBinaries(directory);
+			for (int fileIndex = 0; fileIndex < files.Count; fileIndex++)
 			{
-				byte[] localMd5 = FileFunctions.GetMd5(localFileName);
-
-				if (EqualFunctions.Equal(remoteMd5, localMd5))
-				{
-					Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Use local file: " + relatativeFileName);
-					RawStreamIO.Write(stream, false);
-					File.Copy(localFileName, newFileName);
-					return;
-				}
-			}
-			Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Receive file: " + relatativeFileName);
-			RawStreamIO.Write(stream, true);
-
-			string destinationDirectory = Path.GetDirectoryName(newFileName);
-			FileFunctions.CreateDirectory(destinationDirectory,null);
-
-			long length = RawStreamIO.ReadLong(stream);
-
-			if (length == 0)
-			{
-				using (File.Create(newFileName)) { }
-				return;
+				string fileName = files[fileIndex];
+				SendFileServerCommand.SendFile(host, fileName, directory);
 			}
 
-			using (ChunkStream __stream = new ChunkStream(stream, true, true))
-			using (GZipStream _stream = new GZipStream(__stream, CompressionMode.Decompress, true))
-			using (FileStream fileStream = new FileStream(newFileName, FileMode.Create, FileAccess.Write))
-			{
-				StreamFunctions.CopyStream(fileStream, _stream, length);
-			}
+			string executableName = Path.Combine(versionDirectory, "Swish.Server.exe");
+			RunProcessCommand.Run(host, executableName, "HttpServer", null, true, TimeSpan.Zero, true, false, true);
+
+			TerminateServerCommand.Terminate(host);
 		}
 
-		public static void SendFile(Stream stream, string fileName)
+		public static void UpdateServer(string host, string directory)
 		{
-			string relativeFileName = FileFunctions.GetRelativePath(fileName, Application.StartupPath);
-			Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Send file: " + relativeFileName);
-			RawStreamIO.Write(stream, relativeFileName);
+			List<string> files = GetBinaries(directory);
 
-			byte[] md5 = FileFunctions.GetMd5(fileName);
-			RawStreamIO.Write(stream, md5);
-
-			if (!RawStreamIO.ReadBool(stream))
+			int port = 39390;
+			using (TcpClient connection = new TcpClient(host, port))
+			using (NetworkStream stream = connection.GetStream())
 			{
-				return;
-			}
+				string url = "/command?" + UpdateServerCommand.Command;
 
-			using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-			{
-				RawStreamIO.Write(stream, fileStream.Length);
+				IanServerFunctions.WriteLine(stream, "GET" + " " + url + " " + "HTTP1.1");
+				IanServerFunctions.WriteLine(stream, string.Empty);
 
-				if (fileStream.Length == 0)
+				RawStreamIO.Write(stream, files.Count);
+				for (int fileIndex = 0; fileIndex < files.Count; fileIndex++)
 				{
-					return;
-				}
-
-				using (ChunkStream __stream = new ChunkStream(stream, false, true))
-				using (GZipStream _stream = new GZipStream(__stream, CompressionMode.Compress, true))
-				{
-					StreamFunctions.CopyStream(_stream, fileStream, fileStream.Length);
+					string fileName = files[fileIndex];
+					SendFileServerCommand.SendFile(stream, fileName, directory);
 				}
 			}
+
 		}
 
-		public static void SendFiles(string host, string directory)
+		private static List<string> GetBinaries(string directory)
 		{
 			List<string> files = new List<string>();
 			List<string> directories = new List<string>();
@@ -135,24 +100,7 @@ namespace Swish.Server.ServerCommands
 					fileIndex--;
 				}
 			}
-
-			int port = 39390;
-			using (TcpClient connection = new TcpClient(host, port))
-			using (NetworkStream stream = connection.GetStream())
-			{
-				string url = "/command?" + UpdateServerCommand.UpdateServer2Command;
-
-				IanServerFunctions.WriteLine(stream, "GET" + " " + url + " " + "HTTP1.1");
-				IanServerFunctions.WriteLine(stream, string.Empty);
-
-				RawStreamIO.Write(stream, files.Count);
-				for (int fileIndex = 0; fileIndex < files.Count; fileIndex++)
-				{
-					string fileName = files[fileIndex];
-					SendFile(stream, fileName);
-				}
-			}
-
+			return files;
 		}
 	}
 }

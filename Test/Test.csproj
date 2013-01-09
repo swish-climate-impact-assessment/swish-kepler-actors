@@ -41,6 +41,7 @@
     <Compile Include="ActorTests.cs" />
     <Compile Include="ArgumentFunctionsTests.cs" />
     <Compile Include="AdapterTests.cs" />
+    <Compile Include="ProcessorFunctionsTests.cs" />
     <Compile Include="MetadataTests.cs" />
     <Compile Include="ServerUpdateTests.cs" />
     <Compile Include="TcpServerTest.cs" />

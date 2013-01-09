@@ -196,11 +196,8 @@ namespace Swish.Server
 					if (client.Client.RemoteEndPoint != null && client.Client.RemoteEndPoint is IPEndPoint)
 					{
 						IPEndPoint endPoint = client.Client.RemoteEndPoint as IPEndPoint;
-						Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Client connected from " + endPoint.Address + ":" + endPoint.Port + " " + DateTime.Now.ToLocalTime());
-					} else
-					{
-						Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Client connected");
-					}
+						Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + endPoint.Address + ":" + endPoint.Port + " " + DateTime.Now.ToLocalTime());
+					} 
 					_function(stream, client, this);
 					stream.Flush();
 					client.Close();
@@ -209,7 +206,6 @@ namespace Swish.Server
 			{
 				Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + ExceptionFunctions.Write(error, false));
 			}
-			Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Client disconnected");
 		}
 
 	}

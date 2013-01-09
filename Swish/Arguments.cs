@@ -35,13 +35,7 @@ namespace Swish
 		{
 			get
 			{
-				string argumentText = string.Empty;
-				for (int argumentIndex = 0; argumentIndex < _splitArguments.Count; argumentIndex++)
-				{
-					Tuple<string, string> argument = _splitArguments[argumentIndex];
-					argumentText += argument.Item1 + " " + argument.Item2 + " ";
-				}
-				return argumentText;
+				return ToString();
 			}
 		}
 
@@ -201,6 +195,7 @@ namespace Swish
 			{
 				if (throwOnMissing)
 				{
+					SwishFunctions.MessageTextBox("Argument missing \"" + name + "\"" + Environment.NewLine + ToString(), false);
 					throw new Exception("Argument missing \"" + name + "\"");
 				}
 				return string.Empty;
@@ -208,7 +203,8 @@ namespace Swish
 			string value = _splitArguments[listIndex].Item2;
 			if (string.IsNullOrWhiteSpace(value) && throwOnMissing)
 			{
-				throw new Exception("Argument missing \"" + name + "\"");
+				SwishFunctions.MessageTextBox("Argument value missing \"" + name + "\"" + Environment.NewLine + ToString(), false);
+				throw new Exception("Argument value missing \"" + name + "\"");
 			}
 
 			value = Decode(value);
@@ -287,6 +283,17 @@ namespace Swish
 				File.Delete(outputFileName);
 			}
 			return outputFileName;
+		}
+
+		public override string ToString()
+		{
+			string argumentText = string.Empty;
+			for (int argumentIndex = 0; argumentIndex < _splitArguments.Count; argumentIndex++)
+			{
+				Tuple<string, string> argument = _splitArguments[argumentIndex];
+				argumentText += argument.Item1 + " " + argument.Item2 + " ";
+			}
+			return argumentText;
 		}
 
 	}

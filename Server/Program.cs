@@ -17,13 +17,12 @@ namespace Swish.Server
 				string bestVersionFileName = VersionFunctions.BestExecutable;
 				if (!string.IsNullOrWhiteSpace(bestVersionFileName) && bestVersionFileName != Application.ExecutablePath)
 				{
-					ProcessFunctions.RunProcess(bestVersionFileName, string.Join(" ", arguments), null, true, TimeSpan.Zero, true, false, true);
-					Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "return");
+					ProcessFunctions.Run(bestVersionFileName, string.Join(" ", arguments), null, true, TimeSpan.Zero, true, false, true);
 					return;
 				}
 			} catch (Exception errorException)
 			{
-				Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + ExceptionFunctions.Write(errorException,false));
+				Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + ExceptionFunctions.Write(errorException, false));
 			}
 
 			try
@@ -36,7 +35,7 @@ namespace Swish.Server
 				{
 					try
 					{
-						ProcessFunctions.RunProcess("sudo", "iptables -I INPUT -p tcp --dport 39390 -j ACCEPT", null, false, TimeSpan.Zero, true, false, false);
+						ProcessFunctions.Run("sudo", "iptables -I INPUT -p tcp --dport 39390 -j ACCEPT", null, false, TimeSpan.Zero, true, false, false);
 					} catch (Exception errorException2)
 					{
 						Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + ExceptionFunctions.Write(errorException2, true));
@@ -72,7 +71,6 @@ namespace Swish.Server
 				}
 				if (Terminate)
 				{
-					Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Terminate");
 					using (server) { }
 					server = null;
 					break;
@@ -113,7 +111,7 @@ namespace Swish.Server
 					}
 				} catch (Exception errorException2)
 				{
-					Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + ExceptionFunctions.Write(errorException2,true));
+					Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + ExceptionFunctions.Write(errorException2, true));
 					Thread.Sleep(5000);
 					continue;
 				}
@@ -125,7 +123,6 @@ namespace Swish.Server
 		{
 			string fileName = "Swish.Server";
 
-			Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Close other servers: " + fileName);
 
 			Process[] processes = Process.GetProcesses();
 			Process currentProcess = Process.GetCurrentProcess();
@@ -170,7 +167,6 @@ namespace Swish.Server
 
 		private static void DisplayStartupInformation()
 		{
-			Console.WriteLine();
 
 			if (!ProcessFunctions.MonoEnvironment)
 			{

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
 
 namespace Swish
 {
@@ -179,23 +179,33 @@ namespace Swish
 			return parent;
 		}
 
-		public static ProcessResult RunProcess(string executableName, string arguments,
-			string workingDirectory, bool returnBeforeExit, TimeSpan timeout, bool console, bool readOutput, bool dotNet
-			)
+		public static ProcessResult Run(string executableName, string arguments, string workingDirectory, bool returnBeforeExit, TimeSpan timeout, bool console, bool readOutput, bool dotNet)
 		{
+			if (console && readOutput)
+			{
+				throw new Exception("Cannot read console output");
+			}
+
 			ProcessResult result = new ProcessResult();
 			using (Process process = new Process())
 			{
 				if (!dotNet || !MonoEnvironment)
 				{
 					process.StartInfo.FileName = executableName;
-					process.StartInfo.Arguments = arguments;
-					Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Run process: " + executableName + " " + arguments);
+					if (!string.IsNullOrWhiteSpace(arguments))
+					{
+						process.StartInfo.Arguments = arguments;
+					}
 				} else
 				{
 					process.StartInfo.FileName = "mono";
-					process.StartInfo.Arguments = executableName + " " + arguments;
-					Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Run process : mono " + executableName + " " + arguments);
+					if (!string.IsNullOrWhiteSpace(arguments))
+					{
+						process.StartInfo.Arguments = executableName + " " + arguments;
+					} else
+					{
+						process.StartInfo.Arguments = executableName;
+					}
 				}
 
 				if (!string.IsNullOrWhiteSpace(workingDirectory))
@@ -224,18 +234,23 @@ namespace Swish
 				{
 					process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 					process.StartInfo.UseShellExecute = false;
-					process.StartInfo.RedirectStandardOutput = true;
-					process.StartInfo.RedirectStandardError = true;
-				} else
-				{
 					if (readOutput)
 					{
-						throw new Exception("Cannot read console output");
+						process.StartInfo.RedirectStandardOutput = true;
+						process.StartInfo.RedirectStandardError = true;
+						process.OutputDataReceived += result.OutputDataReceived;
+						process.ErrorDataReceived += result.ErrorDataReceived;
 					}
+				} else
+				{
 					process.StartInfo.UseShellExecute = true;
 				}
 				process.Start();
-				//WaitProcessActive(process);
+				if (readOutput)
+				{
+					process.BeginOutputReadLine();
+					process.BeginErrorReadLine();
+				}
 
 				bool exited = WaitProcessEnd(process, timeout);
 				if (!exited)
@@ -247,14 +262,14 @@ namespace Swish
 				}
 
 				result.ExitCode = process.ExitCode;
-				if (readOutput)
-				{
-					result.Output = process.StandardError.ReadToEnd();
-					result.Output += process.StandardOutput.ReadToEnd();
-				} else
-				{
-					result.Output = string.Empty;
-				}
+				//if (readOutput)
+				//{
+				//    result.Output = process.StandardError.ReadToEnd();
+				//    result.Output += process.StandardOutput.ReadToEnd();
+				//} else
+				//{
+				//    result.Output = string.Empty;
+				//}
 				process.Close();
 			}
 			return result;

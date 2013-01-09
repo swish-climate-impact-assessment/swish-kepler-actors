@@ -20,19 +20,19 @@ namespace Swish.Tests
 
 			using (MemoryStream stream = new MemoryStream())
 			{
-				UpdateServerCommand.SendFile(stream, fileName);
+				string baseDirectory = Path.Combine(Path.GetTempPath(), "ExchangeFiles");
+				SendFileServerCommand.SendFile(stream, fileName, baseDirectory);
 				long position1 = stream.Position;
 
 				long expected = "100".Length + "\r\n".Length + dataLength + "\r\n".Length + "0".Length + "\r\n".Length + "\r\n".Length;
 
-				UpdateServerCommand.SendFile(stream, fileName);
+				SendFileServerCommand.SendFile(stream, fileName, baseDirectory);
 				long position2 = stream.Position;
 
 				stream.Position = 0;
 
-				string baseDirectory = Path.Combine(Path.GetTempPath(), "ExchangeFiles");
 				FileFunctions.CreateDirectory(baseDirectory,null);
-				UpdateServerCommand.ReceiveFile(stream, baseDirectory);
+				SendFileServerCommand.ReceiveFile(stream, baseDirectory);
 				if (stream.Position != position1)
 				{
 					throw new Exception();
@@ -59,7 +59,7 @@ namespace Swish.Tests
 					}
 				}
 
-				UpdateServerCommand.ReceiveFile(stream, baseDirectory);
+				SendFileServerCommand.ReceiveFile(stream, baseDirectory);
 				if (stream.Position != position2)
 				{
 					throw new Exception();

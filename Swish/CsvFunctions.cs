@@ -6,12 +6,12 @@ namespace Swish
 {
 	public static class CsvFunctions
 	{
-		public static Csv Read(string outputFileName)
+		public static Csv Read(string fileName)
 		{
 			Csv table = new Csv();
-			List<string> output = new List<string>(File.ReadAllLines(outputFileName));
+			string[] output = File.ReadAllLines(fileName);
 			List<List<string>> _table = new List<List<string>>();
-			for (int lineIndex = 0; lineIndex < output.Count; lineIndex++)
+			for (int lineIndex = 0; lineIndex < output.Length; lineIndex++)
 			{
 				string line = output[lineIndex];
 				List<string> items = new List<string>(line.Split(','));
@@ -32,7 +32,7 @@ namespace Swish
 
 		public static bool Equal(Csv left, Csv right)
 		{
-			if (left  == null)
+			if (left == null)
 			{
 				if (right == null)
 				{
@@ -49,7 +49,7 @@ namespace Swish
 				return false;
 			}
 
-			for (int headerIndex = 0;  headerIndex < left.Header.Count;  headerIndex++)
+			for (int headerIndex = 0; headerIndex < left.Header.Count; headerIndex++)
 			{
 				string leftName = left.Header[headerIndex];
 				string rightName = right.Header[headerIndex];

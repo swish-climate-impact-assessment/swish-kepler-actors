@@ -63,7 +63,7 @@ namespace Swish.SimpleInstaller
 				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
 				if (ExceptionFunctions.ForceVerbose)
 				{
-					message += ProcessFunctions.WriteProcessHeritage();
+					//message += ProcessFunctions.WriteProcessHeritage();
 					message += ProcessFunctions.WriteSystemVariables();
 				}
 				Console.Write(message);

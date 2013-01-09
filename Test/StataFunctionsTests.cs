@@ -36,7 +36,7 @@ namespace Swish.Tests
 			string workingDirectory = Path.GetDirectoryName(doFileName);
 
 			string stataExecutable = StataFunctions.ExecutablePath;
-			ProcessFunctions.RunProcess(stataExecutable, arguments, workingDirectory, false, TimeSpan.Zero, false, false, false);
+			ProcessFunctions.Run(stataExecutable, arguments, workingDirectory, false, TimeSpan.Zero, false, false, false);
 
 			if (!FileFunctions.FileExists(outputFile))
 			{

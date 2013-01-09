@@ -9,8 +9,8 @@ namespace Swish.Server.ServerCommands
 {
 	public class TerminateServerCommand: IServerCommand
 	{
-		public const string TerminateCommand = "Terminate";
-		public string Name { get { return TerminateCommand; } }
+		public const string Command = "Terminate";
+		public string Name { get { return Command; } }
 
 		public void Run(string command, Stream stream, TcpServer server)
 		{
@@ -19,13 +19,10 @@ namespace Swish.Server.ServerCommands
 
 		internal static void Terminate(TcpServer server)
 		{
-			Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Terminate");
 			Thread.CurrentThread.IsBackground = true;
 
-			Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Terminate = true");
 			Swish.Server.Program.Terminate = true;
 
-			Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "server.Close()");
 			server.Close();
 			string endFileName = Path.Combine(Application.StartupPath, "End");
 			File.WriteAllText(endFileName, "");
@@ -36,7 +33,6 @@ namespace Swish.Server.ServerCommands
 			{
 				if ((DateTime.Now - startTime) > timeOut)
 				{
-					Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Timeout");
 					break;
 				}
 				Thread.Sleep(100);
@@ -51,13 +47,11 @@ namespace Swish.Server.ServerCommands
 			killThread.IsBackground = true;
 			killThread.Start();
 
-			Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Application.Exit()");
 			Application.Exit();
 		}
 
 		private static void Terminate()
 		{
-			Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + "Process.GetCurrentProcess().Kill()");
 			Process.GetCurrentProcess().Kill();
 		}
 
@@ -67,7 +61,7 @@ namespace Swish.Server.ServerCommands
 			using (TcpClient connection = new TcpClient(host, port))
 			using (NetworkStream stream = connection.GetStream())
 			{
-				string url = "/command?" + TerminateServerCommand.TerminateCommand;
+				string url = "/command?" + TerminateServerCommand.Command;
 
 				IanServerFunctions.WriteLine(stream, "GET" + " " + url + " " + "HTTP1.1");
 				IanServerFunctions.WriteLine(stream, string.Empty);

@@ -150,7 +150,7 @@ namespace Swish.SimpleInstaller
 			} else if (progress >= 0)
 			{
 				Console.WriteLine(progress + "%" + message);
-			} else
+			} else if (ExceptionFunctions.ForceVerbose)
 			{
 				Console.WriteLine(message);
 			}
