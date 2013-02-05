@@ -14,6 +14,8 @@ namespace Swish
 		public const string DisplayClientOperation = "displayClient";
 		public const string DisplayOperation = "display";
 		public const string DoScriptOperation = "doScript";
+		public const string FileNameOperation = "fileName";
+		public const string FileNameWithoutExtensionOperation = "fileNameWithoutExtension";
 		public const string FormatOperation = "format";
 		public const string GenerateOperation = "generate";
 		public const string MergeOperation = "merge";
@@ -27,6 +29,7 @@ namespace Swish
 		public const string TemporaryFileNameOperation = "temporaryFileName";
 		public const string TestOperation = "test";
 		public const string TransposeOperation = "transpose";
+		private static bool RecordDoScript = false;
 
 		public static void RunOperation(string operation, Arguments splitArguments)
 		{
@@ -49,6 +52,22 @@ namespace Swish
 					string outputFileName = splitArguments.OutputFileName();
 					Compress(inputFileName, outputFileName);
 					Console.Write(outputFileName);
+				}
+				break;
+
+			case FileNameOperation:
+				{
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+					string fileName = Path.GetFileName(inputFileName);
+					Console.Write(fileName);
+				}
+				break;
+
+			case FileNameWithoutExtensionOperation:
+				{
+					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+					string fileName = Path.GetFileNameWithoutExtension(inputFileName);
+					Console.Write(fileName);
 				}
 				break;
 
@@ -129,7 +148,7 @@ namespace Swish
 					string outputFileName = splitArguments.OutputFileName();
 					List<MergeRecordResult> keep = splitArguments.EnumList<MergeRecordResult>(Arguments.DefaultArgumentPrefix + "keep", false, false);
 
-				string keepMergeString = FileFunctions.AdjustFileName(splitArguments.String(Arguments.DefaultArgumentPrefix + "keepMerge", false));
+					string keepMergeString = FileFunctions.AdjustFileName(splitArguments.String(Arguments.DefaultArgumentPrefix + "keepMerge", false));
 					bool keepMerge;
 					if (!string.IsNullOrWhiteSpace(keepMergeString))
 					{
@@ -310,7 +329,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
 			record.Arguments.Add(new Tuple<string, string>("format", format));
-			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Format";
@@ -366,7 +385,7 @@ namespace Swish
 			MetadataRecord record = new MetadataRecord();
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
-			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Compress";
 			record.Time = DateTime.Now;
@@ -440,7 +459,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("Variable", variableName));
 			record.Arguments.Add(new Tuple<string, string>("Type", type));
 			record.Arguments.Add(new Tuple<string, string>("Expression", expression));
-			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Generate";
 			record.Time = DateTime.Now;
@@ -658,7 +677,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
-			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "RemoveColumns";
 			record.Time = DateTime.Now;
@@ -716,7 +735,7 @@ namespace Swish
 			MetadataRecord record = new MetadataRecord();
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
-			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Transpose";
 			record.Time = DateTime.Now;
@@ -779,7 +798,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("Expression", expression));
-			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Select";
 			record.Time = DateTime.Now;
@@ -843,7 +862,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
-			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "SelectColumns";
 			record.Time = DateTime.Now;
@@ -905,7 +924,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("Command", command));
-			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "StataCommand";
 			record.Time = DateTime.Now;
@@ -917,15 +936,15 @@ namespace Swish
 
 		public static void Merge(string input1FileName, string input2FileName, List<string> variableNames, string outputFileName, bool keepMergeColumn, List<MergeRecordResult> keep)
 		{
-			if (!FileFunctions.FileExists(input1FileName))
-			{
-				throw new Exception("cannot find file \"" + input1FileName + "\"");
-			}
+			//if (!FileFunctions.FileExists(input1FileName))
+			//{
+			//    throw new Exception("cannot find file \"" + input1FileName + "\"");
+			//}
 
-			if (!FileFunctions.FileExists(input2FileName))
-			{
-				throw new Exception("cannot find file \"" + input2FileName + "\"");
-			}
+			//if (!FileFunctions.FileExists(input2FileName))
+			//{
+			//    throw new Exception("cannot find file \"" + input2FileName + "\"");
+			//}
 
 			if (
 			Path.GetFullPath(input1FileName) == Path.GetFullPath(outputFileName)
@@ -981,31 +1000,35 @@ namespace Swish
 			line = StataScriptFunctions.SortCommand(variableNames);
 			lines.Add(line);
 
-			line = "merge 1:1 " + StataScriptFunctions.VariableList(variableNames) + " using \"" + intermediateFileName + "\", force ";
-			if (keep != null && keep.Count > 0)
-			{
-				line += "keep(";
+			//line = "merge 1:1 " + StataScriptFunctions.VariableList(variableNames) + " using \"" + intermediateFileName + "\", force ";
+			//if (keep != null && keep.Count > 0)
+			//{
+			//    line += "keep(";
 
-				if (keep.Contains(MergeRecordResult.Match))
-				{
-					line += "match ";
-				}
-				if (keep.Contains(MergeRecordResult.MatchConflict))
-				{
-					line += "match_conflict ";
-				}
-				if (keep.Contains(MergeRecordResult.MatchUpdate))
-				{
-					line += "match_update ";
-				}
-				if (keep.Contains(MergeRecordResult.Using))
-				{
-					line += "using ";
-				}
+			//    if (keep.Contains(MergeRecordResult.Match))
+			//    {
+			//        line += "match ";
+			//    }
+			//    if (keep.Contains(MergeRecordResult.MatchConflict))
+			//    {
+			//        line += "match_conflict ";
+			//    }
+			//    if (keep.Contains(MergeRecordResult.MatchUpdate))
+			//    {
+			//        line += "match_update ";
+			//    }
+			//    if (keep.Contains(MergeRecordResult.Using))
+			//    {
+			//        line += "using ";
+			//    }
 
-				line += ") ";
-			}
+			//    line += ") ";
+			//}
+			//lines.Add(line);
+
+			line = "merge " + StataScriptFunctions.VariableList(variableNames) + ", using \"" + intermediateFileName + "\"";
 			lines.Add(line);
+
 			if (!keepMergeColumn)
 			{
 				lines.Add("drop " + StataScriptFunctions.MergeColumnName);
@@ -1050,7 +1073,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
 			record.Arguments.Add(new Tuple<string, string>("KeepMergeColumn", keepMergeColumn.ToString()));
-			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			if (keep != null)
 			{
 				string keepString = string.Join(" ", keep);
@@ -1134,7 +1157,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", input1FileName));
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", input2FileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
-			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Append";
 			record.Time = DateTime.Now;
@@ -1202,7 +1225,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("Variable", variable));
 			record.Arguments.Add(new Tuple<string, string>("Operation", operation.ToString()));
-			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Collapse";
 			record.Time = DateTime.Now;
@@ -1268,7 +1291,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
-			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Sort";
 			record.Time = DateTime.Now;
@@ -1347,7 +1370,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("Condition", condition));
 			record.Arguments.Add(new Tuple<string, string>("Value", value));
-			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Replace";
 			record.Time = DateTime.Now;
@@ -1403,7 +1426,7 @@ namespace Swish
 			MetadataRecord record = new MetadataRecord();
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
-			record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines)));
+			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Save";
 			record.Time = DateTime.Now;
@@ -1412,6 +1435,84 @@ namespace Swish
 			metadata.Add(record);
 			MetadataFunctions.Save(outputFileName, metadata);
 		}
+
+		public static void FillCategoryTimeSeries(string inputFileName, string outputFileName, List<Tuple<string/* category variable name */, List<string>/* values */>> categories, string variableName, string expression)
+		{
+			if (!FileFunctions.FileExists(inputFileName))
+			{
+				throw new Exception("cannot find file \"" + inputFileName + "\"");
+			}
+
+			if (string.IsNullOrWhiteSpace(variableName))
+			{
+				throw new Exception("Variable missing");
+			}
+
+			if (string.IsNullOrWhiteSpace(expression))
+			{
+				throw new Exception("Expression missing");
+			}
+
+			if (categories == null || categories.Count == 0)
+			{
+				throw new Exception("Categories missing");
+			}
+
+			for (int categoryIndex = 0; categoryIndex < categories.Count; categoryIndex++)
+			{
+				string categoryVariableName = categories[categoryIndex].Item1;
+				List<string> categoryValues = categories[categoryIndex].Item2;
+
+				if (string.IsNullOrWhiteSpace(categoryVariableName))
+				{
+					throw new Exception("Unnamed category found");
+				}
+				if (categoryValues.Count == 0)
+				{
+					throw new Exception("Category \"" + categoryVariableName + "\" missing values");
+				}
+
+				for (int valueIndex = 0; valueIndex < categoryValues.Count; valueIndex++)
+				{
+					string value = categoryValues[valueIndex];
+					if (string.IsNullOrWhiteSpace(value))
+					{
+						throw new Exception("Category \"" + categoryVariableName + "\" value missing");
+					}
+				}
+			}
+			string extension = Path.GetExtension(outputFileName);
+			string intermaidateOutput = FileFunctions.TempoaryOutputFileName(extension);
+
+			List<string> lines = new List<string>();
+			StataScriptFunctions.WriteHeadder(lines);
+
+			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
+
+			if (DateTime.MinValue < DateTime.MaxValue)
+			{
+				throw new Exception(" do stuff here ...");
+			}
+
+			string line = StataScriptFunctions.SaveFileCommand(intermaidateOutput);
+			lines.Add(line);
+
+			StataScriptFunctions.WriteFooter(lines);
+
+			string log = StataFunctions.RunScript(lines, false);
+			if (!FileFunctions.FileExists(intermaidateOutput))
+			{
+				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
+			}
+
+			if (FileFunctions.FileExists(outputFileName))
+			{
+				File.Delete(outputFileName);
+			}
+
+			File.Move(intermaidateOutput, outputFileName);
+		}
+
 	}
 }
 

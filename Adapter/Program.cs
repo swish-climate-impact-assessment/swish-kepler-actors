@@ -6,9 +6,10 @@ namespace Swish.Adapter
 	{
 		static int Main(string[] arguments)
 		{
+			Arguments splitArguments=null;
 			try
 			{
-				Arguments splitArguments = new Arguments(arguments);
+				 splitArguments = new Arguments(arguments);
 				ExceptionFunctions.ForceVerbose = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "verbose");
 				string operation = splitArguments.String(Arguments.OperationArgument, true);
 
@@ -16,11 +17,13 @@ namespace Swish.Adapter
 				return 0;
 			} catch (Exception error)
 			{
-				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
+				string message = string.Empty
+					+ Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose) + Environment.NewLine
+					+ "Arguments: " + string.Join(" ", arguments) + Environment.NewLine;
 				//if (ExceptionFunctions.ForceVerbose)
 				//{
-				//    message += ProcessFunctions.WriteProcessHeritage();
-				//    message += ProcessFunctions.WriteSystemVariables();
+				//    message += ProcessFunctions.WriteProcessHeritage() + Environment.NewLine;
+				//    message += ProcessFunctions.WriteSystemVariables() + Environment.NewLine;
 				//}
 				Console.Write(message);
 				if (ExceptionFunctions.ForceVerbose)

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using System.Diagnostics;
-using Swish.Server.IO;
 
 namespace Swish.ExecutableRedirector
 {
@@ -31,7 +30,10 @@ namespace Swish.ExecutableRedirector
 				Console.Write(result.Output);
 				if (!string.IsNullOrWhiteSpace(result.Error))
 				{
-					AsciiIO.Write(Process.GetCurrentProcess().StandardError.BaseStream, result.Error);
+					using (StreamWriter _stream = new StreamWriter(Process.GetCurrentProcess().StandardError.BaseStream))
+					{
+						_stream.Write(result.Error);
+					}
 				}
 				return result.ExitCode;
 			} catch (Exception error)

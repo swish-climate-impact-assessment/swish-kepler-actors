@@ -168,6 +168,10 @@ namespace Swish
 
 		public static bool Equal(string left, string right)
 		{
+			//if (left != right)
+			//{
+			//    throw new Exception();
+			//}
 			return left == right;
 		}
 

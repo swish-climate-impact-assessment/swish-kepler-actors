@@ -77,5 +77,41 @@ namespace Swish
 
 			return true;
 		}
+
+		public static void Write(string fileName, Csv table)
+		{
+			List<string> lines = new List<string>();
+
+			string line = string.Empty;
+			for (int columnIndex = 0; columnIndex < table.Header.Count; columnIndex++)
+			{
+				string header = table.Header[columnIndex];
+				if (columnIndex + 1 < table.Header.Count)
+				{
+					line += header + ",";
+				} else
+				{
+					line += header;
+				}
+			}
+
+			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
+			{
+				List<string> record = table.Records[recordIndex];
+				for (int columnIndex = 0; columnIndex < record.Count; columnIndex++)
+				{
+					string value = record[columnIndex];
+					if (columnIndex + 1 < record.Count)
+					{
+						line += value + ",";
+					} else
+					{
+						line += value;
+					}
+				}
+			}
+
+			File.WriteAllLines(fileName, lines);
+		}
 	}
 }

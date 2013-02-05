@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Swish.Server;
-using System.Collections.Generic;
 
 namespace Swish.Tests
 {
@@ -40,8 +39,11 @@ namespace Swish.Tests
 			try
 			{
 
-				string leftFileName = @"C:\Users\u5265691\Desktop\FinalWorking\Replace1.csv";
-				string rightFileName = @"C:\Users\u5265691\Desktop\FinalWorking\Replace1Stata.csv";
+
+
+
+				string leftFileName = @"C:\Users\u5265691\Desktop\FinalWorking\merge4.csv";
+				string rightFileName = @"C:\Users\u5265691\Desktop\FinalWorking\Merge4.do.csv";
 
 				if (!TablesSomewhatEqulivilent(leftFileName, rightFileName))
 				{
@@ -62,10 +64,12 @@ namespace Swish.Tests
 				///		web service of some kind
 				/// 
 				/// 
+
+
+
+				new TimeSeriesFillTests().Test();
+
 				new ProcessorFunctionsTests().ReceiveOutput();
-				new VersionFunctionsTests().Test();
-				new ServerUpdateTests().ExchangeFiles();
-				new TcpServerTests().GetIndex();
 				new MetadataTests().LoadMetadata();
 				new MetadataTests().ValuesWritten();
 				new MetadataTests().MetadataFileName();
@@ -126,7 +130,10 @@ namespace Swish.Tests
 		private static bool TablesSomewhatEqulivilent(string leftFileName, string rightFileName)
 		{
 			Csv left = CsvFunctions.Read(leftFileName);
+			Console.WriteLine("Load: \"" + leftFileName + "\"");
+
 			Csv right = CsvFunctions.Read(rightFileName);
+			Console.WriteLine("Load: \"" + rightFileName + "\"");
 
 			if (false
 				|| left.Header.Count != right.Header.Count
@@ -135,11 +142,16 @@ namespace Swish.Tests
 			{
 				throw new Exception();
 			}
+			Console.WriteLine("Header count equal");
 
 			for (int leftIndex = 0; leftIndex < left.Header.Count; leftIndex++)
 			{
 				string leftVariable = left.Header[leftIndex];
+				Console.Write("Column \"" + leftVariable + "\"");
+
 				int rightIndex = right.ColumnIndex(leftVariable);
+				Console.WriteLine(" index: " + leftIndex + " and " + rightIndex);
+
 				if (rightIndex < 0)
 				{
 					throw new Exception();
@@ -154,12 +166,25 @@ namespace Swish.Tests
 				List<string> leftValues = left.ColunmValues(leftIndex);
 				List<string> rightValues = right.ColunmValues(rightIndex);
 
+				Console.Write("Variable \"" + leftVariable + "\" count: " + leftValues.Count + " and " + rightValues.Count + ", sort: ");
+
 				leftValues.Sort();
+				Console.Write("left ");
 				rightValues.Sort();
+				Console.Write("right ");
+				Console.WriteLine(", equal: ");
 				if (!EqualFunctions.Equal(leftValues, rightValues))
 				{
+					if (leftVariable == "_merge")
+					{
+						Console.WriteLine("_merge failed");
+						continue;
+					}
 					throw new Exception();
 				}
+
+				Console.WriteLine("Ok");
+
 			}
 
 			return true;

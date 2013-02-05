@@ -46,6 +46,8 @@
     <Compile Include="CollapseOpperation.cs" />
     <Compile Include="Arguments.cs" />
     <Compile Include="ByteArrayAsStream.cs" />
+    <Compile Include="RFunctions.cs" />
+    <Compile Include="CSharpCompiler.cs" />
     <Compile Include="ProcessFunctions.cs" />
     <Compile Include="MetadataFunctions.cs" />
     <Compile Include="EqualFunctions.cs" />

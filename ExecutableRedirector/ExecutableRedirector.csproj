@@ -42,10 +42,6 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Server\Server.csproj">
-      <Project>{12B64F61-9325-4FB1-8F2A-0962AD31955B}</Project>
-      <Name>Server</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Swish\Swish.csproj">
       <Project>{EBB44164-34A5-434F-8EDB-6C0AC6F4BAE4}</Project>
       <Name>Swish</Name>

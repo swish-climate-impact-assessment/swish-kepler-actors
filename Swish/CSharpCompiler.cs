@@ -1,25 +1,31 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.CSharp;
 
-namespace Swish.Server
+namespace LibraryTypes.BootStrap
 {
 	public static class CSharpCompiler
 	{
-		public static string MakeExecutable(string code, bool consoleApplication)
+		private static string directoryBase = Path.GetTempFileName() + "_dir";
+		private static int directoryBaseCount = 0;
+
+		public static string MakeExecutable(string code)
 		{
-			string codeDirectory = FileFunctions.TempoaryDirectory();
+			string codeDirectory = directoryBase + directoryBaseCount.ToString();
+			directoryBaseCount++;
 			Directory.CreateDirectory(codeDirectory);
-			string codeFileName =Path.Combine(codeDirectory, "Program.cs");
-			File.WriteAllText(codeFileName, code);
-			string executableName = Path.Combine(codeDirectory, "Program.exe");
-			Compile(codeDirectory, executableName, false, consoleApplication);
-			return executableName;
+			File.WriteAllText(Path.Combine(codeDirectory, "Program.cs"), code);
+
+			string exeName = Path.Combine(codeDirectory, "Program.exe");
+
+			_Compile(codeDirectory, exeName, false);
+			return exeName;
 		}
 
 		private static void AddCodeDirectory(string codeDirectory, List<string> sourceFiles)
@@ -45,7 +51,7 @@ namespace Swish.Server
 			}
 		}
 
-		public static Assembly Compile(string codeDirectory, string outputFileName, bool generateInMemory, bool consoleApplication)
+		public static Assembly _Compile(string codeDirectory, string outputFileName, bool generateInMemory)
 		{
 			List<string> dllFileNames = new List<string>(new string[]{
 				Assembly.GetAssembly(typeof(_AppDomain)).Location,
@@ -71,13 +77,7 @@ namespace Swish.Server
 			CSharpCodeProvider provider = new CSharpCodeProvider();
 
 			options.IncludeDebugInformation = false;
-			if (!consoleApplication)
-			{
-				options.CompilerOptions = "/optimize /unsafe+ /target:winexe";
-			} else
-			{
-				options.CompilerOptions = "/optimize /unsafe+";
-			}
+			options.CompilerOptions = "/optimize /unsafe+ /target:winexe";
 			options.WarningLevel = 0;
 			options.TreatWarningsAsErrors = false;
 
@@ -120,4 +120,3 @@ namespace Swish.Server
 		}
 	}
 }
-

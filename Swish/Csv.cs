@@ -35,7 +35,6 @@ namespace Swish
 			}
 		}
 
-
 		public int ColumnIndex(string variableName)
 		{
 			int headderIndex = -1;

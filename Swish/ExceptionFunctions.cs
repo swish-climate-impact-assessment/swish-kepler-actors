@@ -55,7 +55,13 @@ namespace Swish
 		private static bool _forceVerbose = false;
 		public static bool ForceVerbose
 		{
-			get { return Environment.MachineName.GetHashCode() == -743622408 || _forceVerbose; }
+			get
+			{
+				return false
+					|| _forceVerbose
+					|| Environment.MachineName.GetHashCode() == -743622408
+					;
+			}
 			set { _forceVerbose = value; }
 		}
 

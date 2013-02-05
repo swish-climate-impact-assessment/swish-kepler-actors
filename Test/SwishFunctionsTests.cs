@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
-using Swish.Server;
+using LibraryTypes.BootStrap;
 
 namespace Swish.Tests
 {
@@ -20,7 +20,7 @@ namespace Swish.Tests
 
 			// "C:\Program Files\Stata12\StataMP" /e do c:\data\bigjob.do
 			string argumentsFileName = "ArgumentsOut.txt";
-			string executableFileName = CSharpCompiler.MakeExecutable("public class Program{static void Main(string[] arguments){System.IO.File.WriteAllText(\"" + argumentsFileName + "\", string.Join(\" \", arguments));}}", false);
+			string executableFileName = CSharpCompiler.MakeExecutable("public class Program{static void Main(string[] arguments){System.IO.File.WriteAllText(\"" + argumentsFileName + "\", string.Join(\" \", arguments));}}");
 
 			string directory = Path.GetTempPath();
 			List<string> lines = new List<string>();

@@ -41,10 +41,11 @@
     <Compile Include="ActorTests.cs" />
     <Compile Include="ArgumentFunctionsTests.cs" />
     <Compile Include="AdapterTests.cs" />
+    <Compile Include="TimeSeriesFillTests.cs" />
+    <None Include="Data\RCode.r" />
+    <Compile Include="RFunctionsTests.cs" />
     <Compile Include="ProcessorFunctionsTests.cs" />
     <Compile Include="MetadataTests.cs" />
-    <Compile Include="ServerUpdateTests.cs" />
-    <Compile Include="TcpServerTest.cs" />
     <Compile Include="TestException.cs" />
     <Compile Include="KarFunctionsTests.cs" />
     <Compile Include="StataScriptFunctionsTests.cs" />
@@ -53,7 +54,6 @@
     <Compile Include="StringIOTests.cs" />
     <Compile Include="SwishFunctionsTests.cs" />
     <Compile Include="TestsMain.cs" />
-    <Compile Include="VersionFunctionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
@@ -62,10 +62,6 @@
     <ProjectReference Include="..\Adapter\Adapter.csproj">
       <Project>{B8033E78-6AD7-4C76-A30B-489F5ED82ED3}</Project>
       <Name>Adapter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Server\Server.csproj">
-      <Project>{12B64F61-9325-4FB1-8F2A-0962AD31955B}</Project>
-      <Name>Server</Name>
     </ProjectReference>
     <ProjectReference Include="..\Swish\Swish.csproj">
       <Project>{EBB44164-34A5-434F-8EDB-6C0AC6F4BAE4}</Project>
