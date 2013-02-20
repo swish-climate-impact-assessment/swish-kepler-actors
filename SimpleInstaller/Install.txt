@@ -1,0 +1,4 @@
+﻿CopyFiles "%StartupPath%\\Actors\\" "%UserProfile%\\KeplerData\\workflows\\MyWorkflows\\"
+Copy "%StartupPath%\\Swish.dll" "C:\\Swish\\bin\\Swish.dll"
+CopyFiles "%StartupPath%\\SwishBin\\" "C:\\Swish\\bin\\"
+CopyFiles "%StartupPath%\\SampleData\\" "C:\\Swish\\SampleData\\"

@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EBB44164-34A5-434F-8EDB-6C0AC6F4BAE4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Swish</RootNamespace>
+    <AssemblyName>Swish</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;MONO</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1607</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdapterFunctions.cs" />
+    <Compile Include="CollapseOpperation.cs" />
+    <Compile Include="Arguments.cs" />
+    <Compile Include="ByteArrayAsStream.cs" />
+    <Compile Include="RFunctions.cs" />
+    <Compile Include="CSharpCompiler.cs" />
+    <Compile Include="ProcessFunctions.cs" />
+    <Compile Include="MetadataFunctions.cs" />
+    <Compile Include="EqualFunctions.cs" />
+    <Compile Include="KarFile.cs" />
+    <Compile Include="MergeRecordResult.cs" />
+    <Compile Include="MetadataRecord.cs" />
+    <Compile Include="ProcessResult.cs" />
+    <Compile Include="ReportProgressFunction.cs" />
+    <Compile Include="StreamFunctions.cs" />
+    <Compile Include="FileFunctions.cs" />
+    <Compile Include="KarFunctions.cs" />
+    <Compile Include="KeplerFunctions.cs" />
+    <Compile Include="StataScriptFunctions.cs" />
+    <Compile Include="CsvFunctions.cs" />
+    <Compile Include="Csv.cs" />
+    <Compile Include="StringIO.cs" />
+    <Compile Include="SwishFunctions.cs" />
+    <Compile Include="StataFunctions.cs" />
+    <Compile Include="ExceptionFunctions.cs" />
+    <Compile Include="TextAsStream.cs" />
+    <Compile Include="TextCodedStream.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
