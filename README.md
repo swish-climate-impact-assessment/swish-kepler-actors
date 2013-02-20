@@ -6,7 +6,7 @@ The SWISH Kepler Actors we have built enable users to include Stata programs (ht
 
 These actors currently work with Stata 12 in Windows environments.
 
-We provide a installer that makes the SWISH Kepler Actors available for use in Kepler. It is fully described and can be downloaded from this page
+We provide a installer that makes the SWISH Kepler Actors available for use in Kepler. It is fully described and can be downloaded from http://swish-climate-impact-assessment.github.com/tools/swishkepleractorsinstaller/swishkepleractorsinstaller-details.html
 
 To run the installer double click the “Install” shortcut, to remove use the “Uninstall” shortcut.
 
