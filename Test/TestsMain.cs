@@ -39,16 +39,13 @@ namespace Swish.Tests
 			try
 			{
 
+				//string leftFileName = @"C:\Users\u5265691\Desktop\FinalWorking\merge4.csv";
+				//string rightFileName = @"C:\Users\u5265691\Desktop\FinalWorking\Merge4.do.csv";
 
-
-
-				string leftFileName = @"C:\Users\u5265691\Desktop\FinalWorking\merge4.csv";
-				string rightFileName = @"C:\Users\u5265691\Desktop\FinalWorking\Merge4.do.csv";
-
-				if (!TablesSomewhatEqulivilent(leftFileName, rightFileName))
-				{
-					throw new Exception();
-				}
+				//if (!TablesSomewhatEqulivilent(leftFileName, rightFileName))
+				//{
+				//    throw new Exception();
+				//}
 
 				// missing argument
 				// Arguments splitArguments = new Arguments(@">operation merge >input1 D:\HEALTH FORECASTING\FINAL\../TAPM/Brisbane/dataset1/x >input2  >variables date zone group >keepMerge true");
@@ -67,7 +64,7 @@ namespace Swish.Tests
 
 
 
-				new TimeSeriesFillTests().Test();
+				new TimeSeriesFillTests().Fill();
 
 				new ProcessorFunctionsTests().ReceiveOutput();
 				new MetadataTests().LoadMetadata();

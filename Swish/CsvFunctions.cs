@@ -94,10 +94,12 @@ namespace Swish
 					line += header;
 				}
 			}
+			lines.Add(line);
 
 			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
 			{
 				List<string> record = table.Records[recordIndex];
+				line = string.Empty;
 				for (int columnIndex = 0; columnIndex < record.Count; columnIndex++)
 				{
 					string value = record[columnIndex];
@@ -109,6 +111,7 @@ namespace Swish
 						line += value;
 					}
 				}
+				lines.Add(line);
 			}
 
 			File.WriteAllLines(fileName, lines);

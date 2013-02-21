@@ -9,7 +9,7 @@ namespace Swish.Tests
 		const string CategoryAName = "factorA";
 		const string CategoryBName = "factorB";
 
-		public void Test()
+		public void Fill()
 		{
 			/// So this thing takes some data with a value column and one or more factor labels
 			/// 
@@ -32,7 +32,7 @@ namespace Swish.Tests
 			table.Records.Add(new List<string>(new string[] { categoryAValues[2], categoryBValues[2], "3", }));
 			table.Records.Add(new List<string>(new string[] { categoryAValues[3], categoryBValues[0], "4", }));
 
-			string inputFileName= FileFunctions.TempoaryOutputFileName(".csv");
+			string inputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			CsvFunctions.Write(inputFileName, table);
 
 			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");

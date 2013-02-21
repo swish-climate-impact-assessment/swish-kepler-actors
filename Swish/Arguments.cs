@@ -15,6 +15,8 @@ namespace Swish
 		public const string OperationArgument = DefaultArgumentPrefix + "operation";
 
 		private string _argumentPrefix;
+		public string ArgumentPrefix { get { return _argumentPrefix; } }
+
 		private List<Tuple<string, string>> _splitArguments;
 
 		public List<Tuple<string, string>> SplitArguments
@@ -268,21 +270,6 @@ namespace Swish
 			}
 			bool value = bool.Parse(stringValue.ToLower());
 			return value;
-		}
-
-		public string OutputFileName()
-		{
-			string outputFileName = String(_argumentPrefix + "output" + "", false);
-			outputFileName = FileFunctions.AdjustFileName(outputFileName);
-			if (string.IsNullOrWhiteSpace(outputFileName) || outputFileName.ToLower() == "none" || outputFileName.ToLower() == "temp")
-			{
-				outputFileName = FileFunctions.TempoaryOutputFileName(".dta");
-			}
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
-			return outputFileName;
 		}
 
 		public override string ToString()

@@ -3,25 +3,20 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Swish.Adapters;
+using System.Reflection;
 
 namespace Swish
 {
 	public static class AdapterFunctions
 	{
-		public const string AppendOperation = "append";
-		public const string CommandOperation = "stataCommand";
-		public const string CompressOperation = "compress";
-		public const string DisplayClientOperation = "displayClient";
-		public const string DisplayOperation = "display";
 		public const string DoScriptOperation = "doScript";
 		public const string FileNameOperation = "fileName";
 		public const string FileNameWithoutExtensionOperation = "fileNameWithoutExtension";
-		public const string FormatOperation = "format";
 		public const string GenerateOperation = "generate";
 		public const string MergeOperation = "merge";
 		public const string PasswordOperation = "password";
 		public const string RemoveColumnsOperation = "removeColumns";
-		public const string ReplaceOperation = "replace";
 		public const string SaveOperation = "save";
 		public const string SelectCloumnsOperation = "selectColumns";
 		public const string SelectRecordsOperation = "selectRecords";
@@ -29,32 +24,45 @@ namespace Swish
 		public const string TemporaryFileNameOperation = "temporaryFileName";
 		public const string TestOperation = "test";
 		public const string TransposeOperation = "transpose";
-		private static bool RecordDoScript = false;
+		internal static bool RecordDoScript = false;
+
+		private static List<IAdapter> Adapters()
+		{
+			Type iAdapterType = typeof(IAdapter);
+			Assembly dll =iAdapterType.Assembly;
+			Type[] exportedTypes = dll.GetExportedTypes();
+
+			List<IAdapter> adapters = new List<IAdapter>();
+			for (int typeIndex = 0; typeIndex < exportedTypes.Length; typeIndex++)
+			{
+				Type type = exportedTypes[typeIndex];
+
+				if (TypeFunctions.TypeIsFormOf(type, iAdapterType) && type != iAdapterType  && TypeFunctions.TypeHasDefaultConstructor(type))
+				{
+					IAdapter adapter = (IAdapter)Activator.CreateInstance(type);
+					adapters.Add(adapter);
+				}
+			}
+			return adapters;
+		}
 
 		public static void RunOperation(string operation, Arguments splitArguments)
 		{
+			AdapterArguments adapterArguments = new AdapterArguments(splitArguments);
+
+			string lowercaseOperation = operation.ToLower();
+			List<IAdapter> adapters = Adapters();
+			for (int adapterIndex = 0; adapterIndex < adapters.Count; adapterIndex++)
+			{
+				IAdapter  adapter = adapters[adapterIndex];
+				if (adapter.Name.ToLower() == lowercaseOperation)
+				{
+					adapter.Run(adapterArguments);
+				}
+			}
+
 			switch (operation)
 			{
-			case FormatOperation:
-				{
-					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
-					string outputFileName = splitArguments.OutputFileName();
-					List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
-					string format = splitArguments.String(Arguments.DefaultArgumentPrefix + "format", true);
-					Format(inputFileName, outputFileName, variableNames, format);
-					Console.Write(outputFileName);
-				}
-				break;
-
-			case CompressOperation:
-				{
-					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
-					string outputFileName = splitArguments.OutputFileName();
-					Compress(inputFileName, outputFileName);
-					Console.Write(outputFileName);
-				}
-				break;
-
 			case FileNameOperation:
 				{
 					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
@@ -74,7 +82,7 @@ namespace Swish
 			case GenerateOperation:
 				{
 					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
-					string outputFileName = splitArguments.OutputFileName();
+					string outputFileName = adapterArguments.OutputFileName();
 					string variableName = splitArguments.String(Arguments.DefaultArgumentPrefix + "variable", true);
 					string expression = splitArguments.String(Arguments.DefaultArgumentPrefix + "expression", true);
 					string type = splitArguments.String(Arguments.DefaultArgumentPrefix + "type", false);
@@ -95,7 +103,7 @@ namespace Swish
 			case TransposeOperation:
 				{
 					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
-					string outputFileName = splitArguments.OutputFileName();
+					string outputFileName = adapterArguments.OutputFileName();
 					Transpose(inputFileName, outputFileName);
 					Console.Write(outputFileName);
 				}
@@ -105,7 +113,7 @@ namespace Swish
 				{
 					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
 					List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
-					string outputFileName = splitArguments.OutputFileName();
+					string outputFileName = adapterArguments.OutputFileName();
 					outputFileName = Sort(inputFileName, variableNames, outputFileName);
 					Console.Write(outputFileName);
 				}
@@ -115,7 +123,7 @@ namespace Swish
 				{
 					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
 					List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
-					string outputFileName = splitArguments.OutputFileName();
+					string outputFileName = adapterArguments.OutputFileName();
 					SelectColumns(inputFileName, outputFileName, variableNames);
 					Console.Write(outputFileName);
 				}
@@ -125,7 +133,7 @@ namespace Swish
 				{
 					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
 					string expression = splitArguments.String(Arguments.DefaultArgumentPrefix + "expression", true);
-					string outputFileName = splitArguments.OutputFileName();
+					string outputFileName = adapterArguments.OutputFileName();
 					Select(inputFileName, outputFileName, expression);
 					Console.Write(outputFileName);
 				}
@@ -134,7 +142,7 @@ namespace Swish
 			case SaveOperation:
 				{
 					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
-					string outputFileName = splitArguments.OutputFileName();
+					string outputFileName = adapterArguments.OutputFileName();
 					SaveFile(inputFileName, outputFileName);
 					Console.Write(outputFileName);
 				}
@@ -145,7 +153,7 @@ namespace Swish
 					string input1FileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument + "1", true));
 					string input2FileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument + "2", true));
 					List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
-					string outputFileName = splitArguments.OutputFileName();
+					string outputFileName = adapterArguments.OutputFileName();
 					List<MergeRecordResult> keep = splitArguments.EnumList<MergeRecordResult>(Arguments.DefaultArgumentPrefix + "keep", false, false);
 
 					string keepMergeString = FileFunctions.AdjustFileName(splitArguments.String(Arguments.DefaultArgumentPrefix + "keepMerge", false));
@@ -171,47 +179,13 @@ namespace Swish
 				}
 				break;
 
-			case CommandOperation:
-				{
-					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
-					string command = splitArguments.String(Arguments.DefaultArgumentPrefix + "command", true);
-					string outputFileName = splitArguments.OutputFileName();
-					StataCommand(inputFileName, outputFileName, command);
-					Console.Write(outputFileName);
-				}
-				break;
-
-			case AppendOperation:
-				{
-					string input1FileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument + "1", true));
-					string input2FileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument + "2", true));
-					string outputFileName = splitArguments.OutputFileName();
-					outputFileName = Append(input1FileName, input2FileName, outputFileName);
-					Console.Write(outputFileName);
-				}
-				break;
-
 			case RemoveColumnsOperation:
 				{
 					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
 					List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
-					string outputFileName = splitArguments.OutputFileName();
+					string outputFileName = adapterArguments.OutputFileName();
 					RemoveColumns(inputFileName, outputFileName, variableNames);
 					Console.Write(outputFileName);
-				}
-				break;
-
-			case DisplayOperation:
-				{
-					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
-					Display(inputFileName);
-				}
-				break;
-
-			case DisplayClientOperation:
-				{
-					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
-					DisplayClient(inputFileName);
 				}
 				break;
 
@@ -256,143 +230,10 @@ namespace Swish
 				}
 				break;
 
-			case ReplaceOperation:
-				{
-					string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
-					string outputFileName = splitArguments.OutputFileName();
-					string condition = splitArguments.String(Arguments.DefaultArgumentPrefix + "condition", true);
-					string value = splitArguments.String(Arguments.DefaultArgumentPrefix + "value", true);
-					Replace(inputFileName, outputFileName, condition, value);
-					Console.Write(outputFileName);
-				}
-				break;
 
 			default:
 				throw new Exception("Unknown operation \"" + operation + "\"");
 			}
-		}
-
-		private static void Format(string inputFileName, string outputFileName, List<string> variableNames, string format)
-		{
-			if (!FileFunctions.FileExists(inputFileName))
-			{
-				throw new Exception("cannot find file \"" + inputFileName + "\"");
-			}
-
-			if (variableNames.Count == 0)
-			{
-				throw new Exception("Variables missing");
-			}
-
-			if (string.IsNullOrWhiteSpace(format))
-			{
-				throw new Exception("Format missing");
-			}
-
-			string extension = Path.GetExtension(outputFileName);
-			string intermaidateOutput = FileFunctions.TempoaryOutputFileName(extension);
-
-			List<string> lines = new List<string>();
-			StataScriptFunctions.WriteHeadder(lines);
-
-			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
-
-			lines.Add("format " + StataScriptFunctions.VariableList(variableNames) + " " + format);
-
-			string line = StataScriptFunctions.SaveFileCommand(intermaidateOutput);
-			lines.Add(line);
-
-			StataScriptFunctions.WriteFooter(lines);
-
-			string log = StataFunctions.RunScript(lines, false);
-			if (!FileFunctions.FileExists(intermaidateOutput))
-			{
-				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
-			}
-
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
-
-			File.Move(intermaidateOutput, outputFileName);
-
-			List<MetadataRecord> metadata = new List<MetadataRecord>();
-			if (MetadataFunctions.Exists(inputFileName))
-			{
-				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
-				metadata.AddRange(inputMetadata);
-			}
-
-			MetadataRecord record = new MetadataRecord();
-			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
-			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
-			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
-			record.Arguments.Add(new Tuple<string, string>("format", format));
-			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
-
-			record.ComputerName = Environment.MachineName;
-			record.Operation = "Format";
-			record.Time = DateTime.Now;
-			record.User = Environment.UserName;
-
-			metadata.Add(record);
-			MetadataFunctions.Save(outputFileName, metadata);
-		}
-
-		private static void Compress(string inputFileName, string outputFileName)
-		{
-			if (!FileFunctions.FileExists(inputFileName))
-			{
-				throw new Exception("cannot find file \"" + inputFileName + "\"");
-			}
-
-			string extension = Path.GetExtension(outputFileName);
-			string intermaidateOutput = FileFunctions.TempoaryOutputFileName(extension);
-
-			List<string> lines = new List<string>();
-			StataScriptFunctions.WriteHeadder(lines);
-
-			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
-
-			lines.Add("compress");
-
-			string line = StataScriptFunctions.SaveFileCommand(intermaidateOutput);
-			lines.Add(line);
-
-			StataScriptFunctions.WriteFooter(lines);
-
-			string log = StataFunctions.RunScript(lines, false);
-			if (!FileFunctions.FileExists(intermaidateOutput))
-			{
-				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
-			}
-
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
-
-			File.Move(intermaidateOutput, outputFileName);
-
-			List<MetadataRecord> metadata = new List<MetadataRecord>();
-			if (MetadataFunctions.Exists(inputFileName))
-			{
-				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
-				metadata.AddRange(inputMetadata);
-			}
-
-			MetadataRecord record = new MetadataRecord();
-			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
-			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
-			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
-			record.ComputerName = Environment.MachineName;
-			record.Operation = "Compress";
-			record.Time = DateTime.Now;
-			record.User = Environment.UserName;
-
-			metadata.Add(record);
-			MetadataFunctions.Save(outputFileName, metadata);
 		}
 
 		public static void Generate(string inputFileName, string outputFileName, string variableName, string type, string expression)
@@ -459,7 +300,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("Variable", variableName));
 			record.Arguments.Add(new Tuple<string, string>("Type", type));
 			record.Arguments.Add(new Tuple<string, string>("Expression", expression));
-			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
+			if (AdapterFunctions.RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Generate";
 			record.Time = DateTime.Now;
@@ -580,49 +421,6 @@ namespace Swish
 			}
 		}
 
-		public static void Display(string inputFileName)
-		{
-			string arguments = string.Join(" ", Arguments.OperationArgument, DisplayClientOperation, Arguments.InputArgument, inputFileName);
-			ProcessFunctions.Run(Application.ExecutablePath, arguments, Environment.CurrentDirectory, true, TimeSpan.Zero, false, false, true);
-		}
-
-		public static void DisplayClient(string inputFileName)
-		{
-			string extension = Path.GetExtension(inputFileName);
-			string useFileName;
-
-			try
-			{
-				if (extension.ToLower() == ".csv")
-				{
-					useFileName = inputFileName;
-				} else
-				{
-					useFileName = FileFunctions.TempoaryOutputFileName(".csv");
-					SaveFile(inputFileName, useFileName);
-				}
-
-				string[] lines = File.ReadAllLines(useFileName);
-				for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
-				{
-					lines[lineIndex] = lines[lineIndex].Replace(',', '\t');
-				}
-
-				SwishFunctions.MessageTextBox("File: " + inputFileName + Environment.NewLine, lines, false);
-			} catch (Exception error)
-			{
-				string message = "failed to display " + inputFileName + Environment.NewLine + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
-				//if (ExceptionFunctions.ForceVerbose)
-				//{
-				//    message += ProcessFunctions.WriteProcessHeritage();
-				//    message += ProcessFunctions.WriteSystemVariables();
-				//}
-
-				SwishFunctions.MessageTextBox(message, false);
-			}
-
-		}
-
 		public static void RemoveColumns(string inputFileName, string outputFileName, List<string> variableNames)
 		{
 			if (!FileFunctions.FileExists(inputFileName))
@@ -677,7 +475,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
-			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
+			if (AdapterFunctions.RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "RemoveColumns";
 			record.Time = DateTime.Now;
@@ -735,7 +533,7 @@ namespace Swish
 			MetadataRecord record = new MetadataRecord();
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
-			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
+			if (AdapterFunctions.RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Transpose";
 			record.Time = DateTime.Now;
@@ -798,7 +596,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("Expression", expression));
-			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
+			if (AdapterFunctions.RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Select";
 			record.Time = DateTime.Now;
@@ -862,71 +660,9 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
-			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
+			if (AdapterFunctions.RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "SelectColumns";
-			record.Time = DateTime.Now;
-			record.User = Environment.UserName;
-
-			metadata.Add(record);
-			MetadataFunctions.Save(outputFileName, metadata);
-		}
-
-		public static void StataCommand(string inputFileName, string outputFileName, string command)
-		{
-			if (!FileFunctions.FileExists(inputFileName))
-			{
-				throw new Exception("cannot find file \"" + inputFileName + "\"");
-			}
-
-			if (Path.GetFullPath(inputFileName) == Path.GetFullPath(outputFileName))
-			{
-				throw new Exception("Output cannot be the same as input");
-			}
-
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
-
-			/// create the do file
-			List<string> lines = new List<string>();
-			StataScriptFunctions.WriteHeadder(lines);
-			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
-
-			lines.Add(command);
-
-			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
-			lines.Add(line);
-
-
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
-
-			StataScriptFunctions.WriteFooter(lines);
-
-			string log = StataFunctions.RunScript(lines, false);
-			if (!FileFunctions.FileExists(outputFileName))
-			{
-				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
-			}
-
-			List<MetadataRecord> metadata = new List<MetadataRecord>();
-			if (MetadataFunctions.Exists(inputFileName))
-			{
-				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
-				metadata.AddRange(inputMetadata);
-			}
-
-			MetadataRecord record = new MetadataRecord();
-			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
-			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
-			record.Arguments.Add(new Tuple<string, string>("Command", command));
-			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
-			record.ComputerName = Environment.MachineName;
-			record.Operation = "StataCommand";
 			record.Time = DateTime.Now;
 			record.User = Environment.UserName;
 
@@ -1073,7 +809,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
 			record.Arguments.Add(new Tuple<string, string>("KeepMergeColumn", keepMergeColumn.ToString()));
-			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
+			if (AdapterFunctions.RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			if (keep != null)
 			{
 				string keepString = string.Join(" ", keep);
@@ -1086,87 +822,6 @@ namespace Swish
 
 			metadata.Add(record);
 			MetadataFunctions.Save(outputFileName, metadata);
-		}
-
-		public static string Append(string input1FileName, string input2FileName, string outputFileName)
-		{
-			if (!FileFunctions.FileExists(input1FileName))
-			{
-				throw new Exception("cannot find file \"" + input1FileName + "\"");
-			}
-
-			if (!FileFunctions.FileExists(input2FileName))
-			{
-				throw new Exception("cannot find file \"" + input2FileName + "\"");
-			}
-
-			if (
-			Path.GetFullPath(input1FileName) == Path.GetFullPath(outputFileName)
-			|| Path.GetFullPath(input2FileName) == Path.GetFullPath(outputFileName)
-			)
-			{
-				throw new Exception("Output cannot be the same as input");
-			}
-
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
-
-			List<string> lines = new List<string>();
-
-			StataScriptFunctions.WriteHeadder(lines);
-
-			string intermediateFileName = StataScriptFunctions.ConvertToStataFormat(lines, input2FileName);
-			StataScriptFunctions.LoadFileCommand(lines, input1FileName);
-			lines.Add("append using \"" + intermediateFileName + "\"");
-			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
-			lines.Add(line);
-
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
-
-			StataScriptFunctions.WriteFooter(lines);
-
-			string log = StataFunctions.RunScript(lines, false);
-			if (!FileFunctions.FileExists(outputFileName))
-			{
-				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
-			}
-
-			/// delete all the files not needed
-			File.Delete(intermediateFileName);
-
-			List<MetadataRecord> metadata = new List<MetadataRecord>();
-
-			if (MetadataFunctions.Exists(input1FileName))
-			{
-				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(input1FileName);
-				metadata.AddRange(inputMetadata);
-			}
-
-			if (MetadataFunctions.Exists(input2FileName))
-			{
-				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(input2FileName);
-				metadata.AddRange(inputMetadata);
-			}
-
-			MetadataRecord record = new MetadataRecord();
-			record.Arguments.Add(new Tuple<string, string>("InputFileName", input1FileName));
-			record.Arguments.Add(new Tuple<string, string>("InputFileName", input2FileName));
-			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
-			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
-			record.ComputerName = Environment.MachineName;
-			record.Operation = "Append";
-			record.Time = DateTime.Now;
-			record.User = Environment.UserName;
-
-			metadata.Add(record);
-			MetadataFunctions.Save(outputFileName, metadata);
-
-			return outputFileName;
 		}
 
 		public static double Collapse(string inputFileName, string variable, CollapseOpperation operation)
@@ -1225,7 +880,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("Variable", variable));
 			record.Arguments.Add(new Tuple<string, string>("Operation", operation.ToString()));
-			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
+			if (AdapterFunctions.RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Collapse";
 			record.Time = DateTime.Now;
@@ -1291,7 +946,7 @@ namespace Swish
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
-			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
+			if (AdapterFunctions.RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Sort";
 			record.Time = DateTime.Now;
@@ -1301,84 +956,6 @@ namespace Swish
 			MetadataFunctions.Save(outputFileName, metadata);
 
 			return outputFileName;
-		}
-
-		public static void Replace(string inputFileName, string outputFileName, string condition, string value)
-		{
-			//SwishFunctions.MessageTextBox(""
-			//+ "inputFileName: " + inputFileName + Environment.NewLine
-			//+ "outputFileName: " + outputFileName + Environment.NewLine
-			//+ "condition: " + condition + Environment.NewLine
-			//+ "value: " + value + Environment.NewLine, false);
-
-			if (!FileFunctions.FileExists(inputFileName))
-			{
-				throw new Exception("cannot find file \"" + inputFileName + "\"");
-			}
-
-			if (string.IsNullOrWhiteSpace(condition))
-			{
-				throw new Exception("condition missing");
-			}
-
-			if (string.IsNullOrWhiteSpace(value))
-			{
-				throw new Exception("value missing");
-			}
-
-			if (Path.GetFullPath(inputFileName) == Path.GetFullPath(outputFileName))
-			{
-				throw new Exception("Output cannot be the same as input");
-			}
-
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
-
-			List<string> lines = new List<string>();
-			StataScriptFunctions.WriteHeadder(lines);
-			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
-			//replace oldvar =exp [if] [in] [, nopromote]
-
-			lines.Add("replace " + value + " if " + condition);
-			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
-			lines.Add(line);
-
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
-
-			StataScriptFunctions.WriteFooter(lines);
-
-			string log = StataFunctions.RunScript(lines, false);
-			if (!FileFunctions.FileExists(outputFileName))
-			{
-				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
-			}
-
-			List<MetadataRecord> metadata = new List<MetadataRecord>();
-			if (MetadataFunctions.Exists(inputFileName))
-			{
-				List<MetadataRecord> inputMetadata = MetadataFunctions.Load(inputFileName);
-				metadata.AddRange(inputMetadata);
-			}
-
-			MetadataRecord record = new MetadataRecord();
-			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
-			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
-			record.Arguments.Add(new Tuple<string, string>("Condition", condition));
-			record.Arguments.Add(new Tuple<string, string>("Value", value));
-			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
-			record.ComputerName = Environment.MachineName;
-			record.Operation = "Replace";
-			record.Time = DateTime.Now;
-			record.User = Environment.UserName;
-
-			metadata.Add(record);
-			MetadataFunctions.Save(outputFileName, metadata);
-
 		}
 
 		public static void SaveFile(string inputFileName, string outputFileName)
@@ -1426,7 +1003,7 @@ namespace Swish
 			MetadataRecord record = new MetadataRecord();
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
-			if (RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
+			if (AdapterFunctions.RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Save";
 			record.Time = DateTime.Now;
@@ -1515,4 +1092,7 @@ namespace Swish
 
 	}
 }
+
+
+
 

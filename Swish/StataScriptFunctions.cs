@@ -131,6 +131,26 @@ namespace Swish
 			//lines.Add("}");
 		}
 
+		public static void TryDropVariable(List<string> lines, string variable)
+		{
+			lines.Add("capture confirm variable " + variable);
+			lines.Add("if (_rc == 0){");
+			lines.Add("\tdrop " + variable);
+			lines.Add("}");
+		}
+
+		public static void RenameVariable(List<string> lines, string oldName, string newName)
+		{
+			lines.Add("rename " + oldName + " " + newName);
+		}
+
+		private static int _variableNameCount;
+		public static string TemporaryVariableName()
+		{
+			string variableName = "Variable" + _variableNameCount.ToString();
+			_variableNameCount++;
+			return variableName;
+		}
 	}
 }
 

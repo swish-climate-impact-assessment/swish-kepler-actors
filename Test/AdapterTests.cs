@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Swish.Adapters;
 
 namespace Swish.Tests
 {
@@ -173,7 +174,7 @@ namespace Swish.Tests
 
 			string command = "xpose, clear";
 
-			AdapterFunctions.StataCommand(inputFileName, outputFileName, command);
+			StataCommandAdapter.StataCommand(inputFileName, outputFileName, command);
 		}
 
 		private bool LinesContain(string command, List<string> lines)
@@ -204,7 +205,7 @@ namespace Swish.Tests
 				File.Delete(outputFileName);
 			}
 
-			AdapterFunctions.Append(inputFileName1, inputFileName2, outputFileName);
+			AppendAdapter.Append(inputFileName1, inputFileName2, outputFileName);
 
 			Csv table = CsvFunctions.Read(outputFileName);
 
@@ -253,7 +254,7 @@ namespace Swish.Tests
 			}
 			string condition = "head2==4";
 			string value = "head2=1";
-			AdapterFunctions.Replace(inputFileName, outputFileName, condition, value);
+			ReplaceAdapter.Replace(inputFileName, outputFileName, condition, value);
 
 			Csv table = CsvFunctions.Read(outputFileName);
 
@@ -287,7 +288,7 @@ namespace Swish.Tests
 			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.DefaultArgumentPrefix + "condition", condition));
 			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.DefaultArgumentPrefix + "value", value));
 
-			AdapterFunctions.RunOperation(AdapterFunctions.ReplaceOperation, splitArguments);
+			AdapterFunctions.RunOperation(new ReplaceAdapter().Name, splitArguments);
 
 			if (!File.Exists(outputFileName))
 			{
@@ -330,9 +331,9 @@ namespace Swish.Tests
 			//"master only (1)"
 			//"using only (2)"
 
-			AdapterFunctions.Replace(intermediateFileName1, intermediateFileName2, "_merge==\"using only (2)\"", "head2=0");
+			ReplaceAdapter.Replace(intermediateFileName1, intermediateFileName2, "_merge==\"using only (2)\"", "head2=0");
 
-			AdapterFunctions.Replace(intermediateFileName2, outputFileName, "_merge==\"master only (1)\"", "head6=\"0\"");
+			ReplaceAdapter.Replace(intermediateFileName2, outputFileName, "_merge==\"master only (1)\"", "head6=\"0\"");
 
 			Csv table = CsvFunctions.Read(outputFileName);
 
