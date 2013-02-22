@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class CollapseAdapter
+	public class CollapseAdapter: IAdapter
 	{
 		public string Name { get { return "generate"; } }
 
@@ -35,8 +35,7 @@ namespace Swish.Adapters
 
 			lines.Add("collapse " + "(" + StataScriptFunctions.Write(operation) + ") " + variable + "_" + StataScriptFunctions.Write(operation) + "=" + variable);
 
-			string line = StataScriptFunctions.SaveFileCommand(doOutputFileName);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, doOutputFileName);
 
 			StataScriptFunctions.WriteFooter(lines);
 

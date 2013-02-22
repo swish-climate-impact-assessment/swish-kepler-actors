@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace Swish.Adapters
 {
-	public class PasswordAdapter
+	public class PasswordAdapter: IAdapter
 	{
 		public string Name { get { return "password"; } }
 

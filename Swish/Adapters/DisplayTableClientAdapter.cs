@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class DisplayTableClientAdapter
+	public class DisplayTableClientAdapter: IAdapter
 	{
 		public const string OperationName = "displayClient";
 		public string Name { get { return OperationName; } }

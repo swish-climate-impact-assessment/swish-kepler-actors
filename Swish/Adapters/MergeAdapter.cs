@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class MergeAdapter
+	public class MergeAdapter: IAdapter
 	{
 		public string Name { get { return "merge"; } }
 
@@ -87,8 +87,7 @@ namespace Swish.Adapters
 
 			string line = StataScriptFunctions.SortCommand(variableNames);
 			lines.Add(line);
-			line = StataScriptFunctions.SaveFileCommand(intermediateFileName);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, intermediateFileName);
 
 			lines.Add("clear");
 			StataScriptFunctions.LoadFileCommand(lines, input1FileName);
@@ -129,8 +128,7 @@ namespace Swish.Adapters
 			{
 				lines.Add("drop " + StataScriptFunctions.MergeColumnName);
 			}
-			line = StataScriptFunctions.SaveFileCommand(doOutputFileName);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, doOutputFileName);
 
 			StataScriptFunctions.WriteFooter(lines);
 

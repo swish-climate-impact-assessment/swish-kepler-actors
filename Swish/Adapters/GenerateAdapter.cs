@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class GenerateAdapter
+	public class GenerateAdapter: IAdapter
 	{
 		public string Name { get { return "generate"; } }
 
@@ -14,12 +14,12 @@ namespace Swish.Adapters
 			string outputFileName = splitArguments.OutputFileName();
 			string variableName = splitArguments.String(Arguments.DefaultArgumentPrefix + "variable", true);
 			string expression = splitArguments.String(Arguments.DefaultArgumentPrefix + "expression", true);
-			string type = splitArguments.String(Arguments.DefaultArgumentPrefix + "type", false);
+			StataDataType type = splitArguments.Enum<StataDataType>(Arguments.DefaultArgumentPrefix + "type", false);
 			Generate(inputFileName, outputFileName, variableName, type, expression);
 			Console.Write(outputFileName);
 		}
 
-		public static void Generate(string inputFileName, string outputFileName, string variableName, string type, string expression)
+		public static void Generate(string inputFileName, string outputFileName, string variableName, StataDataType type, string expression)
 		{
 			if (!FileFunctions.FileExists(inputFileName))
 			{
@@ -44,16 +44,9 @@ namespace Swish.Adapters
 
 			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
 
-			if (string.IsNullOrWhiteSpace(type))
-			{
-				lines.Add(" generate " + variableName + " =" + expression);
-			} else
-			{
-				lines.Add(" generate " + type + " " + variableName + " =" + expression);
-			}
+			StataScriptFunctions.Generate(lines, type, variableName, expression);
 
-			string line = StataScriptFunctions.SaveFileCommand(intermaidateOutput);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, intermaidateOutput);
 
 			StataScriptFunctions.WriteFooter(lines);
 
@@ -81,7 +74,7 @@ namespace Swish.Adapters
 			record.Arguments.Add(new Tuple<string, string>("InputFileName", inputFileName));
 			record.Arguments.Add(new Tuple<string, string>("OutputFileName", outputFileName));
 			record.Arguments.Add(new Tuple<string, string>("Variable", variableName));
-			record.Arguments.Add(new Tuple<string, string>("Type", type));
+			record.Arguments.Add(new Tuple<string, string>("Type", type.ToString()));
 			record.Arguments.Add(new Tuple<string, string>("Expression", expression));
 			if (AdapterFunctions.RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
 			record.ComputerName = Environment.MachineName;

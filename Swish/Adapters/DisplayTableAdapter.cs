@@ -5,12 +5,13 @@ using System.Windows.Forms;
 
 namespace Swish.Adapters
 {
-	public class DisplayTableAdapter
+	public class DisplayTableAdapter: IAdapter
 	{
 		public string Name { get { return "display"; } }
 
 		public void Run(AdapterArguments splitArguments)
 		{
+			SwishFunctions.MessageTextBox(splitArguments.ArgumentString, false);
 			string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
 			Display(inputFileName);
 		}

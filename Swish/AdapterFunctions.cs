@@ -65,6 +65,7 @@ namespace Swish
 				{
 					throw new Exception("cannot find " + inputName + ": \"" + inputFileName + "\"");
 				}
+				inputFileNames.Add(inputName, inputFileName);
 			}
 
 			string outputFileName;
@@ -89,12 +90,12 @@ namespace Swish
 				intermaidateOutput = string.Empty;
 			}
 
-			SataScriptOutput scriptOutput = stataOperation.GenerateScript(splitArguments, inputFileNames, intermaidateOutput);
+			List<string> scriptOutput = stataOperation.GenerateScript(splitArguments, inputFileNames, intermaidateOutput);
 
 			List<string> lines = new List<string>();
 
 			StataScriptFunctions.WriteHeadder(lines);
-			lines.AddRange(scriptOutput.Lines);
+			lines.AddRange(scriptOutput);
 			StataScriptFunctions.WriteFooter(lines);
 
 			string log = StataFunctions.RunScript(lines, false);
@@ -114,6 +115,13 @@ namespace Swish
 				File.Move(intermaidateOutput, outputFileName);
 			}
 
+			Console.WriteLine(outputFileName);
+
+			ExportMetadata(stataOperation, splitArguments, inputFileNames, outputFileName, lines);
+		}
+
+		private static void ExportMetadata(IStataBasedOperation stataOperation, Arguments splitArguments, SortedList<string, string> inputFileNames, string outputFileName, List<string> lines)
+		{
 			List<MetadataRecord> metadata = new List<MetadataRecord>();
 
 			MetadataRecord record = new MetadataRecord();
@@ -151,6 +159,7 @@ namespace Swish
 
 			metadata.Add(record);
 			MetadataFunctions.Save(outputFileName, metadata);
+
 		}
 
 		private static IStataBasedOperation FindStataOperation(string operationName)
@@ -173,15 +182,23 @@ namespace Swish
 		{
 			string lowercaseOperation = operation.ToLower();
 			List<IAdapter> adapters = Adapters<IAdapter>();
+			string message = string.Empty;
 			for (int adapterIndex = 0; adapterIndex < adapters.Count; adapterIndex++)
 			{
 				IAdapter adapter = adapters[adapterIndex];
+
+
+				message += "adapter: " + adapter.GetType().FullName + Environment.NewLine;
 				if (adapter.Name.ToLower() == lowercaseOperation)
 				{
+					message += "Found actor!";
+					SwishFunctions.MessageTextBox(message, false);
 					return adapter;
 				}
 			}
 
+			message += "actor not found";
+			SwishFunctions.MessageTextBox(message, false);
 			return null;
 		}
 

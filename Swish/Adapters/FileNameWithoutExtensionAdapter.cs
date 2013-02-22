@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class FileNameWithoutExtensionAdapter
+	public class FileNameWithoutExtensionAdapter: IAdapter
 	{
 		public string Name { get { return "fileNameWithoutExtension"; } }
 

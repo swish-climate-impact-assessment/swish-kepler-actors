@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 namespace Swish
@@ -40,14 +39,15 @@ namespace Swish
 			return line;
 		}
 
-		public static string SaveFileCommand(string fileName)
+		public static void SaveFileCommand(List<string> lines, string fileName)
 		{
 			string extension = Path.GetExtension(fileName);
 			if (extension == ".csv")
 			{
-				return "outsheet using \"" + fileName + "\", comma";
+				lines.Add("outsheet using \"" + fileName + "\", comma");
+				return;
 			}
-			return "save \"" + fileName + "\"";
+			lines.Add("save \"" + fileName + "\"");
 		}
 
 		public static void LoadFileCommand(List<string> lines, string fileName)
@@ -78,8 +78,7 @@ namespace Swish
 				File.Delete(intermediateFileName);
 			}
 
-			string line = SaveFileCommand(intermediateFileName);
-			lines.Add(line);
+			SaveFileCommand(lines, intermediateFileName);
 
 			return intermediateFileName;
 		}
@@ -151,6 +150,18 @@ namespace Swish
 			_variableNameCount++;
 			return variableName;
 		}
+
+		public static void Generate(List<string> lines, StataDataType type, string variableName, string expression)
+		{
+			if (type == StataDataType.Unknown)
+			{
+				lines.Add(" generate " + variableName + " = " + expression);
+			} else
+			{
+				lines.Add(" generate " + type.ToString().ToLower() + " " + variableName + " = " + expression);
+			}
+		}
+
 	}
 }
 

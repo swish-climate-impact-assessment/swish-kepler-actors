@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class FillCategoryTimeSeriesAdapter
+	public class FillCategoryTimeSeriesAdapter: IAdapter
 	{
 		public string Name { get { return "FillCategoryTimeSeries"; } }
 
@@ -71,8 +71,7 @@ namespace Swish.Adapters
 				throw new Exception(" do stuff here ...");
 			}
 
-			string line = StataScriptFunctions.SaveFileCommand(intermaidateOutput);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, intermaidateOutput);
 
 			StataScriptFunctions.WriteFooter(lines);
 

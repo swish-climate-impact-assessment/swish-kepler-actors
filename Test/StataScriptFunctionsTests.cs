@@ -30,17 +30,19 @@ namespace Swish.Tests
 		public void SaveDynamicFileFormat()
 		{
 			string fileName = "stata.dta";
-			string line = StataScriptFunctions.SaveFileCommand(fileName);
+			List<string> lines = new List<string>();
+			StataScriptFunctions.SaveFileCommand(lines, fileName);
 
-			if (!line.StartsWith("save"))
+			if (!lines[0].StartsWith("save"))
 			{
 				throw new TestException();
 			}
 
 			fileName = "text.csv";
-			line = StataScriptFunctions.SaveFileCommand(fileName);
+			lines = new List<string>();
+			StataScriptFunctions.SaveFileCommand(lines, fileName);
 
-			if (!line.StartsWith("outsheet"))
+			if (!lines[0].StartsWith("outsheet"))
 			{
 				throw new TestException();
 			}
@@ -63,8 +65,7 @@ namespace Swish.Tests
 				File.Delete(outputFileName);
 			}
 
-			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, outputFileName);
 
 			string log = StataFunctions.RunScript(lines, false);
 			if (!FileFunctions.FileExists(outputFileName))
@@ -90,8 +91,7 @@ namespace Swish.Tests
 
 			string line = StataScriptFunctions.SortCommand(variableNames);
 			lines.Add(line);
-			line = StataScriptFunctions.SaveFileCommand(@"C:\Swish\SampleData\MergeTableTemp.dta");
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, @"C:\Swish\SampleData\MergeTableTemp.dta");
 
 			lines.Add("clear");
 			StataScriptFunctions.LoadFileCommand(lines, @"C:\Swish\SampleData\MergeTable2.csv");
@@ -100,8 +100,7 @@ namespace Swish.Tests
 			lines.Add(line);
 			lines.Add("merge 1:1 " + StataScriptFunctions.VariableList(variableNames) + " using \"" + @"C:\Swish\SampleData\MergeTableTemp.dta" + "\"");
 			lines.Add("drop " + StataScriptFunctions.MergeColumnName);
-			line = StataScriptFunctions.SaveFileCommand(@"C:\Swish\SampleData\MergeTableOut.csv");
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, @"C:\Swish\SampleData\MergeTableOut.csv");
 
 			StataScriptFunctions.WriteFooter(lines);
 

@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class ReplaceAdapter
+	public class ReplaceAdapter: IAdapter
 	{
 		public string Name { get { return "replace"; } }
 
@@ -57,8 +57,7 @@ namespace Swish.Adapters
 			//replace oldvar =exp [if] [in] [, nopromote]
 
 			lines.Add("replace " + value + " if " + condition);
-			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, outputFileName);
 
 			if (FileFunctions.FileExists(outputFileName))
 			{

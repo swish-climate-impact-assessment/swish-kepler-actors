@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
 
 namespace Swish.Adapters
 {
-	public class FormatAdapter
+	public class FormatAdapter: IAdapter
 	{
 		public string Name { get { return "format"; } }
 		public void Run(AdapterArguments splitArguments)
@@ -46,8 +44,7 @@ namespace Swish.Adapters
 
 			lines.Add("format " + StataScriptFunctions.VariableList(variableNames) + " " + format);
 
-			string line = StataScriptFunctions.SaveFileCommand(intermaidateOutput);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, intermaidateOutput);
 
 			StataScriptFunctions.WriteFooter(lines);
 

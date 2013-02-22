@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class TemporaryFileNameAdapter
+	public class TemporaryFileNameAdapter: IAdapter
 	{
 		public string Name { get { return "temporaryFileName"; } }
 

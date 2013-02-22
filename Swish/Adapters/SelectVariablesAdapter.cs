@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class SelectVariablesAdapter
+	public class SelectVariablesAdapter: IAdapter
 	{
 		public string Name { get { return "selectColumns"; } }
 
@@ -44,8 +44,7 @@ namespace Swish.Adapters
 			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
 			string line = "keep " + StataScriptFunctions.VariableList(variableNames);
 			lines.Add(line);
-			line = StataScriptFunctions.SaveFileCommand(outputFileName);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, outputFileName);
 
 			if (FileFunctions.FileExists(outputFileName))
 			{

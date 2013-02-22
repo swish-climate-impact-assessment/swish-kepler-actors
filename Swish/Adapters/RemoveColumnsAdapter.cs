@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class RemoveColumnsAdapter
+	public class RemoveColumnsAdapter: IAdapter
 	{
 		public string Name { get { return "removeColumns"; } }
 		public void Run(AdapterArguments splitArguments)
@@ -43,8 +43,7 @@ namespace Swish.Adapters
 			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
 			string line = "drop " + StataScriptFunctions.VariableList(variableNames);
 			lines.Add(line);
-			line = StataScriptFunctions.SaveFileCommand(outputFileName);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, outputFileName);
 
 			if (FileFunctions.FileExists(outputFileName))
 			{

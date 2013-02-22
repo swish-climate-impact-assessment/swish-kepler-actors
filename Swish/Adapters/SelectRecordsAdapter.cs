@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class SelectRecordsAdapter
+	public class SelectRecordsAdapter: IAdapter
 	{
 		public string Name { get { return "selectRecords"; } }
 
@@ -43,8 +43,7 @@ namespace Swish.Adapters
 			StataScriptFunctions.WriteHeadder(lines);
 			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
 			lines.Add("keep if " + expression);
-			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, outputFileName);
 
 			if (FileFunctions.FileExists(outputFileName))
 			{

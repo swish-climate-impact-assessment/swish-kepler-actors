@@ -412,7 +412,7 @@ namespace Swish.Tests
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			string variableName = "testVariable";
-			GenerateAdapter.Generate(inputFileName, outputFileName, variableName, string.Empty, "-head4");
+			GenerateAdapter.Generate(inputFileName, outputFileName, variableName, StataDataType.Unknown, "-head4");
 			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new TestException();

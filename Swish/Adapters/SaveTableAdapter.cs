@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class SaveTableAdapter
+	public class SaveTableAdapter: IAdapter
 	{
 		public string Name { get { return "save"; } }
 
@@ -35,8 +35,7 @@ namespace Swish.Adapters
 			List<string> lines = new List<string>();
 			StataScriptFunctions.WriteHeadder(lines);
 			StataScriptFunctions.LoadFileCommand(lines, inputFileName);
-			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, outputFileName);
 
 			if (FileFunctions.FileExists(outputFileName))
 			{

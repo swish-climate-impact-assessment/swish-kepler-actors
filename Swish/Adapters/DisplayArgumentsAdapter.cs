@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Swish.Adapters
 {
-	public class DisplayArgumentsAdapter
+	public class DisplayArgumentsAdapter: IAdapter
 	{
 		public string Name { get { return "test"; } }
 

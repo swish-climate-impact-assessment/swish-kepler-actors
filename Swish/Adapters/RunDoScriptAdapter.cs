@@ -2,7 +2,7 @@
 
 namespace Swish.Adapters
 {
-	public class RunDoScriptAdapter
+	public class RunDoScriptAdapter: IAdapter
 	{
 		public string Name { get { return "doScript"; } }
 		public void Run(AdapterArguments splitArguments)

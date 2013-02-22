@@ -172,6 +172,11 @@ namespace Swish
 		{
 			if (!name.StartsWith(_argumentPrefix))
 			{
+				name = _argumentPrefix + name;
+			}
+
+			if (!name.StartsWith(_argumentPrefix))
+			{
 				throw new Exception("Invalid argument name \"" + name + "\"");
 			}
 			int listIndex = -1;
@@ -192,6 +197,11 @@ namespace Swish
 
 		public string String(string name, bool throwOnMissing)
 		{
+			if (!name.StartsWith(_argumentPrefix))
+			{
+				name = _argumentPrefix + name;
+			}
+
 			int listIndex = IndexOf(name);
 			if (listIndex < 0)
 			{
@@ -216,6 +226,11 @@ namespace Swish
 
 		public List<string> StringList(string name, bool throwOnMissing, bool throwOnEmpty)
 		{
+			if (!name.StartsWith(_argumentPrefix))
+			{
+				name = _argumentPrefix + name;
+			}
+
 			string value = String(name, throwOnMissing);
 			List<string> values = new List<string>(value.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
 			if (values.Count == 0 && throwOnEmpty)
@@ -227,6 +242,11 @@ namespace Swish
 
 		public bool Exists(string name)
 		{
+			if (!name.StartsWith(_argumentPrefix))
+			{
+				name = _argumentPrefix + name;
+			}
+
 			int listIndex = IndexOf(name);
 			if (listIndex < 0)
 			{
@@ -240,6 +260,11 @@ namespace Swish
 
 		public List<T> EnumList<T>(string name, bool throwOnMissing, bool throwOnEmpty)
 		{
+			if (!name.StartsWith(_argumentPrefix))
+			{
+				name = _argumentPrefix + name;
+			}
+
 			List<string> items = StringList(name, throwOnMissing, throwOnEmpty);
 
 			List<T> results = new List<T>();
@@ -250,15 +275,32 @@ namespace Swish
 				{
 					continue;
 				}
-				T value = (T)Enum.Parse(typeof(T), item, true);
+				T value = (T)System.Enum.Parse(typeof(T), item, true);
 				results.Add(value);
 			}
 
 			return results;
 		}
 
+		public T Enum<T>(string name, bool throwOnMissing)
+		{
+			if (!name.StartsWith(_argumentPrefix))
+			{
+				name = _argumentPrefix + name;
+			}
+
+			string stringValue = String(name, throwOnMissing);
+			T value = (T)System.Enum.Parse(typeof(T), stringValue, true);
+			return value;
+		}
+
 		public bool Bool(string name, bool throwOnMissing)
 		{
+			if (!name.StartsWith(_argumentPrefix))
+			{
+				name = _argumentPrefix + name;
+			}
+
 			string stringValue = String(name, throwOnMissing);
 			if (string.IsNullOrWhiteSpace(stringValue))
 			{
@@ -285,13 +327,38 @@ namespace Swish
 
 		public void Remove(string name)
 		{
+			if (!name.StartsWith(_argumentPrefix))
+			{
+				name = _argumentPrefix + name;
+			}
+
 			int listIndex = IndexOf(name);
 			if (listIndex < 0)
 			{
-				return ;
+				return;
 			}
 
 			_splitArguments.RemoveAt(listIndex);
+		}
+
+		public double Double(string name, bool throwOnMissing)
+		{
+			if (!name.StartsWith(_argumentPrefix))
+			{
+				name = _argumentPrefix + name;
+			}
+
+			string stringValue = String(name, throwOnMissing);
+			if (string.IsNullOrWhiteSpace(stringValue))
+			{
+				if (throwOnMissing)
+				{
+					throw new Exception("Argument missing \"" + name + "\"");
+				}
+				return default(double);
+			}
+			double value = double.Parse(stringValue);
+			return value;
 		}
 
 	}

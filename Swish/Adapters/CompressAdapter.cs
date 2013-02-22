@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
 
 namespace Swish.Adapters
 {
-	public class CompressAdapter
+	public class CompressAdapter: IAdapter
 	{
 		public string Name { get { return "compress"; } }
 		public void Run(AdapterArguments splitArguments)
@@ -34,8 +32,7 @@ namespace Swish.Adapters
 
 			lines.Add("compress");
 
-			string line = StataScriptFunctions.SaveFileCommand(intermaidateOutput);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, intermaidateOutput);
 
 			StataScriptFunctions.WriteFooter(lines);
 

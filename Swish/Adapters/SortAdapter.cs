@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
-using System.Drawing;
 
 namespace Swish.Adapters
 {
-	public class SortAdapter
+	public class SortAdapter: IAdapter
 	{
 		public string Name { get { return "sort"; } }
 
@@ -46,8 +44,7 @@ namespace Swish.Adapters
 			string line = StataScriptFunctions.SortCommand(variableNames);
 			lines.Add(line);
 
-			line = StataScriptFunctions.SaveFileCommand(outputFileName);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, outputFileName);
 
 			if (FileFunctions.FileExists(outputFileName))
 			{

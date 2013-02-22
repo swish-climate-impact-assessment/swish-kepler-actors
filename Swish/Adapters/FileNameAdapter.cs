@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class FileNameAdapter
+	public class FileNameAdapter: IAdapter
 	{
 		public string Name { get { return "fileName"; } }
 

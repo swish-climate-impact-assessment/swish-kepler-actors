@@ -57,5 +57,10 @@ namespace Swish.Adapters
 		{
 			return _arguments.Bool(name, throwOnMissing);
 		}
+
+		public T Enum<T>(string name, bool throwOnMissing)
+		{
+			return _arguments.Enum<T>(name, throwOnMissing);
+		}
 	}
 }

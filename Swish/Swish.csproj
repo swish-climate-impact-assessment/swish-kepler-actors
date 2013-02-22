@@ -47,6 +47,11 @@
     <Compile Include="Adapters\CompressAdapter.cs" />
     <Compile Include="Adapters\AppendAdapter.cs" />
     <Compile Include="Adapters\CollapseAdapter.cs" />
+    <Compile Include="StataDataType.cs" />
+    <Compile Include="StataOperations\AndVariablesOperation.cs" />
+    <Compile Include="StataOperations\LessThanValueOperation.cs" />
+    <Compile Include="StataOperations\SubtractVariablesOperation.cs" />
+    <Compile Include="StataOperations\GreaterThanValueOperation.cs" />
     <Compile Include="StataOperations\IStataBasedOperation.cs" />
     <Compile Include="Adapters\FileNameWithoutExtensionAdapter.cs" />
     <Compile Include="Adapters\FileNameAdapter.cs" />
@@ -68,7 +73,6 @@
     <Compile Include="Adapters\DisplayTableClientAdapter.cs" />
     <Compile Include="Adapters\StataCommandAdapter.cs" />
     <Compile Include="Adapters\ReplaceAdapter.cs" />
-    <Compile Include="Adapters\GreaterThanValueAdapter.cs" />
     <Compile Include="Adapters\FormatAdapter.cs" />
     <Compile Include="Adapters\IAdapter.cs" />
     <Compile Include="CollapseOpperation.cs" />

@@ -10,7 +10,7 @@ namespace Swish.StataOperations
 		List<string> InputNames { get; }
 		bool ProducesOutputFile { get; }
 
-		SataScriptOutput GenerateScript(Arguments adapterArguments, SortedList<string, string> inputFileNames, string outputFileName);
+		List<string> GenerateScript(Arguments adapterArguments, SortedList<string, string> inputFileNames, string outputFileName);
 
 	}
 }

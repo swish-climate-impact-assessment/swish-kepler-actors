@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class AppendAdapter
+	public class AppendAdapter: IAdapter
 	{
 		public string Name { get { return "append"; } }
 
@@ -49,8 +49,7 @@ namespace Swish.Adapters
 			string intermediateFileName = StataScriptFunctions.ConvertToStataFormat(lines, input2FileName);
 			StataScriptFunctions.LoadFileCommand(lines, input1FileName);
 			lines.Add("append using \"" + intermediateFileName + "\"");
-			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
-			lines.Add(line);
+			StataScriptFunctions.SaveFileCommand(lines, outputFileName);
 
 			if (FileFunctions.FileExists(outputFileName))
 			{

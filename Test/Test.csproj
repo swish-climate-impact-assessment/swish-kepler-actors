@@ -42,7 +42,6 @@
     <Compile Include="ArgumentFunctionsTests.cs" />
     <Compile Include="AdapterTests.cs" />
     <Compile Include="TimeSeriesFillTests.cs" />
-    <None Include="Data\RCode.r" />
     <Compile Include="ProcessorFunctionsTests.cs" />
     <Compile Include="MetadataTests.cs" />
     <Compile Include="TestException.cs" />

@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class StataCommandAdapter
+	public class StataCommandAdapter: IAdapter
 	{
 		public string Name { get { return "stataCommand"; } }
 
@@ -41,9 +41,7 @@ namespace Swish.Adapters
 
 			lines.Add(command);
 
-			string line = StataScriptFunctions.SaveFileCommand(outputFileName);
-			lines.Add(line);
-
+			StataScriptFunctions.SaveFileCommand(lines, outputFileName);
 
 			if (FileFunctions.FileExists(outputFileName))
 			{
