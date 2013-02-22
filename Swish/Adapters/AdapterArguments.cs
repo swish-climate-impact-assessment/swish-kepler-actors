@@ -40,5 +40,22 @@ namespace Swish.Adapters
 		{
 			return _arguments.StringList(name, throwOnMissing, throwOnEmpty);
 		}
+
+		public string ArgumentString { get { return _arguments.ArgumentString; } }
+
+		internal bool Exists(string name)
+		{
+			return _arguments.Exists(name);
+		}
+
+		public List<T> EnumList<T>(string name, bool throwOnMissing, bool throwOnEmpty)
+		{
+			return _arguments.EnumList<T>(name, throwOnMissing, throwOnEmpty);
+		}
+
+		internal bool Bool(string name, bool throwOnMissing)
+		{
+			return _arguments.Bool(name, throwOnMissing);
+		}
 	}
 }

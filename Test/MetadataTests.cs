@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Swish.Adapters;
 
 namespace Swish.Tests
 {
@@ -14,8 +15,8 @@ namespace Swish.Tests
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(".csv");
 
-			AdapterFunctions.Sort(inputFileName, new List<string>(new string[] { "head4" }), intermediateFileName);
-			AdapterFunctions.Generate(intermediateFileName, outputFileName, "testVariable1", string.Empty, "-head4");
+			SortAdapter.Sort(inputFileName, new List<string>(new string[] { "head4" }), intermediateFileName);
+			GenerateAdapter.Generate(intermediateFileName, outputFileName, "testVariable1", string.Empty, "-head4");
 			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new TestException();
@@ -206,7 +207,7 @@ namespace Swish.Tests
 
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			AdapterFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, null);
+			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, null);
 
 			string metadataFileName = MetadataFunctions.FileName(outputFileName);
 			string text = File.ReadAllText(metadataFileName);
@@ -219,7 +220,7 @@ namespace Swish.Tests
 			List<MergeRecordResult> keep = new List<MergeRecordResult>();
 			keep.Add(MergeRecordResult.Match);
 			keep.Add(MergeRecordResult.Master);
-			AdapterFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, keep);
+			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, keep);
 
 			text = File.ReadAllText(metadataFileName);
 

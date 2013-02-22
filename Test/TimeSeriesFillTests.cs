@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Swish.Adapters;
 
 namespace Swish.Tests
 {
@@ -42,7 +43,7 @@ namespace Swish.Tests
 			categories.Add(new Tuple<string, List<string>>(CategoryAName, categoryAValues));
 			categories.Add(new Tuple<string, List<string>>(CategoryBName, categoryBValues));
 
-			AdapterFunctions.FillCategoryTimeSeries(inputFileName, outputFileName, categories, ValueVariableName, FillValue);
+			FillCategoryTimeSeriesAdapter.Fill(inputFileName, outputFileName, categories, ValueVariableName, FillValue);
 
 			Csv newTable = CsvFunctions.Read(outputFileName);
 			if (false

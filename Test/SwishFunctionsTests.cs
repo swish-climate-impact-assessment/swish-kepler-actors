@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using LibraryTypes.BootStrap;
+using Swish.Adapters;
 
 namespace Swish.Tests
 {
@@ -55,15 +56,15 @@ namespace Swish.Tests
 			string prompt = "Enter a password";
 			string prompt2 = "Enter another password";
 
-			string password = AdapterFunctions.Password(prompt, false);
+			string password = PasswordAdapter.Password(prompt, false);
 
-			string password2 = AdapterFunctions.Password(prompt, false);
+			string password2 = PasswordAdapter.Password(prompt, false);
 
-			string password3 = AdapterFunctions.Password(prompt2, false);
+			string password3 = PasswordAdapter.Password(prompt2, false);
 
-			string password4 = AdapterFunctions.Password(prompt, false);
+			string password4 = PasswordAdapter.Password(prompt, false);
 
-			string password5 = AdapterFunctions.Password(prompt2, false);
+			string password5 = PasswordAdapter.Password(prompt2, false);
 		}
 
 		internal void EncodeDecodePassword()

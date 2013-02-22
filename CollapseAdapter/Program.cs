@@ -21,7 +21,7 @@ namespace Swish.CollapseAdapter
 
 				CollapseOpperation operationCode = (CollapseOpperation)Enum.Parse(typeof(CollapseOpperation), operation, true);
 
-				double result = AdapterFunctions.Collapse(inputFileName, variable, operationCode);
+				double result = Swish.Adapters.CollapseAdapter.Collapse(inputFileName, variable, operationCode);
 
 				Console.Write(result.ToString());
 				return 0;

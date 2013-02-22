@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace Swish.Adapters
@@ -28,7 +27,7 @@ namespace Swish.Adapters
 				} else
 				{
 					useFileName = FileFunctions.TempoaryOutputFileName(".csv");
-				AdapterFunctions.	SaveFile(inputFileName, useFileName);
+					SaveTableAdapter.Save(inputFileName, useFileName);
 				}
 
 				string[] lines = File.ReadAllLines(useFileName);

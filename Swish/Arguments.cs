@@ -257,7 +257,7 @@ namespace Swish
 			return results;
 		}
 
-		internal bool Bool(string name, bool throwOnMissing)
+		public bool Bool(string name, bool throwOnMissing)
 		{
 			string stringValue = String(name, throwOnMissing);
 			if (string.IsNullOrWhiteSpace(stringValue))
@@ -281,6 +281,17 @@ namespace Swish
 				argumentText += argument.Item1 + " " + argument.Item2 + " ";
 			}
 			return argumentText;
+		}
+
+		public void Remove(string name)
+		{
+			int listIndex = IndexOf(name);
+			if (listIndex < 0)
+			{
+				return ;
+			}
+
+			_splitArguments.RemoveAt(listIndex);
 		}
 
 	}

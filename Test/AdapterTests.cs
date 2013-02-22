@@ -30,7 +30,7 @@ namespace Swish.Tests
 			{
 				File.Delete(outputFileName);
 			}
-			AdapterFunctions.Select(inputFileName, outputFileName, expression);
+			SelectRecordsAdapter.Select(inputFileName, outputFileName, expression);
 
 			Csv result = CsvFunctions.Read(outputFileName);
 
@@ -54,7 +54,7 @@ namespace Swish.Tests
 			variables.Add("head4");
 			variables.Add("head6");
 
-			AdapterFunctions.SelectColumns(inputFileName, outputFileName, variables);
+			SelectVariablesAdapter.Select(inputFileName, outputFileName, variables);
 
 			Csv result = CsvFunctions.Read(outputFileName);
 			if (result.Header.Count != 2 || !result.Header.Contains("head4") || !result.Header.Contains("head6"))
@@ -78,7 +78,7 @@ namespace Swish.Tests
 
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			AdapterFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, null);
+			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, null);
 
 			Csv table = CsvFunctions.Read(outputFileName);
 			string name = StataFunctionsTests.MergeVariable;
@@ -120,7 +120,7 @@ namespace Swish.Tests
 			}
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			AdapterFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, null);
+			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, null);
 
 			Csv table = CsvFunctions.Read(outputFileName);
 
@@ -145,7 +145,7 @@ namespace Swish.Tests
 			{
 				File.Delete(outputFileName);
 			}
-			AdapterFunctions.Transpose(inputFileName, outputFileName);
+			TransposeAdapter.Transpose(inputFileName, outputFileName);
 
 			Csv result = CsvFunctions.Read(outputFileName);
 
@@ -222,7 +222,7 @@ namespace Swish.Tests
 
 			string inputFile = StataFunctionsTests.GenerateMeanInputFile();
 
-			double value = AdapterFunctions.Collapse(inputFile, "head4", CollapseOpperation.Mean);
+			double value = CollapseAdapter.Collapse(inputFile, "head4", CollapseOpperation.Mean);
 			if (double.IsNaN(value))
 			{
 				throw new TestException();
@@ -240,7 +240,7 @@ namespace Swish.Tests
 			}
 			List<string> variables = new List<string>();
 			variables.Add("head4");
-			AdapterFunctions.Sort(inputFileName, variables, outputFileName);
+			SortAdapter.Sort(inputFileName, variables, outputFileName);
 		}
 
 		internal void Replace_1()
@@ -282,7 +282,7 @@ namespace Swish.Tests
 			string condition = "head2==4";
 			string value = "head2=1";
 
-			Arguments splitArguments = new  Arguments();
+			Arguments splitArguments = new Arguments();
 			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.InputArgument, inputFileName));
 			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.DefaultArgumentPrefix + "output", outputFileName));
 			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.DefaultArgumentPrefix + "condition", condition));
@@ -325,7 +325,7 @@ namespace Swish.Tests
 
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			AdapterFunctions.Merge(inputFileName1, inputFileName2, variables, intermediateFileName1, true, null);
+			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, intermediateFileName1, true, null);
 
 			//"matched (3)"
 			//"master only (1)"
@@ -412,7 +412,7 @@ namespace Swish.Tests
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
 			string variableName = "testVariable";
-			AdapterFunctions.Generate(inputFileName, outputFileName, variableName, string.Empty, "-head4");
+			GenerateAdapter.Generate(inputFileName, outputFileName, variableName, string.Empty, "-head4");
 			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new TestException();
@@ -449,7 +449,7 @@ namespace Swish.Tests
 			List<MergeRecordResult> keep = new List<MergeRecordResult>();
 			keep.Add(MergeRecordResult.Match);
 
-			AdapterFunctions.Merge(input1FileName, input2FileName, variableNames, outputFileName, false, keep);
+			MergeAdapter.Merge(input1FileName, input2FileName, variableNames, outputFileName, false, keep);
 
 			Csv table = CsvFunctions.Read(outputFileName);
 
