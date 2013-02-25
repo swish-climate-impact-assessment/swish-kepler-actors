@@ -47,6 +47,7 @@
     <Compile Include="Adapters\CompressAdapter.cs" />
     <Compile Include="Adapters\AppendAdapter.cs" />
     <Compile Include="Adapters\CollapseAdapter.cs" />
+    <Compile Include="Adapters\DateRangeAdapter.cs" />
     <Compile Include="StataDataType.cs" />
     <Compile Include="StataOperations\AndVariablesOperation.cs" />
     <Compile Include="StataOperations\LessThanValueOperation.cs" />

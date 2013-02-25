@@ -13,8 +13,7 @@ namespace Swish.Adapters
 			string input1FileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument + "1", true));
 			string input2FileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument + "2", true));
 			List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
-			string outputFileName = splitArguments.OutputFileName();
-			List<MergeRecordResult> keep = splitArguments.EnumList<MergeRecordResult>(Arguments.DefaultArgumentPrefix + "keep", false, false);
+			string outputFileName = splitArguments.OutputFileName(SwishFunctions.DataFileExtension);
 
 			string keepMergeString = FileFunctions.AdjustFileName(splitArguments.String(Arguments.DefaultArgumentPrefix + "keepMerge", false));
 			bool keepMerge;
@@ -26,22 +25,20 @@ namespace Swish.Adapters
 				keepMerge = false;
 			}
 
-			Merge(input1FileName, input2FileName, variableNames, outputFileName, keepMerge, keep);
+			Merge(input1FileName, input2FileName, variableNames, outputFileName, keepMerge);
 			Console.Write(outputFileName);
 		}
 
-		public static void Merge(string input1FileName, string input2FileName, List<string> variableNames, string outputFileName, bool keepMergeColumn, List<MergeRecordResult> keep)
+		public static void Merge(string input1FileName, string input2FileName, List<string> variableNames, string outputFileName, bool keepMergeColumn)
 		{
-			//if (!FileFunctions.FileExists(input1FileName))
-			//{
-			//    throw new Exception("cannot find file \"" + input1FileName + "\"");
-			//}
-
-			//if (!FileFunctions.FileExists(input2FileName))
-			//{
-			//    throw new Exception("cannot find file \"" + input2FileName + "\"");
-			//}
-
+			if (!File.Exists(input1FileName))
+			{
+				throw new ArgumentException(input1FileName + " not found");
+			}
+			if (!File.Exists(input2FileName))
+			{
+				throw new ArgumentException(input2FileName + " not found");
+			}
 			if (
 			Path.GetFullPath(input1FileName) == Path.GetFullPath(outputFileName)
 			|| Path.GetFullPath(input2FileName) == Path.GetFullPath(outputFileName)
@@ -72,7 +69,7 @@ namespace Swish.Adapters
 				File.Delete(doOutputFileName);
 			}
 
-			string intermediateFileName = FileFunctions.TempoaryOutputFileName(".dta");
+			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
 			if (FileFunctions.FileExists(intermediateFileName))
 			{
 				File.Delete(intermediateFileName);
@@ -95,31 +92,6 @@ namespace Swish.Adapters
 			line = StataScriptFunctions.SortCommand(variableNames);
 			lines.Add(line);
 
-			//line = "merge 1:1 " + StataScriptFunctions.VariableList(variableNames) + " using \"" + intermediateFileName + "\", force ";
-			//if (keep != null && keep.Count > 0)
-			//{
-			//    line += "keep(";
-
-			//    if (keep.Contains(MergeRecordResult.Match))
-			//    {
-			//        line += "match ";
-			//    }
-			//    if (keep.Contains(MergeRecordResult.MatchConflict))
-			//    {
-			//        line += "match_conflict ";
-			//    }
-			//    if (keep.Contains(MergeRecordResult.MatchUpdate))
-			//    {
-			//        line += "match_update ";
-			//    }
-			//    if (keep.Contains(MergeRecordResult.Using))
-			//    {
-			//        line += "using ";
-			//    }
-
-			//    line += ") ";
-			//}
-			//lines.Add(line);
 
 			line = "merge " + StataScriptFunctions.VariableList(variableNames) + ", using \"" + intermediateFileName + "\"";
 			lines.Add(line);
@@ -168,11 +140,6 @@ namespace Swish.Adapters
 			record.Arguments.Add(new Tuple<string, string>("VariableNames", string.Join(" ", variableNames)));
 			record.Arguments.Add(new Tuple<string, string>("KeepMergeColumn", keepMergeColumn.ToString()));
 			if (AdapterFunctions.RecordDoScript) { record.Arguments.Add(new Tuple<string, string>("DoScript", string.Join(Environment.NewLine, lines))); }
-			if (keep != null)
-			{
-				string keepString = string.Join(" ", keep);
-				record.Arguments.Add(new Tuple<string, string>("Keep", keepString));
-			}
 			record.ComputerName = Environment.MachineName;
 			record.Operation = "Merge";
 			record.Time = DateTime.Now;

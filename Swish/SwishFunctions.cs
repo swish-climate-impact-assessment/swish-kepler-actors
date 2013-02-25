@@ -11,6 +11,9 @@ namespace Swish
 {
 	public static class SwishFunctions
 	{
+		public const string DataFileExtension = ".dta";
+		public const string CsvFileExtension = ".csv";
+
 		public static void MessageTextBox(string message, bool returnImediatly)
 		{
 			MessageTextBox("Message", message.Split('\r', '\n'), returnImediatly);

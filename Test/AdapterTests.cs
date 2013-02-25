@@ -25,7 +25,7 @@ namespace Swish.Tests
 				}
 			}
 
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -44,7 +44,7 @@ namespace Swish.Tests
 		{
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -74,11 +74,11 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2, false);
 
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, null);
+			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, outputFileName, false);
 
 			Csv table = CsvFunctions.Read(outputFileName);
 			string name = StataFunctionsTests.MergeVariable;
@@ -113,14 +113,14 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2, false);
 
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, null);
+			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, outputFileName, false);
 
 			Csv table = CsvFunctions.Read(outputFileName);
 
@@ -140,7 +140,7 @@ namespace Swish.Tests
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 			Csv table = CsvFunctions.Read(inputFileName);
 
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -166,7 +166,7 @@ namespace Swish.Tests
 			// this is a test that the outputted script contains the command
 
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -199,7 +199,7 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateAppendInputFile(out inputFileName1, out inputFileName2);
 
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -233,7 +233,7 @@ namespace Swish.Tests
 		{
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -247,7 +247,7 @@ namespace Swish.Tests
 		{
 			string inputFileName = StataFunctionsTests.GenerateReplaceInputFile();
 
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -274,7 +274,7 @@ namespace Swish.Tests
 		{
 			string inputFileName = StataFunctionsTests.GenerateReplaceInputFile();
 
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -305,19 +305,19 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2, true);
 
-			string intermediateFileName1 = FileFunctions.TempoaryOutputFileName(".csv");
+			string intermediateFileName1 = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(intermediateFileName1))
 			{
 				File.Delete(intermediateFileName1);
 			}
 
-			string intermediateFileName2 = FileFunctions.TempoaryOutputFileName(".csv");
+			string intermediateFileName2 = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(intermediateFileName2))
 			{
 				File.Delete(intermediateFileName2);
 			}
 
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
@@ -325,15 +325,17 @@ namespace Swish.Tests
 
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, intermediateFileName1, true, null);
+			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, intermediateFileName1, true);
 
 			//"matched (3)"
 			//"master only (1)"
 			//"using only (2)"
 
-			ReplaceAdapter.Replace(intermediateFileName1, intermediateFileName2, "_merge==\"using only (2)\"", "head2=0");
+			//ReplaceAdapter.Replace(intermediateFileName1, intermediateFileName2, "_merge==\"using only (2)\"", "head2=0");
+			ReplaceAdapter.Replace(intermediateFileName1, intermediateFileName2, "_merge==2", "head2=0");
 
-			ReplaceAdapter.Replace(intermediateFileName2, outputFileName, "_merge==\"master only (1)\"", "head6=\"0\"");
+			//ReplaceAdapter.Replace(intermediateFileName2, outputFileName, "_merge==\"master only (1)\"", "head6=\"0\"");
+			ReplaceAdapter.Replace(intermediateFileName2, outputFileName, "_merge==1", "head6=\"0\"");
 
 			Csv table = CsvFunctions.Read(outputFileName);
 
@@ -410,7 +412,7 @@ namespace Swish.Tests
 		{
 
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			string variableName = "testVariable";
 			GenerateAdapter.Generate(inputFileName, outputFileName, variableName, StataDataType.Unknown, "-head4");
 			if (!FileFunctions.FileExists(outputFileName))
@@ -437,41 +439,5 @@ namespace Swish.Tests
 			}
 		}
 
-		internal void MergeKeep()
-		{
-			string input1FileName;
-			string input2FileName;
-			StataFunctionsTests.GenerateMergeInputFiles(out input1FileName, out input2FileName, true);
-
-			List<string> variableNames = new List<string>();
-			variableNames.Add(StataFunctionsTests.MergeVariable);
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
-			List<MergeRecordResult> keep = new List<MergeRecordResult>();
-			keep.Add(MergeRecordResult.Match);
-
-			MergeAdapter.Merge(input1FileName, input2FileName, variableNames, outputFileName, false, keep);
-
-			Csv table = CsvFunctions.Read(outputFileName);
-
-			int columnIndex = table.ColumnIndex(StataFunctionsTests.MergeVariable);
-			List<int> values = table.ColunmAsInts(columnIndex);
-
-
-			if (table.Records.Count != 9
-				|| !values.Contains(9)
-				|| !values.Contains(15)
-				|| !values.Contains(21)
-				|| !values.Contains(3)
-				|| !values.Contains(18)
-				|| !values.Contains(24)
-				|| !values.Contains(12)
-				|| !values.Contains(0)
-				|| !values.Contains(6)
-				)
-			{
-				throw new TestException();
-			}
-
 		}
-	}
 }

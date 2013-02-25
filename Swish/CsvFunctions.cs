@@ -86,7 +86,7 @@ namespace Swish
 			for (int columnIndex = 0; columnIndex < table.Header.Count; columnIndex++)
 			{
 				string header = table.Header[columnIndex];
-				if (columnIndex + 1 < table.Header.Count)
+				if (columnIndex + 1 < table.Header.Count || table.Header.Count == 1)
 				{
 					line += header + ",";
 				} else
@@ -103,7 +103,7 @@ namespace Swish
 				for (int columnIndex = 0; columnIndex < record.Count; columnIndex++)
 				{
 					string value = record[columnIndex];
-					if (columnIndex + 1 < record.Count)
+					if (columnIndex + 1 < record.Count || table.Header.Count == 1)
 					{
 						line += value + ",";
 					} else

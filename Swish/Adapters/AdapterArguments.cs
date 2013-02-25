@@ -21,19 +21,24 @@ namespace Swish.Adapters
 			return _arguments.String(name, throwOnMissing);
 		}
 
-		public string OutputFileName()
+		public string OutputFileName(string extension)
 		{
 			string outputFileName = String(_arguments.ArgumentPrefix + "output" + "", false);
 			outputFileName = FileFunctions.AdjustFileName(outputFileName);
 			if (string.IsNullOrWhiteSpace(outputFileName) || outputFileName.ToLower() == "none" || outputFileName.ToLower() == "temp")
 			{
-				outputFileName = FileFunctions.TempoaryOutputFileName(".dta");
+				outputFileName = FileFunctions.TempoaryOutputFileName(extension);
 			}
 			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
 			return outputFileName;
+		}
+
+		public void SetOutputFileName(string outputFileName)
+		{
+			_arguments.String(_arguments.ArgumentPrefix + "output", outputFileName);
 		}
 
 		internal List<string> StringList(string name, bool throwOnMissing, bool throwOnEmpty)
@@ -61,6 +66,13 @@ namespace Swish.Adapters
 		public T Enum<T>(string name, bool throwOnMissing)
 		{
 			return _arguments.Enum<T>(name, throwOnMissing);
+		}
+
+		public string ArgumentPrefix { get { return _arguments.ArgumentPrefix; } }
+
+		internal DateTime Date(string name, bool throwOnMissing)
+		{
+			return _arguments.Date( name,  throwOnMissing);
 		}
 	}
 }

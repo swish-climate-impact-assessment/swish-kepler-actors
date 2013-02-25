@@ -11,7 +11,7 @@ namespace Swish.Adapters
 		public void Run(AdapterArguments splitArguments)
 		{
 			string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
-			string outputFileName = splitArguments.OutputFileName();
+			string outputFileName = splitArguments.OutputFileName(SwishFunctions.DataFileExtension);
 			string condition = splitArguments.String(Arguments.DefaultArgumentPrefix + "condition", true);
 			string value = splitArguments.String(Arguments.DefaultArgumentPrefix + "value", true);
 			Replace(inputFileName, outputFileName, condition, value);

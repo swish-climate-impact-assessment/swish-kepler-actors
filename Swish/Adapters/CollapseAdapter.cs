@@ -4,13 +4,8 @@ using System.IO;
 
 namespace Swish.Adapters
 {
-	public class CollapseAdapter: IAdapter
+	public class CollapseAdapter
 	{
-		public string Name { get { return "generate"; } }
-
-		public void Run(AdapterArguments splitArguments)
-		{
-		}
 
 		public static double Collapse(string inputFileName, string variable, CollapseOpperation operation)
 		{
@@ -19,7 +14,7 @@ namespace Swish.Adapters
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
 
-			string doOutputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string doOutputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(doOutputFileName))
 			{
 				// Stata does not overwrite files

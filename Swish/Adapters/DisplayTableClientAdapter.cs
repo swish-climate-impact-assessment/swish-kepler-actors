@@ -21,12 +21,12 @@ namespace Swish.Adapters
 
 			try
 			{
-				if (extension.ToLower() == ".csv")
+				if (extension.ToLower() == SwishFunctions.CsvFileExtension)
 				{
 					useFileName = inputFileName;
 				} else
 				{
-					useFileName = FileFunctions.TempoaryOutputFileName(".csv");
+					useFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 					SaveTableAdapter.Save(inputFileName, useFileName);
 				}
 

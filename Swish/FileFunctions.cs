@@ -93,7 +93,7 @@ namespace Swish
 				return true;
 			}
 
-			if (File.Exists(fileName + ".dta"))
+			if (File.Exists(fileName + SwishFunctions.DataFileExtension))
 			{
 				return true;
 			}

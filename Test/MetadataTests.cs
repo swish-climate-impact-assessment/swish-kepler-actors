@@ -9,11 +9,11 @@ namespace Swish.Tests
 	{
 		internal void SequanceHasMetadata()
 		{
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			string metadataFileName = MetadataFunctions.FileName(outputFileName);
 
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
-			string intermediateFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 
 			SortAdapter.Sort(inputFileName, new List<string>(new string[] { "head4" }), intermediateFileName);
 			GenerateAdapter.Generate(intermediateFileName, outputFileName, "testVariable1", StataDataType.Unknown, "-head4");
@@ -48,7 +48,7 @@ namespace Swish.Tests
 			/// this verifies metadata can be detected for a data file 
 			// similar to File.Exists
 
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			string metadataFileName = MetadataFunctions.FileName(outputFileName);
 
 			if (MetadataFunctions.Exists(outputFileName))
@@ -203,31 +203,16 @@ namespace Swish.Tests
 			string inputFileName2;
 			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2, false);
 
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, null);
+			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, outputFileName, false);
 
 			string metadataFileName = MetadataFunctions.FileName(outputFileName);
 			string text = File.ReadAllText(metadataFileName);
 
-			if (text.Contains("<Name>Keep</Name>"))
-			{
-				throw new Exception();
-			}
-
-			List<MergeRecordResult> keep = new List<MergeRecordResult>();
-			keep.Add(MergeRecordResult.Match);
-			keep.Add(MergeRecordResult.Master);
-			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, outputFileName, false, keep);
-
-			text = File.ReadAllText(metadataFileName);
-
-			if (!text.Contains("<Name>Keep</Name>")
-				|| !text.Contains("Match")
-				|| !text.Contains("Master")
-				)
+			if (!text.Contains(StataFunctionsTests.MergeVariable))
 			{
 				throw new Exception();
 			}

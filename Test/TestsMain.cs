@@ -64,8 +64,12 @@ namespace Swish.Tests
 
 
 
-				new TimeSeriesFillTests().Fill();
 
+
+
+				new FillDatesTests().Fill();
+				new GenerateDateRangeOperationTests().GenerateDateRange();
+				//new TimeSeriesFillTests().Fill();
 				new ProcessorFunctionsTests().ReceiveOutput();
 				new MetadataTests().LoadMetadata();
 				new MetadataTests().ValuesWritten();
@@ -91,7 +95,6 @@ namespace Swish.Tests
 
 				new MetadataTests().MergeMetadata();
 				new MetadataTests().SequanceHasMetadata();
-				new AdapterTests().MergeKeep();
 				new AdapterTests().Generate();
 				new AdapterTests().MergeZero();
 				new AdapterTests().Replace_1();

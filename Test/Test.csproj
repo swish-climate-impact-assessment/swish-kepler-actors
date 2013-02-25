@@ -41,6 +41,8 @@
     <Compile Include="ActorTests.cs" />
     <Compile Include="ArgumentFunctionsTests.cs" />
     <Compile Include="AdapterTests.cs" />
+    <Compile Include="FillDatesTests.cs" />
+    <Compile Include="GenerateDateRangeOperationTests.cs" />
     <Compile Include="TimeSeriesFillTests.cs" />
     <Compile Include="ProcessorFunctionsTests.cs" />
     <Compile Include="MetadataTests.cs" />

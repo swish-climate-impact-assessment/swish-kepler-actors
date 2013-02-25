@@ -79,7 +79,7 @@ namespace Swish
 
 				if (string.IsNullOrWhiteSpace(outputFileName) || outputFileName.ToLower() == "none" || outputFileName.ToLower() == "temp")
 				{
-					outputFileName = FileFunctions.TempoaryOutputFileName(".dta");
+					outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
 				}
 
 				string outputExtension = Path.GetExtension(outputFileName);
@@ -182,23 +182,16 @@ namespace Swish
 		{
 			string lowercaseOperation = operation.ToLower();
 			List<IAdapter> adapters = Adapters<IAdapter>();
-			string message = string.Empty;
 			for (int adapterIndex = 0; adapterIndex < adapters.Count; adapterIndex++)
 			{
 				IAdapter adapter = adapters[adapterIndex];
 
-
-				message += "adapter: " + adapter.GetType().FullName + Environment.NewLine;
 				if (adapter.Name.ToLower() == lowercaseOperation)
 				{
-					message += "Found actor!";
-					SwishFunctions.MessageTextBox(message, false);
 					return adapter;
 				}
 			}
 
-			message += "actor not found";
-			SwishFunctions.MessageTextBox(message, false);
 			return null;
 		}
 

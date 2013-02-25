@@ -224,6 +224,16 @@ namespace Swish
 			return value;
 		}
 
+		public void String(string name, string value)
+		{
+			if (!name.StartsWith(_argumentPrefix))
+			{
+				name = _argumentPrefix + name;
+			}
+
+			_splitArguments.Add(new Tuple<string, string>(name, value));
+		}
+
 		public List<string> StringList(string name, bool throwOnMissing, bool throwOnEmpty)
 		{
 			if (!name.StartsWith(_argumentPrefix))
@@ -361,5 +371,37 @@ namespace Swish
 			return value;
 		}
 
+		public DateTime Date(string name, bool throwOnMissing)
+		{
+			if (!name.StartsWith(_argumentPrefix))
+			{
+				name = _argumentPrefix + name;
+			}
+
+			string stringValue = String(name, throwOnMissing);
+			if (string.IsNullOrWhiteSpace(stringValue))
+			{
+				if (throwOnMissing)
+				{
+					throw new Exception("Argument missing \"" + name + "\"");
+				}
+				return default(DateTime);
+			}
+
+			DateTime value = DateTime.Parse(stringValue);
+			return value;
+		}
+
+		public void Date(string name, DateTime value)
+		{
+			if (!name.StartsWith(_argumentPrefix))
+			{
+				name = _argumentPrefix + name;
+			}
+
+			string stringValue = value.ToShortDateString();
+
+			String(name, stringValue);
+		}
 	}
 }

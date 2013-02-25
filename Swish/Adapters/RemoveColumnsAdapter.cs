@@ -11,7 +11,7 @@ namespace Swish.Adapters
 		{
 			string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
 			List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
-			string outputFileName = splitArguments.OutputFileName();
+			string outputFileName = splitArguments.OutputFileName(SwishFunctions.DataFileExtension);
 			RemoveColumns(inputFileName, outputFileName, variableNames);
 			Console.Write(outputFileName);
 		}

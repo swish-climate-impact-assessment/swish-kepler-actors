@@ -12,7 +12,7 @@ namespace Swish.Adapters
 		{
 			string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
 			string command = splitArguments.String(Arguments.DefaultArgumentPrefix + "command", true);
-			string outputFileName = splitArguments.OutputFileName();
+			string outputFileName = splitArguments.OutputFileName(SwishFunctions.DataFileExtension);
 			StataCommand(inputFileName, outputFileName, command);
 			Console.Write(outputFileName);
 		}

@@ -33,10 +33,10 @@ namespace Swish.Tests
 			table.Records.Add(new List<string>(new string[] { categoryAValues[2], categoryBValues[2], "3", }));
 			table.Records.Add(new List<string>(new string[] { categoryAValues[3], categoryBValues[0], "4", }));
 
-			string inputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string inputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			CsvFunctions.Write(inputFileName, table);
 
-			string outputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 
 			List<Tuple<string, List<string>>> categories = new List<Tuple<string, List<string>>>();
 

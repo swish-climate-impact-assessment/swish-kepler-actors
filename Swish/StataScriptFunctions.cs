@@ -42,7 +42,7 @@ namespace Swish
 		public static void SaveFileCommand(List<string> lines, string fileName)
 		{
 			string extension = Path.GetExtension(fileName);
-			if (extension == ".csv")
+			if (extension == SwishFunctions.CsvFileExtension)
 			{
 				lines.Add("outsheet using \"" + fileName + "\", comma");
 				return;
@@ -54,7 +54,7 @@ namespace Swish
 		{
 			lines.Add("clear");
 			string extension = Path.GetExtension(fileName);
-			if (extension == ".csv")
+			if (extension == SwishFunctions.CsvFileExtension)
 			{
 				lines.Add("insheet using \"" + fileName + "\"");
 				return;
@@ -65,14 +65,14 @@ namespace Swish
 		public static string ConvertToStataFormat(List<string> lines, string fileName)
 		{
 			string extension = Path.GetExtension(fileName);
-			if (extension.ToLower() == ".dta")
+			if (extension.ToLower() == SwishFunctions.DataFileExtension)
 			{
 				return fileName;
 			}
 
 			LoadFileCommand(lines, fileName);
 
-			string intermediateFileName = FileFunctions.TempoaryOutputFileName(".dta");
+			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
 			if (FileFunctions.FileExists(intermediateFileName))
 			{
 				File.Delete(intermediateFileName);
