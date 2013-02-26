@@ -47,9 +47,11 @@
     <Compile Include="Adapters\CompressAdapter.cs" />
     <Compile Include="Adapters\AppendAdapter.cs" />
     <Compile Include="Adapters\CollapseAdapter.cs" />
+    <Compile Include="Adapters\FillDateAdapter.cs" />
     <Compile Include="Adapters\DateRangeAdapter.cs" />
     <Compile Include="StataDataType.cs" />
     <Compile Include="StataOperations\AndVariablesOperation.cs" />
+    <Compile Include="StataOperations\RenameVariableOperation.cs" />
     <Compile Include="StataOperations\LessThanValueOperation.cs" />
     <Compile Include="StataOperations\SubtractVariablesOperation.cs" />
     <Compile Include="StataOperations\GreaterThanValueOperation.cs" />
@@ -58,7 +60,6 @@
     <Compile Include="Adapters\FileNameAdapter.cs" />
     <Compile Include="Adapters\FillCategoryTimeSeriesAdapter.cs" />
     <Compile Include="Adapters\GenerateAdapter.cs" />
-    <Compile Include="StataOperations\SataScriptOutput.cs" />
     <Compile Include="Adapters\SaveTableAdapter.cs" />
     <Compile Include="Adapters\SelectRecordsAdapter.cs" />
     <Compile Include="Adapters\SelectVariablesAdapter.cs" />

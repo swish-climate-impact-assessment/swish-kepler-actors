@@ -11,8 +11,7 @@ namespace Swish.Adapters
 
 		public void Run(AdapterArguments splitArguments)
 		{
-			SwishFunctions.MessageTextBox(splitArguments.ArgumentString, false);
-			string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+			string inputFileName = splitArguments.InputFileName();
 			Display(inputFileName);
 		}
 

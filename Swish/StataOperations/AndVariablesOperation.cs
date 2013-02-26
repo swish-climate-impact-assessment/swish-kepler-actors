@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using Swish.Adapters;
 
 namespace Swish.StataOperations
 {
@@ -20,9 +21,8 @@ namespace Swish.StataOperations
 
 		public bool ProducesOutputFile { get { return true; } }
 
-		public List<string> GenerateScript(Arguments adapterArguments, SortedList<string, string> inputFileNames, string outputFileName)
+		public List<string> GenerateScript(AdapterArguments adapterArguments, SortedList<string, string> inputFileNames, string outputFileName)
 		{
-			SwishFunctions.MessageTextBox(adapterArguments.ArgumentString, false);
 			List<string> lines = new List<string>();
 
 			string inputFileName = inputFileNames[InputName];

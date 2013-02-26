@@ -9,8 +9,8 @@ namespace Swish.Adapters
 		public string Name { get { return "removeColumns"; } }
 		public void Run(AdapterArguments splitArguments)
 		{
-			string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
-			List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
+			string inputFileName = splitArguments.InputFileName();
+			List<string> variableNames = splitArguments.VariableNames();
 			string outputFileName = splitArguments.OutputFileName(SwishFunctions.DataFileExtension);
 			RemoveColumns(inputFileName, outputFileName, variableNames);
 			Console.Write(outputFileName);

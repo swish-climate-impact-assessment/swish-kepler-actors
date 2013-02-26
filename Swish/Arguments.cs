@@ -207,7 +207,6 @@ namespace Swish
 			{
 				if (throwOnMissing)
 				{
-					SwishFunctions.MessageTextBox("Argument missing \"" + name + "\"" + Environment.NewLine + ToString(), false);
 					throw new Exception("Argument missing \"" + name + "\"");
 				}
 				return string.Empty;
@@ -215,7 +214,6 @@ namespace Swish
 			string value = _splitArguments[listIndex].Item2;
 			if (string.IsNullOrWhiteSpace(value) && throwOnMissing)
 			{
-				SwishFunctions.MessageTextBox("Argument value missing \"" + name + "\"" + Environment.NewLine + ToString(), false);
 				throw new Exception("Argument value missing \"" + name + "\"");
 			}
 

@@ -9,7 +9,7 @@ namespace Swish.Adapters
 		public string Name { get { return "compress"; } }
 		public void Run(AdapterArguments splitArguments)
 		{
-			string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+			string inputFileName = splitArguments.InputFileName();
 			string outputFileName = splitArguments.OutputFileName(SwishFunctions.DataFileExtension);
 			Compress(inputFileName, outputFileName);
 			Console.Write(outputFileName);

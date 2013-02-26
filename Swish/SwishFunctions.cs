@@ -19,7 +19,7 @@ namespace Swish
 			MessageTextBox("Message", message.Split('\r', '\n'), returnImediatly);
 		}
 
-		internal static void MessageTextBox(string title, IList<string> lines, bool returnImediatly)
+		public static void MessageTextBox(string title, IList<string> lines, bool returnImediatly)
 		{
 			TextBox textBox = new TextBox();
 			Form form = new Form();

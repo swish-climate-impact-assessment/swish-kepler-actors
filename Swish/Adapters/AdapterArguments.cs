@@ -41,21 +41,11 @@ namespace Swish.Adapters
 			_arguments.String(_arguments.ArgumentPrefix + "output", outputFileName);
 		}
 
-		internal List<string> StringList(string name, bool throwOnMissing, bool throwOnEmpty)
-		{
-			return _arguments.StringList(name, throwOnMissing, throwOnEmpty);
-		}
-
 		public string ArgumentString { get { return _arguments.ArgumentString; } }
 
 		internal bool Exists(string name)
 		{
 			return _arguments.Exists(name);
-		}
-
-		public List<T> EnumList<T>(string name, bool throwOnMissing, bool throwOnEmpty)
-		{
-			return _arguments.EnumList<T>(name, throwOnMissing, throwOnEmpty);
 		}
 
 		internal bool Bool(string name, bool throwOnMissing)
@@ -68,11 +58,41 @@ namespace Swish.Adapters
 			return _arguments.Enum<T>(name, throwOnMissing);
 		}
 
-		public string ArgumentPrefix { get { return _arguments.ArgumentPrefix; } }
-
-		internal DateTime Date(string name, bool throwOnMissing)
+		public DateTime Date(string name, bool throwOnMissing)
 		{
-			return _arguments.Date( name,  throwOnMissing);
+			return _arguments.Date(name, throwOnMissing);
+		}
+
+		public string InputFileName()
+		{
+			string fileName = _arguments.String(Arguments.InputArgument, true);
+			fileName = FileFunctions.AdjustFileName(fileName);
+			return fileName;
+		}
+
+		public List<string> VariableNames()
+		{
+			List<string> variables = _arguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
+			return variables;
+		}
+
+		public string InputFileName(int number)
+		{
+			string variableName = Arguments.InputArgument + number.ToString();
+			string fileName = _arguments.String(variableName, true);
+			fileName = FileFunctions.AdjustFileName(fileName);
+			return fileName;
+		}
+
+		public string VariableName()
+		{
+			string variableName = _arguments.String(Arguments.DefaultArgumentPrefix + "variable", true);
+			return variableName;
+		}
+
+		internal double Double(string name, bool throwOnMissing)
+		{
+			return _arguments.Double(name, throwOnMissing);
 		}
 	}
 }

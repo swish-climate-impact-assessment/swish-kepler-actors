@@ -10,8 +10,8 @@ namespace Swish.Adapters
 
 		public void Run(AdapterArguments splitArguments)
 		{
-			string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
-			List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
+			string inputFileName = splitArguments.InputFileName();
+			List<string> variableNames = splitArguments.VariableNames();
 			string outputFileName = splitArguments.OutputFileName(SwishFunctions.DataFileExtension);
 			outputFileName = Sort(inputFileName, variableNames, outputFileName);
 			Console.Write(outputFileName);

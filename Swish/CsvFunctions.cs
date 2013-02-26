@@ -86,7 +86,7 @@ namespace Swish
 			for (int columnIndex = 0; columnIndex < table.Header.Count; columnIndex++)
 			{
 				string header = table.Header[columnIndex];
-				if (columnIndex + 1 < table.Header.Count || table.Header.Count == 1)
+				if (columnIndex + 1 < table.Header.Count)
 				{
 					line += header + ",";
 				} else
@@ -94,7 +94,10 @@ namespace Swish
 					line += header;
 				}
 			}
-			lines.Add(line);
+			if (!string.IsNullOrWhiteSpace(line))
+			{
+				lines.Add(line);
+			}
 
 			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
 			{
@@ -103,7 +106,7 @@ namespace Swish
 				for (int columnIndex = 0; columnIndex < record.Count; columnIndex++)
 				{
 					string value = record[columnIndex];
-					if (columnIndex + 1 < record.Count || table.Header.Count == 1)
+					if (columnIndex + 1 < record.Count)
 					{
 						line += value + ",";
 					} else

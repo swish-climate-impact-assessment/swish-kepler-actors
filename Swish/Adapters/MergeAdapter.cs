@@ -10,9 +10,9 @@ namespace Swish.Adapters
 
 		public void Run(AdapterArguments splitArguments)
 		{
-			string input1FileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument + "1", true));
-			string input2FileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument + "2", true));
-			List<string> variableNames = splitArguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
+			string input1FileName = splitArguments.InputFileName(1);
+			string input2FileName = splitArguments.InputFileName(2);
+			List<string> variableNames = splitArguments.VariableNames();
 			string outputFileName = splitArguments.OutputFileName(SwishFunctions.DataFileExtension);
 
 			string keepMergeString = FileFunctions.AdjustFileName(splitArguments.String(Arguments.DefaultArgumentPrefix + "keepMerge", false));
@@ -100,6 +100,10 @@ namespace Swish.Adapters
 			{
 				lines.Add("drop " + StataScriptFunctions.MergeColumnName);
 			}
+
+			line = StataScriptFunctions.SortCommand(variableNames);
+			lines.Add(line);
+
 			StataScriptFunctions.SaveFileCommand(lines, doOutputFileName);
 
 			StataScriptFunctions.WriteFooter(lines);

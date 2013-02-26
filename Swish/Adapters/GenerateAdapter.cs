@@ -10,9 +10,9 @@ namespace Swish.Adapters
 
 		public void Run(AdapterArguments splitArguments)
 		{
-			string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
+			string inputFileName = splitArguments.InputFileName();
 			string outputFileName = splitArguments.OutputFileName(SwishFunctions.DataFileExtension);
-			string variableName = splitArguments.String(Arguments.DefaultArgumentPrefix + "variable", true);
+			string variableName = splitArguments.VariableName();
 			string expression = splitArguments.String(Arguments.DefaultArgumentPrefix + "expression", true);
 			StataDataType type = splitArguments.Enum<StataDataType>(Arguments.DefaultArgumentPrefix + "type", false);
 			Generate(inputFileName, outputFileName, variableName, type, expression);

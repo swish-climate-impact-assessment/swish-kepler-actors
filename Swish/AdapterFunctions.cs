@@ -90,7 +90,7 @@ namespace Swish
 				intermaidateOutput = string.Empty;
 			}
 
-			List<string> scriptOutput = stataOperation.GenerateScript(splitArguments, inputFileNames, intermaidateOutput);
+			List<string> scriptOutput = stataOperation.GenerateScript(new AdapterArguments(splitArguments), inputFileNames, intermaidateOutput);
 
 			List<string> lines = new List<string>();
 

@@ -56,7 +56,7 @@ namespace Swish
 			string extension = Path.GetExtension(fileName);
 			if (extension == SwishFunctions.CsvFileExtension)
 			{
-				lines.Add("insheet using \"" + fileName + "\"");
+				lines.Add("insheet using \"" + fileName + "\", names clear comma case");
 				return;
 			}
 			lines.Add("use \"" + fileName + "\"");
