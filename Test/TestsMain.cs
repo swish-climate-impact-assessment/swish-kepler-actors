@@ -50,7 +50,7 @@ namespace Swish.Tests
 				// missing argument
 				// Arguments splitArguments = new Arguments(@">operation merge >input1 D:\HEALTH FORECASTING\FINAL\../TAPM/Brisbane/dataset1/x >input2  >variables date zone group >keepMerge true");
 				// string operation = splitArguments.String(Arguments.OperationArgument, true);
-				// AdapterFunctions.RunOperation(operation, splitArguments);
+				// AdapterFunctions.RunThisOperation(operation, splitArguments);
 
 				/// Input / output 
 				/// 
@@ -63,10 +63,7 @@ namespace Swish.Tests
 				/// 
 
 
-
-
-
-
+				new CountOfPreviousDaysTests().Count();
 				new FillDatesTests().Fill();
 				new GenerateDateRangeOperationTests().GenerateDateRange();
 				//new TimeSeriesFillTests().Fill();
@@ -127,7 +124,7 @@ namespace Swish.Tests
 
 		}
 
-		private static bool TablesSomewhatEqulivilent(string leftFileName, string rightFileName)
+			private static bool TablesSomewhatEqulivilent(string leftFileName, string rightFileName)
 		{
 			Csv left = CsvFunctions.Read(leftFileName);
 			Console.WriteLine("Load: \"" + leftFileName + "\"");
@@ -149,19 +146,14 @@ namespace Swish.Tests
 				string leftVariable = left.Header[leftIndex];
 				Console.Write("Column \"" + leftVariable + "\"");
 
-				int rightIndex = right.ColumnIndex(leftVariable);
+				int rightIndex = right.ColumnIndex(leftVariable, true);
 				Console.WriteLine(" index: " + leftIndex + " and " + rightIndex);
-
-				if (rightIndex < 0)
-				{
-					throw new Exception();
-				}
 			}
 
 			for (int leftIndex = 0; leftIndex < left.Header.Count; leftIndex++)
 			{
 				string leftVariable = left.Header[leftIndex];
-				int rightIndex = right.ColumnIndex(leftVariable);
+				int rightIndex = right.ColumnIndex(leftVariable, true);
 
 				List<string> leftValues = left.ColunmValues(leftIndex);
 				List<string> rightValues = right.ColunmValues(rightIndex);

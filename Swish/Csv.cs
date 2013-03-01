@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System;
 namespace Swish
 {
 	public class Csv
@@ -35,7 +36,7 @@ namespace Swish
 			}
 		}
 
-		public int ColumnIndex(string variableName)
+		public int ColumnIndex(string variableName, bool throwOnMissing)
 		{
 			int headderIndex = -1;
 			for (int columnIndex = 0; columnIndex < Header.Count; columnIndex++)
@@ -46,6 +47,10 @@ namespace Swish
 					headderIndex = columnIndex;
 					break;
 				}
+			}
+			if (throwOnMissing && headderIndex == 0)
+			{
+				throw new Exception("could not find variable \"" + variableName + "\"");
 			}
 			return headderIndex;
 		}
@@ -71,6 +76,62 @@ namespace Swish
 				values.Add(valueString);
 			}
 			return values;
+		}
+
+		internal List<double> ColunmAsDoubles(int columnIndex)
+		{
+			List<double> values = new List<double>();
+			for (int recordIndex = 0; recordIndex < Records.Count; recordIndex++)
+			{
+				string valueString = Records[recordIndex][columnIndex];
+				double value = double.Parse(valueString);
+				values.Add(value);
+			}
+			return values;
+		}
+
+
+		internal bool ColumnExists(string variableName)
+		{
+			return ColumnIndex(variableName, false) >= 0;
+		}
+
+		internal void Remove(string variableName)
+		{
+			int columnIndex = ColumnIndex(variableName, false);
+			if (columnIndex <= 0)
+			{
+				return;
+			}
+
+			_headder.RemoveAt(columnIndex);
+			for (int recordIndex = 0; recordIndex < _records.Count; recordIndex++)
+			{
+				List<string> record = _records[recordIndex];
+				record.RemoveAt(columnIndex);
+			}
+		}
+
+
+		internal void Add(string variableName, List<int> values)
+		{
+			if (string.IsNullOrWhiteSpace(variableName))
+			{
+				throw new Exception(""); 
+			}
+			_headder.Add(variableName);
+			if (values == null || values.Count != _records.Count)
+			{
+				throw new Exception("");
+			}
+
+			for (int recordIndex = 0; recordIndex < _records.Count; recordIndex++)
+			{
+				List<string> record = _records[recordIndex];
+				int value = values[recordIndex];
+
+				record.Add(value.ToString());
+			}
 		}
 	}
 

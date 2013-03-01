@@ -401,5 +401,38 @@ namespace Swish
 
 			String(name, stringValue);
 		}
+
+		public int Int(string name, bool throwOnMissing)
+		{
+			if (!name.StartsWith(_argumentPrefix))
+			{
+				name = _argumentPrefix + name;
+			}
+
+			string stringValue = String(name, throwOnMissing);
+			if (string.IsNullOrWhiteSpace(stringValue))
+			{
+				if (throwOnMissing)
+				{
+					throw new Exception("Argument missing \"" + name + "\"");
+				}
+				return default(int);
+			}
+			int value = int.Parse(stringValue);
+			return value;
+		}
+
+		public void Int(string name, int value)
+		{
+			if (!name.StartsWith(_argumentPrefix))
+			{
+				name = _argumentPrefix + name;
+			}
+
+			string stringValue = value.ToString();
+
+			String(name, stringValue);
+		}
+
 	}
 }

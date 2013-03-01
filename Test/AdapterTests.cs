@@ -14,7 +14,7 @@ namespace Swish.Tests
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 			Csv table = CsvFunctions.Read(inputFileName);
 
-			int head4Index = table.ColumnIndex("head4");
+			int head4Index = table.ColumnIndex("head4", true);
 			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
 			{
 				List<string> record = table.Records[recordIndex];
@@ -82,11 +82,7 @@ namespace Swish.Tests
 
 			Csv table = CsvFunctions.Read(outputFileName);
 			string name = StataFunctionsTests.MergeVariable;
-			int head4Index = table.ColumnIndex(name);
-			if (head4Index == -1)
-			{
-				throw new TestException("column not found");
-			}
+			int head4Index = table.ColumnIndex(name, true);
 
 			List<int> values = table.ColunmAsInts(head4Index);
 			for (int recordIndex = 0; recordIndex + 1 < table.Records.Count; recordIndex++)
@@ -125,11 +121,7 @@ namespace Swish.Tests
 			Csv table = CsvFunctions.Read(outputFileName);
 
 			string name = StataScriptFunctions.MergeColumnName;
-			int head4Index = table.ColumnIndex(name);
-			if (head4Index != -1)
-			{
-				throw new TestException("merge column not removed");
-			}
+			int head4Index = table.ColumnIndex(name, true);
 		}
 
 		public void TransposeTable()
@@ -258,7 +250,7 @@ namespace Swish.Tests
 
 			Csv table = CsvFunctions.Read(outputFileName);
 
-			int head2Index = table.ColumnIndex("head2");
+			int head2Index = table.ColumnIndex("head2", true);
 			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
 			{
 				List<string> record = table.Records[recordIndex];
@@ -345,13 +337,9 @@ namespace Swish.Tests
 			}
 
 			string name = StataFunctionsTests.MergeVariable;
-			int head4Index = table.ColumnIndex(name);
-			int head2Index = table.ColumnIndex("head2");
-			int head6Index = table.ColumnIndex("head6");
-			if (head4Index == -1 || head2Index == -1 || head6Index == -1)
-			{
-				throw new TestException("column not found");
-			}
+			int head4Index = table.ColumnIndex(name, true);
+			int head2Index = table.ColumnIndex("head2", true);
+			int head6Index = table.ColumnIndex("head6", true);
 
 			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
 			{
@@ -410,7 +398,6 @@ namespace Swish.Tests
 
 		internal void Generate()
 		{
-
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			string variableName = "testVariable";
@@ -421,12 +408,7 @@ namespace Swish.Tests
 			}
 			Csv table = CsvFunctions.Read(outputFileName);
 
-			int index = table.ColumnIndex(variableName);
-			if (index < 0)
-			{
-				throw new TestException();
-			}
-
+			int index = table.ColumnIndex(variableName, true);
 			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
 			{
 				List<string> record = table.Records[recordIndex];

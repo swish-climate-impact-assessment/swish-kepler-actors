@@ -90,9 +90,15 @@ namespace Swish.Adapters
 			return variableName;
 		}
 
-		internal double Double(string name, bool throwOnMissing)
+		public double Double(string name, bool throwOnMissing)
 		{
 			return _arguments.Double(name, throwOnMissing);
 		}
+
+		public int Int(string name, bool throwOnMissing)
+		{
+			return _arguments.Int(name, throwOnMissing);
+		}
+
 	}
 }

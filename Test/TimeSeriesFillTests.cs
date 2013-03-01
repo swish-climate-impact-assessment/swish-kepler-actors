@@ -1,4 +1,8 @@
-﻿using System;
+﻿
+
+
+
+using System;
 using System.Collections.Generic;
 using Swish.Adapters;
 
@@ -90,17 +94,9 @@ namespace Swish.Tests
 
 		private bool TryGetValue(Csv table, string valueA, string valueB, out string value)
 		{
-			int aIndex = table.ColumnIndex(CategoryAName);
-			if (aIndex <= 0)
-			{
-				throw new Exception();
-			}
+			int aIndex = table.ColumnIndex(CategoryAName, true);
 
-			int bIndex = table.ColumnIndex(CategoryBName);
-			if (bIndex <= 0)
-			{
-				throw new Exception();
-			}
+			int bIndex = table.ColumnIndex(CategoryBName, true);
 
 			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
 			{
@@ -110,11 +106,7 @@ namespace Swish.Tests
 
 				if (recordValueA == valueA && recordValueB == valueB)
 				{
-					int valueIndex = table.ColumnIndex(ValueVariableName);
-					if (valueIndex <= 0)
-					{
-						throw new Exception();
-					}
+					int valueIndex = table.ColumnIndex(ValueVariableName, true);
 
 					value = record[valueIndex];
 					return true;
@@ -126,3 +118,4 @@ namespace Swish.Tests
 		}
 	}
 }
+

@@ -9,6 +9,7 @@ namespace Swish
 {
 	public static class AdapterFunctions
 	{
+		public const string WorkingVariableName = "Working";
 		internal static bool RecordDoScript = false;
 
 		private static List<InterfaceType> Adapters<InterfaceType>()
@@ -194,6 +195,8 @@ namespace Swish
 
 			return null;
 		}
+
+
 
 	}
 }
