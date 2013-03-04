@@ -153,13 +153,17 @@ namespace Swish
 
 		public static void Generate(List<string> lines, StataDataType type, string variableName, string expression)
 		{
+			string intermediateName = TemporaryVariableName();
 			if (type == StataDataType.Unknown)
 			{
-				lines.Add(" generate " + variableName + " = " + expression);
+				lines.Add(" generate " + intermediateName + " = " + expression);
 			} else
 			{
-				lines.Add(" generate " + type.ToString().ToLower() + " " + variableName + " = " + expression);
+				lines.Add(" generate " + type.ToString().ToLower() + " " + intermediateName + " = " + expression);
 			}
+
+			TryDropVariable(lines, variableName);
+			RenameVariable(lines, intermediateName, variableName);
 		}
 
 	}

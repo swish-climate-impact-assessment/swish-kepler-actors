@@ -121,7 +121,11 @@ namespace Swish.Tests
 			Csv table = CsvFunctions.Read(outputFileName);
 
 			string name = StataScriptFunctions.MergeColumnName;
-			int head4Index = table.ColumnIndex(name, true);
+			int head4Index = table.ColumnIndex(name, false);
+			if (head4Index >=0)
+			{
+				throw new Exception(""); 
+			}
 		}
 
 		public void TransposeTable()
@@ -298,22 +302,8 @@ namespace Swish.Tests
 			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2, true);
 
 			string intermediateFileName1 = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
-			if (FileFunctions.FileExists(intermediateFileName1))
-			{
-				File.Delete(intermediateFileName1);
-			}
-
 			string intermediateFileName2 = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
-			if (FileFunctions.FileExists(intermediateFileName2))
-			{
-				File.Delete(intermediateFileName2);
-			}
-
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
 
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
@@ -421,5 +411,5 @@ namespace Swish.Tests
 			}
 		}
 
-		}
+	}
 }

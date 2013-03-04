@@ -36,7 +36,7 @@ namespace Swish.StataOperations
 			string resultVariableName = adapterArguments.String("resultVariable", false);
 			if (string.IsNullOrWhiteSpace(resultVariableName))
 			{
-				resultVariableName = "result";
+				resultVariableName = AdapterFunctions.WorkingVariableName;
 			}
 
 			string expression = variableName + " > " + value;

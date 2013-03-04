@@ -78,7 +78,6 @@ namespace Swish.Adapters
 			}
 
 			SaveTableAdapter.Save(intermediateOutput, outputFileName);
-			Console.WriteLine(outputFileName);
 		}
 	}
 }

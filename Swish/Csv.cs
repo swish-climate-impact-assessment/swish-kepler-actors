@@ -48,7 +48,7 @@ namespace Swish
 					break;
 				}
 			}
-			if (throwOnMissing && headderIndex == 0)
+			if (throwOnMissing && headderIndex < 0)
 			{
 				throw new Exception("could not find variable \"" + variableName + "\"");
 			}
@@ -117,7 +117,7 @@ namespace Swish
 		{
 			if (string.IsNullOrWhiteSpace(variableName))
 			{
-				throw new Exception(""); 
+				throw new Exception("");
 			}
 			_headder.Add(variableName);
 			if (values == null || values.Count != _records.Count)
