@@ -52,6 +52,16 @@
     <Compile Include="Adapters\DateRangeAdapter.cs" />
     <Compile Include="StataDataType.cs" />
     <Compile Include="StataOperations\AndVariablesOperation.cs" />
+    <Compile Include="StataOperations\AndValueOperation.cs" />
+    <Compile Include="StataOperations\GreaterThanOrEqualVariableOperation.cs" />
+    <Compile Include="StataOperations\GreaterThanVariableOperation.cs" />
+    <Compile Include="StataOperations\LessThanOrEqualVariableOperation.cs" />
+    <Compile Include="StataOperations\LessThanVariableOperation.cs" />
+    <Compile Include="StataOperations\OrVariablesOperation.cs" />
+    <Compile Include="StataOperations\GreaterThanOrEqualValueOperation.cs" />
+    <Compile Include="StataOperations\LessThanOrEqualValueOperation.cs" />
+    <Compile Include="StataOperations\NotVariableOperation.cs" />
+    <Compile Include="StataOperations\OrValueOperation.cs" />
     <Compile Include="StataOperations\RenameVariableOperation.cs" />
     <Compile Include="StataOperations\LessThanValueOperation.cs" />
     <Compile Include="StataOperations\SubtractVariablesOperation.cs" />
