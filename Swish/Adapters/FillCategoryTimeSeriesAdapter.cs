@@ -13,16 +13,19 @@ namespace Swish.Adapters
 			throw new Exception();
 		}
 
-		public static void Fill(string inputFileName, string outputFileName, List<Tuple<string/* category variable name */, List<string>/* values */>> categories, string variableName, string expression)
+		public static void Fill(string inputFileName, string outputFileName, 
+			
+			string dateVariableName,
+			List<Tuple<string/* category variable name */, List<string>/* values */>> categories,  string expression)
 		{
 			if (!FileFunctions.FileExists(inputFileName))
 			{
 				throw new Exception("cannot find file \"" + inputFileName + "\"");
 			}
 
-			if (string.IsNullOrWhiteSpace(variableName))
+			if (string.IsNullOrWhiteSpace(dateVariableName))
 			{
-				throw new Exception("Variable missing");
+				throw new Exception("dateVariableName missing");
 			}
 
 			if (string.IsNullOrWhiteSpace(expression))

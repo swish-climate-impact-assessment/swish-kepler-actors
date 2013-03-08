@@ -63,10 +63,11 @@ namespace Swish.Tests
 				/// 
 
 
+				new GetVariableNamesTests().Names();
+				new TimeSeriesFillTests().Fill();
 				new CountOfPreviousDaysTests().Count();
 				new FillDatesTests().Fill();
 				new GenerateDateRangeOperationTests().GenerateDateRange();
-				//new TimeSeriesFillTests().Fill();
 				new ProcessorFunctionsTests().ReceiveOutput();
 				new MetadataTests().LoadMetadata();
 				new MetadataTests().ValuesWritten();

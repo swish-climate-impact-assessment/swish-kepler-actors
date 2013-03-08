@@ -1,8 +1,4 @@
-﻿
-
-
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Swish.Adapters;
 
@@ -10,9 +6,13 @@ namespace Swish.Tests
 {
 	class TimeSeriesFillTests
 	{
-		const string ValueVariableName = "value";
+		const string DateVariableName = "Date";
 		const string CategoryAName = "factorA";
 		const string CategoryBName = "factorB";
+		const string ValueVariableName = "value";
+
+		public static List<string> CategoryAValues = new List<string>(new string[] { "A", "B", "C", "D" });
+		public static List<string> CategoryBValues = new List<string>(new string[] { "1", "2", "3", });
 
 		public void Fill()
 		{
@@ -24,30 +24,29 @@ namespace Swish.Tests
 
 			const string FillValue = "-1";
 
-			List<string> categoryAValues = new List<string>(new string[] { "A", "B", "C", "D" });
-			List<string> categoryBValues = new List<string>(new string[] { "1", "2", "3", });
-
 			Csv table = new Csv();
+			table.Header.Add(DateVariableName);
 			table.Header.Add(CategoryAName);
 			table.Header.Add(CategoryBName);
 			table.Header.Add(ValueVariableName);
 
-			table.Records.Add(new List<string>(new string[] { categoryAValues[0], categoryBValues[0], "1", }));
-			table.Records.Add(new List<string>(new string[] { categoryAValues[1], categoryBValues[1], "2", }));
-			table.Records.Add(new List<string>(new string[] { categoryAValues[2], categoryBValues[2], "3", }));
-			table.Records.Add(new List<string>(new string[] { categoryAValues[3], categoryBValues[0], "4", }));
+			table.Records.Add(new List<string>(new string[] { new DateTime(2000, 1, 1).ToShortDateString(), CategoryAValues[0], CategoryBValues[0], "1", }));
+			table.Records.Add(new List<string>(new string[] { new DateTime(2000, 1, 2).ToShortDateString(), CategoryAValues[1], CategoryBValues[1], "2", }));
+			table.Records.Add(new List<string>(new string[] { new DateTime(2000, 1, 3).ToShortDateString(), CategoryAValues[2], CategoryBValues[2], "3", }));
+			table.Records.Add(new List<string>(new string[] { new DateTime(2000, 1, 4).ToShortDateString(), CategoryAValues[3], CategoryBValues[0], "4", }));
 
 			string inputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			CsvFunctions.Write(inputFileName, table);
+			CsvFunctions.Write(@"C:\Users\u5265691\Desktop\TSFillWorking\SparseTable2.csv", table);
 
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 
 			List<Tuple<string, List<string>>> categories = new List<Tuple<string, List<string>>>();
 
-			categories.Add(new Tuple<string, List<string>>(CategoryAName, categoryAValues));
-			categories.Add(new Tuple<string, List<string>>(CategoryBName, categoryBValues));
+			categories.Add(new Tuple<string, List<string>>(CategoryAName, CategoryAValues));
+			categories.Add(new Tuple<string, List<string>>(CategoryBName, CategoryBValues));
 
-			FillCategoryTimeSeriesAdapter.Fill(inputFileName, outputFileName, categories, ValueVariableName, FillValue);
+			FillCategoryTimeSeriesAdapter.Fill(inputFileName, outputFileName, DateVariableName, categories, FillValue);
 
 			Csv newTable = CsvFunctions.Read(outputFileName);
 			if (false
@@ -55,18 +54,18 @@ namespace Swish.Tests
 				|| !newTable.Header.Contains(ValueVariableName)
 				|| !newTable.Header.Contains(CategoryAName)
 				|| !newTable.Header.Contains(CategoryBName)
-				|| newTable.Records.Count != categoryAValues.Count * categoryBValues.Count
+				|| newTable.Records.Count != CategoryAValues.Count * CategoryBValues.Count
 				)
 			{
 				throw new Exception();
 			}
 
-			for (int categoryAIndex = 0; categoryAIndex < categoryAValues.Count; categoryAIndex++)
+			for (int categoryAIndex = 0; categoryAIndex < CategoryAValues.Count; categoryAIndex++)
 			{
-				string valueA = categoryAValues[categoryAIndex];
-				for (int categoryBIndex = 0; categoryBIndex < categoryBValues.Count; categoryBIndex++)
+				string valueA = CategoryAValues[categoryAIndex];
+				for (int categoryBIndex = 0; categoryBIndex < CategoryBValues.Count; categoryBIndex++)
 				{
-					string valueB = categoryBValues[categoryBIndex];
+					string valueB = CategoryBValues[categoryBIndex];
 
 					string newValue;
 					if (!TryGetValue(newTable, valueA, valueB, out newValue))

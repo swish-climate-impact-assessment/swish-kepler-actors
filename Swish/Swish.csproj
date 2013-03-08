@@ -47,12 +47,17 @@
     <Compile Include="Adapters\CompressAdapter.cs" />
     <Compile Include="Adapters\AppendAdapter.cs" />
     <Compile Include="Adapters\CollapseAdapter.cs" />
+    <Compile Include="Adapters\VariableNamesAdapter.cs" />
     <Compile Include="Adapters\CountOfPreviousDaysAdapter.cs" />
     <Compile Include="Adapters\FillDateAdapter.cs" />
     <Compile Include="Adapters\DateRangeAdapter.cs" />
     <Compile Include="StataDataType.cs" />
     <Compile Include="StataOperations\AndVariablesOperation.cs" />
     <Compile Include="StataOperations\AndValueOperation.cs" />
+    <Compile Include="StataOperations\AddValueOperation.cs" />
+    <Compile Include="StataOperations\DivideValueOperation.cs" />
+    <Compile Include="StataOperations\MultiplyValueOperation.cs" />
+    <Compile Include="StataOperations\SubtractValueOperation.cs" />
     <Compile Include="StataOperations\GreaterThanOrEqualVariableOperation.cs" />
     <Compile Include="StataOperations\GreaterThanVariableOperation.cs" />
     <Compile Include="StataOperations\LessThanOrEqualVariableOperation.cs" />
