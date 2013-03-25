@@ -20,15 +20,18 @@ namespace Swish.SimpleInstaller
 			List<string> _pending = new List<string>(File.ReadLines(fileName));
 			List<string> _completed = new List<string>();
 
-			_ReportMessage(ReportMessage, 0, "Installing...");
+			SwishFunctions._ReportMessage(ReportMessage, 0, "Installing...");
 
 			for (int symbolIndex = 0; symbolIndex < _symbols.Count; symbolIndex++)
 			{
 				string symbol = _symbols[symbolIndex].Item1;
 				string value = _symbols[symbolIndex].Item2;
 
-				_ReportMessage(ReportMessage, -1, "Symbol: " + symbol + " -> " + value);
+				SwishFunctions._ReportMessage(ReportMessage, -1, "Symbol: " + symbol + " -> " + value);
 			}
+
+			List<string> newPending = SwishFunctions.ConvertLines(_pending, _symbols, ReportMessage);
+			_pending = newPending;
 
 			while (_pending.Count > 0)
 			{
@@ -46,21 +49,15 @@ namespace Swish.SimpleInstaller
 
 				RunLine(line, clean, ReportMessage);
 
-				_ReportMessage(ReportMessage, 100 * (_completed.Count) / (_completed.Count + _pending.Count), string.Empty);
+				SwishFunctions._ReportMessage(ReportMessage, 100 * (_completed.Count) / (_completed.Count + _pending.Count), string.Empty);
 			}
-			_ReportMessage(ReportMessage, 100, "Done.");
+			SwishFunctions._ReportMessage(ReportMessage, 100, "Done.");
 		}
 
-		internal static void RunLine(string _line, bool clean, ReportProgressFunction ReportMessage)
+
+		internal static void RunLine(string line, bool clean, ReportProgressFunction ReportMessage)
 		{
-				_ReportMessage(ReportMessage, -1, _line);
-
-			string line = ResloveSymbols(_line);
-
-			if (line != _line)
-			{
-					_ReportMessage(ReportMessage, -1, "Changed to: " + line);
-			}
+			SwishFunctions._ReportMessage(ReportMessage, -1, line);
 
 			string whiteSpace;
 			StringIO.SkipWhiteSpace(out whiteSpace, ref line);
@@ -70,14 +67,14 @@ namespace Swish.SimpleInstaller
 				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
 				if (!StringIO.TryReadString(out sourceDirectory, ref line))
 				{
-					throw new Exception("could not read line \"" + _line + "\"");
+					throw new Exception("could not read line \"" + line + "\"");
 				}
 
 				string destinationDirectory;
 				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
 				if (!StringIO.TryReadString(out destinationDirectory, ref line))
 				{
-					throw new Exception("could not read line \"" + _line + "\"");
+					throw new Exception("could not read line \"" + line + "\"");
 				}
 
 				string[] files = Directory.GetFiles(sourceDirectory, "*");
@@ -102,14 +99,14 @@ namespace Swish.SimpleInstaller
 				string sourceFileName;
 				if (!StringIO.TryReadString(out sourceFileName, ref line))
 				{
-					throw new Exception("could not read line \"" + _line + "\"");
+					throw new Exception("could not read line \"" + line + "\"");
 				}
 
 				string destinationFileName;
 				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
 				if (!StringIO.TryReadString(out destinationFileName, ref line))
 				{
-					throw new Exception("could not read line \"" + _line + "\"");
+					throw new Exception("could not read line \"" + line + "\"");
 				}
 
 				if (!clean)
@@ -124,38 +121,11 @@ namespace Swish.SimpleInstaller
 				// do nothing
 			} else
 			{
-				throw new Exception("could not read line \"" + _line + "\"");
+				throw new Exception("could not read line \"" + line + "\"");
 			}
 		}
 
 		private static List<Tuple<string, string>> _symbols = new List<Tuple<string, string>>();
-
-		private static string ResloveSymbols(string line)
-		{
-			for (int symbolIndex = 0; symbolIndex < _symbols.Count; symbolIndex++)
-			{
-				string symbol = _symbols[symbolIndex].Item1;
-				string value = StringIO.Escape(_symbols[symbolIndex].Item2);
-				line = line.Replace(symbol, value);
-			}
-
-			return line;
-		}
-
-		private static void _ReportMessage(ReportProgressFunction ReportMessage, int progress, string message)
-		{
-			if (ReportMessage != null)
-			{
-				ReportMessage(progress, message);
-			} else if (progress >= 0)
-			{
-				Console.WriteLine(progress + "%" + message);
-			} else if (ExceptionFunctions.ForceVerbose)
-			{
-				Console.WriteLine(message);
-			}
-
-		}
 
 	}
 }

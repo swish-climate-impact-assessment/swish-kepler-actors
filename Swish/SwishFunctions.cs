@@ -13,6 +13,7 @@ namespace Swish
 	{
 		public const string DataFileExtension = ".dta";
 		public const string CsvFileExtension = ".csv";
+		public const string DoFileExtension = ".do";
 
 		public static void MessageTextBox(string message, bool returnImediatly)
 		{
@@ -190,6 +191,49 @@ namespace Swish
 
 			string password = ASCIIEncoding.ASCII.GetString(passwordBytes);
 			return password;
+		}
+
+		public static List<string> ConvertLines(List<string> lines, List<Tuple<string, string>> symbols, ReportProgressFunction ReportMessage)
+		{
+			List<string> newPending = new List<string>();
+			for (int lineIndex = 0; lineIndex < lines.Count; lineIndex++)
+			{
+				string _line = lines[lineIndex];
+				string line = ResloveSymbols(_line, symbols);
+
+				if (line != _line)
+				{
+					_ReportMessage(ReportMessage, -1, "Changed to: " + line);
+				}
+				newPending.Add(line);
+			}
+			return newPending;
+		}
+
+		public static string ResloveSymbols(string line, List<Tuple<string, string>> symbols)
+		{
+			for (int symbolIndex = 0; symbolIndex < symbols.Count; symbolIndex++)
+			{
+				string symbol = symbols[symbolIndex].Item1;
+				string value = StringIO.Escape(symbols[symbolIndex].Item2);
+				line = line.Replace(symbol, value);
+			}
+
+			return line;
+		}
+
+		public static void _ReportMessage(ReportProgressFunction ReportMessage, int progress, string message)
+		{
+			if (ReportMessage != null)
+			{
+				ReportMessage(progress, message);
+			} else if (progress >= 0)
+			{
+				Console.WriteLine(progress + "%" + message);
+			} else if (ExceptionFunctions.ForceVerbose)
+			{
+				Console.WriteLine(message);
+			}
 		}
 
 	}

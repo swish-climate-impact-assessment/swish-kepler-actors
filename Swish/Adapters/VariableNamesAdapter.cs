@@ -11,11 +11,12 @@ namespace Swish.Adapters
 		public void Run(AdapterArguments splitArguments)
 		{
 			string inputFileName = splitArguments.InputFileName();
-			List<string> variableNames = VariableNames(inputFileName);
-			Console.WriteLine(string.Join(Environment.NewLine, variableNames));
+			SortedList<string, string> variableInformation = VariableInformation(inputFileName);
+
+			Console.WriteLine(string.Join(Environment.NewLine, variableInformation.Keys));
 		}
 
-		public static List<string> VariableNames(string inputFileName)
+		public static SortedList<string/*name*/, string /*type*/> VariableInformation(string inputFileName)
 		{
 			if (string.IsNullOrWhiteSpace(inputFileName))
 			{
@@ -37,13 +38,14 @@ namespace Swish.Adapters
 
 			string log = StataFunctions.RunScript(lines, false);
 
-			List<string> variableNames = ParseVariableNames(log);
-			return variableNames;
+			SortedList<string, string> variableInformation = ParseVariableNames(log);
+	
+			return  variableInformation;
 		}
 
-		private static List<string> ParseVariableNames(string log)
+		private static SortedList<string/*name*/, string /*type*/> ParseVariableNames(string log)
 		{
-			List<string> variableNames = new List<string>();
+			SortedList<string, string > variableNames = new  SortedList<string,string>();
 			List<string> lines = new List<string>(log.Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
 
 			/// Other  lines
@@ -67,9 +69,9 @@ namespace Swish.Adapters
 			int lineIndex = 0;
 			List<string> linesRead;
 			ReadUntil(lines, out linesRead, ref lineIndex, ". describe");
-			ReadUntil(lines, out linesRead, ref lineIndex, "------------------------------------------------------------------");
-			ReadUntil(lines, out linesRead, ref lineIndex, "------------------------------------------------------------------");
-			ReadUntil(lines, out linesRead, ref lineIndex, "------------------------------------------------------------------");
+			ReadUntil(lines, out linesRead, ref lineIndex, "---------------------------");
+			ReadUntil(lines, out linesRead, ref lineIndex, "---------------------------");
+			ReadUntil(lines, out linesRead, ref lineIndex, "---------------------------");
 			if (linesRead.Count == 0)
 			{
 				throw new Exception("");
@@ -78,8 +80,10 @@ namespace Swish.Adapters
 			{
 				string line = linesRead[variableIndex].Trim();
 				string[] fragments = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-				string variableName = fragments[0]; 
-				variableNames.Add(variableName);
+				string variableName = fragments[0];
+				string variableType = fragments[1]; 
+
+				variableNames.Add(variableName, variableType);
 			}
 			return variableNames;
 		}
@@ -91,11 +95,11 @@ namespace Swish.Adapters
 			{
 				if (lineIndex == lines.Count)
 				{
-					throw new Exception("");
+					throw new Exception("Could not find line \"" + searchLine + "\"" + Environment.NewLine + string.Join(Environment.NewLine, lines));
 				}
 
 				string line = lines[lineIndex++];
-				if (line.Trim() == searchLine)
+				if (line.Trim().StartsWith(searchLine))
 				{
 					break;
 				}

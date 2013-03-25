@@ -26,7 +26,7 @@ namespace Swish.Tests
 			lines.Add("collapse (mean) head4_mean=head4");
 			StataScriptFunctions.SaveFileCommand(lines, outputFile);
 
-			string doFileName = FileFunctions.TempoaryOutputFileName(".do");
+			string doFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DoFileExtension);
 			File.WriteAllLines(doFileName, lines.ToArray());
 
 			string arguments = StataFunctions.BatchArgument + "\"" + doFileName + "\"";

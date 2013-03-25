@@ -78,7 +78,7 @@ namespace Swish.Tests
 
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, outputFileName, false);
+			TableFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false);
 
 			Csv table = CsvFunctions.Read(outputFileName);
 			string name = StataFunctionsTests.MergeVariable;
@@ -116,7 +116,7 @@ namespace Swish.Tests
 			}
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, outputFileName, false);
+			TableFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false);
 
 			Csv table = CsvFunctions.Read(outputFileName);
 
@@ -284,7 +284,7 @@ namespace Swish.Tests
 			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.DefaultArgumentPrefix + "condition", condition));
 			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.DefaultArgumentPrefix + "value", value));
 
-			AdapterFunctions.RunOperation(new ReplaceAdapter().Name, splitArguments);
+			AdapterFunctions.RunOperation(new ReplaceAdapter().Name, new AdapterArguments( splitArguments));
 
 			if (!File.Exists(outputFileName))
 			{
@@ -307,7 +307,7 @@ namespace Swish.Tests
 
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, intermediateFileName1, true);
+			TableFunctions.Merge(inputFileName1, inputFileName2, variables, intermediateFileName1, true);
 
 			//"matched (3)"
 			//"master only (1)"

@@ -13,7 +13,7 @@ namespace Swish.Adapter
 				ExceptionFunctions.ForceVerbose = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "verbose");
 				string operation = splitArguments.String(Arguments.OperationArgument, true);
 
-				AdapterFunctions.RunOperation(operation, splitArguments);
+				AdapterFunctions.RunOperation(operation, new Adapters.AdapterArguments( splitArguments));
 				return 0;
 			} catch (Exception error)
 			{

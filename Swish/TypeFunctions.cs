@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace Swish
 {
@@ -89,6 +90,26 @@ namespace Swish
 			{
 				throw new ArgumentNullException("type");
 			}
+		}
+
+		public static List<InterfaceType> Interfaces<InterfaceType>()
+		{
+			Type iAdapterType = typeof(InterfaceType);
+			Assembly dll = iAdapterType.Assembly;
+			Type[] exportedTypes = dll.GetExportedTypes();
+
+			List<InterfaceType> adapters = new List<InterfaceType>();
+			for (int typeIndex = 0; typeIndex < exportedTypes.Length; typeIndex++)
+			{
+				Type type = exportedTypes[typeIndex];
+
+				if (TypeIsFormOf(type, iAdapterType) && type != iAdapterType && TypeHasDefaultConstructor(type))
+				{
+					InterfaceType adapter = (InterfaceType)Activator.CreateInstance(type);
+					adapters.Add(adapter);
+				}
+			}
+			return adapters;
 		}
 
 	}

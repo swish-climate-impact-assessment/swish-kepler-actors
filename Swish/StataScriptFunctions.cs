@@ -8,12 +8,12 @@ namespace Swish
 	{
 		public const string MergeColumnName = "_merge";
 
-		public static string SortCommand(List<string> variableNames)
+		public static string SortCommand(string variableNames)
 		{
 			string line;
-			if (variableNames.Count > 0)
+			if (!string.IsNullOrWhiteSpace(variableNames))
 			{
-				line = "sort " + VariableList(variableNames) + ", stable";
+				line = "sort " + variableNames + ", stable";
 			} else
 			{
 				line = "sort *, stable";

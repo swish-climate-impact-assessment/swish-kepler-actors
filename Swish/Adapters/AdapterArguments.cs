@@ -7,6 +7,7 @@ namespace Swish.Adapters
 	public class AdapterArguments
 	{
 		private Arguments _arguments;
+
 		public AdapterArguments(Arguments splitArguments)
 		{
 			if (splitArguments == null)
@@ -100,5 +101,32 @@ namespace Swish.Adapters
 			return _arguments.Int(name, throwOnMissing);
 		}
 
+		public string ResultVariableName()
+		{
+			string resultVariableName = _arguments.String(Arguments.DefaultArgumentPrefix + "resultVariable", false);
+			if (string.IsNullOrWhiteSpace(resultVariableName))
+			{
+				return AdapterFunctions.WorkingVariableName;
+			}
+			return resultVariableName;
+		}
+
+		public List<Tuple<string, string>> SplitArguments
+		{
+			get { return _arguments.SplitArguments; }
+		}
+
+
+		 public void Remove(string name)
+		{
+			_arguments.Remove( name);
+		}
+
+		public string ArgumentPrefix { get{return _arguments.ArgumentPrefix;} }
+
+		internal List<string> StringList(string name, bool throwOnMissing, bool throwOnEmpty)
+		{
+			return _arguments.StringList( name,  throwOnMissing,  throwOnEmpty);
+		}
 	}
 }

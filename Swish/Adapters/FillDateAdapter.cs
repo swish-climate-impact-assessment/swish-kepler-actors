@@ -39,7 +39,8 @@ namespace Swish.Adapters
 
 			List<string> mergeVariables = new List<string>();
 			mergeVariables.Add(variableName);
-			MergeAdapter.Merge(inputFileName, datesFileName, mergeVariables, outputFileName, false);
+
+			TableFunctions.Merge(inputFileName, datesFileName, mergeVariables, outputFileName, false);
 		}
 	}
 }

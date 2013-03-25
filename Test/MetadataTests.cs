@@ -207,7 +207,7 @@ namespace Swish.Tests
 
 			List<string> variables = new List<string>();
 			variables.Add(StataFunctionsTests.MergeVariable);
-			MergeAdapter.Merge(inputFileName1, inputFileName2, variables, outputFileName, false);
+			TableFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false);
 
 			string metadataFileName = MetadataFunctions.FileName(outputFileName);
 			string text = File.ReadAllText(metadataFileName);

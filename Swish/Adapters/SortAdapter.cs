@@ -41,7 +41,7 @@ namespace Swish.Adapters
 
 			/// sort varlist, stable
 			/// add variables names
-			string line = StataScriptFunctions.SortCommand(variableNames);
+			string line = StataScriptFunctions.SortCommand(StataScriptFunctions.VariableList(variableNames));
 			lines.Add(line);
 
 			StataScriptFunctions.SaveFileCommand(lines, outputFileName);

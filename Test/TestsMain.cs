@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.IO;
+using Swish.ScriptGenerators;
+using System.Windows.Forms;
 
 namespace Swish.Tests
 {
@@ -38,6 +41,8 @@ namespace Swish.Tests
 		{
 			try
 			{
+				GenerateScripts(@"..\..\..\SimpleInstaller\Scripts");
+				GenerateScripts(@"C:\Swish\StataScripts");
 
 				//string leftFileName = @"C:\Users\u5265691\Desktop\FinalWorking\merge4.csv";
 				//string rightFileName = @"C:\Users\u5265691\Desktop\FinalWorking\Merge4.do.csv";
@@ -62,9 +67,8 @@ namespace Swish.Tests
 				/// 
 				/// 
 
-
 				new GetVariableNamesTests().Names();
-				new TimeSeriesFillTests().Fill();
+				//new TimeSeriesFillTests().Fill();
 				new CountOfPreviousDaysTests().Count();
 				new FillDatesTests().Fill();
 				new GenerateDateRangeOperationTests().GenerateDateRange();
@@ -125,7 +129,26 @@ namespace Swish.Tests
 
 		}
 
-			private static bool TablesSomewhatEqulivilent(string leftFileName, string rightFileName)
+		private static void GenerateScripts(string directory)
+		{
+			directory = Path.Combine(Application.StartupPath, directory);
+			directory = Path.GetFullPath( directory);
+			if (!Directory.Exists(directory))
+			{
+				Directory.CreateDirectory(directory);
+			}
+
+			List<IScriptGenerator> generators = TypeFunctions.Interfaces<IScriptGenerator>();
+			for (int generatorIndex = 0; generatorIndex < generators.Count; generatorIndex++)
+			{
+				IScriptGenerator generator = generators[generatorIndex];
+				List<string> lines = generator.GenerateScript();
+				string fileName = Path.Combine(directory, generator.Name + SwishFunctions.DoFileExtension);
+				File.WriteAllLines(fileName, lines);
+			}
+		}
+
+		private static bool TablesSomewhatEqulivilent(string leftFileName, string rightFileName)
 		{
 			Csv left = CsvFunctions.Read(leftFileName);
 			Console.WriteLine("Load: \"" + leftFileName + "\"");
@@ -185,6 +208,8 @@ namespace Swish.Tests
 
 	}
 }
+
+
 
 
 

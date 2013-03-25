@@ -21,13 +21,14 @@ namespace Swish.Tests
 			string inputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			CsvFunctions.Write(inputFileName, table);
 
-			List<string> variables = Swish.Adapters.VariableNamesAdapter.VariableNames(inputFileName);
+			SortedList<string, string > variableInformation = Swish.Adapters.VariableNamesAdapter.VariableInformation(inputFileName);
+			List<string> variableNames = new List<string>(variableInformation.Keys);
 
-			if (variables.Count != 4 
-				|| !variables.Contains("Date")
-				|| !variables.Contains("CategoryA")
-				|| !variables.Contains("CategoryB")
-				|| !variables.Contains("Value"))
+			if (variableNames.Count != 4
+				|| !variableNames.Contains("Date")
+				|| !variableNames.Contains("CategoryA")
+				|| !variableNames.Contains("CategoryB")
+				|| !variableNames.Contains("Value"))
 			{
 				throw new Exception();
 

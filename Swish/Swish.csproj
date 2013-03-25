@@ -47,10 +47,15 @@
     <Compile Include="Adapters\CompressAdapter.cs" />
     <Compile Include="Adapters\AppendAdapter.cs" />
     <Compile Include="Adapters\CollapseAdapter.cs" />
+    <Compile Include="Adapters\UniqueValuesAdapter.cs" />
+    <Compile Include="Adapters\CountOfPreviousDaysAdapter2.cs" />
     <Compile Include="Adapters\VariableNamesAdapter.cs" />
     <Compile Include="Adapters\CountOfPreviousDaysAdapter.cs" />
     <Compile Include="Adapters\FillDateAdapter.cs" />
     <Compile Include="Adapters\DateRangeAdapter.cs" />
+    <Compile Include="ScriptGenerators\MergeScriptGenerator.cs" />
+    <Compile Include="TableFunctions.cs" />
+    <Compile Include="ScriptGenerators\IScriptGenerator.cs" />
     <Compile Include="StataDataType.cs" />
     <Compile Include="StataOperations\AndVariablesOperation.cs" />
     <Compile Include="StataOperations\AndValueOperation.cs" />
@@ -81,7 +86,6 @@
     <Compile Include="Adapters\SelectVariablesAdapter.cs" />
     <Compile Include="Adapters\SortAdapter.cs" />
     <Compile Include="Adapters\PasswordAdapter.cs" />
-    <Compile Include="Adapters\MergeAdapter.cs" />
     <Compile Include="Adapters\TransposeAdapter.cs" />
     <Compile Include="Adapters\TemporaryFileNameAdapter.cs" />
     <Compile Include="Adapters\DisplayArgumentsAdapter.cs" />
