@@ -39,6 +39,17 @@ namespace Swish
 			throw new Exception("No operation found for \"" + operationName + "\"");
 		}
 
+		private static string FindScriptTemplate(string operationName)
+		{
+			string fileName = Path.Combine(@"C:\Swish\StataScripts", operationName + SwishFunctions.DoFileExtension);
+			if (!File.Exists(fileName))
+			{
+				return string.Empty;
+			}
+			fileName = Path.GetFullPath(fileName);
+			return fileName;
+		}
+
 		private static void RunScriptTemplate(string operationName, string scriptFile, AdapterArguments adapterArguments)
 		{
 			string[] _lines = File.ReadAllLines(scriptFile);
@@ -50,7 +61,7 @@ namespace Swish
 
 			List<string> newLines;
 			List<Tuple<string, string>> symbols;
-			ResloveSymbols(out outputFileName, out inputFileNames, out newLines, out symbols, lines, intermediateFileName, adapterArguments);
+			StataScriptFunctions.ResloveSymbols(out outputFileName, out inputFileNames, out newLines, out symbols, lines, intermediateFileName, adapterArguments);
 			lines = SwishFunctions.ConvertLines(newLines, symbols, null);
 
 			string tempScriptFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DoFileExtension);
@@ -79,203 +90,6 @@ namespace Swish
 			}
 
 			Console.WriteLine(outputFileName);
-		}
-
-		public const string OutputType = "output";
-		public const string InputType = "input";
-		public const string VariableNamesType = "variableNames";
-		public const string BoolType = "bool";
-		public const string TemporaryFileType = "temporaryFile";
-
-		private static void ResloveSymbols(
-			out string outputFileName,
-			out SortedList<string, string> inputFileNames,
-			out List<string> newLines,
-			out List<Tuple<string, string>> symbols,
-			List<string> lines, string intermediateFileName, AdapterArguments adapterArguments)
-		{
-			newLines = new List<string>();
-			symbols = new List<Tuple<string, string>>();
-			symbols.Add(new Tuple<string, string>("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)));
-			symbols.Add(new Tuple<string, string>("%StartupPath%", Application.StartupPath));
-
-			outputFileName = string.Empty;
-			inputFileNames = new SortedList<string, string>();
-			for (int lineIndex = 0; lineIndex < lines.Count; lineIndex++)
-			{
-				string _line = lines[lineIndex];
-				string line = _line;
-				string buffer;
-				StringIO.SkipWhiteSpace(out buffer, ref line);
-				if (!StringIO.TryRead("//", ref line))
-				{
-					newLines.Add(line);
-					continue;
-				}
-
-				StringIO.SkipWhiteSpace(out buffer, ref line);
-				if (!StringIO.TryRead("define", ref line))
-				{
-					newLines.Add(line);
-					continue;
-				}
-
-				StringIO.SkipWhiteSpace(out buffer, ref line);
-				string type;
-				if (!StringIO.TryReadUntill(out type, out buffer, new string[] { " ", "\t", "\r", "\n" }, ref line))
-				{
-					throw new Exception("Could not read line: \"" + _line + "\"");
-				}
-
-				bool optional;
-				StringIO.SkipWhiteSpace(out buffer, ref line);
-				optional = StringIO.TryRead("optional", ref line);
-
-				StringIO.SkipWhiteSpace(out buffer, ref line);
-				string name;
-				if (StringIO.TryReadUntill(out buffer, out name, new string[] { " ", "\t", "\r", "\n" }, ref line))
-				{
-				} else
-				{
-					name = line;
-					line = string.Empty;
-				}
-				if (string.IsNullOrWhiteSpace(name))
-				{
-					throw new Exception("Could not read line: \"" + _line + "\"");
-				}
-
-				string defaultValue;
-				StringIO.SkipWhiteSpace(out buffer, ref line);
-				if (StringIO.TryReadUntill(out buffer, out defaultValue, new string[] { " ", "\t", "\r", "\n" }, ref line))
-				{
-				} else
-				{
-					defaultValue = line;
-				}
-
-				switch (type)
-				{
-				case TemporaryFileType:
-					{
-						string fileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
-						symbols.Add(new Tuple<string, string>(name, fileName));
-					} break;
-
-				case OutputType:
-					{
-						string _outputFileName = adapterArguments.String("%Output%" + "", false);
-						if (string.IsNullOrWhiteSpace(_outputFileName) || _outputFileName.ToLower() == "none" || _outputFileName.ToLower() == "temp")
-						{
-							_outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
-						} else
-						{
-							_outputFileName = FileFunctions.AdjustFileName(_outputFileName);
-						}
-
-						if (!string.IsNullOrWhiteSpace(outputFileName))
-						{
-							throw new Exception("outputFile defined multiple times");
-						}
-						outputFileName = _outputFileName;
-						symbols.Add(new Tuple<string, string>(name, intermediateFileName));
-					} break;
-
-				case InputType:
-					{
-						if (optional)
-						{
-							throw new Exception("inputFile cannot be optional");
-						}
-
-						string fileName = adapterArguments.String(name, !optional);
-						fileName = FileFunctions.AdjustFileName(fileName);
-						if (!File.Exists(fileName))
-						{
-							throw new ArgumentException(fileName + " not found");
-						}
-
-						string usedFileName = TableFunctions.ConvertInput(fileName);
-						symbols.Add(new Tuple<string, string>(name, usedFileName));
-						inputFileNames.Add(name, fileName);
-					} break;
-
-				case VariableNamesType:
-					{
-						string stringValue;
-						if (adapterArguments.Exists(name))
-						{
-							List<string> variableNames = adapterArguments.StringList(name, optional, !optional);
-							stringValue = StataScriptFunctions.VariableList(variableNames);
-						} else
-						{
-							stringValue = string.Empty;
-						}
-
-						if (string.IsNullOrWhiteSpace(stringValue))
-						{
-							if (!optional)
-							{
-								throw new Exception("Variables missing");
-							}
-							stringValue = defaultValue;
-						}
-
-						if (!string.IsNullOrWhiteSpace(stringValue))
-						{
-							symbols.Add(new Tuple<string, string>(name, stringValue));
-						}
-					} break;
-
-				case BoolType:
-					{
-						string stringValue;
-
-						if (adapterArguments.Exists(name))
-						{
-							stringValue = adapterArguments.String(name, !optional);
-						} else
-						{
-							stringValue = string.Empty;
-						}
-
-						if (string.IsNullOrWhiteSpace(stringValue))
-						{
-							if (!optional)
-							{
-								throw new Exception("Variables missing");
-							}
-							stringValue = defaultValue;
-						}
-
-						bool value;
-						if (!string.IsNullOrWhiteSpace(stringValue))
-						{
-							value = bool.Parse(stringValue.ToLower());
-							symbols.Add(new Tuple<string, string>(name, stringValue));
-						} else
-						{
-							value = false;
-						}
-
-						symbols.Add(new Tuple<string, string>(name, value.ToString()));
-					} break;
-
-				default:
-					throw new Exception("Unknown argument type \"" + type + "\" ");
-				}
-			}
-		}
-
-		private static string FindScriptTemplate(string operationName)
-		{
-			string fileName = Path.Combine(@"C:\Swish\StataScripts", operationName + SwishFunctions.DoFileExtension);
-			if (!File.Exists(fileName))
-			{
-				return string.Empty;
-			}
-			fileName = Path.GetFullPath(fileName);
-			return fileName;
 		}
 
 		private static void RunStataOperation(IStataBasedOperation stataOperation, AdapterArguments splitArguments)

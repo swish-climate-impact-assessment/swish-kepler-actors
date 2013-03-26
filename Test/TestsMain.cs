@@ -39,10 +39,17 @@ namespace Swish.Tests
 
 		static void Main(string[] arguments)
 		{
+
+			if (arguments.Length > 0 && arguments[0] == "Generate")
+			{
+				GenerateScripts(@"C:\Swish\StataScripts");
+				GenerateScripts(@"..\..\..\SimpleInstaller\Scripts");
+				GenerateScripts(@"..\..\..\SimpleInstaller\bin\Debug\Scripts");
+				return;
+			}
+
 			try
 			{
-				GenerateScripts(@"..\..\..\SimpleInstaller\Scripts");
-				GenerateScripts(@"C:\Swish\StataScripts");
 
 				//string leftFileName = @"C:\Users\u5265691\Desktop\FinalWorking\merge4.csv";
 				//string rightFileName = @"C:\Users\u5265691\Desktop\FinalWorking\Merge4.do.csv";
@@ -132,7 +139,7 @@ namespace Swish.Tests
 		private static void GenerateScripts(string directory)
 		{
 			directory = Path.Combine(Application.StartupPath, directory);
-			directory = Path.GetFullPath( directory);
+			directory = Path.GetFullPath(directory);
 			if (!Directory.Exists(directory))
 			{
 				Directory.CreateDirectory(directory);

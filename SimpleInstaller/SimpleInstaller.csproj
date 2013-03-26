@@ -161,9 +161,11 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"$(ProjectDir)\MakeDirectory.exe" "Actors"
+"$(ProjectDir)\MakeDirectory.exe" "Scripts"
 del /Q .\Actors\*
 copy "$(ProjectDir)\Actors\*" "Actors\"
 copy "$(TargetDir)\*" "$(TargetDir)\SwishBin\"
+copy "$(ProjectDir)\Scripts\*" "Scripts\"
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Swish.Adapters;
+using Swish.ScriptGenerators;
 
 namespace Swish.Tests
 {
@@ -201,7 +202,7 @@ namespace Swish.Tests
 				File.Delete(outputFileName);
 			}
 
-			AppendAdapter.Append(inputFileName1, inputFileName2, outputFileName);
+			TableFunctions.Append(inputFileName1, inputFileName2, outputFileName);
 
 			Csv table = CsvFunctions.Read(outputFileName);
 
@@ -250,7 +251,7 @@ namespace Swish.Tests
 			}
 			string condition = "head2==4";
 			string value = "head2=1";
-			ReplaceAdapter.Replace(inputFileName, outputFileName, condition, value);
+			TableFunctions.Replace(inputFileName, outputFileName, condition, value);
 
 			Csv table = CsvFunctions.Read(outputFileName);
 
@@ -284,7 +285,7 @@ namespace Swish.Tests
 			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.DefaultArgumentPrefix + "condition", condition));
 			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.DefaultArgumentPrefix + "value", value));
 
-			AdapterFunctions.RunOperation(new ReplaceAdapter().Name, new AdapterArguments( splitArguments));
+			AdapterFunctions.RunOperation(ReplaceScriptGenerator.NameString, new AdapterArguments(splitArguments));
 
 			if (!File.Exists(outputFileName))
 			{
@@ -314,10 +315,10 @@ namespace Swish.Tests
 			//"using only (2)"
 
 			//ReplaceAdapter.Replace(intermediateFileName1, intermediateFileName2, "_merge==\"using only (2)\"", "head2=0");
-			ReplaceAdapter.Replace(intermediateFileName1, intermediateFileName2, "_merge==2", "head2=0");
+			TableFunctions.Replace(intermediateFileName1, intermediateFileName2, "_merge==2", "head2=0");
 
 			//ReplaceAdapter.Replace(intermediateFileName2, outputFileName, "_merge==\"master only (1)\"", "head6=\"0\"");
-			ReplaceAdapter.Replace(intermediateFileName2, outputFileName, "_merge==1", "head6=\"0\"");
+			TableFunctions.Replace(intermediateFileName2, outputFileName, "_merge==1", "head6=\"0\"");
 
 			Csv table = CsvFunctions.Read(outputFileName);
 
@@ -391,7 +392,8 @@ namespace Swish.Tests
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			string variableName = "testVariable";
-			GenerateAdapter.Generate(inputFileName, outputFileName, variableName, StataDataType.Unknown, "-head4");
+
+			TableFunctions.Generate(inputFileName, outputFileName, variableName, StataDataType.Unknown, "-head4");
 			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new TestException();

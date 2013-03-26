@@ -44,8 +44,8 @@
   <ItemGroup>
     <Compile Include="AdapterFunctions.cs" />
     <Compile Include="Adapters\AdapterArguments.cs" />
-    <Compile Include="Adapters\CompressAdapter.cs" />
-    <Compile Include="Adapters\AppendAdapter.cs" />
+    <Compile Include="ScriptGenerators\CompressCompressScriptGenerator.cs" />
+    <Compile Include="ScriptGenerators\AppendScriptGenerator.cs" />
     <Compile Include="Adapters\CollapseAdapter.cs" />
     <Compile Include="Adapters\UniqueValuesAdapter.cs" />
     <Compile Include="Adapters\CountOfPreviousDaysAdapter2.cs" />
@@ -81,7 +81,7 @@
     <Compile Include="Adapters\FileNameWithoutExtensionAdapter.cs" />
     <Compile Include="Adapters\FileNameAdapter.cs" />
     <Compile Include="Adapters\FillCategoryTimeSeriesAdapter.cs" />
-    <Compile Include="Adapters\GenerateAdapter.cs" />
+    <Compile Include="ScriptGenerators\GenerateScriptGenerator.cs" />
     <Compile Include="Adapters\SaveTableAdapter.cs" />
     <Compile Include="Adapters\SelectRecordsAdapter.cs" />
     <Compile Include="Adapters\SelectVariablesAdapter.cs" />
@@ -90,13 +90,13 @@
     <Compile Include="Adapters\TransposeAdapter.cs" />
     <Compile Include="Adapters\TemporaryFileNameAdapter.cs" />
     <Compile Include="Adapters\DisplayArgumentsAdapter.cs" />
-    <Compile Include="Adapters\RemoveColumnsAdapter.cs" />
+    <Compile Include="ScriptGenerators\DeleteVariablesScriptGenerator.cs" />
     <Compile Include="Adapters\RunDoScriptAdapter.cs" />
     <Compile Include="Adapters\DisplayTableAdapter.cs" />
     <Compile Include="Adapters\DisplayTableClientAdapter.cs" />
     <Compile Include="Adapters\StataCommandAdapter.cs" />
-    <Compile Include="Adapters\ReplaceAdapter.cs" />
-    <Compile Include="Adapters\FormatAdapter.cs" />
+    <Compile Include="ScriptGenerators\ReplaceScriptGenerator.cs" />
+    <Compile Include="ScriptGenerators\FormatScriptGenerator.cs" />
     <Compile Include="Adapters\IAdapter.cs" />
     <Compile Include="CollapseOpperation.cs" />
     <Compile Include="Arguments.cs" />

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Swish.CollapseAdapter
+namespace Swish.CollapseAdapterExecutable
 {
 	static class Program
 	{
