@@ -19,6 +19,7 @@ namespace Swish
 			if (!string.IsNullOrWhiteSpace(scriptFile))
 			{
 				RunScriptTemplate(operationName, scriptFile, splitArguments);
+				return;
 			}
 
 			IAdapter adapter = FindAdapter(operationName);
@@ -46,7 +47,11 @@ namespace Swish
 
 			string outputFileName;
 			SortedList<string, string> inputFileNames;
-			lines = ConvertScript(out outputFileName, out	 inputFileNames, lines, intermediateFileName, adapterArguments);
+
+			List<string> newLines;
+			List<Tuple<string, string>> symbols;
+			ResloveSymbols(out outputFileName, out inputFileNames, out newLines, out symbols, lines, intermediateFileName, adapterArguments);
+			lines = SwishFunctions.ConvertLines(newLines, symbols, null);
 
 			string tempScriptFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DoFileExtension);
 			File.WriteAllLines(tempScriptFileName, lines);
@@ -82,10 +87,15 @@ namespace Swish
 		public const string BoolType = "bool";
 		public const string TemporaryFileType = "temporaryFile";
 
-		private static List<string> ConvertScript(out string outputFileName, out SortedList<string, string> inputFileNames, List<string> lines, string intermediateFileName, AdapterArguments adapterArguments)
+		private static void ResloveSymbols(
+			out string outputFileName,
+			out SortedList<string, string> inputFileNames,
+			out List<string> newLines,
+			out List<Tuple<string, string>> symbols,
+			List<string> lines, string intermediateFileName, AdapterArguments adapterArguments)
 		{
-			List<string> _lines = new List<string>();
-			List<Tuple<string, string>> symbols = new List<Tuple<string, string>>();
+			newLines = new List<string>();
+			symbols = new List<Tuple<string, string>>();
 			symbols.Add(new Tuple<string, string>("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)));
 			symbols.Add(new Tuple<string, string>("%StartupPath%", Application.StartupPath));
 
@@ -99,14 +109,14 @@ namespace Swish
 				StringIO.SkipWhiteSpace(out buffer, ref line);
 				if (!StringIO.TryRead("//", ref line))
 				{
-					_lines.Add(line);
+					newLines.Add(line);
 					continue;
 				}
 
 				StringIO.SkipWhiteSpace(out buffer, ref line);
 				if (!StringIO.TryRead("define", ref line))
 				{
-					_lines.Add(line);
+					newLines.Add(line);
 					continue;
 				}
 
@@ -154,13 +164,21 @@ namespace Swish
 
 				case OutputType:
 					{
-						string _outputFileName = adapterArguments.OutputFileName(SwishFunctions.DataFileExtension);
+						string _outputFileName = adapterArguments.String("%Output%" + "", false);
+						if (string.IsNullOrWhiteSpace(_outputFileName) || _outputFileName.ToLower() == "none" || _outputFileName.ToLower() == "temp")
+						{
+							_outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
+						} else
+						{
+							_outputFileName = FileFunctions.AdjustFileName(_outputFileName);
+						}
+
 						if (!string.IsNullOrWhiteSpace(outputFileName))
 						{
 							throw new Exception("outputFile defined multiple times");
 						}
 						outputFileName = _outputFileName;
-						symbols.Add(new Tuple<string, string>(name, outputFileName));
+						symbols.Add(new Tuple<string, string>(name, intermediateFileName));
 					} break;
 
 				case InputType:
@@ -171,13 +189,14 @@ namespace Swish
 						}
 
 						string fileName = adapterArguments.String(name, !optional);
-
 						fileName = FileFunctions.AdjustFileName(fileName);
 						if (!File.Exists(fileName))
 						{
 							throw new ArgumentException(fileName + " not found");
 						}
-						symbols.Add(new Tuple<string, string>(name, fileName));
+
+						string usedFileName = TableFunctions.ConvertInput(fileName);
+						symbols.Add(new Tuple<string, string>(name, usedFileName));
 						inputFileNames.Add(name, fileName);
 					} break;
 
@@ -202,7 +221,7 @@ namespace Swish
 							stringValue = defaultValue;
 						}
 
-						if (string.IsNullOrWhiteSpace(stringValue))
+						if (!string.IsNullOrWhiteSpace(stringValue))
 						{
 							symbols.Add(new Tuple<string, string>(name, stringValue));
 						}
@@ -230,7 +249,7 @@ namespace Swish
 						}
 
 						bool value;
-						if (string.IsNullOrWhiteSpace(stringValue))
+						if (!string.IsNullOrWhiteSpace(stringValue))
 						{
 							value = bool.Parse(stringValue.ToLower());
 							symbols.Add(new Tuple<string, string>(name, stringValue));
@@ -246,15 +265,6 @@ namespace Swish
 					throw new Exception("Unknown argument type \"" + type + "\" ");
 				}
 			}
-
-			for (int argumentIndex = 0; argumentIndex < adapterArguments.SplitArguments.Count; argumentIndex++)
-			{
-				Tuple<string, string> nameValue = adapterArguments.SplitArguments[argumentIndex];
-				symbols.Add(new Tuple<string, string>(nameValue.Item1, nameValue.Item2));
-			}
-
-			_lines = SwishFunctions.ConvertLines(_lines, symbols, null);
-			return _lines;
 		}
 
 		private static string FindScriptTemplate(string operationName)

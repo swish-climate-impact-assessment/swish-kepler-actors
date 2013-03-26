@@ -23,7 +23,6 @@ namespace Swish.Tests
 			string inputFileName = GenerateInputData(startDate, endDate);
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 
-
 			FillDateAdapter.Fill(inputFileName, outputFileName, dateVariableName, startDate, endDate);
 
 			Csv output = CsvFunctions.Read(outputFileName);

@@ -203,7 +203,7 @@ namespace Swish
 
 				if (line != _line)
 				{
-					_ReportMessage(ReportMessage, -1, "Changed to: " + line);
+					_ReportMessage(ReportMessage, -1, "\"" + _line + "\"" + " changed to " + "\"" + line + "\"");
 				}
 				newPending.Add(line);
 			}

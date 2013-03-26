@@ -14,6 +14,5 @@ clear
 use "%Input1%"
 sort %VariableNames%, stable
 merge %VariableNames%, using "%TemporaryFile%"
-drop _merge
 sort %VariableNames%, stable
 save "%Output%"

@@ -5,9 +5,9 @@ using Swish.Adapters;
 
 namespace Swish.ScriptGenerators
 {
-	public class MergeScriptGenerator: IScriptGenerator
+	public class MergeKeepScriptGenerator: IScriptGenerator
 	{
-		public string Name { get { return "merge"; } }
+		public string Name { get { return "mergeKeep"; } }
 
 		public const string Input1FileNameString = "%Input1%";
 		public const string Input2FileNameString = "%Input2%";
@@ -44,8 +44,6 @@ namespace Swish.ScriptGenerators
 
 			line = "merge " + VariableNamesString + ", using \"" + IntermediateFileNameString + "\"";
 			lines.Add(line);
-
-			lines.Add("drop " + StataScriptFunctions.MergeColumnName);
 
 			line = StataScriptFunctions.SortCommand(VariableNamesString);
 			lines.Add(line);

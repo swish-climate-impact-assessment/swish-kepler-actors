@@ -30,10 +30,6 @@ namespace Swish.Adapters
 			{
 				outputFileName = FileFunctions.TempoaryOutputFileName(extension);
 			}
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
 			return outputFileName;
 		}
 
