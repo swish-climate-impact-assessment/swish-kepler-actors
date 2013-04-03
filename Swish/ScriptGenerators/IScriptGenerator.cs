@@ -6,6 +6,6 @@ namespace Swish.ScriptGenerators
 	{
 		string Name { get; }
 
-		List<string> GenerateScript();
+		void GenerateScript(List<string> lines);
 	}
 }

@@ -7,31 +7,23 @@ namespace Swish.ScriptGenerators
 {
 	public class AppendScriptGenerator: IScriptGenerator
 	{
-		public const string NameString = "append";
+		public const string NameString = "Append";
 		public string Name { get { return NameString; } }
 
-		public List<string> GenerateScript()
+		public void GenerateScript(List<string> lines)
 		{
-			List<string> lines = new List<string>();
+			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.Input1FileNameToken);
+			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.Input2FileNameToken);
 
-			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.Input1FileNameString);
-			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.Input2FileNameString);
-
-			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameString);
+			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameToken);
 
 			lines.Add("// define " + StataScriptFunctions.VariableNamesType + " " + StataScriptFunctions.VariableNamesToken);
-			lines.Add("// define " + StataScriptFunctions.TemporaryFileType + " " + StataScriptFunctions.IntermediateFileNameString);
+			lines.Add("// define " + StataScriptFunctions.TemporaryFileType + " " + StataScriptFunctions.IntermediateFileNameToken);
 
-			StataScriptFunctions.WriteHeadder(lines);
-
-			string intermediateFileName = StataScriptFunctions.ConvertToStataFormat(lines, StataScriptFunctions.Input2FileNameString);
-			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.Input1FileNameString);
+			string intermediateFileName = StataScriptFunctions.ConvertToStataFormat(lines, StataScriptFunctions.Input2FileNameToken);
+			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.Input1FileNameToken);
 			lines.Add("append using \"" + intermediateFileName + "\"");
-			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameString);
-
-			StataScriptFunctions.WriteFooter(lines);
-
-			return lines;
+			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}
 
 

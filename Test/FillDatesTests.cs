@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Swish.Adapters;
 using System.IO;
-using Swish.StataOperations;
 
 namespace Swish.Tests
 {

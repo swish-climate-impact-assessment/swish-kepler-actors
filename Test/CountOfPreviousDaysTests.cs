@@ -7,7 +7,6 @@ namespace Swish.Tests
 {
 	public class CountOfPreviousDaysTests
 	{
-
 		internal void Count()
 		{
 			string variableName = "Value";

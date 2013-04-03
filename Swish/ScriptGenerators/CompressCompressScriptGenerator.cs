@@ -6,27 +6,19 @@ namespace Swish.ScriptGenerators
 {
 	public class CompressScriptGenerator: IScriptGenerator
 	{
-		public const string NameString = "compress";
+		public const string NameString = "Compress";
 		public string Name { get { return NameString; } }
 
-		public List<string> GenerateScript()
+		public void GenerateScript(List<string> lines)
 		{
-			List<string> lines = new List<string>();
+			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.InputFileNameToken);
+			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameToken);
 
-			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.InputFileNameString);
-			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameString);
-
-			StataScriptFunctions.WriteHeadder(lines);
-
-			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameString);
+			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameToken);
 
 			lines.Add("compress");
 
-			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameString);
-
-			StataScriptFunctions.WriteFooter(lines);
-
-			return lines;
+			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}
 	}
 }

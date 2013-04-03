@@ -9,87 +9,51 @@ namespace Swish
 	{
 		public static bool TypeIsFormOf(Type type, Type requiredType)
 		{
-			bool flag;
-			bool flag1 = !EqualFunctions.Equal(type, null);
-			if (flag1)
-			{
-				flag1 = !EqualFunctions.Equal(requiredType, null);
-				if (flag1)
-				{
-					while (true)
-					{
-						flag1 = !EqualFunctions.Equal(type, null);
-						if (flag1)
-						{
-							flag1 = !EqualFunctions.Equal(type, requiredType);
-							if (flag1)
-							{
-								flag1 = EqualFunctions.Equal(type.GetInterface(requiredType.FullName), null);
-								if (flag1)
-								{
-									flag1 = !requiredType.IsAssignableFrom(type);
-									if (flag1)
-									{
-										type = type.BaseType;
-									} else
-									{
-										flag = true;
-										break;
-									}
-								} else
-								{
-									flag = true;
-									break;
-								}
-							} else
-							{
-								flag = true;
-								break;
-							}
-						} else
-						{
-							flag = false;
-							break;
-						}
-					}
-					return flag;
-				} else
-				{
-					throw new ArgumentNullException("requiredType");
-				}
-			} else
+			if (EqualFunctions.Equal(type, null))
 			{
 				throw new ArgumentNullException("type");
 			}
+			if (EqualFunctions.Equal(requiredType, null))
+			{
+				throw new ArgumentNullException("requiredType");
+			}
+			while (!EqualFunctions.Equal(type, null))
+			{
+				if (EqualFunctions.Equal(type, requiredType))
+				{
+					return true;
+				}
+				if (!EqualFunctions.Equal(type.GetInterface(requiredType.FullName), null))
+				{
+					return true;
+				}
+				if (requiredType.IsAssignableFrom(type))
+				{
+					return true;
+				}
+				type = type.BaseType;
+			}
+			return false;
 		}
 
 		public static bool TypeHasDefaultConstructor(Type type)
 		{
-			bool flag;
-			bool isPrimitive = !EqualFunctions.Equal(type, null);
-			if (isPrimitive)
-			{
-				isPrimitive = !type.IsPrimitive;
-				if (isPrimitive)
-				{
-					isPrimitive = !type.IsInterface;
-					if (isPrimitive)
-					{
-						ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
-						flag = constructor != null;
-					} else
-					{
-						flag = false;
-					}
-				} else
-				{
-					flag = true;
-				}
-				return flag;
-			} else
+			if (EqualFunctions.Equal(type, null))
 			{
 				throw new ArgumentNullException("type");
 			}
+
+			if (type.IsPrimitive)
+			{
+				return true;
+			}
+			if (type.IsInterface)
+			{
+				return false;
+			}
+
+			ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
+			return constructor != null;
 		}
 
 		public static List<InterfaceType> Interfaces<InterfaceType>()

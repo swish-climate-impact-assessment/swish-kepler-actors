@@ -42,11 +42,23 @@ namespace Swish.Tests
 
 			if (arguments.Length > 0 && arguments[0] == "Generate")
 			{
-				GenerateScripts(@"C:\Swish\StataScripts");
-				GenerateScripts(@"..\..\..\SimpleInstaller\Scripts");
-				GenerateScripts(@"..\..\..\SimpleInstaller\bin\Debug\Scripts");
+				try
+				{
+					GenerateScripts(@"C:\Swish\StataScripts");
+					GenerateScripts(@"..\..\..\SimpleInstaller\Scripts");
+					GenerateScripts(@"..\..\..\SimpleInstaller\bin\Debug\Scripts");
+				} catch (Exception error)
+				{
+					string message = ExceptionFunctions.Write(error, false);
+					message += ProcessFunctions.WriteProcessHeritage();
+					message += ProcessFunctions.WriteSystemVariables();
+
+					Console.WriteLine(message);
+					SwishFunctions.MessageTextBox(message, false);
+				}
 				return;
 			}
+
 
 			try
 			{
@@ -149,8 +161,17 @@ namespace Swish.Tests
 			for (int generatorIndex = 0; generatorIndex < generators.Count; generatorIndex++)
 			{
 				IScriptGenerator generator = generators[generatorIndex];
-				List<string> lines = generator.GenerateScript();
+
+				List<string> lines = new List<string>();
+				StataScriptFunctions.WriteHeadder(lines);
+				generator.GenerateScript(lines);
+				StataScriptFunctions.WriteFooter(lines);
+
 				string fileName = Path.Combine(directory, generator.Name + SwishFunctions.DoFileExtension);
+				if (File.Exists(fileName))
+				{
+					File.Delete(fileName);
+				}
 				File.WriteAllLines(fileName, lines);
 			}
 		}

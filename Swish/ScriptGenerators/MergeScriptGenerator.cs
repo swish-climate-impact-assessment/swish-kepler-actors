@@ -7,37 +7,33 @@ namespace Swish.ScriptGenerators
 {
 	public class MergeScriptGenerator: IScriptGenerator
 	{
-		public const string NameString = "merge";
+		public const string NameString = "Merge";
 		public string Name { get { return NameString; } }
 
-		public List<string> GenerateScript()
+		public void GenerateScript(List<string> lines)
 		{
 			/// create the do file
 			//  merge [varlist] using filename [filename ...] [, options]
-			List<string> lines = new List<string>();
-
-			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.Input1FileNameString);
-			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.Input2FileNameString);
-			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameString);
+			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.Input1FileNameToken);
+			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.Input2FileNameToken);
+			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameToken);
 			lines.Add("// define " + StataScriptFunctions.VariableNamesType + " " + StataScriptFunctions.VariableNamesToken);
-			lines.Add("// define " + StataScriptFunctions.TemporaryFileType + " " + StataScriptFunctions.IntermediateFileNameString);
+			lines.Add("// define " + StataScriptFunctions.TemporaryFileType + " " + StataScriptFunctions.IntermediateFileNameToken);
 
-			StataScriptFunctions.WriteHeadder(lines);
-
-			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.Input2FileNameString);
+			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.Input2FileNameToken);
 
 			string line = StataScriptFunctions.SortCommand(StataScriptFunctions.VariableNamesToken);
 			lines.Add(line);
-			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.IntermediateFileNameString);
+			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.IntermediateFileNameToken);
 
 			lines.Add("clear");
-			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.Input1FileNameString);
+			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.Input1FileNameToken);
 
 			line = StataScriptFunctions.SortCommand(StataScriptFunctions.VariableNamesToken);
 			lines.Add(line);
 
 
-			line = "merge " + StataScriptFunctions.VariableNamesToken + ", using \"" + StataScriptFunctions.IntermediateFileNameString + "\"";
+			line = "merge " + StataScriptFunctions.VariableNamesToken + ", using \"" + StataScriptFunctions.IntermediateFileNameToken + "\"";
 			lines.Add(line);
 
 			lines.Add("drop " + StataScriptFunctions.MergeColumnName);
@@ -45,11 +41,7 @@ namespace Swish.ScriptGenerators
 			line = StataScriptFunctions.SortCommand(StataScriptFunctions.VariableNamesToken);
 			lines.Add(line);
 
-			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameString);
-
-			StataScriptFunctions.WriteFooter(lines);
-
-			return lines;
+			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}
 
 	}

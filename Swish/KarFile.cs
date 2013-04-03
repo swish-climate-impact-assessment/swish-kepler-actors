@@ -168,5 +168,20 @@ namespace Swish
 			// I expect that parts will be loaded and kept in memory for speed
 			// this forces the files to be synchronised
 		}
+
+		public void Replace(string find, string replace)
+		{
+			string[] files = Directory.GetFiles(_directory, "*.xml");
+			if (files.Length != 1)
+			{
+				throw new Exception("muli actor kar files not supported");
+			}
+
+			string fileName = files[0];
+
+			string text = File.ReadAllText(fileName);
+			text = text.Replace(find, replace);
+			File.WriteAllText(fileName, text);
+		}
 	}
 }

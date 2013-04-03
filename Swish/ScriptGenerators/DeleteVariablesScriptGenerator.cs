@@ -6,24 +6,18 @@ namespace Swish.ScriptGenerators
 {
 	public class DeleteVariablesScriptGenerator: IScriptGenerator
 	{
-		public const string NameString = "deleteVariables";
+		public const string NameString = "DeleteVariables";
 		public string Name { get { return NameString; } }
 
-		public List<string> GenerateScript()
+		public void GenerateScript(List<string> lines)
 		{
-			List<string> lines = new List<string>();
-
-			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.InputFileNameString);
-			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameString);
+			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.InputFileNameToken);
+			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameToken);
 			lines.Add("// define " + StataScriptFunctions.VariableNamesType + " " + StataScriptFunctions.VariableNamesToken);
 
-			StataScriptFunctions.WriteHeadder(lines);
-			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameString);
+			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameToken);
 			lines.Add("drop " + StataScriptFunctions.VariableNamesToken);
-			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameString);
-			StataScriptFunctions.WriteFooter(lines);
-
-			return lines;
+			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}
 
 	}

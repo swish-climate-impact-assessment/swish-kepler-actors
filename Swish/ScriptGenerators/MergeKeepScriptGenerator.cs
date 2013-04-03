@@ -7,7 +7,7 @@ namespace Swish.ScriptGenerators
 {
 	public class MergeKeepScriptGenerator: IScriptGenerator
 	{
-		public const string NameString = "mergeKeep";
+		public const string NameString = "MergeKeep";
 		public string Name { get { return NameString; } }
 
 		public const string Input1FileNameString = "%Input1%";
@@ -16,19 +16,16 @@ namespace Swish.ScriptGenerators
 		public const string VariableNamesString = "%VariableNames%";
 		public const string IntermediateFileNameString = "%TemporaryFile%";
 
-		public List<string> GenerateScript()
+		public void GenerateScript(List<string> lines)
 		{
 			/// create the do file
 			//  merge [varlist] using filename [filename ...] [, options]
-			List<string> lines = new List<string>();
 
 			lines.Add("// define " + StataScriptFunctions.InputType + " " + Input1FileNameString);
 			lines.Add("// define " + StataScriptFunctions.InputType + " " + Input2FileNameString);
 			lines.Add("// define " + StataScriptFunctions.OutputType + " " + OutputFileNameString);
 			lines.Add("// define " + StataScriptFunctions.VariableNamesType + " " + VariableNamesString);
 			lines.Add("// define " + StataScriptFunctions.TemporaryFileType + " " + IntermediateFileNameString);
-
-			StataScriptFunctions.WriteHeadder(lines);
 
 			StataScriptFunctions.LoadFileCommand(lines, Input2FileNameString);
 
@@ -50,10 +47,6 @@ namespace Swish.ScriptGenerators
 			lines.Add(line);
 
 			StataScriptFunctions.SaveFileCommand(lines, OutputFileNameString);
-
-			StataScriptFunctions.WriteFooter(lines);
-
-			return lines;
 		}
 
 	}

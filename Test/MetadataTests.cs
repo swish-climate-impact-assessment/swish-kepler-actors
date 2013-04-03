@@ -15,7 +15,7 @@ namespace Swish.Tests
 			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 
-			SortAdapter.Sort(inputFileName, new List<string>(new string[] { "head4" }), intermediateFileName);
+			TableFunctions.Sort(inputFileName, new List<string>(new string[] { "head4" }), intermediateFileName);
 			TableFunctions.Generate(intermediateFileName, outputFileName, "testVariable1", StataDataType.Unknown, "-head4");
 			if (!FileFunctions.FileExists(outputFileName))
 			{

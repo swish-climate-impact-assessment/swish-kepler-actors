@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Swish.Adapters;
-using Swish.StataOperations;
 using System.Windows.Forms;
 
 namespace Swish
@@ -26,13 +25,6 @@ namespace Swish
 			if (adapter != null)
 			{
 				adapter.Run(splitArguments);
-				return;
-			}
-
-			IStataBasedOperation stataOperation = FindStataOperation(operationName);
-			if (stataOperation != null)
-			{
-				RunStataOperation(stataOperation, splitArguments);
 				return;
 			}
 
@@ -92,78 +84,6 @@ namespace Swish
 			Console.WriteLine(outputFileName);
 		}
 
-		private static void RunStataOperation(IStataBasedOperation stataOperation, AdapterArguments splitArguments)
-		{
-			SortedList<string, string> inputFileNames = new SortedList<string, string>();
-			for (int inputIndex = 0; inputIndex < stataOperation.InputNames.Count; inputIndex++)
-			{
-				string inputName = stataOperation.InputNames[inputIndex];
-
-				string inputFileName = splitArguments.String(inputName, true);
-				splitArguments.Remove(inputName);
-				inputFileName = FileFunctions.AdjustFileName(inputFileName);
-				if (!FileFunctions.FileExists(inputFileName))
-				{
-					throw new Exception("cannot find " + inputName + ": \"" + inputFileName + "\"");
-				}
-				inputFileNames.Add(inputName, inputFileName);
-			}
-
-			string outputFileName;
-			string intermaidateOutput;
-			if (stataOperation.ProducesOutputFile)
-			{
-				string outputArgumentName = splitArguments.ArgumentPrefix + "output" + "";
-				outputFileName = splitArguments.String(outputArgumentName, false);
-				splitArguments.Remove(outputArgumentName);
-				outputFileName = FileFunctions.AdjustFileName(outputFileName);
-
-				if (string.IsNullOrWhiteSpace(outputFileName) || outputFileName.ToLower() == "none" || outputFileName.ToLower() == "temp")
-				{
-					outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
-				}
-
-				string outputExtension = Path.GetExtension(outputFileName);
-				intermaidateOutput = FileFunctions.TempoaryOutputFileName(outputExtension);
-			} else
-			{
-				outputFileName = string.Empty;
-				intermaidateOutput = string.Empty;
-			}
-
-			List<string> scriptOutput = stataOperation.GenerateScript(splitArguments, inputFileNames, intermaidateOutput);
-
-			List<string> lines = new List<string>();
-
-			StataScriptFunctions.WriteHeadder(lines);
-			lines.AddRange(scriptOutput);
-			StataScriptFunctions.WriteFooter(lines);
-
-			string log = StataFunctions.RunScript(lines, false);
-
-			if (stataOperation.ProducesOutputFile)
-			{
-				if (!FileFunctions.FileExists(intermaidateOutput))
-				{
-					throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "Script lines: " + Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
-				}
-
-				if (FileFunctions.FileExists(outputFileName))
-				{
-					File.Delete(outputFileName);
-				}
-
-				File.Move(intermaidateOutput, outputFileName);
-			}
-
-			Console.WriteLine(outputFileName);
-
-			if (ExceptionFunctions.ForceVerbose)
-			{
-				ExportMetadata(stataOperation.Name, splitArguments, inputFileNames, outputFileName, lines);
-			}
-		}
-
 		private static void ExportMetadata(string operationName, AdapterArguments splitArguments, SortedList<string, string> inputFileNames, string outputFileName, List<string> lines)
 		{
 			List<MetadataRecord> metadata = new List<MetadataRecord>();
@@ -204,22 +124,6 @@ namespace Swish
 			metadata.Add(record);
 			MetadataFunctions.Save(outputFileName, metadata);
 
-		}
-
-		private static IStataBasedOperation FindStataOperation(string operationName)
-		{
-			string lowercaseOperation = operationName.ToLower();
-			List<IStataBasedOperation> operations = TypeFunctions.Interfaces<IStataBasedOperation>();
-			for (int adapterIndex = 0; adapterIndex < operations.Count; adapterIndex++)
-			{
-				IStataBasedOperation adapter = operations[adapterIndex];
-				if (adapter.Name.ToLower() == lowercaseOperation)
-				{
-					return adapter;
-				}
-			}
-
-			return null;
 		}
 
 		private static IAdapter FindAdapter(string operation)

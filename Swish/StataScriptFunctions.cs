@@ -8,14 +8,21 @@ namespace Swish
 {
 	public static class StataScriptFunctions
 	{
-		public const string InputFileNameString = "%Input%";
-		public const string Input1FileNameString = "%Input1%";
-		public const string Input2FileNameString = "%Input2%";
-		public const string OutputFileNameString = "%Output%";
-		public const string VariableNamesToken = "%VariableNames%";
-		public const string IntermediateFileNameString = "%TemporaryFile%";
-		public const string VariableNameToken = "%VariableName%";
+		public const string InputFileNameToken = "%Input%";
+		public const string Input1FileNameToken = "%Input1%";
+		public const string Input2FileNameToken = "%Input2%";
+		public const string OutputFileNameToken = "%Output%";
+		public const string IntermediateFileNameToken = "%TemporaryFile%";
+
 		public const string ExpressionToken = "%Expression%";
+
+		public const string ValueToken = "%Value%";
+
+		public const string LeftVariableNameToken = "%LeftVariableName%";
+		public const string RightVariableNameToken = "%RightVariableName%";
+		public const string VariableNameToken = "%VariableName%";
+		public const string ResultVariableNameToken = "%ResultVariableName%";
+		public const string VariableNamesToken = "%VariableNames%";
 
 		public const string OutputType = "output";
 		public const string InputType = "input";
@@ -29,13 +36,9 @@ namespace Swish
 		public const string TokenType = "token";
 
 		public const string ExpressionType = "expression";
+		public const string DoubleType = "double";
 
-		public static void ResloveSymbols(
-			out string outputFileName,
-			out SortedList<string, string> inputFileNames,
-			out List<string> newLines,
-			out List<Tuple<string, string>> symbols,
-			List<string> lines, string intermediateFileName, AdapterArguments adapterArguments)
+		public static void ResloveSymbols(out string outputFileName, out SortedList<string, string> inputFileNames, out List<string> newLines, out List<Tuple<string, string>> symbols, List<string> lines, string intermediateFileName, AdapterArguments adapterArguments)
 		{
 			newLines = new List<string>();
 			symbols = new List<Tuple<string, string>>();
@@ -103,11 +106,12 @@ namespace Swish
 					{
 						string fileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
 						symbols.Add(new Tuple<string, string>(name, fileName));
-					} break;
+					}
+					break;
 
 				case OutputType:
 					{
-						string _outputFileName = adapterArguments.String(OutputFileNameString, false);
+						string _outputFileName = adapterArguments.String(OutputFileNameToken, false);
 						if (string.IsNullOrWhiteSpace(_outputFileName) || _outputFileName.ToLower() == "none" || _outputFileName.ToLower() == "temp")
 						{
 							_outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
@@ -122,7 +126,8 @@ namespace Swish
 						}
 						outputFileName = _outputFileName;
 						symbols.Add(new Tuple<string, string>(name, intermediateFileName));
-					} break;
+					}
+					break;
 
 				case InputType:
 					{
@@ -141,7 +146,8 @@ namespace Swish
 						string usedFileName = TableFunctions.ConvertInput(fileName);
 						symbols.Add(new Tuple<string, string>(name, usedFileName));
 						inputFileNames.Add(name, fileName);
-					} break;
+					}
+					break;
 
 				case VariableNamesType:
 					{
@@ -168,7 +174,8 @@ namespace Swish
 						{
 							symbols.Add(new Tuple<string, string>(name, stringValue));
 						}
-					} break;
+					}
+					break;
 
 				case BoolType:
 					{
@@ -202,7 +209,8 @@ namespace Swish
 						}
 
 						symbols.Add(new Tuple<string, string>(name, value.ToString()));
-					} break;
+					}
+					break;
 
 				default:
 					throw new Exception("Unknown argument type \"" + type + "\" ");

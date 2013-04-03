@@ -31,7 +31,7 @@ namespace Swish.Tests
 			{
 				File.Delete(outputFileName);
 			}
-			SelectRecordsAdapter.Select(inputFileName, outputFileName, expression);
+			TableFunctions.SelectRecords(inputFileName, outputFileName, expression);
 
 			Csv result = CsvFunctions.Read(outputFileName);
 
@@ -55,7 +55,7 @@ namespace Swish.Tests
 			variables.Add("head4");
 			variables.Add("head6");
 
-			SelectVariablesAdapter.Select(inputFileName, outputFileName, variables);
+			TableFunctions.SelectVariables(inputFileName, outputFileName, variables);
 
 			Csv result = CsvFunctions.Read(outputFileName);
 			if (result.Header.Count != 2 || !result.Header.Contains("head4") || !result.Header.Contains("head6"))
@@ -142,7 +142,7 @@ namespace Swish.Tests
 			{
 				File.Delete(outputFileName);
 			}
-			TransposeAdapter.Transpose(inputFileName, outputFileName);
+			TableFunctions.Transpose(inputFileName, outputFileName);
 
 			Csv result = CsvFunctions.Read(outputFileName);
 
@@ -237,7 +237,7 @@ namespace Swish.Tests
 			}
 			List<string> variables = new List<string>();
 			variables.Add("head4");
-			SortAdapter.Sort(inputFileName, variables, outputFileName);
+			TableFunctions.Sort(inputFileName, variables, outputFileName);
 		}
 
 		internal void Replace_1()
