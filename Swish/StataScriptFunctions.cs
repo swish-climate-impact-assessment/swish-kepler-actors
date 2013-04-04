@@ -102,6 +102,11 @@ namespace Swish
 
 				switch (type)
 				{
+
+				//public const string DoubleType = "double";
+
+
+
 				case TemporaryFileType:
 					{
 						string fileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
@@ -177,7 +182,48 @@ namespace Swish
 					}
 					break;
 
+				case StringType:
+				case ExpressionType:
+				case TokenType:
+				case VariableNameType:
+					{
+						string stringValue;
+						if (adapterArguments.Exists(name))
+						{
+							stringValue = adapterArguments.String(name, !optional);
+						} else
+						{
+							stringValue = string.Empty;
+						}
+
+						if (string.IsNullOrWhiteSpace(stringValue))
+						{
+							if (!optional)
+							{
+								throw new Exception("String missing");
+							}
+							stringValue = defaultValue;
+						}
+
+						if (!string.IsNullOrWhiteSpace(stringValue))
+						{
+
+							if (type == TokenType || type == VariableNameType)
+							{
+								string[] fragments = stringValue.Trim().Split(new char[] { '\t', ' ' });
+								if (fragments.Length != 1)
+								{
+									throw new Exception("Expected token, found \"" + stringValue + "\"");
+								}
+								stringValue = stringValue.Trim();
+							}
+							symbols.Add(new Tuple<string, string>(name, stringValue));
+						}
+					}
+					break;
+
 				case BoolType:
+				case DoubleType:
 					{
 						string stringValue;
 
@@ -193,22 +239,35 @@ namespace Swish
 						{
 							if (!optional)
 							{
-								throw new Exception("Variables missing");
+								throw new Exception("Boolean missing");
 							}
 							stringValue = defaultValue;
 						}
 
-						bool value;
-						if (!string.IsNullOrWhiteSpace(stringValue))
+						if (type == BoolType)
 						{
-							value = bool.Parse(stringValue.ToLower());
-							symbols.Add(new Tuple<string, string>(name, stringValue));
-						} else
-						{
-							value = false;
-						}
+							if (!string.IsNullOrWhiteSpace(stringValue))
+							{
+								bool value = bool.Parse(stringValue.ToLower());
+								symbols.Add(new Tuple<string, string>(name, stringValue));
+							} else
+							{
+								bool value = false;
+								symbols.Add(new Tuple<string, string>(name, value.ToString()));
+							}
 
-						symbols.Add(new Tuple<string, string>(name, value.ToString()));
+						} else if (type == DoubleType)
+						{
+							if (!string.IsNullOrWhiteSpace(stringValue))
+							{
+								double value = double.Parse(stringValue.ToLower());
+								symbols.Add(new Tuple<string, string>(name, stringValue));
+							} else
+							{
+								double value = 0;
+								symbols.Add(new Tuple<string, string>(name, value.ToString()));
+							}
+						}
 					}
 					break;
 

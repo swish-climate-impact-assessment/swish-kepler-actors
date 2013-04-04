@@ -38,6 +38,7 @@ namespace Swish.CollapseAdapterExecutable
 				{
 					SwishFunctions.MessageTextBox(message, false);
 				}
+
 				return -1;
 			}
 		}
