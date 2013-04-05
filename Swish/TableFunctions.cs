@@ -89,7 +89,7 @@ namespace Swish
 			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
 			arguments.String(StataScriptFunctions.OutputFileNameToken, intermediateFileName);
-			arguments.String(StataScriptFunctions.VariableNamesToken, variableName);
+			arguments.String(StataScriptFunctions.ResultVariableNameToken, variableName);
 			arguments.String(StataScriptFunctions.ExpressionToken, expression);
 
 			if (type != StataDataType.Unknown)
@@ -106,7 +106,7 @@ namespace Swish
 		{
 			Arguments arguments = new Arguments();
 			inputFileName = ConvertInput(inputFileName);
-			arguments.String(StataScriptFunctions.Input1FileNameToken, inputFileName);
+			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
 			arguments.String(StataScriptFunctions.OutputFileNameToken, intermediateFileName);
 			arguments.String(ReplaceScriptGenerator.ConditionToken, condition);
@@ -121,7 +121,7 @@ namespace Swish
 		{
 			Arguments arguments = new Arguments();
 			inputFileName = ConvertInput(inputFileName);
-			arguments.String(StataScriptFunctions.Input1FileNameToken, inputFileName);
+			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
 			arguments.String(StataScriptFunctions.OutputFileNameToken, intermediateFileName);
 
@@ -136,7 +136,7 @@ namespace Swish
 		{
 			Arguments arguments = new Arguments();
 			inputFileName = ConvertInput(inputFileName);
-			arguments.String(StataScriptFunctions.Input1FileNameToken, inputFileName);
+			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
 			arguments.String(StataScriptFunctions.OutputFileNameToken, intermediateFileName);
 
@@ -151,7 +151,7 @@ namespace Swish
 		{
 			Arguments arguments = new Arguments();
 			inputFileName = ConvertInput(inputFileName);
-			arguments.String(StataScriptFunctions.Input1FileNameToken, inputFileName);
+			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
 			arguments.String(StataScriptFunctions.OutputFileNameToken, intermediateFileName);
 
@@ -166,7 +166,7 @@ namespace Swish
 		{
 			Arguments arguments = new Arguments();
 			inputFileName = ConvertInput(inputFileName);
-			arguments.String(StataScriptFunctions.Input1FileNameToken, inputFileName);
+			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
 			arguments.String(StataScriptFunctions.OutputFileNameToken, intermediateFileName);
 

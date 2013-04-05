@@ -40,7 +40,7 @@ namespace Swish.Tests
 		static void Main(string[] arguments)
 		{
 
-			if (arguments.Length > 0 && arguments[0] == "Generate")
+			if (arguments.Length > 0 && arguments[0] .ToLower() == "generate")
 			{
 				try
 				{
@@ -87,7 +87,6 @@ namespace Swish.Tests
 				/// 
 
 				new GetVariableNamesTests().Names();
-				//new TimeSeriesFillTests().Fill();
 				new CountOfPreviousDaysTests().Count();
 				new FillDatesTests().Fill();
 				new GenerateDateRangeOperationTests().GenerateDateRange();
@@ -137,6 +136,8 @@ namespace Swish.Tests
 				new AdapterTests().RemoveMergeColoumn();
 				new StataFunctionsTests().StataBatchMode();
 
+				new TimeSeriesFillTests().Fill();
+
 			} catch (Exception error)
 			{
 				string message = ExceptionFunctions.Write(error, false);
@@ -144,8 +145,6 @@ namespace Swish.Tests
 				message += ProcessFunctions.WriteSystemVariables();
 				Console.WriteLine(message);
 			}
-
-
 		}
 
 		private static void GenerateScripts(string directory)
@@ -164,10 +163,13 @@ namespace Swish.Tests
 
 				List<string> lines = new List<string>();
 				StataScriptFunctions.WriteHeadder(lines);
+
+				string fileName = Path.Combine(directory, generator.Name + SwishFunctions.DoFileExtension);
+				SwishFunctions.SetTemporaryVariableId(Math.Abs(fileName.GetHashCode()));
+
 				generator.GenerateScript(lines);
 				StataScriptFunctions.WriteFooter(lines);
 
-				string fileName = Path.Combine(directory, generator.Name + SwishFunctions.DoFileExtension);
 				if (File.Exists(fileName))
 				{
 					File.Delete(fileName);

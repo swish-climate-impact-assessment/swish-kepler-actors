@@ -14,15 +14,10 @@ namespace Swish.ScriptGenerators
 		{
 			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.Input1FileNameToken);
 			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.Input2FileNameToken);
-
 			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameToken);
 
-			lines.Add("// define " + StataScriptFunctions.VariableNamesType + " " + StataScriptFunctions.VariableNamesToken);
-			lines.Add("// define " + StataScriptFunctions.TemporaryFileType + " " + StataScriptFunctions.IntermediateFileNameToken);
-
-			string intermediateFileName = StataScriptFunctions.ConvertToStataFormat(lines, StataScriptFunctions.Input2FileNameToken);
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.Input1FileNameToken);
-			lines.Add("append using \"" + intermediateFileName + "\"");
+			lines.Add("append using \"" + StataScriptFunctions.Input2FileNameToken + "\"");
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}
 

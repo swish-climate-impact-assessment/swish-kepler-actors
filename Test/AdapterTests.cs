@@ -280,10 +280,10 @@ namespace Swish.Tests
 			string value = "head2=1";
 
 			Arguments splitArguments = new Arguments();
-			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.InputArgument, inputFileName));
-			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.DefaultArgumentPrefix + "output", outputFileName));
-			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.DefaultArgumentPrefix + "condition", condition));
-			splitArguments.SplitArguments.Add(new Tuple<string, string>(Arguments.DefaultArgumentPrefix + "value", value));
+			splitArguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
+			splitArguments.String(StataScriptFunctions.OutputFileNameToken, outputFileName);
+			splitArguments.String(ReplaceScriptGenerator.ConditionToken, condition);
+			splitArguments.String(ReplaceScriptGenerator.ValueToken, value);
 
 			AdapterFunctions.RunOperation(ReplaceScriptGenerator.NameString, new AdapterArguments(splitArguments));
 

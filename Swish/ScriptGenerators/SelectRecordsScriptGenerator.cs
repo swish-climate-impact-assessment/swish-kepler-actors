@@ -14,7 +14,7 @@ namespace Swish.ScriptGenerators
 			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.InputFileNameToken);
 			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameToken);
 
-			lines.Add("// define " + StataScriptFunctions.ExpressionType + " " + StataScriptFunctions.ExpressionToken);
+			lines.Add("// define " + StataScriptFunctions.StringType + " " + StataScriptFunctions.ExpressionToken);
 
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameToken);
 			lines.Add("keep if " + StataScriptFunctions.ExpressionToken);

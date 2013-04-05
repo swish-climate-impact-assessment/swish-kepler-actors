@@ -32,7 +32,6 @@ namespace Swish.ScriptGenerators
 			line = StataScriptFunctions.SortCommand(StataScriptFunctions.VariableNamesToken);
 			lines.Add(line);
 
-
 			line = "merge " + StataScriptFunctions.VariableNamesToken + ", using \"" + StataScriptFunctions.IntermediateFileNameToken + "\"";
 			lines.Add(line);
 
@@ -43,6 +42,5 @@ namespace Swish.ScriptGenerators
 
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}
-
 	}
 }

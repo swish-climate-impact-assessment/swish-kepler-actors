@@ -17,11 +17,10 @@ namespace Swish.ScriptGenerators
 			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.InputFileNameToken);
 			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameToken);
 
-			lines.Add("// define " + StataScriptFunctions.ExpressionType + " " + ConditionToken);
+			lines.Add("// define " + StataScriptFunctions.StringType + " " + ConditionToken);
 			lines.Add("// define " + StataScriptFunctions.StringType + " " + ValueToken);
 
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameToken);
-			//replace oldvar =exp [if] [in] [, nopromote]
 
 			lines.Add("replace " + ValueToken + " if " + ConditionToken);
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);

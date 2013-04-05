@@ -2,15 +2,15 @@ set more off
 set output proc
 // define input %Input%
 // define output %Output%
-// define variableName optional %VariableName% Working
-// define expression %Expression%
+// define variableName optional %ResultVariableName% Working
+// define string %Expression%
 // define token optional %Type%
 clear
 use "%Input%"
- generate %type% variable1847210191 = %Expression%
-capture confirm variable %VariableName%
+ generate %Type% variable579822704 = %Expression%
+capture confirm variable %ResultVariableName%
 if (_rc == 0){
-	drop %VariableName%
+	drop %ResultVariableName%
 }
-rename variable1847210191 %VariableName%
+rename variable579822704 %ResultVariableName%
 save "%Output%"

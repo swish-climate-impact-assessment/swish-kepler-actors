@@ -8,10 +8,10 @@ set output proc
 // define double %Value%
 clear
 use "%Input%"
- generate double variable1847210180 = %LeftVariableName% > %RightVariableName%
+ generate double variable1507650874 = %LeftVariableName% > %RightVariableName%
 capture confirm variable %ResultVariableName%
 if (_rc == 0){
 	drop %ResultVariableName%
 }
-rename variable1847210180 %ResultVariableName%
+rename variable1507650874 %ResultVariableName%
 save "%Output%"

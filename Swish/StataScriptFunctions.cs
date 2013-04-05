@@ -30,12 +30,11 @@ namespace Swish
 
 		public const string VariableNamesType = "variableNames";
 		public const string VariableNameType = "variableName";
-		public const string BoolType = "bool";
 
 		public const string StringType = "string";
 		public const string TokenType = "token";
 
-		public const string ExpressionType = "expression";
+		public const string BoolType = "bool";
 		public const string DoubleType = "double";
 
 		public static void ResloveSymbols(out string outputFileName, out SortedList<string, string> inputFileNames, out List<string> newLines, out List<Tuple<string, string>> symbols, List<string> lines, string intermediateFileName, AdapterArguments adapterArguments)
@@ -102,11 +101,6 @@ namespace Swish
 
 				switch (type)
 				{
-
-				//public const string DoubleType = "double";
-
-
-
 				case TemporaryFileType:
 					{
 						string fileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
@@ -183,7 +177,6 @@ namespace Swish
 					break;
 
 				case StringType:
-				case ExpressionType:
 				case TokenType:
 				case VariableNameType:
 					{
@@ -207,17 +200,19 @@ namespace Swish
 
 						if (!string.IsNullOrWhiteSpace(stringValue))
 						{
-
 							if (type == TokenType || type == VariableNameType)
 							{
 								string[] fragments = stringValue.Trim().Split(new char[] { '\t', ' ' });
 								if (fragments.Length != 1)
 								{
-									throw new Exception("Expected token, found \"" + stringValue + "\"");
+									throw new Exception("Expected variable name or token, found \"" + stringValue + "\"");
 								}
 								stringValue = stringValue.Trim();
 							}
 							symbols.Add(new Tuple<string, string>(name, stringValue));
+						} else if (optional)
+						{
+							symbols.Add(new Tuple<string, string>(name, defaultValue));
 						}
 					}
 					break;
@@ -414,11 +409,9 @@ namespace Swish
 			lines.Add("rename " + oldName + " " + newName);
 		}
 
-		private static int _variableNameCount = Math.Abs((int)DateTime.Now.Ticks);
 		public static string TemporaryVariableName()
 		{
-			string variableName = "variable" + _variableNameCount.ToString();
-			_variableNameCount++;
+			string variableName = "variable" + SwishFunctions.TemporaryVariableId().ToString();
 			return variableName;
 		}
 
@@ -445,7 +438,7 @@ namespace Swish
 				lines.Add(" generate " + intermediateName + " = " + expression);
 			} else
 			{
-				lines.Add(" generate " + type.ToString().ToLower() + " " + intermediateName + " = " + expression);
+				lines.Add(" generate " + type.ToString() + " " + intermediateName + " = " + expression);
 			}
 
 			TryDropVariable(lines, variableName);

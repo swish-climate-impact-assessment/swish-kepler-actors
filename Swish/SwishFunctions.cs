@@ -199,7 +199,7 @@ namespace Swish
 			for (int lineIndex = 0; lineIndex < lines.Count; lineIndex++)
 			{
 				string _line = lines[lineIndex];
-				string line = ResloveSymbols(_line, symbols);
+				string line = ResloveSymbols(_line, symbols, false);
 
 				if (line != _line)
 				{
@@ -210,12 +210,19 @@ namespace Swish
 			return newPending;
 		}
 
-		public static string ResloveSymbols(string line, List<Tuple<string, string>> symbols)
+		public static string ResloveSymbols(string line, List<Tuple<string, string>> symbols, bool escapeStrings)
 		{
 			for (int symbolIndex = 0; symbolIndex < symbols.Count; symbolIndex++)
 			{
 				string symbol = symbols[symbolIndex].Item1;
-				string value = StringIO.Escape(symbols[symbolIndex].Item2);
+				string value;
+				if (!escapeStrings)
+				{
+					value = symbols[symbolIndex].Item2;
+				} else
+				{
+					value = StringIO.Escape(symbols[symbolIndex].Item2);
+				}
 				line = line.Replace(symbol, value);
 			}
 
@@ -234,6 +241,19 @@ namespace Swish
 			{
 				Console.WriteLine(message);
 			}
+		}
+
+		private static int _temporaryVariableId = Math.Abs((int)DateTime.Now.Ticks);
+		public static int TemporaryVariableId()
+		{
+			int value = _temporaryVariableId;
+			_temporaryVariableId++;
+			return value;
+		}
+
+		public static void SetTemporaryVariableId(int value)
+		{
+			_temporaryVariableId = value;
 		}
 
 	}
