@@ -1,4 +1,4 @@
-﻿namespace Swish.SimpleInstaller.Controls
+namespace Swish.SimpleInstaller.Controls
 {
 	partial class WelcomePage
 	{

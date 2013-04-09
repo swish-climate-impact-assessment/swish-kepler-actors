@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -110,7 +110,10 @@ namespace Swish
 					return;
 				}
 				File.SetAttributes(fileName, FileAttributes.Normal);
-				_ReportMessage(ReportMessage, -1, "delete file: " + fileName);
+				if (ExceptionFunctions.VerboseFileOperations)
+				{
+					SwishFunctions._ReportMessage(ReportMessage, -1, "delete file: " + fileName);
+				}
 				File.Delete(fileName);
 				string destinationDirectory = Path.GetDirectoryName(fileName);
 				DeleteDirectory(destinationDirectory, ReportMessage);
@@ -131,7 +134,10 @@ namespace Swish
 					return;
 				}
 
-				_ReportMessage(ReportMessage, -1, "delete directory: " + directory);
+				if (ExceptionFunctions.VerboseFileOperations)
+				{
+					SwishFunctions._ReportMessage(ReportMessage, -1, "delete directory: " + directory);
+				}
 				Directory.Delete(directory);
 				string baseDirectory = Path.GetDirectoryName(directory);
 				DeleteDirectory(baseDirectory, ReportMessage);
@@ -147,16 +153,22 @@ namespace Swish
 				CreateDirectory(destinationDirectory, ReportMessage);
 				if (FileExists(destinationFileName))
 				{
-					_ReportMessage(ReportMessage, -1, "delete: " + destinationFileName);
+					if (ExceptionFunctions.VerboseFileOperations)
+					{
+						SwishFunctions._ReportMessage(ReportMessage, -1, "delete: " + destinationFileName);
+					}
 					File.Delete(destinationFileName);
 				}
 
-				_ReportMessage(ReportMessage, -1, "copy: " + sourceFileName + " -> " + destinationFileName);
+				if (ExceptionFunctions.VerboseFileOperations)
+				{
+					SwishFunctions._ReportMessage(ReportMessage, -1, "copy: " + sourceFileName + " -> " + destinationFileName);
+				}
 				File.Copy(sourceFileName, destinationFileName);
 			} catch (Exception error)
 			{
 				string errorMessage = "Failed copying file \"" + sourceFileName + "\" -> \"" + destinationFileName + "\"";
-				_ReportMessage(ReportMessage, -1, errorMessage);
+				SwishFunctions._ReportMessage(ReportMessage, -1, errorMessage);
 				throw new Exception(errorMessage, error);
 			}
 		}
@@ -173,12 +185,15 @@ namespace Swish
 				string baseDirectory = Path.GetDirectoryName(directory);
 				CreateDirectory(baseDirectory, ReportMessage);
 
-				_ReportMessage(ReportMessage, -1, "Create directory: " + directory);
+				if (ExceptionFunctions.VerboseFileOperations)
+				{
+					SwishFunctions._ReportMessage(ReportMessage, -1, "Create directory: " + directory);
+				}
 				Directory.CreateDirectory(directory);
 			} catch (Exception error)
 			{
 				string errorMessage = "Failed create directory \"" + directory + "\"";
-				_ReportMessage(ReportMessage, -1, errorMessage);
+				SwishFunctions._ReportMessage(ReportMessage, -1, errorMessage);
 				throw new Exception(errorMessage, error);
 			}
 		}
@@ -239,20 +254,6 @@ namespace Swish
 				File.Delete(outputFileName);
 			}
 			return outputFileName;
-		}
-
-		private static void _ReportMessage(ReportProgressFunction ReportMessage, int progress, string message)
-		{
-			if (ReportMessage != null)
-			{
-				ReportMessage(progress, message);
-			} else if (progress >= 0)
-			{
-				Console.WriteLine(progress + "%" + message);
-			} else if (ExceptionFunctions.ForceVerbose)
-			{
-				Console.WriteLine(message);
-			}
 		}
 
 		public static void GetFilesAndDirectories(out List<string> directoryList, out List<string> fileList, string directory, List<string> excludeDirectories)

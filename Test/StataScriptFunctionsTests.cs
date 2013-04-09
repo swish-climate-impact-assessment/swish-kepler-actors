@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Swish.Tests
@@ -89,15 +89,13 @@ namespace Swish.Tests
 
 			StataScriptFunctions.LoadFileCommand(lines, @"C:\Swish\SampleData\MergeTable1.csv");
 
-			string line = StataScriptFunctions.SortCommand(StataScriptFunctions.VariableList(variableNames));
-			lines.Add(line);
+			StataScriptFunctions.SortCommand(lines, StataScriptFunctions.VariableList(variableNames));
 			StataScriptFunctions.SaveFileCommand(lines, @"C:\Swish\SampleData\MergeTableTemp.dta");
 
 			lines.Add("clear");
 			StataScriptFunctions.LoadFileCommand(lines, @"C:\Swish\SampleData\MergeTable2.csv");
 
-			line = StataScriptFunctions.SortCommand(StataScriptFunctions.VariableList(variableNames));
-			lines.Add(line);
+			StataScriptFunctions.SortCommand(lines, StataScriptFunctions.VariableList(variableNames));
 			lines.Add("merge 1:1 " + StataScriptFunctions.VariableList(variableNames) + " using \"" + @"C:\Swish\SampleData\MergeTableTemp.dta" + "\"");
 			lines.Add("drop " + StataScriptFunctions.MergeColumnName);
 			StataScriptFunctions.SaveFileCommand(lines, @"C:\Swish\SampleData\MergeTableOut.csv");

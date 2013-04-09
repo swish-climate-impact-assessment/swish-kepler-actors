@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Swish.Adapters;
@@ -36,8 +36,10 @@ namespace Swish
 
 		public const string BoolType = "bool";
 		public const string DoubleType = "double";
+		public const string DateType = "date";
 
-		public static void ResloveSymbols(out string outputFileName, out SortedList<string, string> inputFileNames, out List<string> newLines, out List<Tuple<string, string>> symbols, List<string> lines, string intermediateFileName, AdapterArguments adapterArguments)
+		public static void ResloveSymbols(out string outputFileName, out SortedList<string, string> inputFileNames, out List<string> newLines,
+			out List<Tuple<string, string>> symbols, List<string> lines, string intermediateFileName, AdapterArguments adapterArguments)
 		{
 			newLines = new List<string>();
 			symbols = new List<Tuple<string, string>>();
@@ -82,12 +84,16 @@ namespace Swish
 				{
 				} else
 				{
-					name = line;
+					name = line.Trim();
 					line = string.Empty;
 				}
 				if (string.IsNullOrWhiteSpace(name))
 				{
 					throw new Exception("Could not read line: \"" + _line + "\"");
+				}
+				if (!name.StartsWith("%") && !name.EndsWith("%"))
+				{
+					name = "%" + name + "%";
 				}
 
 				string defaultValue;
@@ -193,7 +199,7 @@ namespace Swish
 						{
 							if (!optional)
 							{
-								throw new Exception("String missing");
+								throw new Exception(name +" String, token or variable name missing");
 							}
 							stringValue = defaultValue;
 						}
@@ -219,6 +225,7 @@ namespace Swish
 
 				case BoolType:
 				case DoubleType:
+				case DateType:
 					{
 						string stringValue;
 
@@ -234,7 +241,7 @@ namespace Swish
 						{
 							if (!optional)
 							{
-								throw new Exception("Boolean missing");
+								throw new Exception("Boolean double or date missing");
 							}
 							stringValue = defaultValue;
 						}
@@ -255,12 +262,23 @@ namespace Swish
 						{
 							if (!string.IsNullOrWhiteSpace(stringValue))
 							{
-								double value = double.Parse(stringValue.ToLower());
+								double value = double.Parse(stringValue);
 								symbols.Add(new Tuple<string, string>(name, stringValue));
 							} else
 							{
 								double value = 0;
 								symbols.Add(new Tuple<string, string>(name, value.ToString()));
+							}
+						} else if (type == DateType)
+						{
+							if (!string.IsNullOrWhiteSpace(stringValue))
+							{
+								DateTime value = DateTime.Parse(stringValue);
+								symbols.Add(new Tuple<string, string>(name, stringValue));
+							} else
+							{
+								DateTime value = new DateTime();
+								symbols.Add(new Tuple<string, string>(name, value.ToShortDateString()));
 							}
 						}
 					}
@@ -274,17 +292,15 @@ namespace Swish
 
 		public const string MergeColumnName = "_merge";
 
-		public static string SortCommand(string variableNames)
+		public static void SortCommand(List<string> lines, string variableNames)
 		{
-			string line;
 			if (!string.IsNullOrWhiteSpace(variableNames))
 			{
-				line = "sort " + variableNames + ", stable";
+				lines.Add("sort " + variableNames + ", stable");
 			} else
 			{
-				line = "sort *, stable";
+				lines.Add("sort *, stable");
 			}
-			return line;
 		}
 
 		public static string VariableList(List<string> variableNames)
@@ -396,7 +412,7 @@ namespace Swish
 			//lines.Add("}");
 		}
 
-		public static void TryDropVariable(List<string> lines, string variable)
+		public static void DropVariable(List<string> lines, string variable)
 		{
 			lines.Add("capture confirm variable " + variable);
 			lines.Add("if (_rc == 0){");
@@ -426,7 +442,7 @@ namespace Swish
 				lines.Add(" generate " + type.ToString().ToLower() + " " + intermediateName + " = " + expression);
 			}
 
-			TryDropVariable(lines, variableName);
+			DropVariable(lines, variableName);
 			RenameVariable(lines, intermediateName, variableName);
 		}
 
@@ -441,10 +457,19 @@ namespace Swish
 				lines.Add(" generate " + type.ToString() + " " + intermediateName + " = " + expression);
 			}
 
-			TryDropVariable(lines, variableName);
+			DropVariable(lines, variableName);
 			RenameVariable(lines, intermediateName, variableName);
 		}
 
+		public static void Format(List<string> lines, string variable, string format)
+		{
+			lines.Add("format " + variable + " " + format);
+		}
+
+		internal static void Replace(List<string> lines, string value, string expression)
+		{
+			lines.Add("replace " + value + " if " + expression);
+		}
 	}
 }
 

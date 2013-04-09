@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using LibraryTypes.BootStrap;
 
@@ -10,8 +10,6 @@ namespace Swish.Tests
 		internal void ReceiveOutput()
 		{
 			string expectedOutput = "this is the output";
-			//string toolFileName = CSharpCompiler.MakeExecutable("class Program{static void Main(string[] arguments){for(int index=0;index<10;index++){System.Console.WriteLine(\"" + expectedOutput + "\"); System.Threading.Thread.Sleep(1000);}}}", false);
-			//string toolFileName = CSharpCompiler.MakeExecutable("class Program{static void Main(string[] arguments){for(int index=0;index<10;index++){System.Console.WriteLine(\"" + expectedOutput + "\"); }}}", false);
 			string toolFileName = CSharpCompiler.MakeExecutable("class Program{static void Main(string[] arguments){System.Console.WriteLine(\"" + expectedOutput + "\"); }}");
 
 			ProcessResult result = ProcessFunctions.Run(toolFileName, string.Empty, Environment.CurrentDirectory, false, new TimeSpan(0, 0, 24), false, true, true);

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 using System;
@@ -171,6 +171,35 @@ namespace Swish
 			arguments.String(StataScriptFunctions.OutputFileNameToken, intermediateFileName);
 
 			AdapterFunctions.RunOperation(TransposeScriptGenerator.NameString, new AdapterArguments(arguments));
+
+			ConvertOutput(outputFileName, intermediateFileName);
+		}
+
+		public static void FillDate(string inputFileName, string outputFileName, string dateVariableName)
+		{
+			Arguments arguments = new Arguments();
+			inputFileName = ConvertInput(inputFileName);
+			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
+			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
+			arguments.String(StataScriptFunctions.OutputFileNameToken, intermediateFileName);
+			arguments.String(StataScriptFunctions.VariableNameToken, dateVariableName);
+
+			AdapterFunctions.RunOperation(FillDateScriptGenerator.NameString, new AdapterArguments(arguments));
+
+			ConvertOutput(outputFileName, intermediateFileName);
+		}
+
+		public static void DateRange(string outputFileName, string variableName, DateTime startDate, DateTime endDate)
+		{
+			Arguments arguments = new Arguments();
+			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
+			arguments.String(StataScriptFunctions.OutputFileNameToken, intermediateFileName);
+
+			arguments.Date(DateRangeScriptGenerator.StartDateToken, startDate);
+			arguments.Date(DateRangeScriptGenerator.EndDateToken, endDate);
+			arguments.String(StataScriptFunctions.ResultVariableNameToken, variableName);
+
+			AdapterFunctions.RunOperation(DateRangeScriptGenerator.NameString, new AdapterArguments(arguments));
 
 			ConvertOutput(outputFileName, intermediateFileName);
 		}

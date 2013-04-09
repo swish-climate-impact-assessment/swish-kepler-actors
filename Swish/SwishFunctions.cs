@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -201,10 +201,10 @@ namespace Swish
 				string _line = lines[lineIndex];
 				string line = ResloveSymbols(_line, symbols, false);
 
-				if (line != _line)
-				{
-					_ReportMessage(ReportMessage, -1, "\"" + _line + "\"" + " changed to " + "\"" + line + "\"");
-				}
+				//if (line != _line)
+				//{
+				//    _ReportMessage(ReportMessage, -1, "\"" + _line + "\"" + " changed to " + "\"" + line + "\"");
+				//}
 				newPending.Add(line);
 			}
 			return newPending;

@@ -2,8 +2,8 @@ set more off
 set output proc
 // define input %Input%
 // define output %Output%
-// define variableNames %VariableNames%
+// define variableNames %Variables%
 clear
 use "%Input%"
-drop %VariableNames%
+drop %Variables%
 save "%Output%"

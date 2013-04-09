@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -14,7 +14,6 @@ namespace Swish.Adapters
 		}
 
 		public static void Fill(string inputFileName, string outputFileName, 
-			
 			string dateVariableName,
 			List<Tuple<string/* category variable name */, List<string>/* values */>> categories,  string expression)
 		{

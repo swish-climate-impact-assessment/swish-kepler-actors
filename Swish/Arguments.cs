@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
@@ -10,9 +10,9 @@ namespace Swish
 	{
 		public const string DefaultArgumentPrefix = ">";
 
-		public const string ErrorArgument = DefaultArgumentPrefix + "SwishError";
-		public const string InputArgument = DefaultArgumentPrefix + "input";
-		public const string OperationArgument = DefaultArgumentPrefix + "operation";
+		public const string ErrorArgument = "SwishError";
+		public const string InputArgument = "input";
+		public const string OperationArgument = "operation";
 
 		private string _argumentPrefix;
 		public string ArgumentPrefix { get { return _argumentPrefix; } }
@@ -29,7 +29,19 @@ namespace Swish
 					_splitArguments = new List<Tuple<string, string>>();
 					return;
 				}
-				_splitArguments = new List<Tuple<string, string>>(value);
+
+				_splitArguments = new List<Tuple<string, string>>();
+				for (int argumentIndex = 0; argumentIndex < value.Count; argumentIndex++)
+				{
+					string name = value[argumentIndex].Item1;
+					string valueString = value[argumentIndex].Item2;
+					name = name.Trim().ToLower();
+					if (name.StartsWith(_argumentPrefix))
+					{
+						name = name.Substring(1);
+					}
+					_splitArguments.Add(new Tuple<string, string>(name, valueString));
+				}
 			}
 		}
 
@@ -96,6 +108,12 @@ namespace Swish
 					usedArguments = string.Empty;
 				}
 				name = argumentPrefix + name;
+
+				name = name.Trim().ToLower();
+				if (name.StartsWith(argumentPrefix))
+				{
+					name = name.Substring(1);
+				}
 
 				StringIO.SkipWhiteSpace(out buffer, ref usedArguments);
 				string value = ReadArgumentValue(ref usedArguments, argumentPrefix);
@@ -170,15 +188,12 @@ namespace Swish
 
 		private int IndexOf(string name)
 		{
-			if (!name.StartsWith(_argumentPrefix))
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
 			{
-				name = _argumentPrefix + name;
+				name = name.Substring(1);
 			}
 
-			if (!name.StartsWith(_argumentPrefix))
-			{
-				throw new Exception("Invalid argument name \"" + name + "\"");
-			}
 			int listIndex = -1;
 			for (int argumentIndex = 0; argumentIndex < _splitArguments.Count; argumentIndex++)
 			{
@@ -197,9 +212,10 @@ namespace Swish
 
 		public string String(string name, bool throwOnMissing)
 		{
-			if (!name.StartsWith(_argumentPrefix))
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
 			{
-				name = _argumentPrefix + name;
+				name = name.Substring(1);
 			}
 
 			int listIndex = IndexOf(name);
@@ -224,9 +240,10 @@ namespace Swish
 
 		public void String(string name, string value)
 		{
-			if (!name.StartsWith(_argumentPrefix))
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
 			{
-				name = _argumentPrefix + name;
+				name = name.Substring(1);
 			}
 
 			_splitArguments.Add(new Tuple<string, string>(name, value));
@@ -234,9 +251,10 @@ namespace Swish
 
 		public List<string> StringList(string name, bool throwOnMissing, bool throwOnEmpty)
 		{
-			if (!name.StartsWith(_argumentPrefix))
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
 			{
-				name = _argumentPrefix + name;
+				name = name.Substring(1);
 			}
 
 			string value = String(name, throwOnMissing);
@@ -250,9 +268,10 @@ namespace Swish
 
 		public bool Exists(string name)
 		{
-			if (!name.StartsWith(_argumentPrefix))
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
 			{
-				name = _argumentPrefix + name;
+				name = name.Substring(1);
 			}
 
 			int listIndex = IndexOf(name);
@@ -268,9 +287,10 @@ namespace Swish
 
 		public List<T> EnumList<T>(string name, bool throwOnMissing, bool throwOnEmpty)
 		{
-			if (!name.StartsWith(_argumentPrefix))
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
 			{
-				name = _argumentPrefix + name;
+				name = name.Substring(1);
 			}
 
 			List<string> items = StringList(name, throwOnMissing, throwOnEmpty);
@@ -292,9 +312,10 @@ namespace Swish
 
 		public T Enum<T>(string name, bool throwOnMissing)
 		{
-			if (!name.StartsWith(_argumentPrefix))
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
 			{
-				name = _argumentPrefix + name;
+				name = name.Substring(1);
 			}
 
 			string stringValue = String(name, throwOnMissing);
@@ -304,9 +325,10 @@ namespace Swish
 
 		public bool Bool(string name, bool throwOnMissing)
 		{
-			if (!name.StartsWith(_argumentPrefix))
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
 			{
-				name = _argumentPrefix + name;
+				name = name.Substring(1);
 			}
 
 			string stringValue = String(name, throwOnMissing);
@@ -328,16 +350,17 @@ namespace Swish
 			for (int argumentIndex = 0; argumentIndex < _splitArguments.Count; argumentIndex++)
 			{
 				Tuple<string, string> argument = _splitArguments[argumentIndex];
-				argumentText += argument.Item1 + " " + argument.Item2 + " ";
+				argumentText += _argumentPrefix + argument.Item1.Substring(0, 1).ToUpper() + argument.Item1.Substring(1) + " " + argument.Item2 + " ";
 			}
 			return argumentText;
 		}
 
 		public void Remove(string name)
 		{
-			if (!name.StartsWith(_argumentPrefix))
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
 			{
-				name = _argumentPrefix + name;
+				name = name.Substring(1);
 			}
 
 			int listIndex = IndexOf(name);
@@ -351,9 +374,10 @@ namespace Swish
 
 		public double Double(string name, bool throwOnMissing)
 		{
-			if (!name.StartsWith(_argumentPrefix))
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
 			{
-				name = _argumentPrefix + name;
+				name = name.Substring(1);
 			}
 
 			string stringValue = String(name, throwOnMissing);
@@ -371,9 +395,10 @@ namespace Swish
 
 		public DateTime Date(string name, bool throwOnMissing)
 		{
-			if (!name.StartsWith(_argumentPrefix))
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
 			{
-				name = _argumentPrefix + name;
+				name = name.Substring(1);
 			}
 
 			string stringValue = String(name, throwOnMissing);
@@ -392,9 +417,10 @@ namespace Swish
 
 		public void Date(string name, DateTime value)
 		{
-			if (!name.StartsWith(_argumentPrefix))
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
 			{
-				name = _argumentPrefix + name;
+				name = name.Substring(1);
 			}
 
 			string stringValue = value.ToShortDateString();
@@ -404,9 +430,10 @@ namespace Swish
 
 		public int Int(string name, bool throwOnMissing)
 		{
-			if (!name.StartsWith(_argumentPrefix))
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
 			{
-				name = _argumentPrefix + name;
+				name = name.Substring(1);
 			}
 
 			string stringValue = String(name, throwOnMissing);
@@ -424,9 +451,10 @@ namespace Swish
 
 		public void Int(string name, int value)
 		{
-			if (!name.StartsWith(_argumentPrefix))
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
 			{
-				name = _argumentPrefix + name;
+				name = name.Substring(1);
 			}
 
 			string stringValue = value.ToString();

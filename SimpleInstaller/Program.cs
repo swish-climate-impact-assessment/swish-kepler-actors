@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Windows.Forms;
 using Swish.SimpleInstaller.Controls;
@@ -22,6 +22,7 @@ namespace Swish.SimpleInstaller
 
 				Arguments splitArguments = new Arguments(arguments);
 				ExceptionFunctions.ForceVerbose = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "verbose");
+				ExceptionFunctions.VerboseFileOperations = true;
 				bool noGui = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "silent") || splitArguments.Exists(Arguments.DefaultArgumentPrefix + "nogui");
 				bool clean = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "clean");
 				bool luanch = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "luanch");
@@ -50,7 +51,6 @@ namespace Swish.SimpleInstaller
 					}
 				} else
 				{
-					Console.WriteLine("Installing");
 					InstallFunctions.Install(clean, null);
 				}
 

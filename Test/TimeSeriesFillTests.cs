@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Swish.Adapters;
 
@@ -37,7 +37,6 @@ namespace Swish.Tests
 
 			string inputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			CsvFunctions.Write(inputFileName, table);
-			CsvFunctions.Write(@"C:\Users\u5265691\Desktop\TSFillWorking\SparseTable2.csv", table);
 
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 

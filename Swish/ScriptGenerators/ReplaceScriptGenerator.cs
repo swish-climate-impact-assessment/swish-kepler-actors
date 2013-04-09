@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -21,9 +21,9 @@ namespace Swish.ScriptGenerators
 			lines.Add("// define " + StataScriptFunctions.StringType + " " + ValueToken);
 
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameToken);
-
-			lines.Add("replace " + ValueToken + " if " + ConditionToken);
+			StataScriptFunctions.Replace(lines, ValueToken, ConditionToken);
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}
+
 	}
 }

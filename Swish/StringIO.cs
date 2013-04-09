@@ -1,4 +1,4 @@
-﻿
+
 namespace Swish
 {
 	public static class StringIO

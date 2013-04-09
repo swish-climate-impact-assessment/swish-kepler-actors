@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -19,10 +19,11 @@ namespace Swish.ScriptGenerators
 
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameToken);
 
-			lines.Add("format " + StataScriptFunctions.VariableNamesToken + " " + FormatToken);
+			StataScriptFunctions.Format(lines, StataScriptFunctions.VariableNamesToken, FormatToken);
 
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}
+
 
 
 	}

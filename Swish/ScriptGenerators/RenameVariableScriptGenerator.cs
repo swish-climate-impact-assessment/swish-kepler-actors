@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System;
 using Swish.Adapters;
 
@@ -19,8 +19,8 @@ namespace Swish.ScriptGenerators
 			lines.Add("// define " + StataScriptFunctions.VariableNameType + " " + NewVariableNameToken);
 
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameToken);
-			StataScriptFunctions.TryDropVariable(lines, NewVariableNameToken);
-			lines.Add("rename " + StataScriptFunctions.VariableNameToken + " " + NewVariableNameToken + "");
+			StataScriptFunctions.DropVariable(lines, NewVariableNameToken);
+			StataScriptFunctions.RenameVariable(lines, StataScriptFunctions.VariableNameToken, NewVariableNameToken);
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}
 

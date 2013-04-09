@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 
@@ -8,6 +8,13 @@ namespace Swish.Adapters
 	{
 		private Arguments _arguments;
 
+		private char _fixingCharacter = '%';
+		public char FixingCharacter
+		{
+			get { return _fixingCharacter; }
+			set { _fixingCharacter = value; }
+		}
+
 		public AdapterArguments(Arguments splitArguments)
 		{
 			if (splitArguments == null)
@@ -15,16 +22,28 @@ namespace Swish.Adapters
 				throw new ArgumentNullException("splitArguments");
 			}
 			_arguments = splitArguments;
+
+			List<Tuple<string, string>> lowerCaseArguments = new List<Tuple<string, string>>();
+			for (int argumentIndex = 0; argumentIndex < _arguments.SplitArguments.Count; argumentIndex++)
+			{
+				string name = _arguments.SplitArguments[argumentIndex].Item1;
+				string value = _arguments.SplitArguments[argumentIndex].Item2;
+				name = name.Trim(_fixingCharacter);
+
+				lowerCaseArguments.Add(new Tuple<string, string>(name, value));
+			}
+			_arguments.SplitArguments = lowerCaseArguments;
 		}
 
 		internal string String(string name, bool throwOnMissing)
 		{
+			name = name.Trim(_fixingCharacter);
 			return _arguments.String(name, throwOnMissing);
 		}
 
 		public string OutputFileName(string extension)
 		{
-			string outputFileName = String(_arguments.ArgumentPrefix + "output" + "", false);
+			string outputFileName = String("output" + "", false);
 			outputFileName = FileFunctions.AdjustFileName(outputFileName);
 			if (string.IsNullOrWhiteSpace(outputFileName) || outputFileName.ToLower() == "none" || outputFileName.ToLower() == "temp")
 			{
@@ -35,28 +54,32 @@ namespace Swish.Adapters
 
 		public void SetOutputFileName(string outputFileName)
 		{
-			_arguments.String(_arguments.ArgumentPrefix + "output", outputFileName);
+			_arguments.String("output", outputFileName);
 		}
 
 		public string ArgumentString { get { return _arguments.ArgumentString; } }
 
 		internal bool Exists(string name)
 		{
+			name = name.Trim(_fixingCharacter);
 			return _arguments.Exists(name);
 		}
 
 		internal bool Bool(string name, bool throwOnMissing)
 		{
+			name = name.Trim(_fixingCharacter);
 			return _arguments.Bool(name, throwOnMissing);
 		}
 
 		public T Enum<T>(string name, bool throwOnMissing)
 		{
+			name = name.Trim(_fixingCharacter);
 			return _arguments.Enum<T>(name, throwOnMissing);
 		}
 
 		public DateTime Date(string name, bool throwOnMissing)
 		{
+			name = name.Trim(_fixingCharacter);
 			return _arguments.Date(name, throwOnMissing);
 		}
 
@@ -89,11 +112,13 @@ namespace Swish.Adapters
 
 		public double Double(string name, bool throwOnMissing)
 		{
+			name = name.Trim(_fixingCharacter);
 			return _arguments.Double(name, throwOnMissing);
 		}
 
 		public int Int(string name, bool throwOnMissing)
 		{
+			name = name.Trim(_fixingCharacter);
 			return _arguments.Int(name, throwOnMissing);
 		}
 
@@ -113,16 +138,16 @@ namespace Swish.Adapters
 		}
 
 
-		 public void Remove(string name)
+		public void Remove(string name)
 		{
-			_arguments.Remove( name);
+			name = name.Trim(_fixingCharacter);
+			_arguments.Remove(name);
 		}
-
-		public string ArgumentPrefix { get{return _arguments.ArgumentPrefix;} }
 
 		internal List<string> StringList(string name, bool throwOnMissing, bool throwOnEmpty)
 		{
-			return _arguments.StringList( name,  throwOnMissing,  throwOnEmpty);
+			name = name.Trim(_fixingCharacter);
+			return _arguments.StringList(name, throwOnMissing, throwOnEmpty);
 		}
 	}
 }

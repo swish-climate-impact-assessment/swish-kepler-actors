@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -20,8 +20,7 @@ namespace Swish.ScriptGenerators
 
 			/// sort varlist, stable
 			/// add variables names
-			string line = StataScriptFunctions.SortCommand(StataScriptFunctions.VariableNamesToken);
-			lines.Add(line);
+			StataScriptFunctions.SortCommand(lines, StataScriptFunctions.VariableNamesToken);
 
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}

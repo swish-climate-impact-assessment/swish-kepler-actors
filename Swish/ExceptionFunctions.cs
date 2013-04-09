@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -64,6 +64,8 @@ namespace Swish
 			}
 			set { _forceVerbose = value; }
 		}
+
+		public static bool VerboseFileOperations{get;set;}
 
 		public static string Write(Exception error, bool messageOnly)
 		{

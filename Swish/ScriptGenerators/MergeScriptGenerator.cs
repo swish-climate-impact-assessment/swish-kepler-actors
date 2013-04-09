@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Swish.Adapters;
@@ -22,23 +22,20 @@ namespace Swish.ScriptGenerators
 
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.Input2FileNameToken);
 
-			string line = StataScriptFunctions.SortCommand(StataScriptFunctions.VariableNamesToken);
-			lines.Add(line);
+			StataScriptFunctions.SortCommand(lines, StataScriptFunctions.VariableNamesToken);
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.IntermediateFileNameToken);
 
 			lines.Add("clear");
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.Input1FileNameToken);
 
-			line = StataScriptFunctions.SortCommand(StataScriptFunctions.VariableNamesToken);
-			lines.Add(line);
+			StataScriptFunctions.SortCommand(lines, StataScriptFunctions.VariableNamesToken);
 
-			line = "merge " + StataScriptFunctions.VariableNamesToken + ", using \"" + StataScriptFunctions.IntermediateFileNameToken + "\"";
+			string line = "merge " + StataScriptFunctions.VariableNamesToken + ", using \"" + StataScriptFunctions.IntermediateFileNameToken + "\"";
 			lines.Add(line);
 
 			lines.Add("drop " + StataScriptFunctions.MergeColumnName);
 
-			line = StataScriptFunctions.SortCommand(StataScriptFunctions.VariableNamesToken);
-			lines.Add(line);
+			StataScriptFunctions.SortCommand(lines, StataScriptFunctions.VariableNamesToken);
 
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}

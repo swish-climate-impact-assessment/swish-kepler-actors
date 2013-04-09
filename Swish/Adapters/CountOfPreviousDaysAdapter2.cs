@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -78,7 +78,6 @@ namespace Swish.Adapters
 				}
 			}
 
-			SwishFunctions.MessageTextBox("Expression = " + expression, false);
 			StataScriptFunctions.Generate(lines, StataDataType.Double, resultVariableName, expression);
 
 			if (dateVariableNameUsed != dateVariableName)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Swish.Adapters;
@@ -29,22 +29,18 @@ namespace Swish.ScriptGenerators
 
 			StataScriptFunctions.LoadFileCommand(lines, Input2FileNameString);
 
-			string line = StataScriptFunctions.SortCommand(VariableNamesString);
-			lines.Add(line);
+			StataScriptFunctions.SortCommand(lines, VariableNamesString);
 			StataScriptFunctions.SaveFileCommand(lines, IntermediateFileNameString);
 
 			lines.Add("clear");
 			StataScriptFunctions.LoadFileCommand(lines, Input1FileNameString);
 
-			line = StataScriptFunctions.SortCommand(VariableNamesString);
+			StataScriptFunctions.SortCommand(lines, VariableNamesString);
+
+			string line = "merge " + VariableNamesString + ", using \"" + IntermediateFileNameString + "\"";
 			lines.Add(line);
 
-
-			line = "merge " + VariableNamesString + ", using \"" + IntermediateFileNameString + "\"";
-			lines.Add(line);
-
-			line = StataScriptFunctions.SortCommand(VariableNamesString);
-			lines.Add(line);
+			StataScriptFunctions.SortCommand(lines, VariableNamesString);
 
 			StataScriptFunctions.SaveFileCommand(lines, OutputFileNameString);
 		}

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Swish.Adapters;
 using System.IO;
@@ -22,7 +22,7 @@ namespace Swish.Tests
 			string inputFileName = GenerateInputData(startDate, endDate);
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 
-			FillDateAdapter.Fill(inputFileName, outputFileName, dateVariableName, startDate, endDate);
+			TableFunctions.FillDate(inputFileName, outputFileName, dateVariableName);
 
 			Csv output = CsvFunctions.Read(outputFileName);
 
@@ -44,12 +44,14 @@ namespace Swish.Tests
 			table.Header.Add("Date");
 			table.Header.Add("Other");
 
-			DateTime date = startDate;
+			double aValue; List<string> record;
+
+			DateTime date = startDate.AddDays(1);
 			Random random = new Random();
-			while (date <= endDate)
+			while (date.AddDays(1) <= endDate)
 			{
-				double aValue = random.NextDouble();
-				List<string> record = new List<string>();
+				aValue = random.NextDouble();
+				record = new List<string>();
 				record.Add(date.ToShortDateString());
 				record.Add(aValue.ToString());
 				table.Records.Add(record);
@@ -62,6 +64,19 @@ namespace Swish.Tests
 				int number = random.Next(table.Records.Count);
 				table.Records.RemoveAt(number);
 			}
+
+			aValue = random.NextDouble();
+			record = new List<string>();
+			record.Add(startDate.ToShortDateString());
+			record.Add(aValue.ToString());
+			table.Records.Add(record);
+
+			aValue = random.NextDouble();
+			record = new List<string>();
+			record.Add(endDate.ToShortDateString());
+			record.Add(aValue.ToString());
+			table.Records.Add(record);
+
 			CsvFunctions.Write(inputFileName, table);
 			return inputFileName;
 		}

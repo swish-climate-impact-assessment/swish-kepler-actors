@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -17,7 +17,8 @@ namespace Swish.Adapters
 
 		public static void Display(string inputFileName)
 		{
-			string arguments = string.Join(" ", Arguments.OperationArgument, DisplayTableClientAdapter.OperationName, Arguments.InputArgument, inputFileName);
+			string arguments = string.Join(" ", Arguments.DefaultArgumentPrefix +  Arguments.OperationArgument,
+				DisplayTableClientAdapter.OperationName, Arguments.DefaultArgumentPrefix + Arguments.InputArgument, inputFileName);
 			ProcessFunctions.Run(Application.ExecutablePath, arguments, Environment.CurrentDirectory, true, TimeSpan.Zero, false, false, true);
 		}
 
