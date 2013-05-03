@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.IO;
-using Swish.ScriptGenerators;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Swish.ScriptGenerators;
 
 namespace Swish.Tests
 {
@@ -37,10 +37,14 @@ namespace Swish.Tests
 		}
 #endif
 
+
+
+
+
+
 		static void Main(string[] arguments)
 		{
-
-			if (arguments.Length > 0 && arguments[0] .ToLower() == "generate")
+			if (arguments.Length > 0 && arguments[0].ToLower() == "generate")
 			{
 				try
 				{
@@ -59,9 +63,10 @@ namespace Swish.Tests
 				return;
 			}
 
-
 			try
 			{
+
+				Swish.SimpleInstaller.Program.Main(new string[] { ">silent" });
 
 				//string leftFileName = @"C:\Users\u5265691\Desktop\FinalWorking\merge4.csv";
 				//string rightFileName = @"C:\Users\u5265691\Desktop\FinalWorking\Merge4.do.csv";
@@ -170,7 +175,7 @@ namespace Swish.Tests
 				generator.GenerateScript(lines);
 				StataScriptFunctions.WriteFooter(lines);
 
-				if (File.Exists(fileName))
+				if (FileFunctions.FileExists(fileName))
 				{
 					File.Delete(fileName);
 				}

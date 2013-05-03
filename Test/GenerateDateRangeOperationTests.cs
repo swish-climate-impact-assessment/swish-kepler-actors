@@ -14,14 +14,14 @@ namespace Swish.Tests
 			DateTime startDate = new DateTime(2000, 1, 1);
 			DateTime endDate = new DateTime(2000, 1, 31);
 
-			if (File.Exists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}
 
 			TableFunctions.DateRange(outputFileName, variableName, startDate, endDate);
 
-			if (!File.Exists(outputFileName))
+			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new Exception();
 			}

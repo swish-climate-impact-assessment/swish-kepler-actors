@@ -30,7 +30,7 @@ namespace Swish.Tests
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			CountOfPreviousDaysAdapter.Count(inputFileName, outputFileName, variableName, periodCount);
 
-			if (!File.Exists(outputFileName))
+			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new Exception("");
 			}

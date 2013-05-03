@@ -10,6 +10,8 @@ namespace Swish.ScriptGenerators
 		public const string NameString = "Merge";
 		public string Name { get { return NameString; } }
 
+		public const string VariableNamesToken = "%Variables%";
+
 		public void GenerateScript(List<string> lines)
 		{
 			/// create the do file
@@ -17,25 +19,25 @@ namespace Swish.ScriptGenerators
 			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.Input1FileNameToken);
 			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.Input2FileNameToken);
 			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameToken);
-			lines.Add("// define " + StataScriptFunctions.VariableNamesType + " " + StataScriptFunctions.VariableNamesToken);
+			lines.Add("// define " + StataScriptFunctions.VariableNamesType + " " + VariableNamesToken);
 			lines.Add("// define " + StataScriptFunctions.TemporaryFileType + " " + StataScriptFunctions.IntermediateFileNameToken);
 
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.Input2FileNameToken);
 
-			StataScriptFunctions.SortCommand(lines, StataScriptFunctions.VariableNamesToken);
+			StataScriptFunctions.SortCommand(lines, VariableNamesToken);
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.IntermediateFileNameToken);
 
 			lines.Add("clear");
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.Input1FileNameToken);
 
-			StataScriptFunctions.SortCommand(lines, StataScriptFunctions.VariableNamesToken);
+			StataScriptFunctions.SortCommand(lines, VariableNamesToken);
 
-			string line = "merge " + StataScriptFunctions.VariableNamesToken + ", using \"" + StataScriptFunctions.IntermediateFileNameToken + "\"";
+			string line = "merge " + VariableNamesToken + ", using \"" + StataScriptFunctions.IntermediateFileNameToken + "\"";
 			lines.Add(line);
 
 			lines.Add("drop " + StataScriptFunctions.MergeColumnName);
 
-			StataScriptFunctions.SortCommand(lines, StataScriptFunctions.VariableNamesToken);
+			StataScriptFunctions.SortCommand(lines, VariableNamesToken);
 
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}

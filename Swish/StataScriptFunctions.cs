@@ -143,7 +143,7 @@ namespace Swish
 
 						string fileName = adapterArguments.String(name, !optional);
 						fileName = FileFunctions.AdjustFileName(fileName);
-						if (!File.Exists(fileName))
+						if (string.IsNullOrWhiteSpace(fileName) || !FileFunctions.FileExists(fileName))
 						{
 							throw new ArgumentException(fileName + " not found");
 						}
@@ -199,7 +199,7 @@ namespace Swish
 						{
 							if (!optional)
 							{
-								throw new Exception(name +" String, token or variable name missing");
+								throw new Exception(name + " String, token or variable name missing");
 							}
 							stringValue = defaultValue;
 						}
@@ -241,7 +241,7 @@ namespace Swish
 						{
 							if (!optional)
 							{
-								throw new Exception("Boolean double or date missing");
+								throw new Exception(name + "Boolean double or date missing");
 							}
 							stringValue = defaultValue;
 						}

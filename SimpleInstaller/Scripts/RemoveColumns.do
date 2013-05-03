@@ -5,5 +5,5 @@ set output proc
 // define variableNames %Variables%
 clear
 use "%Input%"
-sort %Variables%, stable
+drop %Variables%
 save "%Output%"

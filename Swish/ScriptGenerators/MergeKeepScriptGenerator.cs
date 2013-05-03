@@ -13,7 +13,7 @@ namespace Swish.ScriptGenerators
 		public const string Input1FileNameString = "%Input1%";
 		public const string Input2FileNameString = "%Input2%";
 		public const string OutputFileNameString = "%Output%";
-		public const string VariableNamesString = "%VariableNames%";
+		public const string VariableNamesString = "%Variables%";
 		public const string IntermediateFileNameString = "%TemporaryFile%";
 
 		public void GenerateScript(List<string> lines)

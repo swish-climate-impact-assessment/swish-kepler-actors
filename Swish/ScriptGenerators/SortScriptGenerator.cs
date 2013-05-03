@@ -9,18 +9,20 @@ namespace Swish.ScriptGenerators
 		public const string NameString = "Sort";
 		public string Name { get { return NameString; } }
 
+		public const string VariableNamesToken = "%Variables%";
+
 		public void GenerateScript(List<string> lines)
 		{
 			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.InputFileNameToken);
 			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameToken);
 
-			lines.Add("// define " + StataScriptFunctions.VariableNamesType + " " + StataScriptFunctions.VariableNamesToken);
+			lines.Add("// define " + StataScriptFunctions.VariableNamesType + " " + VariableNamesToken);
 
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameToken);
 
 			/// sort varlist, stable
 			/// add variables names
-			StataScriptFunctions.SortCommand(lines, StataScriptFunctions.VariableNamesToken);
+			StataScriptFunctions.SortCommand(lines, VariableNamesToken);
 
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}

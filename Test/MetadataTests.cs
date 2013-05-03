@@ -104,7 +104,7 @@ namespace Swish.Tests
 			MetadataFunctions.Save(fileName, metadata);
 
 			string metadataFileName = MetadataFunctions.FileName(fileName);
-			if (!File.Exists(metadataFileName))
+			if (!FileFunctions.FileExists(metadataFileName))
 			{
 				throw new Exception();
 			}

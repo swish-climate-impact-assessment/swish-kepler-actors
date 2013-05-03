@@ -125,11 +125,17 @@ namespace Swish.Adapters
 		public string ResultVariableName()
 		{
 			string resultVariableName = _arguments.String(Arguments.DefaultArgumentPrefix + "resultVariable", false);
-			if (string.IsNullOrWhiteSpace(resultVariableName))
+			if (!string.IsNullOrWhiteSpace(resultVariableName))
 			{
-				return AdapterFunctions.WorkingVariableName;
+				return resultVariableName;
 			}
-			return resultVariableName;
+			 resultVariableName = _arguments.String(Arguments.DefaultArgumentPrefix + "ResultVariableName", false);
+			if (!string.IsNullOrWhiteSpace(resultVariableName))
+			{
+				return resultVariableName;
+			}
+			return AdapterFunctions.WorkingVariableName;
+
 		}
 
 		public List<Tuple<string, string>> SplitArguments

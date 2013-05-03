@@ -14,7 +14,7 @@ namespace Swish
 			string sourceExtension = Path.GetExtension(source).ToLower();
 			string destinationExtension = Path.GetExtension(destination).ToLower();
 
-			if (File.Exists(destination))
+			if (FileFunctions.FileExists(destination))
 			{
 				File.Delete(destination);
 			}

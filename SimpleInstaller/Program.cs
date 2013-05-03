@@ -5,10 +5,10 @@ using Swish.SimpleInstaller.Controls;
 
 namespace Swish.SimpleInstaller
 {
-	static class Program
+	public static class Program
 	{
 		[STAThread]
-		static int Main(string[] arguments)
+		public static int Main(string[] arguments)
 		{
 			string logFileName = string.Empty;
 			try

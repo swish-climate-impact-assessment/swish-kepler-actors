@@ -287,7 +287,7 @@ namespace Swish.Tests
 
 			AdapterFunctions.RunOperation(ReplaceScriptGenerator.NameString, new AdapterArguments(splitArguments));
 
-			if (!File.Exists(outputFileName))
+			if (!FileFunctions.FileExists(outputFileName))
 			{
 				throw new TestException();
 			}

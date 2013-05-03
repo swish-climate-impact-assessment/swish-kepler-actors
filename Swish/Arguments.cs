@@ -207,7 +207,54 @@ namespace Swish
 					listIndex = argumentIndex;
 				}
 			}
-			return listIndex;
+			if (listIndex >= 0)
+			{
+				return listIndex;
+			}
+
+			if (name.EndsWith(name))
+			{
+				name = name.Substring(0, name.Length - "name".Length);
+				listIndex = -1;
+				for (int argumentIndex = 0; argumentIndex < _splitArguments.Count; argumentIndex++)
+				{
+					Tuple<string, string> item = _splitArguments[argumentIndex];
+					if (item.Item1 == name)
+					{
+						if (listIndex != -1)
+						{
+							throw new Exception("Duplicate argument: \"" + name + "\"");
+						}
+						listIndex = argumentIndex;
+					}
+				}
+				if (listIndex >= 0)
+				{
+					return listIndex;
+				}
+			} else
+			{
+				name += "name";
+				listIndex = -1;
+				for (int argumentIndex = 0; argumentIndex < _splitArguments.Count; argumentIndex++)
+				{
+					Tuple<string, string> item = _splitArguments[argumentIndex];
+					if (item.Item1 == name)
+					{
+						if (listIndex != -1)
+						{
+							throw new Exception("Duplicate argument: \"" + name + "\"");
+						}
+						listIndex = argumentIndex;
+					}
+				}
+				if (listIndex >= 0)
+				{
+					return listIndex;
+				}
+			}
+
+			return -1;
 		}
 
 		public string String(string name, bool throwOnMissing)
@@ -275,14 +322,12 @@ namespace Swish
 			}
 
 			int listIndex = IndexOf(name);
-			if (listIndex < 0)
+			if (listIndex > 0)
 			{
-				return false;
+				return true;
 			}
 
-			string value = _splitArguments[listIndex].Item2;
-
-			return true;
+			return false;
 		}
 
 		public List<T> EnumList<T>(string name, bool throwOnMissing, bool throwOnEmpty)

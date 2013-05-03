@@ -4,29 +4,22 @@ using System.IO;
 
 namespace Swish.ScriptGenerators
 {
-	public class FormatScriptGenerator: IScriptGenerator
+	public class LegacyRemoveColumnsScriptGenerator: IScriptGenerator
 	{
-		public const string NameString = "Format";
+		public const string NameString = "RemoveColumns";
 		public string Name { get { return NameString; } }
 
-		public const string FormatToken = "%Format%";
-		public const string VariableNamesString = "%Variables%";
-
+		public const string VariableNamesToken = "%Variables%";
 		public void GenerateScript(List<string> lines)
 		{
 			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.InputFileNameToken);
 			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameToken);
-			lines.Add("// define " + StataScriptFunctions.VariableNamesType + " " + VariableNamesString);
-			lines.Add("// define " + StataScriptFunctions.StringType + " " + FormatToken);
+			lines.Add("// define " + StataScriptFunctions.VariableNamesType + " " + VariableNamesToken);
 
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameToken);
-
-			StataScriptFunctions.Format(lines, VariableNamesString, FormatToken);
-
+			lines.Add("drop " + VariableNamesToken);
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}
-
-
 
 	}
 }

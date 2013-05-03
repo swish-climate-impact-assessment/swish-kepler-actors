@@ -45,6 +45,7 @@
     <Compile Include="AdapterFunctions.cs" />
     <Compile Include="Adapters\AdapterArguments.cs" />
     <Compile Include="ScriptGenerators\ConvertVariableToDateScriptGenerator.cs" />
+    <Compile Include="ScriptGenerators\LegacyRemoveColumnsScriptGenerator.cs" />
     <Compile Include="ScriptGenerators\MergeAndFillZeroScriptGenerator.cs" />
     <Compile Include="ScriptGenerators\JoinbyScriptGenerator.cs" />
     <Compile Include="ScriptGenerators\DateRangeScriptGenerator.cs" />

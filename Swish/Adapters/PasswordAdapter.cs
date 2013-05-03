@@ -108,7 +108,7 @@ namespace Swish.Adapters
 			}
 
 			string encodedPassword = SwishFunctions.EncodePassword(password, ProcessFunctions.KeplerProcess);
-			if (File.Exists(passwordFileName))
+			if (FileFunctions.FileExists(passwordFileName))
 			{
 				FileFunctions.DeleteFile(passwordFileName, null);
 			}

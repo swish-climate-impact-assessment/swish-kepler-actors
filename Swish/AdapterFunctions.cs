@@ -34,7 +34,7 @@ namespace Swish
 		private static string FindScriptTemplate(string operationName)
 		{
 			string fileName = Path.Combine(@"C:\Swish\StataScripts", operationName + SwishFunctions.DoFileExtension);
-			if (!File.Exists(fileName))
+			if (!FileFunctions.FileExists(fileName))
 			{
 				return string.Empty;
 			}
@@ -54,7 +54,7 @@ namespace Swish
 			List<string> newLines;
 			List<Tuple<string, string>> symbols;
 			StataScriptFunctions.ResloveSymbols(out outputFileName, out inputFileNames, out newLines, out symbols, lines, intermediateFileName, adapterArguments);
-			lines = SwishFunctions.ConvertLines(newLines, symbols, null);
+			lines = SwishFunctions.ConvertLines(newLines, symbols, null, true);
 
 			string tempScriptFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DoFileExtension);
 			File.WriteAllLines(tempScriptFileName, lines);

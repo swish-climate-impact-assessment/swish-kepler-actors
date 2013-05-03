@@ -9,18 +9,19 @@ namespace Swish.ScriptGenerators
 		public const string NameString = "LessThanValue";
 		public string Name { get { return NameString; } }
 
+		public const string VariableNameToken = "%Variable%";
 		public void GenerateScript(List<string> lines)
 		{
 			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.InputFileNameToken);
 			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameToken);
 
-			lines.Add("// define " + StataScriptFunctions.VariableNameType + " " + StataScriptFunctions.VariableNameToken);
+			lines.Add("// define " + StataScriptFunctions.VariableNameType + " " + VariableNameToken);
 			lines.Add("// define " + StataScriptFunctions.VariableNameType + " " + "optional" + " " + StataScriptFunctions.ResultVariableNameToken + " " + AdapterFunctions.WorkingVariableName);
 			lines.Add("// define " + StataScriptFunctions.DoubleType + " " + StataScriptFunctions.ValueToken);
 
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameToken);
 
-			string expression = StataScriptFunctions.VariableNameToken + " < " + StataScriptFunctions.ValueToken;
+			string expression = VariableNameToken + " < " + StataScriptFunctions.ValueToken;
 			StataScriptFunctions.Generate(lines, StataDataType.Double, StataScriptFunctions.ResultVariableNameToken, expression);
 
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);

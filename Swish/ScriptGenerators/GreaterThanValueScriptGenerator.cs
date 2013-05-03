@@ -21,7 +21,7 @@ namespace Swish.ScriptGenerators
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameToken);
 
 			string expression = StataScriptFunctions.VariableNameToken + " > " + StataScriptFunctions.ValueToken;
-			StataScriptFunctions.Generate(lines, StataDataType.Double, StataScriptFunctions.ResultVariableNameToken, expression);
+			StataScriptFunctions.Generate(lines, StataDataType.Unknown, StataScriptFunctions.ResultVariableNameToken, expression);
 
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}

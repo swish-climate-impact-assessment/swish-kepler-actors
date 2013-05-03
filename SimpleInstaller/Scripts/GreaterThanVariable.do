@@ -5,7 +5,6 @@ set output proc
 // define variableName %LeftVariableName%
 // define variableName %RightVariableName%
 // define variableName optional %ResultVariableName% Working
-// define double %Value%
 clear
 use "%Input%"
  generate double variable1507650874 = %LeftVariableName% > %RightVariableName%

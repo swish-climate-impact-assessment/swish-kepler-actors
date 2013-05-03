@@ -5,10 +5,9 @@ set output proc
 // define variableName %LeftVariableName%
 // define variableName %RightVariableName%
 // define variableName optional %ResultVariableName% Working
-// define double %Value%
 clear
 use "%Input%"
- generate double variable1031206661 = %LeftVariableName% - %RightVariableName%
+ generate double variable1031206661 = %LeftVariableName% & %RightVariableName%
 capture confirm variable %ResultVariableName%
 if (_rc == 0){
 	drop %ResultVariableName%

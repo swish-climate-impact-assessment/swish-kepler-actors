@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Swish.SimpleInstaller
 {
@@ -11,6 +12,8 @@ namespace Swish.SimpleInstaller
 		{
 			_symbols.Add(new Tuple<string, string>("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)));
 			_symbols.Add(new Tuple<string, string>("%StartupPath%", Application.StartupPath));
+			_symbols.Add(new Tuple<string, string>("%StartMenu%", Environment.GetFolderPath(Environment.SpecialFolder.CommonPrograms)));
+			_symbols.Add(new Tuple<string, string>("%KeplerBin%", KeplerFunctions.KeplerBin));
 		}
 
 		internal static void Install(bool clean, ReportProgressFunction ReportMessage)
@@ -30,7 +33,7 @@ namespace Swish.SimpleInstaller
 				SwishFunctions._ReportMessage(ReportMessage, -1, "Symbol: " + symbol + " -> " + value);
 			}
 
-			List<string> newPending = SwishFunctions.ConvertLines(_pending, _symbols, ReportMessage);
+			List<string> newPending = SwishFunctions.ConvertLines(_pending, _symbols, ReportMessage, false);
 			_pending = newPending;
 
 			while (_pending.Count > 0)
@@ -53,7 +56,6 @@ namespace Swish.SimpleInstaller
 			}
 			SwishFunctions._ReportMessage(ReportMessage, 100, "Done.");
 		}
-
 
 		internal static void RunLine(string line, bool clean, ReportProgressFunction ReportMessage)
 		{
@@ -116,6 +118,48 @@ namespace Swish.SimpleInstaller
 				{
 					FileFunctions.DeleteFile(destinationFileName, ReportMessage);
 				}
+			} else if (StringIO.TryRead("MakeShortCut", ref line))
+			{
+				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+
+				string fileName;
+				if (!StringIO.TryReadString(out fileName, ref line))
+				{
+					throw new Exception("could not read line \"" + line + "\"");
+				}
+
+				string targetFileName;
+				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+				if (!StringIO.TryReadString(out targetFileName, ref line))
+				{
+					throw new Exception("could not read line \"" + line + "\"");
+				}
+
+				string arguments;
+				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+				if (!StringIO.TryReadString(out arguments, ref line))
+				{
+					throw new Exception("could not read line \"" + line + "\"");
+				}
+
+				string description;
+				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+				if (!StringIO.TryReadString(out description, ref line))
+				{
+					throw new Exception("could not read line \"" + line + "\"");
+				}
+
+				if (!clean)
+				{
+					string destinationDirectory = Path.GetDirectoryName(fileName);
+
+					FileFunctions.CreateDirectory(destinationDirectory, ReportMessage);
+					string icon = KeplerFunctions.ExecutablePath + ",0";
+					Shortcut.Create(fileName, targetFileName, arguments, description, icon);
+				} else
+				{
+					FileFunctions.DeleteFile(fileName, ReportMessage);
+				}
 			} else if (string.IsNullOrWhiteSpace(line) || StringIO.TryRead("//", ref line))
 			{
 				// do nothing
@@ -126,6 +170,26 @@ namespace Swish.SimpleInstaller
 		}
 
 		private static List<Tuple<string, string>> _symbols = new List<Tuple<string, string>>();
+
+		public static void SplitArguments(out string fileName, out string arguments, string command)
+		{
+			command = command.Trim();
+			string stopString;
+			if (StringIO.TryReadString(out fileName, ref command))
+			{
+
+			} else if (StringIO.TryReadUntill(out fileName, out stopString, new string[] { " " }, ref command))
+			{
+
+			} else
+			{
+				fileName = command;
+				command = string.Empty;
+			}
+
+			command = command.Trim();
+			arguments = command;
+		}
 
 	}
 }

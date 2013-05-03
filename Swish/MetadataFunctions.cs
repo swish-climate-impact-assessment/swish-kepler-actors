@@ -19,7 +19,7 @@ namespace Swish
 		public static bool Exists(string fileName)
 		{
 			string metadataFileName = FileName(fileName);
-			return File.Exists(metadataFileName);
+			return FileFunctions.FileExists(metadataFileName);
 		}
 
 		public static void Save(string fileName, List<MetadataRecord> metadata)

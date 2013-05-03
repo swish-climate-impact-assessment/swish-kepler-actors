@@ -7,7 +7,7 @@ set output proc
 // define double %Value%
 clear
 use "%Input%"
- generate double variable1644047694 = %VariableName% > %Value%
+ generate variable1644047694 = %VariableName% > %Value%
 capture confirm variable %ResultVariableName%
 if (_rc == 0){
 	drop %ResultVariableName%

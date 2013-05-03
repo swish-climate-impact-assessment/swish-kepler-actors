@@ -23,7 +23,7 @@ namespace Swish.Tests
 				string expectedData = contents[contentIndex];
 				string expectedFileName = Path.Combine(directory, "DumpKar", expectedData);
 
-				if (!File.Exists(expectedFileName))
+				if (!FileFunctions.FileExists(expectedFileName))
 				{
 					throw new TestException();
 				}

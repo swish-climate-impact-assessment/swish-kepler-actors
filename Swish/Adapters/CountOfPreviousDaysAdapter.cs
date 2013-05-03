@@ -72,7 +72,7 @@ namespace Swish.Adapters
 			string intermediateOutput= FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			CsvFunctions.Write(intermediateOutput, table);
 
-			if (File.Exists(outputFileName))
+			if (FileFunctions.FileExists(outputFileName))
 			{
 				File.Delete(outputFileName);
 			}

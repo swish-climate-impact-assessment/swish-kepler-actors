@@ -15,7 +15,7 @@ namespace Swish
 
 		public static void RunWorkflow(string workflowFileName, List<Tuple<string, string>> parameters)
 		{
-			if (!File.Exists(workflowFileName))
+			if (!FileFunctions.FileExists(workflowFileName))
 			{
 				throw new Exception("cannot find workflow file: \"" + workflowFileName + "\"");
 			}
@@ -39,8 +39,15 @@ namespace Swish
 			get
 			{
 				List<string> locations = FileFunctions.Locations();
+				locations.Add(@"C:\Program Files\Kepler-*\");
+				locations.Add(@"C:\Program Files (x86)\Kepler-*\");
+
+				locations.Add(@"C:\Program Files\Kepler-2.4\");
+				locations.Add(@"C:\Program Files (x86)\Kepler-2.4\");
+
 				locations.Add(@"C:\Program Files\Kepler-2.3\");
 				locations.Add(@"C:\Program Files (x86)\Kepler-2.3\");
+
 				locations.Add(@"C:\Kepler-2.3\");
 				locations.Add(@"C:\Program Files\Kepler\");
 				locations.Add(@"C:\Program Files (x86)\Kepler\");
@@ -85,6 +92,24 @@ namespace Swish
 			{
 				if (string.IsNullOrWhiteSpace(_executablePath))
 				{
+					if (!Directory.Exists(KeplerBin))
+					{
+						throw new Exception("Could not find installed version of Kepler");
+					}
+					_executablePath = Path.Combine(KeplerBin, "kepler.exe");
+				}
+				return _executablePath;
+			}
+			set { _executablePath = value; }
+		}
+
+		private static string _keplerBin = null;
+		public static string KeplerBin
+		{
+			get
+			{
+				if (string.IsNullOrWhiteSpace(_keplerBin))
+				{
 					List<string> fileNames = new List<string>();
 					fileNames.Add("kepler.exe");
 
@@ -94,17 +119,19 @@ namespace Swish
 						string fileName = FileFunctions.ResloveFileName(file, PotentialKeplerPaths, false, true);
 						if (!string.IsNullOrWhiteSpace(fileName))
 						{
-							_executablePath = fileName;
-							return fileName;
+							if (string.IsNullOrWhiteSpace(_executablePath))
+							{
+								_executablePath = fileName;
+							}
+							_keplerBin = Path.GetDirectoryName(fileName);
+							return _keplerBin;
 						}
 					}
-
 					throw new Exception("Could not find installed version of Kepler");
-
 				}
-				return _executablePath;
+				return _keplerBin;
 			}
-			set { _executablePath = value; }
+			set { _keplerBin = value; }
 		}
 
 	}

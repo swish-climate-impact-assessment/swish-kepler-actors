@@ -84,6 +84,7 @@ namespace Swish
 			{
 				lines.Add(index.ToString("d2") + ": " + drives[index]);
 			}
+			lines.Add("");
 
 			lines.Add("Special folders: ");
 			string[] specialFolderNames = Enum.GetNames(typeof(Environment.SpecialFolder));
@@ -95,11 +96,20 @@ namespace Swish
 				for (int index2 = 0; index2 < specialFolderNames.Length; index2++)
 				{
 					Environment.SpecialFolder folder = (Environment.SpecialFolder)Enum.Parse(typeof(Environment.SpecialFolder), specialFolderNames[index2], false);
+					try
+					{
+						string value = Environment.GetFolderPath(folder, option);
+						if (!string.IsNullOrWhiteSpace(value))
+						{
+							string line = specialFolderNames[index2] + ": " + value; lines.Add(line);
+						}
+					} catch { }
 #if !MONO
 					try { string value = Environment.GetFolderPath(folder, option); if (!string.IsNullOrWhiteSpace(value)) { string line = specialFolderNames[index2] + ": " + value; lines.Add(line); } } catch { }
 #endif
 				}
 			}
+			lines.Add("");
 
 			lines.Add("Environment variables: ");
 			string[] environmentVariableTargetNames = Enum.GetNames(typeof(EnvironmentVariableTarget));
@@ -114,6 +124,7 @@ namespace Swish
 					lines.Add(key + ": " + value);
 				}
 			}
+			lines.Add("");
 
 			string message = string.Join(Environment.NewLine, lines);
 
@@ -340,15 +351,15 @@ namespace Swish
 
 		public static string TryGetFileName(Process process)
 		{
-			try { string value = process.ProcessName; if (File.Exists(value)) { return value; } } catch { }
-			try { string value = process.StartInfo.FileName; if (File.Exists(value)) { return value; } } catch { }
+			try { string value = process.ProcessName; if (FileFunctions.FileExists(value)) { return value; } } catch { }
+			try { string value = process.StartInfo.FileName; if (FileFunctions.FileExists(value)) { return value; } } catch { }
 
 			try
 			{
 				ProcessModule module = process.MainModule;
-				try { string value = module.FileName; if (File.Exists(value)) { return value; } } catch { }
-				try { string value = module.ModuleName; if (File.Exists(value)) { return value; } } catch { }
-				try { string value = module.FileVersionInfo.FileName; if (File.Exists(value)) { return value; } } catch { }
+				try { string value = module.FileName; if (FileFunctions.FileExists(value)) { return value; } } catch { }
+				try { string value = module.ModuleName; if (FileFunctions.FileExists(value)) { return value; } } catch { }
+				try { string value = module.FileVersionInfo.FileName; if (FileFunctions.FileExists(value)) { return value; } } catch { }
 			} catch { }
 
 			return string.Empty;

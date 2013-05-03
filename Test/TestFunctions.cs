@@ -19,7 +19,7 @@ namespace Swish.Tests
 		{
 			string fileName = TestDataFileName( file);
 			string destinationFileName = Path.Combine(directory, file);
-			if (File.Exists(destinationFileName))
+			if (FileFunctions.FileExists(destinationFileName))
 			{
 				File.Delete(destinationFileName);
 			}

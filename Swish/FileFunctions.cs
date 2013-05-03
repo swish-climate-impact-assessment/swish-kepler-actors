@@ -33,8 +33,28 @@ namespace Swish
 			{
 				string location = possibleLocations[locationIndex];
 
-				string path = Path.Combine(location, fileName);
-				attempts.Add(path);
+				if (!location.Contains("*"))
+				{
+					string path = Path.Combine(location, fileName);
+					attempts.Add(path);
+				} else
+				{
+					if (location.EndsWith("\\"))
+					{
+						location = location.TrimEnd('\\');
+					}
+					string baseDirectory = Path.GetDirectoryName(location);
+					string searchString = Path.GetFileName(location);
+
+					string[] directories = Directory.GetDirectories(baseDirectory, searchString);
+
+					for (int directoryIndex = 0; directoryIndex < directories.Length; directoryIndex++)
+					{
+						string directory = directories[directoryIndex];
+						string path = Path.Combine(directory, fileName);
+						attempts.Add(path);
+					}
+				}
 			}
 
 			attempts.Add(fileName);
@@ -133,11 +153,17 @@ namespace Swish
 				{
 					return;
 				}
+				string[] directories = Directory.GetDirectories(directory);
+				if (directories.Length > 0)
+				{
+					return;
+				}
 
 				if (ExceptionFunctions.VerboseFileOperations)
 				{
 					SwishFunctions._ReportMessage(ReportMessage, -1, "delete directory: " + directory);
 				}
+
 				Directory.Delete(directory);
 				string baseDirectory = Path.GetDirectoryName(directory);
 				DeleteDirectory(baseDirectory, ReportMessage);
@@ -206,7 +232,7 @@ namespace Swish
 			if (string.IsNullOrWhiteSpace(_tempoaryFileBase))
 			{
 				_tempoaryFileBase = Path.GetTempFileName();
-				if (File.Exists(_tempoaryFileBase))
+				if (FileFunctions.FileExists(_tempoaryFileBase))
 				{
 					File.Delete(_tempoaryFileBase);
 				}
@@ -220,7 +246,7 @@ namespace Swish
 			if (string.IsNullOrWhiteSpace(_tempoaryFileBase))
 			{
 				_tempoaryFileBase = Path.GetTempFileName();
-				if (File.Exists(_tempoaryFileBase))
+				if (FileFunctions.FileExists(_tempoaryFileBase))
 				{
 					File.Delete(_tempoaryFileBase);
 				}
@@ -232,7 +258,7 @@ namespace Swish
 		public static string CreateTempoaryDirectory()
 		{
 			string tempFileName = TempoaryFileName();
-			if (File.Exists(tempFileName))
+			if (FileFunctions.FileExists(tempFileName))
 			{
 				File.Delete(tempFileName);
 			}
@@ -305,7 +331,7 @@ namespace Swish
 			if (destinationPath.ToLower() == sourceDirectory.ToLower())
 			{
 				string fileNameFragment = destinationFragments[destinationFragments.Count - 1];
-				if (File.Exists(destinationPath) || fileNameFragment.Contains(FileExtensionSeparatorChar))
+				if (FileFunctions.FileExists(destinationPath) || fileNameFragment.Contains(FileExtensionSeparatorChar))
 				{
 					return fileNameFragment;
 				}

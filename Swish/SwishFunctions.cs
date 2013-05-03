@@ -193,13 +193,13 @@ namespace Swish
 			return password;
 		}
 
-		public static List<string> ConvertLines(List<string> lines, List<Tuple<string, string>> symbols, ReportProgressFunction ReportMessage)
+		public static List<string> ConvertLines(List<string> lines, List<Tuple<string, string>> symbols, ReportProgressFunction ReportMessage, bool optionalNameExtension)
 		{
 			List<string> newPending = new List<string>();
 			for (int lineIndex = 0; lineIndex < lines.Count; lineIndex++)
 			{
 				string _line = lines[lineIndex];
-				string line = ResloveSymbols(_line, symbols, false);
+				string line = ResloveSymbols(_line, symbols, false, optionalNameExtension);
 
 				//if (line != _line)
 				//{
@@ -210,7 +210,7 @@ namespace Swish
 			return newPending;
 		}
 
-		public static string ResloveSymbols(string line, List<Tuple<string, string>> symbols, bool escapeStrings)
+		public static string ResloveSymbols(string line, List<Tuple<string, string>> symbols, bool escapeStrings, bool optionalNameExtension)
 		{
 			for (int symbolIndex = 0; symbolIndex < symbols.Count; symbolIndex++)
 			{
@@ -224,6 +224,19 @@ namespace Swish
 					value = StringIO.Escape(symbols[symbolIndex].Item2);
 				}
 				line = line.Replace(symbol, value);
+				if (optionalNameExtension)
+				{
+					if (symbol.ToLower().EndsWith("name%"))
+					{
+						symbol = symbol.Substring(0, symbol.Length - "name%".Length) + "%";
+					} else
+					{
+						string symbolA = symbol.Substring(0, symbol.Length - "%".Length) + "Name%";
+						line = line.Replace(symbolA, value);
+						symbol = symbol.Substring(0, symbol.Length - "%".Length) + "name%";
+					}
+					line = line.Replace(symbol, value);
+				}
 			}
 
 			return line;
