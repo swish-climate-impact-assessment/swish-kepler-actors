@@ -92,7 +92,23 @@ namespace Swish.Adapters
 
 		public List<string> VariableNames()
 		{
-			List<string> variables = _arguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
+			List<string> variables;
+			if (Exists("variables"))
+			{
+				variables = _arguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
+			} else if (Exists("Variables"))
+			{
+				variables = _arguments.StringList(Arguments.DefaultArgumentPrefix + "Variables", true, true);
+			} else if (Exists("variableNames"))
+			{
+				variables = _arguments.StringList(Arguments.DefaultArgumentPrefix + "variableNames", true, true);
+			} else if (Exists("VariableNames"))
+			{
+				variables = _arguments.StringList(Arguments.DefaultArgumentPrefix + "VariableNames", true, true);
+			} else
+			{
+				throw new Exception("Argument  \"VariableNames\" not found");
+			}
 			return variables;
 		}
 

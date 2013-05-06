@@ -54,7 +54,7 @@ namespace Swish
 			List<string> newLines;
 			List<Tuple<string, string>> symbols;
 			StataScriptFunctions.ResloveSymbols(out outputFileName, out inputFileNames, out newLines, out symbols, lines, intermediateFileName, adapterArguments);
-			lines = SwishFunctions.ConvertLines(newLines, symbols, null, true);
+			lines = SwishFunctions.ConvertLines(newLines, symbols, null, true, false);
 
 			string tempScriptFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DoFileExtension);
 			File.WriteAllLines(tempScriptFileName, lines);

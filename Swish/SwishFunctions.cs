@@ -193,18 +193,18 @@ namespace Swish
 			return password;
 		}
 
-		public static List<string> ConvertLines(List<string> lines, List<Tuple<string, string>> symbols, ReportProgressFunction ReportMessage, bool optionalNameExtension)
+		public static List<string> ConvertLines(List<string> lines, List<Tuple<string, string>> symbols, ReportProgressFunction ReportMessage, bool optionalNameExtension, bool escapeStrings)
 		{
 			List<string> newPending = new List<string>();
 			for (int lineIndex = 0; lineIndex < lines.Count; lineIndex++)
 			{
 				string _line = lines[lineIndex];
-				string line = ResloveSymbols(_line, symbols, false, optionalNameExtension);
+				string line = ResloveSymbols(_line, symbols, escapeStrings, optionalNameExtension);
 
-				//if (line != _line)
-				//{
-				//    _ReportMessage(ReportMessage, -1, "\"" + _line + "\"" + " changed to " + "\"" + line + "\"");
-				//}
+				if (line != _line)
+				{
+					_ReportMessage(ReportMessage, -1, "\"" + _line + "\"" + " changed to " + "\"" + line + "\"");
+				}
 				newPending.Add(line);
 			}
 			return newPending;
@@ -228,14 +228,23 @@ namespace Swish
 				{
 					if (symbol.ToLower().EndsWith("name%"))
 					{
-						symbol = symbol.Substring(0, symbol.Length - "name%".Length) + "%";
+						string testSymbol = symbol.Substring(0, symbol.Length - "name%".Length) + "%";
+						line = line.Replace(testSymbol, value);
+					} else if (symbol.ToLower().EndsWith("names%"))
+					{
+						string testSymbol = symbol.Substring(0, symbol.Length - "names%".Length) + "%";
+						line = line.Replace(testSymbol, value);
 					} else
 					{
-						string symbolA = symbol.Substring(0, symbol.Length - "%".Length) + "Name%";
-						line = line.Replace(symbolA, value);
-						symbol = symbol.Substring(0, symbol.Length - "%".Length) + "name%";
+						string testSymbol = symbol.Substring(0, symbol.Length - "%".Length) + "Name%";
+						line = line.Replace(testSymbol, value);
+						testSymbol = symbol.Substring(0, symbol.Length - "%".Length) + "Names%";
+						line = line.Replace(testSymbol, value);
+						testSymbol = symbol.Substring(0, symbol.Length - "%".Length) + "names%";
+						line = line.Replace(testSymbol, value);
+						testSymbol = symbol.Substring(0, symbol.Length - "%".Length) + "name%";
+						line = line.Replace(testSymbol, value);
 					}
-					line = line.Replace(symbol, value);
 				}
 			}
 

@@ -170,7 +170,7 @@ namespace Swish
 						{
 							if (!optional)
 							{
-								throw new Exception("Variables missing");
+								throw new Exception("Variables \"" + name + "\" missing");
 							}
 							stringValue = defaultValue;
 						}
@@ -338,7 +338,8 @@ namespace Swish
 			string extension = Path.GetExtension(fileName);
 			if (extension == SwishFunctions.CsvFileExtension)
 			{
-				lines.Add("insheet using \"" + fileName + "\", names clear comma case");
+				//lines.Add("insheet using \"" + fileName + "\", names clear comma case");
+				lines.Add("insheet using \"" + fileName + "\", names clear comma");
 				return;
 			}
 			lines.Add("use \"" + fileName + "\"");

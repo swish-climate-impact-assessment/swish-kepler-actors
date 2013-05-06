@@ -39,19 +39,16 @@ namespace Swish
 			get
 			{
 				List<string> locations = FileFunctions.Locations();
-				locations.Add(@"C:\Program Files\Kepler-*\");
-				locations.Add(@"C:\Program Files (x86)\Kepler-*\");
-
-				locations.Add(@"C:\Program Files\Kepler-2.4\");
-				locations.Add(@"C:\Program Files (x86)\Kepler-2.4\");
-
-				locations.Add(@"C:\Program Files\Kepler-2.3\");
-				locations.Add(@"C:\Program Files (x86)\Kepler-2.3\");
-
-				locations.Add(@"C:\Kepler-2.3\");
-				locations.Add(@"C:\Program Files\Kepler\");
-				locations.Add(@"C:\Program Files (x86)\Kepler\");
-				locations.Add(@"C:\Kepler\");
+				if(Directory.Exists(@"C:\Program Files\Kepler-*\"        )){locations.Add(@"C:\Program Files\Kepler-*\"        );}
+				if(Directory.Exists(@"C:\Program Files (x86)\Kepler-*\"  )){locations.Add(@"C:\Program Files (x86)\Kepler-*\"  );}
+				if(Directory.Exists(@"C:\Program Files\Kepler-2.4\"      )){locations.Add(@"C:\Program Files\Kepler-2.4\"      );}
+				if(Directory.Exists(@"C:\Program Files (x86)\Kepler-2.4\")){locations.Add(@"C:\Program Files (x86)\Kepler-2.4\");}
+				if(Directory.Exists(@"C:\Program Files\Kepler-2.3\"      )){locations.Add(@"C:\Program Files\Kepler-2.3\"      );}
+				if(Directory.Exists(@"C:\Program Files (x86)\Kepler-2.3\")){locations.Add(@"C:\Program Files (x86)\Kepler-2.3\");}
+				if(Directory.Exists(@"C:\Kepler-2.3\"                    )){locations.Add(@"C:\Kepler-2.3\"                    );}
+				if(Directory.Exists(@"C:\Program Files\Kepler\"          )){locations.Add(@"C:\Program Files\Kepler\"          );}
+				if(Directory.Exists(@"C:\Program Files (x86)\Kepler\"    )){locations.Add(@"C:\Program Files (x86)\Kepler\"    );}
+				if(Directory.Exists(@"C:\Kepler\"                        )){locations.Add(@"C:\Kepler\"                        );}
 				return locations;
 			}
 		}

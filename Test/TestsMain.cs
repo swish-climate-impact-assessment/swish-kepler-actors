@@ -66,7 +66,7 @@ namespace Swish.Tests
 			try
 			{
 
-				Swish.SimpleInstaller.Program.Main(new string[] { ">silent" });
+				//Swish.SimpleInstaller.Program.Main(new string[] { "*silent" });
 
 				//string leftFileName = @"C:\Users\u5265691\Desktop\FinalWorking\merge4.csv";
 				//string rightFileName = @"C:\Users\u5265691\Desktop\FinalWorking\Merge4.do.csv";
@@ -77,7 +77,7 @@ namespace Swish.Tests
 				//}
 
 				// missing argument
-				// Arguments splitArguments = new Arguments(@">operation merge >input1 D:\HEALTH FORECASTING\FINAL\../TAPM/Brisbane/dataset1/x >input2  >variables date zone group >keepMerge true");
+				// Arguments splitArguments = new Arguments(@"*operation merge *input1 D:\HEALTH FORECASTING\FINAL\../TAPM/Brisbane/dataset1/x >input2  >variables date zone group >keepMerge true");
 				// string operation = splitArguments.String(Arguments.OperationArgument, true);
 				// AdapterFunctions.RunThisOperation(operation, splitArguments);
 

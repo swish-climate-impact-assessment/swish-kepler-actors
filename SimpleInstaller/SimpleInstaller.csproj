@@ -76,6 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Controls\FinishedPage.resx">
       <DependentUpon>FinishedPage.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\InstallerMain.resx">
       <DependentUpon>InstallerMain.cs</DependentUpon>

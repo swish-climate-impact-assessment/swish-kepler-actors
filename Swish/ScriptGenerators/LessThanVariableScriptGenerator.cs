@@ -17,7 +17,6 @@ namespace Swish.ScriptGenerators
 			lines.Add("// define " + StataScriptFunctions.VariableNameType + " " + StataScriptFunctions.LeftVariableNameToken);
 			lines.Add("// define " + StataScriptFunctions.VariableNameType + " " + StataScriptFunctions.RightVariableNameToken);
 			lines.Add("// define " + StataScriptFunctions.VariableNameType + " " + "optional" + " " + StataScriptFunctions.ResultVariableNameToken + " " + AdapterFunctions.WorkingVariableName);
-			lines.Add("// define " + StataScriptFunctions.DoubleType + " " + StataScriptFunctions.ValueToken);
 
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameToken);
 

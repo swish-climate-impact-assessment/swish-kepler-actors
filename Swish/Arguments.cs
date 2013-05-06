@@ -194,6 +194,65 @@ namespace Swish
 				name = name.Substring(1);
 			}
 
+			int listIndex = IndexOfExactName(name);
+			if (listIndex >= 0)
+			{
+				return listIndex;
+			}
+
+			if (name.EndsWith("name"))
+			{
+				string testName = name.Substring(0, name.Length - "name".Length);
+				listIndex = IndexOfExactName(testName);
+				if (listIndex >= 0)
+				{
+					return listIndex;
+				}
+			} else if (name.EndsWith("names"))
+			{
+				string testName = name.Substring(0, name.Length - "names".Length);
+				listIndex = IndexOfExactName(testName);
+				if (listIndex >= 0)
+				{
+					return listIndex;
+				}
+			} else if (name.EndsWith("s"))
+			{
+				string testName = name.Substring(0, name.Length - "s".Length) + "name" + "s";
+				listIndex = IndexOfExactName(testName);
+				if (listIndex >= 0)
+				{
+					return listIndex;
+				}
+
+				testName = name.Substring(0, name.Length - "s".Length) + "Name" + "s";
+				listIndex = IndexOfExactName(testName);
+				if (listIndex >= 0)
+				{
+					return listIndex;
+				}
+			} else
+			{
+				string testName = name + "name";
+				listIndex = IndexOfExactName(testName);
+				if (listIndex >= 0)
+				{
+					return listIndex;
+				}
+
+				testName = name + "names";
+				listIndex = IndexOfExactName(testName);
+				if (listIndex >= 0)
+				{
+					return listIndex;
+				}
+			}
+
+			return -1;
+		}
+
+		private int IndexOfExactName(string name)
+		{
 			int listIndex = -1;
 			for (int argumentIndex = 0; argumentIndex < _splitArguments.Count; argumentIndex++)
 			{
@@ -207,54 +266,7 @@ namespace Swish
 					listIndex = argumentIndex;
 				}
 			}
-			if (listIndex >= 0)
-			{
-				return listIndex;
-			}
-
-			if (name.EndsWith(name))
-			{
-				name = name.Substring(0, name.Length - "name".Length);
-				listIndex = -1;
-				for (int argumentIndex = 0; argumentIndex < _splitArguments.Count; argumentIndex++)
-				{
-					Tuple<string, string> item = _splitArguments[argumentIndex];
-					if (item.Item1 == name)
-					{
-						if (listIndex != -1)
-						{
-							throw new Exception("Duplicate argument: \"" + name + "\"");
-						}
-						listIndex = argumentIndex;
-					}
-				}
-				if (listIndex >= 0)
-				{
-					return listIndex;
-				}
-			} else
-			{
-				name += "name";
-				listIndex = -1;
-				for (int argumentIndex = 0; argumentIndex < _splitArguments.Count; argumentIndex++)
-				{
-					Tuple<string, string> item = _splitArguments[argumentIndex];
-					if (item.Item1 == name)
-					{
-						if (listIndex != -1)
-						{
-							throw new Exception("Duplicate argument: \"" + name + "\"");
-						}
-						listIndex = argumentIndex;
-					}
-				}
-				if (listIndex >= 0)
-				{
-					return listIndex;
-				}
-			}
-
-			return -1;
+			return listIndex;
 		}
 
 		public string String(string name, bool throwOnMissing)
@@ -322,7 +334,7 @@ namespace Swish
 			}
 
 			int listIndex = IndexOf(name);
-			if (listIndex > 0)
+			if (listIndex >= 0)
 			{
 				return true;
 			}

@@ -35,6 +35,10 @@ namespace Swish
 
 				if (!location.Contains("*"))
 				{
+					if (!Directory.Exists(location))
+					{
+						continue;
+					}
 					string path = Path.Combine(location, fileName);
 					attempts.Add(path);
 				} else
@@ -44,6 +48,10 @@ namespace Swish
 						location = location.TrimEnd('\\');
 					}
 					string baseDirectory = Path.GetDirectoryName(location);
+					if (!Directory.Exists(baseDirectory))
+					{
+						continue;
+					}
 					string searchString = Path.GetFileName(location);
 
 					string[] directories = Directory.GetDirectories(baseDirectory, searchString);

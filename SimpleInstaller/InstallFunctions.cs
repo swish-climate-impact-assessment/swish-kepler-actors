@@ -24,7 +24,9 @@ namespace Swish.SimpleInstaller
 			List<string> _completed = new List<string>();
 
 			SwishFunctions._ReportMessage(ReportMessage, 0, "Installing...");
+			SwishFunctions._ReportMessage(ReportMessage, -1, "");
 
+			SwishFunctions._ReportMessage(ReportMessage, -1, "Symbols");
 			for (int symbolIndex = 0; symbolIndex < _symbols.Count; symbolIndex++)
 			{
 				string symbol = _symbols[symbolIndex].Item1;
@@ -32,8 +34,9 @@ namespace Swish.SimpleInstaller
 
 				SwishFunctions._ReportMessage(ReportMessage, -1, "Symbol: " + symbol + " -> " + value);
 			}
+			SwishFunctions._ReportMessage(ReportMessage, -1, "");
 
-			List<string> newPending = SwishFunctions.ConvertLines(_pending, _symbols, ReportMessage, false);
+			List<string> newPending = SwishFunctions.ConvertLines(_pending, _symbols, ReportMessage, false, true);
 			_pending = newPending;
 
 			while (_pending.Count > 0)
@@ -50,10 +53,13 @@ namespace Swish.SimpleInstaller
 				}
 				_completed.Add(line);
 
+				SwishFunctions._ReportMessage(ReportMessage, -1, "Run line: \"" + line + "\"");
+
 				RunLine(line, clean, ReportMessage);
 
 				SwishFunctions._ReportMessage(ReportMessage, 100 * (_completed.Count) / (_completed.Count + _pending.Count), string.Empty);
 			}
+			SwishFunctions._ReportMessage(ReportMessage, -1, "");
 			SwishFunctions._ReportMessage(ReportMessage, 100, "Done.");
 		}
 
@@ -79,6 +85,10 @@ namespace Swish.SimpleInstaller
 					throw new Exception("could not read line \"" + line + "\"");
 				}
 
+				if (!Directory.Exists(sourceDirectory))
+				{
+					throw new Exception("could not find directory: \""+ sourceDirectory+"\"");
+				}
 				string[] files = Directory.GetFiles(sourceDirectory, "*");
 				for (int fileIndex = 0; fileIndex < files.Length; fileIndex++)
 				{
