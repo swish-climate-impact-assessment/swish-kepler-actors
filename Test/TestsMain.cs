@@ -37,11 +37,6 @@ namespace Swish.Tests
 		}
 #endif
 
-
-
-
-
-
 		static void Main(string[] arguments)
 		{
 			if (arguments.Length > 0 && arguments[0].ToLower() == "generate")
@@ -91,6 +86,7 @@ namespace Swish.Tests
 				/// 
 				/// 
 
+				new GraphingAdapterTest().ManualGraph();
 				new GetVariableNamesTests().Names();
 				new CountOfPreviousDaysTests().Count();
 				new FillDatesTests().Fill();

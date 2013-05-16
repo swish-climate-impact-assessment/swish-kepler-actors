@@ -78,7 +78,7 @@ namespace Swish
 			return values;
 		}
 
-		internal List<double> ColunmAsDoubles(int columnIndex)
+		public List<double> ColunmAsDoubles(int columnIndex)
 		{
 			List<double> values = new List<double>();
 			for (int recordIndex = 0; recordIndex < Records.Count; recordIndex++)
@@ -89,7 +89,6 @@ namespace Swish
 			}
 			return values;
 		}
-
 
 		internal bool ColumnExists(string variableName)
 		{
@@ -112,7 +111,6 @@ namespace Swish
 			}
 		}
 
-
 		internal void Add(string variableName, List<int> values)
 		{
 			if (string.IsNullOrWhiteSpace(variableName))
@@ -131,6 +129,16 @@ namespace Swish
 				int value = values[recordIndex];
 
 				record.Add(value.ToString());
+			}
+		}
+
+		public void Remove(int columnIndex)
+		{
+			Header.RemoveAt(columnIndex);
+			for (int rowIndex = 0; rowIndex < Records.Count; rowIndex++)
+			{
+				List<string> record = Records[rowIndex];
+				record.RemoveAt(columnIndex);
 			}
 		}
 	}

@@ -44,6 +44,24 @@
   <ItemGroup>
     <Compile Include="AdapterFunctions.cs" />
     <Compile Include="Adapters\AdapterArguments.cs" />
+    <Compile Include="Adapters\GraphClientAdapter.cs" />
+    <Compile Include="Adapters\GraphAdapter.cs" />
+    <Compile Include="JavaFunctions.cs" />
+    <Compile Include="RFunctions.cs" />
+    <Compile Include="GraphData.cs" />
+    <Compile Include="DisplayForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DisplayForm.Designer.cs">
+      <DependentUpon>DisplayForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GraphFunctions.cs" />
+    <Compile Include="OhlcvsEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OhlcvsEditor.Designer.cs">
+      <DependentUpon>OhlcvsEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="ScriptGenerators\ConvertVariableToDateScriptGenerator.cs" />
     <Compile Include="ScriptGenerators\LegacyRemoveColumnsScriptGenerator.cs" />
     <Compile Include="ScriptGenerators\MergeAndFillZeroScriptGenerator.cs" />

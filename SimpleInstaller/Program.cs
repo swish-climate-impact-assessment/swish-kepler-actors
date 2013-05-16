@@ -25,7 +25,7 @@ namespace Swish.SimpleInstaller
 				ExceptionFunctions.VerboseFileOperations = true;
 				bool noGui = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "silent") || splitArguments.Exists(Arguments.DefaultArgumentPrefix + "nogui");
 				bool clean = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "clean");
-				bool luanch = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "luanch");
+				bool launch = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "launch") || splitArguments.Exists(Arguments.DefaultArgumentPrefix + "luanch");
 
 				/// adding actor steps
 				/// Adapter
@@ -54,7 +54,7 @@ namespace Swish.SimpleInstaller
 					InstallFunctions.Install(clean, null);
 				}
 
-				if (luanch)
+				if (launch)
 				{
 					KeplerFunctions.Run();
 				}

@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
+using Microsoft.Win32;
 
 namespace Swish.SimpleInstaller
 {
@@ -13,7 +13,9 @@ namespace Swish.SimpleInstaller
 			_symbols.Add(new Tuple<string, string>("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)));
 			_symbols.Add(new Tuple<string, string>("%StartupPath%", Application.StartupPath));
 			_symbols.Add(new Tuple<string, string>("%StartMenu%", Environment.GetFolderPath(Environment.SpecialFolder.CommonPrograms)));
-			_symbols.Add(new Tuple<string, string>("%KeplerBin%", KeplerFunctions.KeplerBin));
+			_symbols.Add(new Tuple<string, string>("%KeplerBin%", KeplerFunctions.BinDirectory));
+			_symbols.Add(new Tuple<string, string>("%RBin%", RFunctions.BinDirectory));
+			_symbols.Add(new Tuple<string, string>("%JavaBin%", JavaFunctions.BinDirectory));
 		}
 
 		internal static void Install(bool clean, ReportProgressFunction ReportMessage)
@@ -69,7 +71,7 @@ namespace Swish.SimpleInstaller
 
 			string whiteSpace;
 			StringIO.SkipWhiteSpace(out whiteSpace, ref line);
-			if (StringIO.TryRead("CopyFiles", ref line))
+			if (StringIO.TryRead("CopyFilesAndDirectories", ref line))
 			{
 				string sourceDirectory;
 				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
@@ -87,23 +89,32 @@ namespace Swish.SimpleInstaller
 
 				if (!Directory.Exists(sourceDirectory))
 				{
-					throw new Exception("could not find directory: \""+ sourceDirectory+"\"");
+					throw new Exception("could not find directory: \"" + sourceDirectory + "\"");
 				}
-				string[] files = Directory.GetFiles(sourceDirectory, "*");
-				for (int fileIndex = 0; fileIndex < files.Length; fileIndex++)
-				{
-					string sourceFileName = files[fileIndex];
-					string fileName = Path.GetFileName(sourceFileName);
-					string destinationFileName = Path.Combine(destinationDirectory, fileName);
 
-					if (!clean)
-					{
-						FileFunctions.CopyFile(sourceFileName, destinationFileName, ReportMessage);
-					} else
-					{
-						FileFunctions.DeleteFile(destinationFileName, ReportMessage);
-					}
+				CopyDirectory(sourceDirectory, destinationDirectory, clean, ReportMessage);
+			} else if (StringIO.TryRead("CopyFiles", ref line))
+			{
+				string sourceDirectory;
+				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+				if (!StringIO.TryReadString(out sourceDirectory, ref line))
+				{
+					throw new Exception("could not read line \"" + line + "\"");
 				}
+
+				string destinationDirectory;
+				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+				if (!StringIO.TryReadString(out destinationDirectory, ref line))
+				{
+					throw new Exception("could not read line \"" + line + "\"");
+				}
+
+				if (!Directory.Exists(sourceDirectory))
+				{
+					throw new Exception("could not find directory: \"" + sourceDirectory + "\"");
+				}
+
+				CopyFiles(sourceDirectory, destinationDirectory, clean, ReportMessage);
 			} else if (StringIO.TryRead("Copy", ref line))
 			{
 				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
@@ -170,12 +181,123 @@ namespace Swish.SimpleInstaller
 				{
 					FileFunctions.DeleteFile(fileName, ReportMessage);
 				}
+			} else if (StringIO.TryRead("AddPath", ref line))
+			{
+				string binPath;
+				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+				if (!StringIO.TryReadString(out binPath, ref line))
+				{
+					throw new Exception("could not read line \"" + line + "\"");
+				}
+
+				if (!clean)
+				{
+					string keyUserPath = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment";
+					string keySystemPath = @"HKEY_CURRENT_USER\Environment";
+
+					try
+					{
+						AddPath(keySystemPath, binPath);
+						return;
+					} catch (Exception error)
+					{
+						ReportMessage(-1, "Failed add to system path" + Environment.NewLine + ExceptionFunctions.Write(error, false));
+					}
+
+					AddPath(keyUserPath, binPath);
+				}
+			} else if (StringIO.TryRead("AddRegistryKey", ref line))
+			{
+				string path;
+				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+				if (!StringIO.TryReadString(out path, ref line))
+				{
+					throw new Exception("could not read line \"" + line + "\"");
+				}
+
+				string key;
+				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+				if (!StringIO.TryReadString(out key, ref line))
+				{
+					throw new Exception("could not read line \"" + line + "\"");
+				}
+
+				string value;
+				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+				if (!StringIO.TryReadString(out value, ref line))
+				{
+					throw new Exception("could not read line \"" + line + "\"");
+				}
+
+				if (!clean)
+				{
+					Registry.SetValue(path, key, value, RegistryValueKind.String);
+				} else
+				{
+					Registry.SetValue(path, key, null, RegistryValueKind.String);
+				}
 			} else if (string.IsNullOrWhiteSpace(line) || StringIO.TryRead("//", ref line))
 			{
 				// do nothing
 			} else
 			{
 				throw new Exception("could not read line \"" + line + "\"");
+			}
+		}
+
+		private static void AddPath(string keyPath, string binPath)
+		{
+			string keyName = "Path";
+			string path = (string)Registry.GetValue(keyPath, keyName, null);
+			List<string> paths = new List<string>(path.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+
+			binPath = Path.GetFullPath(binPath);
+			if (!binPath.EndsWith("\\"))
+			{
+				binPath += "\\";
+			}
+			if (paths.Contains(binPath))
+			{
+				return;
+			}
+
+			paths.Add(binPath);
+			path = string.Join(";", paths) + ";";
+			Registry.SetValue(keyPath, keyName, path, RegistryValueKind.String);
+		}
+
+		private static void CopyDirectory(string sourceDirectory, string destinationDirectory, bool clean, ReportProgressFunction ReportMessage)
+		{
+			CopyFiles(sourceDirectory, destinationDirectory, clean, ReportMessage);
+
+			string[] directories = Directory.GetDirectories(sourceDirectory);
+			for (int fileIndex = 0; fileIndex < directories.Length; fileIndex++)
+			{
+				string sourceDirectoryName = directories[fileIndex];
+
+				string name = Path.GetFileName(sourceDirectoryName);
+				string destinationDirectoryName = Path.Combine(destinationDirectory, name);
+
+				CopyDirectory(sourceDirectoryName, destinationDirectoryName, clean, ReportMessage);
+			}
+		}
+
+		private static void CopyFiles(string sourceDirectory, string destinationDirectory, bool clean, ReportProgressFunction ReportMessage)
+		{
+			string[] files = Directory.GetFiles(sourceDirectory, "*");
+			for (int fileIndex = 0; fileIndex < files.Length; fileIndex++)
+			{
+				string sourceFileName = files[fileIndex];
+				string fileName = Path.GetFileName(sourceFileName);
+				string destinationFileName = Path.Combine(destinationDirectory, fileName);
+
+				if (!clean)
+				{
+					FileFunctions.CopyFile(sourceFileName, destinationFileName, ReportMessage);
+				} else
+				{
+					FileFunctions.DeleteFile(destinationFileName, ReportMessage);
+				}
 			}
 		}
 

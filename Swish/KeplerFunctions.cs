@@ -38,17 +38,56 @@ namespace Swish
 		{
 			get
 			{
+				List<string> programLocations = new List<string>(new string[]{
+					"Program Files",
+					"Program Files (x86)",
+					"Kepler",
+					"Bin",
+					"",
+				});
+
+				List<string> keplerDirectories = new List<string>(new string[]{
+					"Kepler-2.3",
+					"Kepler-2.4",
+					"Kepler-*",
+					"Kepler*",
+					"",
+				});
+
 				List<string> locations = FileFunctions.Locations();
-				if(Directory.Exists(@"C:\Program Files\Kepler-*\"        )){locations.Add(@"C:\Program Files\Kepler-*\"        );}
-				if(Directory.Exists(@"C:\Program Files (x86)\Kepler-*\"  )){locations.Add(@"C:\Program Files (x86)\Kepler-*\"  );}
-				if(Directory.Exists(@"C:\Program Files\Kepler-2.4\"      )){locations.Add(@"C:\Program Files\Kepler-2.4\"      );}
-				if(Directory.Exists(@"C:\Program Files (x86)\Kepler-2.4\")){locations.Add(@"C:\Program Files (x86)\Kepler-2.4\");}
-				if(Directory.Exists(@"C:\Program Files\Kepler-2.3\"      )){locations.Add(@"C:\Program Files\Kepler-2.3\"      );}
-				if(Directory.Exists(@"C:\Program Files (x86)\Kepler-2.3\")){locations.Add(@"C:\Program Files (x86)\Kepler-2.3\");}
-				if(Directory.Exists(@"C:\Kepler-2.3\"                    )){locations.Add(@"C:\Kepler-2.3\"                    );}
-				if(Directory.Exists(@"C:\Program Files\Kepler\"          )){locations.Add(@"C:\Program Files\Kepler\"          );}
-				if(Directory.Exists(@"C:\Program Files (x86)\Kepler\"    )){locations.Add(@"C:\Program Files (x86)\Kepler\"    );}
-				if(Directory.Exists(@"C:\Kepler\"                        )){locations.Add(@"C:\Kepler\"                        );}
+				for (int letter = 0; letter < 26; letter++)
+				{
+					string driveLetter = (char)('A' + letter) + ":\\";
+					if (!Directory.Exists(driveLetter))
+					{
+						continue;
+					}
+
+					for (int programLocationIndex = 0; programLocationIndex < programLocations.Count; programLocationIndex++)
+					{
+						string programFiles = programLocations[programLocationIndex];
+						string testDirectory = Path.Combine(driveLetter, programFiles);
+						if (!Directory.Exists(testDirectory))
+						{
+							continue;
+						}
+
+						for (int keplerDirectoryIndex = 0; keplerDirectoryIndex < keplerDirectories.Count; keplerDirectoryIndex++)
+						{
+							string keplerDirectory = keplerDirectories[keplerDirectoryIndex];
+
+							string testKeplerDirectory = Path.Combine(driveLetter, programFiles, keplerDirectory);
+							if (Directory.Exists(testKeplerDirectory))
+							{
+								locations.Add(testKeplerDirectory);
+							}
+						}
+					}
+				}
+
+				locations.Add(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
+				locations.Add(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
+
 				return locations;
 			}
 		}
@@ -89,11 +128,11 @@ namespace Swish
 			{
 				if (string.IsNullOrWhiteSpace(_executablePath))
 				{
-					if (!Directory.Exists(KeplerBin))
+					if (!Directory.Exists(BinDirectory))
 					{
 						throw new Exception("Could not find installed version of Kepler");
 					}
-					_executablePath = Path.Combine(KeplerBin, "kepler.exe");
+					_executablePath = Path.Combine(BinDirectory, "kepler.exe");
 				}
 				return _executablePath;
 			}
@@ -101,7 +140,7 @@ namespace Swish
 		}
 
 		private static string _keplerBin = null;
-		public static string KeplerBin
+		public static string BinDirectory
 		{
 			get
 			{
@@ -131,6 +170,34 @@ namespace Swish
 			set { _keplerBin = value; }
 		}
 
+		public static bool Installed
+		{
+			get
+			{
+				if (!string.IsNullOrWhiteSpace(_keplerBin))
+				{
+					return true;
+				}
+				List<string> fileNames = new List<string>();
+				fileNames.Add("kepler.exe");
+
+				for (int fileIndex = 0; fileIndex < fileNames.Count; fileIndex++)
+				{
+					string file = fileNames[fileIndex];
+					string fileName = FileFunctions.ResloveFileName(file, PotentialKeplerPaths, false, true);
+					if (!string.IsNullOrWhiteSpace(fileName))
+					{
+						if (string.IsNullOrWhiteSpace(_executablePath))
+						{
+							_executablePath = fileName;
+						}
+						_keplerBin = Path.GetDirectoryName(fileName);
+						return true;
+					}
+				}
+				return false;
+			}
+		}
 	}
 }
 

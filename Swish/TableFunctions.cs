@@ -203,5 +203,15 @@ namespace Swish
 
 			ConvertOutput(outputFileName, intermediateFileName);
 		}
+
+		public static void DisplayGraph(string inputFileName, List<string> variables)
+		{
+
+			Arguments arguments = new Arguments();
+			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
+			arguments.StringList(StataScriptFunctions.VariableNamesToken, variables);
+
+			AdapterFunctions.RunOperation(GraphClientAdapter.OperationName, new AdapterArguments(arguments));
+		}
 	}
 }

@@ -18,10 +18,18 @@ namespace Swish.SimpleInstaller.Controls
 
 		private void welcomePage1_Install(object sender, EventArgs e)
 		{
-			Controls.Clear();
-			progressPage1.Dock = DockStyle.Fill;
-			Controls.Add(progressPage1);
-			progressPage1.Install();
+			if (!KeplerFunctions.Installed || !RFunctions.Installed || !JavaFunctions.Installed)
+			{
+				Controls.Clear();
+				KeplerVerifyPage.Dock = DockStyle.Fill;
+				Controls.Add(KeplerVerifyPage);
+			} else
+			{
+				Controls.Clear();
+				progressPage1.Dock = DockStyle.Fill;
+				Controls.Add(progressPage1);
+				progressPage1.Install();
+			}
 		}
 
 		private void progressPage1_Next(object sender, EventArgs e)
@@ -60,5 +68,11 @@ namespace Swish.SimpleInstaller.Controls
 				this.welcomePage1.Clean = value;
 			}
 		}
+
+		private void KeplerVerifyPage_Failed(object sender, EventArgs e)
+		{
+			Close();
+		}
+
 	}
 }

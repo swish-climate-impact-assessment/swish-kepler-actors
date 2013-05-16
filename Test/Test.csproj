@@ -41,6 +41,8 @@
     <Compile Include="ActorTests.cs" />
     <Compile Include="ArgumentFunctionsTests.cs" />
     <Compile Include="AdapterTests.cs" />
+    <Compile Include="GridLayer.cs" />
+    <Compile Include="GraphingAdapterTest.cs" />
     <Compile Include="CountOfPreviousDaysTests.cs" />
     <Compile Include="FillDatesTests.cs" />
     <Compile Include="GenerateDateRangeOperationTests.cs" />

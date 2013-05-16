@@ -12,13 +12,20 @@ namespace Swish.Adapters
 		public void Run(AdapterArguments splitArguments)
 		{
 			string inputFileName = splitArguments.InputFileName();
-			Display(inputFileName);
+			List<string> variableNames = splitArguments.VariableNames();
+			Display(inputFileName, variableNames);
 		}
 
-		public static void Display(string inputFileName)
+		public static void Display(string inputFileName, List<string> variableNames)
 		{
-			string arguments = string.Join(" ", Arguments.DefaultArgumentPrefix +  Arguments.OperationArgument,
-				DisplayTableClientAdapter.OperationName, Arguments.DefaultArgumentPrefix + Arguments.InputArgument, inputFileName);
+			string arguments = string.Join(" ",
+				Arguments.DefaultArgumentPrefix + Arguments.OperationArgument,
+				DisplayTableClientAdapter.OperationName,
+				Arguments.InputArgument,
+				inputFileName,
+				Arguments.DefaultArgumentPrefix + "	VariableNames",
+				string.Join(" ", variableNames)
+			);
 			ProcessFunctions.Run(Application.ExecutablePath, arguments, Environment.CurrentDirectory, true, TimeSpan.Zero, false, false, true);
 		}
 

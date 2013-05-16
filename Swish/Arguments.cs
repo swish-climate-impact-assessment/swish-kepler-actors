@@ -325,6 +325,18 @@ namespace Swish
 			return values;
 		}
 
+		public void StringList(string name, List<string> values)
+		{
+			name = name.Trim().ToLower();
+			if (name.StartsWith(_argumentPrefix))
+			{
+				name = name.Substring(1);
+			}
+
+			string value = string.Join(" ", values);
+			String(name, value);
+		}
+
 		public bool Exists(string name)
 		{
 			name = name.Trim().ToLower();

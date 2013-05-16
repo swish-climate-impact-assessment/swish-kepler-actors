@@ -82,7 +82,7 @@ namespace Swish.SimpleInstaller.Controls
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(314, 20);
 			this.label3.TabIndex = 2;
-			this.label3.Text = "Internal development build - 19 March 2013";
+			this.label3.Text = "Internal development build - 16 May 2013";
 			// 
 			// panel1
 			// 

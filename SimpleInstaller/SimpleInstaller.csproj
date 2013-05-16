@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\KeplerNotInstalledPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\KeplerNotInstalledPage.Designer.cs">
+      <DependentUpon>KeplerNotInstalledPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FinishedPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -73,7 +79,9 @@
     <Compile Include="Shortcut.cs" />
     <Compile Include="InstallFunctions.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\KeplerNotInstalledPage.resx">
+      <DependentUpon>KeplerNotInstalledPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\FinishedPage.resx">
       <DependentUpon>FinishedPage.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -88,25 +96,6 @@
       <DependentUpon>WelcomePage.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
     <None Include="SampleData\AppendTable1.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -165,6 +154,9 @@
     <Content Include="SwishBin\rundo.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

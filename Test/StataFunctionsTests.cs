@@ -316,6 +316,35 @@ namespace Swish.Tests
 			return fileName;
 		}
 
+		public static string GenerateRandomDateIndexIntegerDoubleData()
+		{
+			string fileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
+			if (FileFunctions.FileExists(fileName))
+			{
+				File.Delete(fileName);
+			}
+
+			List<string> lines = new List<string>();
+
+			int count = 1000;
+			lines.Add("dateValue,indexValue,integerValue,doubleValue");
+			Random random = new Random();
+			for (int index = 0; index < count; index++)
+			{
+				lines.Add(""
+					+ new DateTime(2000, 1, 1).AddDays(index).ToShortDateString() + ","
+					+ index.ToString() + ","
+					+ random.Next().ToString() + ","
+					+ random.NextDouble().ToString()
+					);
+			}
+
+			File.WriteAllLines(fileName, lines.ToArray());
+
+			return fileName;
+		}
+
+
 
 	}
 }
