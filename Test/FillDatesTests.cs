@@ -26,7 +26,7 @@ namespace Swish.Tests
 
 			Csv output = CsvFunctions.Read(outputFileName);
 
-			if (output.Header.Count != 2)
+			if (output.Headers.Count != 2)
 			{
 				throw new Exception();
 			}
@@ -41,8 +41,8 @@ namespace Swish.Tests
 		{
 			string inputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			Csv table = new Csv();
-			table.Header.Add("Date");
-			table.Header.Add("Other");
+			table.Headers.Add("Date");
+			table.Headers.Add("Other");
 
 			double aValue; List<string> record;
 

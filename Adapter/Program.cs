@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Diagnostics;
 
 namespace Swish.Adapter
 {
@@ -6,14 +8,23 @@ namespace Swish.Adapter
 	{
 		static int Main(string[] arguments)
 		{
-			Arguments splitArguments=null;
+			Arguments splitArguments = null;
 			try
 			{
-				 splitArguments = new Arguments(arguments);
+				if (arguments.Length == 1 && File.Exists(arguments[0]) && Path.GetExtension(arguments[0]).ToLower() == ".kar")
+				{
+					Process.Start(KeplerFunctions.ExecutablePath, arguments[0]);
+					return 0;
+				}
+
+				splitArguments = new Arguments(arguments);
 				ExceptionFunctions.ForceVerbose = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "verbose");
+
 				string operation = splitArguments.String(Arguments.OperationArgument, true);
 
-				AdapterFunctions.RunOperation(operation, new Adapters.AdapterArguments( splitArguments));
+				string output = AdapterFunctions.RunOperation(operation, new Adapters.AdapterArguments(splitArguments));
+				Console.Write(output);
+
 				return 0;
 			} catch (Exception error)
 			{

@@ -8,14 +8,12 @@ namespace Swish.Adapters
 	{
 		public string Name { get { return "FillCategoryTimeSeries"; } }
 
-		public void Run(AdapterArguments splitArguments)
+		public string Run(AdapterArguments splitArguments)
 		{
 			throw new Exception();
 		}
 
-		public static void Fill(string inputFileName, string outputFileName, 
-			string dateVariableName,
-			List<Tuple<string/* category variable name */, List<string>/* values */>> categories,  string expression)
+		public static void Fill(string inputFileName, string outputFileName, string dateVariableName, List<Tuple<string/* category variable name */, List<string>/* values */>> categories, string expression)
 		{
 			if (!FileFunctions.FileExists(inputFileName))
 			{

@@ -9,6 +9,6 @@ namespace Swish.Adapters
 	public interface IAdapter
 	{
 		string Name { get; }
-		void Run(AdapterArguments splitArguments);
+		string Run(AdapterArguments splitArguments);
 	}
 }

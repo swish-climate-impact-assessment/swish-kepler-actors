@@ -58,7 +58,7 @@ namespace Swish.Tests
 			TableFunctions.SelectVariables(inputFileName, outputFileName, variables);
 
 			Csv result = CsvFunctions.Read(outputFileName);
-			if (result.Header.Count != 2 || !result.Header.Contains("head4") || !result.Header.Contains("head6"))
+			if (result.Headers.Count != 2 || !result.Headers.Contains("head4") || !result.Headers.Contains("head6"))
 			{
 				throw new TestException();
 			}
@@ -146,7 +146,7 @@ namespace Swish.Tests
 
 			Csv result = CsvFunctions.Read(outputFileName);
 
-			for (int x = 0; x < table.Header.Count - 1; x++)
+			for (int x = 0; x < table.Headers.Count - 1; x++)
 			{
 				for (int y = 0; y < table.Records.Count; y++)
 				{

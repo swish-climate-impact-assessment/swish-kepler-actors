@@ -1,4 +1,4 @@
-namespace Swish
+namespace Swish.Controls
 {
 	partial class DisplayForm
 	{

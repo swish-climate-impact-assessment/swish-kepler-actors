@@ -57,9 +57,11 @@ namespace Swish
 		{
 			get
 			{
+				int hash = Environment.MachineName.GetHashCode();
 				return false
 					|| _forceVerbose
-					|| Environment.MachineName.GetHashCode() == -743622408
+					|| hash == -743622408
+					|| hash == 1271797101
 					;
 			}
 			set { _forceVerbose = value; }

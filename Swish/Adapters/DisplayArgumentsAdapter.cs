@@ -9,7 +9,7 @@ namespace Swish.Adapters
 	{
 		public string Name { get { return "test"; } }
 
-		public void Run(AdapterArguments splitArguments)
+		public string Run(AdapterArguments splitArguments)
 		{
 			bool silent = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "silent");
 
@@ -35,7 +35,8 @@ namespace Swish.Adapters
 			{
 				SwishFunctions.MessageTextBox("Test display", lines, false);
 			}
-			Console.Write(string.Join(Environment.NewLine, lines));
+			string output = string.Join(Environment.NewLine, lines);
+			return output;
 		}
 	}
 }

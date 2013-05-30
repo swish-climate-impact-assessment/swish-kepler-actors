@@ -12,20 +12,20 @@ namespace Swish
 		public const string WorkingVariableName = "Working";
 		internal static bool RecordDoScript = false;
 
-		public static void RunOperation(string operationName, AdapterArguments splitArguments)
+		public static string RunOperation(string operationName, AdapterArguments splitArguments)
 		{
 			string scriptFile = FindScriptTemplate(operationName);
 			if (!string.IsNullOrWhiteSpace(scriptFile))
 			{
-				RunScriptTemplate(operationName, scriptFile, splitArguments);
-				return;
+				string output = RunScriptTemplate(operationName, scriptFile, splitArguments);
+				return output;
 			}
 
 			IAdapter adapter = FindAdapter(operationName);
 			if (adapter != null)
 			{
-				adapter.Run(splitArguments);
-				return;
+				string output = adapter.Run(splitArguments);
+				return output;
 			}
 
 			throw new Exception("No operation found for \"" + operationName + "\"");
@@ -42,7 +42,7 @@ namespace Swish
 			return fileName;
 		}
 
-		private static void RunScriptTemplate(string operationName, string scriptFile, AdapterArguments adapterArguments)
+		private static string RunScriptTemplate(string operationName, string scriptFile, AdapterArguments adapterArguments)
 		{
 			string[] _lines = File.ReadAllLines(scriptFile);
 			List<string> lines = new List<string>(_lines);
@@ -54,7 +54,7 @@ namespace Swish
 			List<string> newLines;
 			List<Tuple<string, string>> symbols;
 			StataScriptFunctions.ResloveSymbols(out outputFileName, out inputFileNames, out newLines, out symbols, lines, intermediateFileName, adapterArguments);
-			lines = SwishFunctions.ConvertLines(newLines, symbols, null, true, false);
+			lines = SwishFunctions.ConvertLines(newLines, symbols, null, true, false, false);
 
 			string tempScriptFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DoFileExtension);
 			File.WriteAllLines(tempScriptFileName, lines);
@@ -81,7 +81,7 @@ namespace Swish
 				ExportMetadata(operationName, adapterArguments, inputFileNames, outputFileName, lines);
 			}
 
-			Console.WriteLine(outputFileName);
+			return outputFileName;
 		}
 
 		private static void ExportMetadata(string operationName, AdapterArguments splitArguments, SortedList<string, string> inputFileNames, string outputFileName, List<string> lines)

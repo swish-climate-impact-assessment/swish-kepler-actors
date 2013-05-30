@@ -8,7 +8,7 @@ namespace Swish.Adapters
 	{
 		public string Name { get { return "CountOfPreviousDays"; } }
 
-		public void Run(AdapterArguments splitArguments)
+		public string Run(AdapterArguments splitArguments)
 		{
 			string inputFileName = splitArguments.InputFileName();
 			string variableName = splitArguments.VariableName();
@@ -16,7 +16,7 @@ namespace Swish.Adapters
 			string outputFileName = splitArguments.OutputFileName(SwishFunctions.DataFileExtension);
 
 			Count(inputFileName, outputFileName, variableName, days);
-			Console.Write(outputFileName);
+			return outputFileName;
 		}
 
 		public static void Count(string inputFileName, string outputFileName, string variableName, int days)
@@ -62,14 +62,14 @@ namespace Swish.Adapters
 				results.Add(count);
 			}
 
-			 if (table.ColumnExists(AdapterFunctions.WorkingVariableName))
-			 {
-				 table.Remove(AdapterFunctions.WorkingVariableName);
-			 }
+			if (table.ColumnExists(AdapterFunctions.WorkingVariableName))
+			{
+				table.Remove(AdapterFunctions.WorkingVariableName);
+			}
 
-			 table.Add(AdapterFunctions.WorkingVariableName, results);
-		
-			string intermediateOutput= FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
+			table.Add(AdapterFunctions.WorkingVariableName, results);
+
+			string intermediateOutput = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			CsvFunctions.Write(intermediateOutput, table);
 
 			if (FileFunctions.FileExists(outputFileName))

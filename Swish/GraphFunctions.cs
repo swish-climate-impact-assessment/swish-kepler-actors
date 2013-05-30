@@ -56,7 +56,7 @@ namespace Swish
 			}
 		}
 
-		public static void DrawLines(List<double> values, Bitmap image, double minimum, double maximum)
+		public static void DrawLines(List<double> values, int offset, int count, Color colour, Bitmap image, double minimum, double maximum)
 		{
 			if (image == null)
 			{
@@ -74,6 +74,15 @@ namespace Swish
 				throw new ArgumentException("values");
 			}
 
+			Pen pen;
+			if (colour == null)
+			{
+				pen = new Pen(LineColour);
+			} else
+			{
+				pen = new Pen(colour);
+			}
+
 			int width = image.Width;
 			int height = image.Height;
 
@@ -81,11 +90,12 @@ namespace Swish
 			{
 				if (minimum == maximum)
 				{
-					graphics.DrawLine(new Pen(LineColour), 0, height / 2, width - 1, height / 2);
+					graphics.DrawLine(pen, 0, height / 2, width - 1, height / 2);
 					return;
 				}
 
-				for (int index = 0; index + 1 < values.Count; index++)
+				int originalCount = count;
+				for (int index = offset; count > 1; index++, count--)
 				{
 					double value0 = values[index];
 					if (value0 < minimum)
@@ -108,11 +118,11 @@ namespace Swish
 					{
 						continue;
 					}
-					float x0 = (width - 1) * index / (values.Count - 1.0f);
-					float x1 = (width - 1) * (index + 1.0f) / (values.Count - 1.0f);
+					float x0 = (width - 1) * (index - offset) / (originalCount - 1.0f);
+					float x1 = (width - 1) * (index - offset + 1.0f) / (originalCount - 1.0f);
 					float y0 = (float)(height - (height - 1) * (value0 - minimum) / (maximum - minimum)) - 1;
 					float y1 = (float)(height - (height - 1) * (value1 - minimum) / (maximum - minimum)) - 1;
-					graphics.DrawLine(new Pen(LineColour), x0, y0, x1, y1);
+					graphics.DrawLine(pen, x0, y0, x1, y1);
 				}
 
 				if (minimum <= 0 && 0 <= maximum)
@@ -120,17 +130,17 @@ namespace Swish
 					float y = (float)(height - (height - 1) * (0.0f - minimum) / (maximum - minimum)) - 1;
 					float x0 = 0;
 					float x1 = width - 1;
-					graphics.DrawLine(new Pen(LineColour), x0, y, x1, y);
+					graphics.DrawLine(pen, x0, y, x1, y);
 				}
 			}
 		}
 
-		public static void ValueRange(out double minimum, out double maximum, List<double> values)
+		public static void ValueRange(out double minimum, out double maximum, List<double> values, int offset, int count)
 		{
 			minimum = double.MaxValue;
 			maximum = double.MinValue;
 
-			for (int index = 0; index < values.Count; index++)
+			for (int index = offset; count > 0; index++, count--)
 			{
 				double value = values[index];
 				if (double.IsNaN(value))
@@ -148,12 +158,12 @@ namespace Swish
 			}
 		}
 
-		public static void DrawLines(List<double> values, Bitmap image)
+		public static void DrawLines(List<double> values, int offset, int count, Color colour, Bitmap image)
 		{
 			double yMinimum;
 			double yMaximum;
-			ValueRange(out yMinimum, out yMaximum, values);
-			DrawLines(values, image, yMinimum, yMaximum);
+			ValueRange(out yMinimum, out yMaximum, values, offset, count);
+			DrawLines(values, offset, count, colour, image, yMinimum, yMaximum);
 		}
 
 	}

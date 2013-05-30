@@ -8,7 +8,7 @@ namespace Swish
 		private List<string> _headder = new List<string>();
 		private List<List<string>> _records = new List<List<string>>();
 
-		public List<string> Header
+		public List<string> Headers
 		{
 			get { return _headder; }
 			set
@@ -39,9 +39,9 @@ namespace Swish
 		public int ColumnIndex(string variableName, bool throwOnMissing)
 		{
 			int headderIndex = -1;
-			for (int columnIndex = 0; columnIndex < Header.Count; columnIndex++)
+			for (int columnIndex = 0; columnIndex < Headers.Count; columnIndex++)
 			{
-				string _name = Header[columnIndex];
+				string _name = Headers[columnIndex];
 				if (_name == variableName)
 				{
 					headderIndex = columnIndex;
@@ -134,7 +134,7 @@ namespace Swish
 
 		public void Remove(int columnIndex)
 		{
-			Header.RemoveAt(columnIndex);
+			Headers.RemoveAt(columnIndex);
 			for (int rowIndex = 0; rowIndex < Records.Count; rowIndex++)
 			{
 				List<string> record = Records[rowIndex];

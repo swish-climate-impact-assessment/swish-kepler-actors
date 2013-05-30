@@ -38,8 +38,7 @@ namespace Swish
 		public const string DoubleType = "double";
 		public const string DateType = "date";
 
-		public static void ResloveSymbols(out string outputFileName, out SortedList<string, string> inputFileNames, out List<string> newLines,
-			out List<Tuple<string, string>> symbols, List<string> lines, string intermediateFileName, AdapterArguments adapterArguments)
+		public static void ResloveSymbols(out string outputFileName, out SortedList<string, string> inputFileNames, out List<string> newLines, out List<Tuple<string, string>> symbols, List<string> lines, string intermediateFileName, AdapterArguments adapterArguments)
 		{
 			newLines = new List<string>();
 			symbols = new List<Tuple<string, string>>();
@@ -63,7 +62,7 @@ namespace Swish
 				StringIO.SkipWhiteSpace(out buffer, ref line);
 				if (!StringIO.TryRead("define", ref line))
 				{
-					newLines.Add(line);
+					newLines.Add("//" + buffer + line);
 					continue;
 				}
 

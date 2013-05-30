@@ -8,7 +8,7 @@ namespace Swish.Adapters
 	{
 		public string Name { get { return "CountOfPreviousDaysLag"; } }
 
-		public void Run(AdapterArguments splitArguments)
+		public string Run(AdapterArguments splitArguments)
 		{
 			string inputFileName = splitArguments.InputFileName();
 			string variableName = splitArguments.VariableName();
@@ -18,7 +18,7 @@ namespace Swish.Adapters
 			string resultVariableName = splitArguments.ResultVariableName();
 
 			Count(inputFileName, outputFileName, variableName, days, dateVariableName, resultVariableName);
-			Console.Write(outputFileName);
+			return outputFileName;
 		}
 
 		public static void Count(string inputFileName, string outputFileName, string variableName, int days, string dateVariableName, string resultVariableName)

@@ -8,12 +8,13 @@ namespace Swish.Adapters
 	{
 		public string Name { get { return "VariableNames"; } }
 
-		public void Run(AdapterArguments splitArguments)
+		public string Run(AdapterArguments splitArguments)
 		{
 			string inputFileName = splitArguments.InputFileName();
 			SortedList<string, string> variableInformation = VariableInformation(inputFileName);
 
-			Console.WriteLine(string.Join(Environment.NewLine, variableInformation.Keys));
+			string output = string.Join(Environment.NewLine, variableInformation.Keys);
+			return output;
 		}
 
 		public static SortedList<string/*name*/, string /*type*/> VariableInformation(string inputFileName)
@@ -39,13 +40,13 @@ namespace Swish.Adapters
 			string log = StataFunctions.RunScript(lines, false);
 
 			SortedList<string, string> variableInformation = ParseVariableNames(log);
-	
-			return  variableInformation;
+
+			return variableInformation;
 		}
 
 		private static SortedList<string/*name*/, string /*type*/> ParseVariableNames(string log)
 		{
-			SortedList<string, string > variableNames = new  SortedList<string,string>();
+			SortedList<string, string> variableNames = new SortedList<string, string>();
 			List<string> lines = new List<string>(log.Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
 
 			/// Other  lines
@@ -81,7 +82,7 @@ namespace Swish.Adapters
 				string line = linesRead[variableIndex].Trim();
 				string[] fragments = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 				string variableName = fragments[0];
-				string variableType = fragments[1]; 
+				string variableType = fragments[1];
 
 				variableNames.Add(variableName, variableType);
 			}

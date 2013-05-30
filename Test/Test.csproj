@@ -41,12 +41,12 @@
     <Compile Include="ActorTests.cs" />
     <Compile Include="ArgumentFunctionsTests.cs" />
     <Compile Include="AdapterTests.cs" />
-    <Compile Include="GridLayer.cs" />
     <Compile Include="GraphingAdapterTest.cs" />
     <Compile Include="CountOfPreviousDaysTests.cs" />
     <Compile Include="FillDatesTests.cs" />
     <Compile Include="GenerateDateRangeOperationTests.cs" />
     <Compile Include="GetVariableNamesTests.cs" />
+    <Compile Include="GridFunctionsTests.cs" />
     <Compile Include="TimeSeriesFillTests.cs" />
     <Compile Include="ProcessorFunctionsTests.cs" />
     <Compile Include="MetadataTests.cs" />
@@ -58,6 +58,7 @@
     <Compile Include="StringIOTests.cs" />
     <Compile Include="SwishFunctionsTests.cs" />
     <Compile Include="TestsMain.cs" />
+    <Compile Include="VerticalLabelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

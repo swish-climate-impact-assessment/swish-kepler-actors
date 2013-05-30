@@ -2,20 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using Swish.Controls;
 
 namespace Swish.Adapters
 {
-	public class GraphClientAdapter: IAdapter
+	public class GraphSeriesClientAdapter: IAdapter
 	{
-		public const string OperationName = "GraphClient";
+		public const string OperationName = "GraphSeriesClient";
 		public string Name { get { return OperationName; } }
 
-		public void Run(AdapterArguments splitArguments)
+		public string Run(AdapterArguments splitArguments)
 		{
 			string inputFileName = splitArguments.InputFileName();
 			List<string> variableNames = splitArguments.VariableNames();
 			Display(inputFileName, variableNames);
-			Console.WriteLine(inputFileName);
+			return inputFileName;
 		}
 
 		public static void Display(string inputFileName, List<string> variables)
@@ -36,7 +37,7 @@ namespace Swish.Adapters
 
 				Csv table = CsvFunctions.Read(useFileName);
 
-				using (OhlcvsEditor control = new OhlcvsEditor())
+				using (TableView control = new TableView())
 				{
 					for (int variableIndex = 0; variableIndex < variables.Count; variableIndex++)
 					{
@@ -46,6 +47,7 @@ namespace Swish.Adapters
 
 						GraphData item = new GraphData();
 						item.Values = table.ColunmAsDoubles(columnIndex);
+						item.Name = variableName;
 						control.Data.Add(item);
 					}
 

@@ -86,7 +86,11 @@ namespace Swish.Tests
 				/// 
 				/// 
 
-				new GraphingAdapterTest().ManualGraph();
+
+				new GridFunctionsTests().ConvertLarge();
+				new GridFunctionsTests().LayerIO();
+				new GridFunctionsTests().ConvertToLayer();
+				new GraphingAdapterTest().ManualTSGraph();
 				new GetVariableNamesTests().Names();
 				new CountOfPreviousDaysTests().Count();
 				new FillDatesTests().Fill();
@@ -186,23 +190,23 @@ namespace Swish.Tests
 			Csv right = CsvFunctions.Read(rightFileName);
 
 			if (false
-				|| left.Header.Count != right.Header.Count
+				|| left.Headers.Count != right.Headers.Count
 				|| left.Records.Count != right.Records.Count
 				)
 			{
 				throw new Exception();
 			}
 
-			for (int leftIndex = 0; leftIndex < left.Header.Count; leftIndex++)
+			for (int leftIndex = 0; leftIndex < left.Headers.Count; leftIndex++)
 			{
-				string leftVariable = left.Header[leftIndex];
+				string leftVariable = left.Headers[leftIndex];
 
 				int rightIndex = right.ColumnIndex(leftVariable, true);
 			}
 
-			for (int leftIndex = 0; leftIndex < left.Header.Count; leftIndex++)
+			for (int leftIndex = 0; leftIndex < left.Headers.Count; leftIndex++)
 			{
-				string leftVariable = left.Header[leftIndex];
+				string leftVariable = left.Headers[leftIndex];
 				int rightIndex = right.ColumnIndex(leftVariable, true);
 
 				List<string> leftValues = left.ColunmValues(leftIndex);

@@ -7,14 +7,15 @@ namespace Swish.Adapters
 	{
 		public string Name { get { return "temporaryFileName"; } }
 
-		public void Run(AdapterArguments splitArguments)
+		public string Run(AdapterArguments splitArguments)
 		{
 			string fileName = FileFunctions.TempoaryOutputFileName(string.Empty);
 			if (FileFunctions.FileExists(fileName))
 			{
 				File.Delete(fileName);
 			}
-			Console.Write(fileName);
+			string output = fileName;
+			return output;
 		}
 	}
 }

@@ -25,10 +25,10 @@ namespace Swish.Tests
 			const string FillValue = "-1";
 
 			Csv table = new Csv();
-			table.Header.Add(DateVariableName);
-			table.Header.Add(CategoryAName);
-			table.Header.Add(CategoryBName);
-			table.Header.Add(ValueVariableName);
+			table.Headers.Add(DateVariableName);
+			table.Headers.Add(CategoryAName);
+			table.Headers.Add(CategoryBName);
+			table.Headers.Add(ValueVariableName);
 
 			table.Records.Add(new List<string>(new string[] { new DateTime(2000, 1, 1).ToShortDateString(), CategoryAValues[0], CategoryBValues[0], "1", }));
 			table.Records.Add(new List<string>(new string[] { new DateTime(2000, 1, 2).ToShortDateString(), CategoryAValues[1], CategoryBValues[1], "2", }));
@@ -49,10 +49,10 @@ namespace Swish.Tests
 
 			Csv newTable = CsvFunctions.Read(outputFileName);
 			if (false
-				|| newTable.Header.Count != 3
-				|| !newTable.Header.Contains(ValueVariableName)
-				|| !newTable.Header.Contains(CategoryAName)
-				|| !newTable.Header.Contains(CategoryBName)
+				|| newTable.Headers.Count != 3
+				|| !newTable.Headers.Contains(ValueVariableName)
+				|| !newTable.Headers.Contains(CategoryAName)
+				|| !newTable.Headers.Contains(CategoryBName)
 				|| newTable.Records.Count != CategoryAValues.Count * CategoryBValues.Count
 				)
 			{

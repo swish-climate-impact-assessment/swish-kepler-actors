@@ -8,11 +8,11 @@ namespace Swish.Adapters
 	{
 		public string Name { get { return "fileName"; } }
 
-		public void Run(AdapterArguments splitArguments)
+		public string Run(AdapterArguments splitArguments)
 		{
 			string inputFileName = splitArguments.InputFileName();
 			string fileName = Path.GetFileName(inputFileName);
-			Console.Write(fileName);
+			return fileName;
 		}
 	}
 }

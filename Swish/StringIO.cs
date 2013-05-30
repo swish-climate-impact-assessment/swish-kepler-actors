@@ -146,5 +146,41 @@ namespace Swish
 
 			return _value;
 		}
+
+		internal static bool TryRead(out int value, ref string line)
+		{
+			string[] parts = line.Split(' ', '\t', ')', '(', ',', '{', '}', '[', ']');
+			if (parts.Length == 0)
+			{
+				value = default(int);
+				return false;
+			}
+			if (!int.TryParse(parts[0], out value))
+			{
+				value = default(int);
+				return false;
+			}
+
+			line = line.Substring(parts[0].Length, line.Length - parts[0].Length);
+			return true;
+		}
+
+		internal static bool TryRead(out double value, ref string line)
+		{
+			string[] parts = line.Split(' ', '\t', ')', '(', ',', '{', '}', '[', ']');
+			if (parts.Length == 0)
+			{
+				value = default(double);
+				return false;
+			}
+			if (!double.TryParse(parts[0], out value))
+			{
+				value = default(double);
+				return false;
+			}
+
+			line = line.Substring(parts[0].Length, line.Length - parts[0].Length);
+			return true;
+		}
 	}
 }

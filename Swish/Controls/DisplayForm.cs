@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Swish
+namespace Swish.Controls
 {
 	public partial class DisplayForm: Form
 	{

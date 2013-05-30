@@ -107,6 +107,7 @@ namespace Swish
 					name = usedArguments;
 					usedArguments = string.Empty;
 				}
+				name = Clean(name);
 				name = argumentPrefix + name;
 
 				name = name.Trim().ToLower();
@@ -114,13 +115,32 @@ namespace Swish
 				{
 					name = name.Substring(1);
 				}
+				name = name.Trim('\"');
 
 				StringIO.SkipWhiteSpace(out buffer, ref usedArguments);
 				string value = ReadArgumentValue(ref usedArguments, argumentPrefix);
+				value = Decode(value);
+				value = Clean(value);
+
 				splitArguments.Add(new Tuple<string, string>(name, value));
 			}
 
 			return splitArguments;
+		}
+
+		private static string Clean(string text)
+		{
+			while (true)
+			{
+				string startValue = text;
+				text = text.Trim();
+				text = text.Trim('\"');
+				if (text == startValue)
+				{
+					break;
+				}
+			}
+			return text;
 		}
 
 		private static string ReadArgumentValue(ref string arguments, string argumentPrefix)
@@ -142,12 +162,11 @@ namespace Swish
 				return value;
 			}
 
-			value = value.Trim();
 			arguments = usedArguments;
 			return value;
 		}
 
-		private string Decode(string value)
+		private static string Decode(string value)
 		{
 			string decodedValue = string.Empty;
 
@@ -292,7 +311,6 @@ namespace Swish
 				throw new Exception("Argument value missing \"" + name + "\"");
 			}
 
-			value = Decode(value);
 
 			return value;
 		}

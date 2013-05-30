@@ -544,65 +544,6 @@ namespace Swish.Tests
 			}
 		}
 
-		private static GridLayer ConvertToLayer(Csv table, int longitudeIndex, int latitudeIndex, int valueIndex)
-		{
-			GridSorter sorter = new GridSorter();
-			sorter.LongitudeIndex = longitudeIndex;
-			sorter.LatitudeIndex = latitudeIndex;
-
-			GridLayer layer = new GridLayer();
-			layer.Longitudes = UniqueValues(table, longitudeIndex);
-			layer.Latitudes = UniqueValues(table, latitudeIndex);
-
-			if (table.Records.Count != layer.Longitudes.Count * layer.Latitudes.Count)
-			{
-				throw new Exception();
-			}
-
-			Csv newTable = new Csv();
-			newTable.Records = ListFunctions.Sort(table.Records, sorter.Compare);
-			newTable.Header = table.Header;
-
-			layer.Values = newTable.ColunmAsDoubles(valueIndex);
-
-			return layer;
-		}
-
-		private class GridSorter
-		{
-			public int LongitudeIndex;
-			public int LatitudeIndex;
-
-			public int Compare(List<string> left, List<string> right)
-			{
-				double leftLatitude = double.Parse(left[LatitudeIndex]);
-				double rightLatitude = double.Parse(right[LatitudeIndex]);
-
-				if (leftLatitude > rightLatitude)
-				{
-					return -1;
-				}
-				if (leftLatitude < rightLatitude)
-				{
-					return 1;
-				}
-
-				double leftLongitude = double.Parse(left[LongitudeIndex]);
-				double rightLongitude = double.Parse(right[LongitudeIndex]);
-
-				if (leftLongitude < rightLongitude)
-				{
-					return -1;
-				}
-				if (leftLongitude > rightLongitude)
-				{
-					return 1;
-				}
-
-				return 0;
-			}
-		}
-
 		private static void DoValues(GridLayer layer, string name)
 		{
 			return;
@@ -775,22 +716,6 @@ namespace Swish.Tests
 					RawStreamIO.Write(file, value);
 				}
 			}
-		}
-
-		private static List<string> UniqueValues(Csv table, int index)
-		{
-			List<string> longitudes = new List<string>();
-			for (int rowIndex = 0; rowIndex < table.Records.Count; rowIndex++)
-			{
-				List<string> record = table.Records[rowIndex];
-				string longitude = record[index];
-				if (!longitudes.Contains(longitude))
-				{
-					longitudes.Add(longitude);
-				}
-			}
-
-			return longitudes;
 		}
 
 		private static SortedList<string, Csv> SplitByDate(Csv table, int columnIndex)

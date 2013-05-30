@@ -33,6 +33,7 @@ namespace Swish.SimpleInstaller.Controls
 			this.PendingBox = new System.Windows.Forms.TextBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.ExitButton = new System.Windows.Forms.Button();
+			this.label1 = new System.Windows.Forms.Label();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -87,10 +88,22 @@ namespace Swish.SimpleInstaller.Controls
 			this.ExitButton.UseVisualStyleBackColor = true;
 			this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
 			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label1.Location = new System.Drawing.Point(0, 66);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(332, 26);
+			this.label1.TabIndex = 11;
+			this.label1.Text = "SWISH Kepler actors have been installed.\r\nNote that it may be necessary to restar" +
+    "t for all changes to take effect.";
+			// 
 			// FinishedPage
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.PendingBox);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.label2);
@@ -110,5 +123,6 @@ namespace Swish.SimpleInstaller.Controls
 		private System.Windows.Forms.TextBox PendingBox;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Button ExitButton;
+		private System.Windows.Forms.Label label1;
 	}
 }

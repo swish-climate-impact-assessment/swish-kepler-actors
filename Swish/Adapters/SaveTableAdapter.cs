@@ -8,12 +8,12 @@ namespace Swish.Adapters
 	{
 		public string Name { get { return "save"; } }
 
-		public void Run(AdapterArguments splitArguments)
+		public string Run(AdapterArguments splitArguments)
 		{
 			string inputFileName = splitArguments.InputFileName();
 			string outputFileName = splitArguments.OutputFileName(SwishFunctions.DataFileExtension);
 			Save(inputFileName, outputFileName);
-			Console.Write(outputFileName);
+			return outputFileName;
 		}
 
 		public static void Save(string inputFileName, string outputFileName)

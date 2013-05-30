@@ -13,8 +13,8 @@ namespace Swish.Tests
 			int recordCount = 100;
 			int periodCount = 5;
 			Csv table = new Csv();
-			table.Header.Add("Date");
-			table.Header.Add(variableName);
+			table.Headers.Add("Date");
+			table.Headers.Add(variableName);
 			DateTime date = new DateTime(2000, 1, 1);
 			for (int recordIndex = 0; recordIndex < recordCount; recordIndex++)
 			{
@@ -36,7 +36,7 @@ namespace Swish.Tests
 			}
 
 			table = CsvFunctions.Read(outputFileName);
-			if (table.Header.Count != 3 || table.Records.Count != recordCount)
+			if (table.Headers.Count != 3 || table.Records.Count != recordCount)
 			{
 				throw new Exception("");
 			}

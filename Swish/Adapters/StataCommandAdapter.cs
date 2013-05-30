@@ -8,13 +8,13 @@ namespace Swish.Adapters
 	{
 		public string Name { get { return "stataCommand"; } }
 
-		public void Run(AdapterArguments splitArguments)
+		public string Run(AdapterArguments splitArguments)
 		{
 			string inputFileName = splitArguments.InputFileName();
 			string command = splitArguments.String(Arguments.DefaultArgumentPrefix + "command", true);
 			string outputFileName = splitArguments.OutputFileName(SwishFunctions.DataFileExtension);
 			StataCommand(inputFileName, outputFileName, command);
-			Console.Write(outputFileName);
+			return outputFileName;
 		}
 
 		public static void StataCommand(string inputFileName, string outputFileName, string command)

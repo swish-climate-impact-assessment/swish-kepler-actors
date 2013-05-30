@@ -8,10 +8,10 @@ namespace Swish.Tests
 		internal void Names()
 		{
 			Csv table = new Csv();
-			table.Header.Add("Date");
-			table.Header.Add("CategoryA");
-			table.Header.Add("CategoryB");
-			table.Header.Add("Value");
+			table.Headers.Add("Date");
+			table.Headers.Add("CategoryA");
+			table.Headers.Add("CategoryB");
+			table.Headers.Add("Value");
 
 			table.Records.Add(new List<string>(new string[] { new DateTime(2000, 1, 1).ToShortDateString(), "q", "w", "1", }));
 			table.Records.Add(new List<string>(new string[] { new DateTime(2000, 1, 2).ToShortDateString(), "q", "w", "2", }));
@@ -25,10 +25,10 @@ namespace Swish.Tests
 			List<string> variableNames = new List<string>(variableInformation.Keys);
 
 			if (variableNames.Count != 4
-				|| !variableNames.Contains("Date")
-				|| !variableNames.Contains("CategoryA")
-				|| !variableNames.Contains("CategoryB")
-				|| !variableNames.Contains("Value"))
+				|| !variableNames.Contains("Date".ToLower())
+				|| !variableNames.Contains("CategoryA".ToLower())
+				|| !variableNames.Contains("CategoryB".ToLower())
+				|| !variableNames.Contains("Value".ToLower()))
 			{
 				throw new Exception();
 

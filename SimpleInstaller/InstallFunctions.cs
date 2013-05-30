@@ -38,7 +38,7 @@ namespace Swish.SimpleInstaller
 			}
 			SwishFunctions._ReportMessage(ReportMessage, -1, "");
 
-			List<string> newPending = SwishFunctions.ConvertLines(_pending, _symbols, ReportMessage, false, true);
+			List<string> newPending = SwishFunctions.ConvertLines(_pending, _symbols, ReportMessage, false, true, true);
 			_pending = newPending;
 
 			while (_pending.Count > 0)

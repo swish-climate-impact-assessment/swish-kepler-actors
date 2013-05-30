@@ -44,23 +44,38 @@
   <ItemGroup>
     <Compile Include="AdapterFunctions.cs" />
     <Compile Include="Adapters\AdapterArguments.cs" />
-    <Compile Include="Adapters\GraphClientAdapter.cs" />
-    <Compile Include="Adapters\GraphAdapter.cs" />
+    <Compile Include="Adapters\ConvertToGridAdapter.cs" />
+    <Compile Include="Adapters\ViewGridClientAdapter.cs" />
+    <Compile Include="Adapters\ViewGridAdapter.cs" />
+    <Compile Include="Adapters\GraphSeriesClientAdapter.cs" />
+    <Compile Include="Adapters\GraphSeriesAdapter.cs" />
+    <Compile Include="Controls\VerticalLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\GridView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\GridView.Designer.cs">
+      <DependentUpon>GridView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GridFunctions.cs" />
+    <Compile Include="GridLayer.cs" />
+    <Compile Include="ListFunctions.cs" />
     <Compile Include="JavaFunctions.cs" />
     <Compile Include="RFunctions.cs" />
     <Compile Include="GraphData.cs" />
-    <Compile Include="DisplayForm.cs">
+    <Compile Include="Controls\DisplayForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DisplayForm.Designer.cs">
+    <Compile Include="Controls\DisplayForm.Designer.cs">
       <DependentUpon>DisplayForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GraphFunctions.cs" />
-    <Compile Include="OhlcvsEditor.cs">
+    <Compile Include="Controls\TableView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="OhlcvsEditor.Designer.cs">
-      <DependentUpon>OhlcvsEditor.cs</DependentUpon>
+    <Compile Include="Controls\TableView.Designer.cs">
+      <DependentUpon>TableView.cs</DependentUpon>
     </Compile>
     <Compile Include="ScriptGenerators\ConvertVariableToDateScriptGenerator.cs" />
     <Compile Include="ScriptGenerators\LegacyRemoveColumnsScriptGenerator.cs" />
@@ -123,6 +138,7 @@
     <Compile Include="CollapseOpperation.cs" />
     <Compile Include="Arguments.cs" />
     <Compile Include="ByteArrayAsStream.cs" />
+    <Compile Include="MultiProcessor.cs" />
     <Compile Include="TypeFunctions.cs" />
     <Compile Include="CSharpCompiler.cs" />
     <Compile Include="ProcessFunctions.cs" />
@@ -149,6 +165,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\GridView.resx">
+      <DependentUpon>GridView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TableView.resx">
+      <DependentUpon>TableView.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

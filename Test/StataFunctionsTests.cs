@@ -188,8 +188,8 @@ namespace Swish.Tests
 			Csv expectedTable = new Csv();
 			//List<List<string>> expectedTable = new List<List<string>>();
 
-			expectedTable.Header.Add("cars");
-			expectedTable.Header.Add("hhsize");
+			expectedTable.Headers.Add("cars");
+			expectedTable.Headers.Add("hhsize");
 			List<string> list = new List<string>();
 			list.Add("1");
 			list.Add("1");

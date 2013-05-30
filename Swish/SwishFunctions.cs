@@ -14,6 +14,7 @@ namespace Swish
 		public const string DataFileExtension = ".dta";
 		public const string CsvFileExtension = ".csv";
 		public const string DoFileExtension = ".do";
+		public const string AscGridFileExtension = ".asc";
 
 		public static void MessageTextBox(string message, bool returnImediatly)
 		{
@@ -193,7 +194,7 @@ namespace Swish
 			return password;
 		}
 
-		public static List<string> ConvertLines(List<string> lines, List<Tuple<string, string>> symbols, ReportProgressFunction ReportMessage, bool optionalNameExtension, bool escapeStrings)
+		public static List<string> ConvertLines(List<string> lines, List<Tuple<string, string>> symbols, ReportProgressFunction ReportMessage, bool optionalNameExtension, bool escapeStrings, bool reportChanges)
 		{
 			List<string> newPending = new List<string>();
 			for (int lineIndex = 0; lineIndex < lines.Count; lineIndex++)
@@ -201,7 +202,7 @@ namespace Swish
 				string _line = lines[lineIndex];
 				string line = ResloveSymbols(_line, symbols, escapeStrings, optionalNameExtension);
 
-				if (line != _line)
+				if (reportChanges && line != _line)
 				{
 					_ReportMessage(ReportMessage, -1, "\"" + _line + "\"" + " changed to " + "\"" + line + "\"");
 				}
@@ -256,12 +257,12 @@ namespace Swish
 			if (ReportMessage != null)
 			{
 				ReportMessage(progress, message);
-			} else if (progress >= 0)
-			{
-				Console.WriteLine(progress + "%" + message);
 			} else if (ExceptionFunctions.ForceVerbose)
 			{
 				Console.WriteLine(message);
+			} else if (progress >= 0)
+			{
+				//Console.WriteLine(progress + "%" + message);
 			}
 		}
 

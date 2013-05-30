@@ -1,21 +1,24 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Windows.Forms;
+using Swish.Controls;
 
 namespace Swish.Adapters
 {
-	public class DisplayTableClientAdapter: IAdapter
+	public class ViewGridClientAdapter: IAdapter
 	{
-		public const string OperationName = "displayClient";
+		public const string OperationName = "ViewGridClient";
 		public string Name { get { return OperationName; } }
 
 		public string Run(AdapterArguments splitArguments)
 		{
 			string inputFileName = splitArguments.InputFileName();
-			DisplayTable(inputFileName);
+			Display(inputFileName);
 			return inputFileName;
 		}
 
-		public static void DisplayTable(string inputFileName)
+		public static void Display(string inputFileName)
 		{
 			string extension = Path.GetExtension(inputFileName);
 			string useFileName;
@@ -31,13 +34,15 @@ namespace Swish.Adapters
 					SaveTableAdapter.Save(inputFileName, useFileName);
 				}
 
-				string[] lines = File.ReadAllLines(useFileName);
-				for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
-				{
-					lines[lineIndex] = lines[lineIndex].Replace(',', '\t');
-				}
+				Csv table = CsvFunctions.Read(useFileName);
 
-				SwishFunctions.MessageTextBox("File: " + inputFileName + Environment.NewLine, lines, false);
+				using (GridView control = new GridView())
+				{
+					GridLayer layer = GridFunctions.Read(inputFileName);
+
+					control.Layer = layer;
+					DisplayForm.Display(control, "Data", true, false);
+				}
 			} catch (Exception error)
 			{
 				string message = "failed to display " + inputFileName + Environment.NewLine + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);

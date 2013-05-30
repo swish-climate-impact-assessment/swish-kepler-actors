@@ -10,12 +10,12 @@ namespace Swish.Adapters
 	{
 		public string Name { get { return "password"; } }
 
-		public void Run(AdapterArguments splitArguments)
+		public string Run(AdapterArguments splitArguments)
 		{
 			string prompt = splitArguments.String(Arguments.DefaultArgumentPrefix + "prompt", false);
 			bool requireEntry = splitArguments.Bool(Arguments.DefaultArgumentPrefix + "ignoreCache", false);
 			string password = Password(prompt, requireEntry);
-			Console.Write(password);
+			return password;
 		}
 
 		/// <summary>
