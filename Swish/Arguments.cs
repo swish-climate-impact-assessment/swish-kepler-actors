@@ -100,32 +100,40 @@ namespace Swish
 					throw new Exception("Malformed arguments 1: \"" + arguments + "\"");
 				}
 
-				string name;
-				string stopString;
-				if (!StringIO.TryReadUntill(out name, out stopString, new string[] { " " }, ref usedArguments))
-				{
-					name = usedArguments;
-					usedArguments = string.Empty;
-				}
-				name = Clean(name);
-				name = argumentPrefix + name;
-
-				name = name.Trim().ToLower();
-				if (name.StartsWith(argumentPrefix))
-				{
-					name = name.Substring(1);
-				}
-				name = name.Trim('\"');
+				StringIO.SkipWhiteSpace(out buffer, ref usedArguments);
+				string name = ReadArgumentName(ref usedArguments, argumentPrefix);
 
 				StringIO.SkipWhiteSpace(out buffer, ref usedArguments);
 				string value = ReadArgumentValue(ref usedArguments, argumentPrefix);
-				value = Decode(value);
-				value = Clean(value);
 
 				splitArguments.Add(new Tuple<string, string>(name, value));
 			}
 
 			return splitArguments;
+		}
+
+		private static string ReadArgumentName(ref string line, string argumentPrefix)
+		{
+			string name;
+			string stopString;
+			if (StringIO.TryReadString(out name, ref line))
+			{
+
+			} else if (!StringIO.TryReadUntill(out name, out stopString, new string[] { " " }, ref line))
+			{
+				name = line;
+				line = string.Empty;
+			}
+			name = Clean(name);
+			name = argumentPrefix + name;
+
+			name = name.Trim().ToLower();
+			if (name.StartsWith(argumentPrefix))
+			{
+				name = name.Substring(1);
+			}
+			name = name.Trim('\"');
+			return name;
 		}
 
 		private static string Clean(string text)
@@ -151,6 +159,8 @@ namespace Swish
 			if (StringIO.TryReadString(out value, ref usedArguments))
 			{
 				arguments = usedArguments;
+				value = Decode(value);
+				value = Clean(value);
 				return value;
 			}
 
@@ -159,10 +169,14 @@ namespace Swish
 			{
 				value = usedArguments.Trim();
 				arguments = string.Empty;
+				value = Decode(value);
+				value = Clean(value);
 				return value;
 			}
 
 			arguments = usedArguments;
+			value = Decode(value);
+			value = Clean(value);
 			return value;
 		}
 
@@ -272,6 +286,7 @@ namespace Swish
 
 		private int IndexOfExactName(string name)
 		{
+			name = name.ToLower();
 			int listIndex = -1;
 			for (int argumentIndex = 0; argumentIndex < _splitArguments.Count; argumentIndex++)
 			{
@@ -437,7 +452,13 @@ namespace Swish
 			for (int argumentIndex = 0; argumentIndex < _splitArguments.Count; argumentIndex++)
 			{
 				Tuple<string, string> argument = _splitArguments[argumentIndex];
-				argumentText += _argumentPrefix + argument.Item1.Substring(0, 1).ToUpper() + argument.Item1.Substring(1) + " " + argument.Item2 + " ";
+				if (argument.Item1.Length <= 1)
+				{
+					throw new Exception(argument.Item1);
+				}
+				argumentText += _argumentPrefix 
+					+ argument.Item1.Substring(0, 1).ToUpper() 
+					+ argument.Item1.Substring(1) + " " + argument.Item2 + " ";
 			}
 			return argumentText;
 		}

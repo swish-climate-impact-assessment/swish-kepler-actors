@@ -16,8 +16,19 @@ namespace Swish.Adapter
 					Process.Start(KeplerFunctions.ExecutablePath, arguments[0]);
 					return 0;
 				}
+//C:\Swish\bin\Swish.Adapter.exe 
+//	>operation"<034SplitByVariable<034" 
+//	>Input"C:\Users\Ian\Desktop\GetWeatherGrid\MinMaxDayLatLong.csv" 
+//	>"VariableName""<034date<034"
+				
 
+
+//"" "VariableName "date"
+
+
+				
 				splitArguments = new Arguments(arguments);
+
 				ExceptionFunctions.ForceVerbose = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "verbose");
 
 				string operation = splitArguments.String(Arguments.OperationArgument, true);

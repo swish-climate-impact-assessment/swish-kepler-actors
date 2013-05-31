@@ -45,6 +45,7 @@
     <Compile Include="AdapterFunctions.cs" />
     <Compile Include="Adapters\AdapterArguments.cs" />
     <Compile Include="Adapters\ConvertToGridAdapter.cs" />
+    <Compile Include="Adapters\SplitByVariableAdapter.cs" />
     <Compile Include="Adapters\ViewGridClientAdapter.cs" />
     <Compile Include="Adapters\ViewGridAdapter.cs" />
     <Compile Include="Adapters\GraphSeriesClientAdapter.cs" />
@@ -175,6 +176,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>"$(ProjectDir)\MakeDirectory.exe" "c:\Swish\bin\"
+
+
+</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)*" "C:\Swish\bin\"
+
+</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

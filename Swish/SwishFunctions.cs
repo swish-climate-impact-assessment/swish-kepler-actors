@@ -52,7 +52,8 @@ namespace Swish
 			int controlHeight = size.Height;
 
 			form.ControlBox = true;
-
+			form.KeyPreview = true;
+			form.KeyUp += form_KeyUp;
 			form.Text = title;
 			size = textBox.Size;
 			form.ClientSize = new Size(size.Width, controlHeight);
@@ -80,6 +81,19 @@ namespace Swish
 							form.Dispose();
 						}
 					}
+				}
+			}
+		}
+
+		static void form_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Escape)
+			{
+				Form form = GetForm(sender);
+				if (form != null)
+				{
+					form.DialogResult = DialogResult.OK;
+					form.Close();
 				}
 			}
 		}
@@ -279,5 +293,21 @@ namespace Swish
 			_temporaryVariableId = value;
 		}
 
+
+		internal static string ConvertToCsvFile(string fileName)
+		{
+			string useInput;
+
+			string extension = Path.GetExtension(fileName).ToLower();
+			if (extension == SwishFunctions.CsvFileExtension.ToLower())
+			{
+				useInput = fileName;
+			} else
+			{
+				useInput = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
+				Swish.Adapters.SaveTableAdapter.Save(fileName, useInput);
+			}
+			return useInput;
+		}
 	}
 }
