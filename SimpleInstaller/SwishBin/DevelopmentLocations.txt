@@ -1,0 +1,2 @@
+D:\Development\swishKAGit\CollapseAdapter\bin\Debug
+D:\Development\swishKAGit\Adapter\bin\Debug
