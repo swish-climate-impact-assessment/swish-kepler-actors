@@ -433,5 +433,35 @@ namespace Swish
 			}
 		}
 
+		public static void DeleteDirectoryAndContents(string directory, ReportProgressFunction ReportMessage)
+		{
+			try
+			{
+				if (!Directory.Exists(directory))
+				{
+					return;
+				}
+				string[] files = Directory.GetFiles(directory);
+				for (int fileIndex = 0; fileIndex < files.Length; fileIndex++)
+				{
+					string fileName = files[fileIndex];
+					DeleteFile(fileName, ReportMessage);
+				}
+				string[] directories = Directory.GetDirectories(directory);
+				for (int directoryIndex = 0; directoryIndex < directories.Length; directoryIndex++)
+				{
+					string fileName = directories[directoryIndex];
+					DeleteDirectoryAndContents(fileName, ReportMessage);
+				}
+
+				if (ExceptionFunctions.VerboseFileOperations)
+				{
+					SwishFunctions._ReportMessage(ReportMessage, -1, "delete directory: " + directory);
+				}
+
+				Directory.Delete(directory);
+			} catch { }
+
+		}
 	}
 }

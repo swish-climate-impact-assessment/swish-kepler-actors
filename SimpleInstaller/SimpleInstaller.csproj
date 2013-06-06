@@ -111,6 +111,9 @@
     <None Include="SampleData\table.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="SampleData\weather stations.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="SwishBin\rundo.au3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

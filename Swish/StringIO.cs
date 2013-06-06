@@ -182,5 +182,10 @@ namespace Swish
 			line = line.Substring(parts[0].Length, line.Length - parts[0].Length);
 			return true;
 		}
+
+		internal static bool TryReadToken(out string token, ref string line)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

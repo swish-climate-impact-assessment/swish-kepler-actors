@@ -41,12 +41,14 @@
     <Compile Include="ActorTests.cs" />
     <Compile Include="ArgumentFunctionsTests.cs" />
     <Compile Include="AdapterTests.cs" />
+    <Compile Include="CodeAdapterTests.cs" />
     <Compile Include="GraphingAdapterTest.cs" />
     <Compile Include="CountOfPreviousDaysTests.cs" />
     <Compile Include="FillDatesTests.cs" />
     <Compile Include="GenerateDateRangeOperationTests.cs" />
     <Compile Include="GetVariableNamesTests.cs" />
     <Compile Include="GridFunctionsTests.cs" />
+    <Compile Include="PostGreSqlPasswordFileEditTests.cs" />
     <Compile Include="TimeSeriesFillTests.cs" />
     <Compile Include="ProcessorFunctionsTests.cs" />
     <Compile Include="MetadataTests.cs" />

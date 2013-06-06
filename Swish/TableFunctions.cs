@@ -213,5 +213,10 @@ namespace Swish
 
 			AdapterFunctions.RunOperation(GraphSeriesClientAdapter.OperationName, new AdapterArguments(arguments));
 		}
+
+		public static void EditPostGreSqlPasswordFile()
+		{
+			AdapterFunctions.RunOperation(Swish.Adapters.PostGreSqlPasswordFile.PostGreSqlPasswordFileEditAdapter.OperationName, new AdapterArguments(new Arguments()));
+		}
 	}
 }
