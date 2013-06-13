@@ -28,12 +28,18 @@ namespace Swish.Adapters.PostGreSqlPasswordFile
 				string[] fragments = line.Split(':');
 				if (fragments.Length != 5)
 				{
-					throw new Exception("Bad password file, could not read line " + (lineIndex + 1).ToString() + " \"" + line + "\"");
+					continue;
+					//throw new Exception("Bad password file, could not read line " + (lineIndex + 1).ToString() + " \"" + line + "\"");
 				}
 
 				PostGreSqlPassword password = new PostGreSqlPassword();
 				password.Address = fragments[0];
-				password.Port = int.Parse(fragments[1]);
+				int port;
+				if (!int.TryParse(fragments[1], out port))
+				{
+					continue;
+				}
+				password.Port = port;
 				password.DatabaseName = fragments[2];
 				password.UserName = fragments[3];
 				password.Password = fragments[4];

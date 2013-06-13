@@ -12,7 +12,7 @@ namespace Swish.Adapters.PostGreSqlPasswordFile
 			InitializeComponent();
 		}
 
-		public PostGreSqlPassword Password{get;set;}
+		public PostGreSqlPassword Password { get; set; }
 
 		private void Parent_FormClosed(object sender, FormClosedEventArgs e)
 		{
@@ -88,14 +88,96 @@ namespace Swish.Adapters.PostGreSqlPasswordFile
 			_ignoreUpdate = true;
 			try
 			{
-
-				MessageBox.Show("not done yet");
+				if (Password != null)
+				{
+					_addressBox.Text = Password.Address;
+					_databaseBox.Text = Password.DatabaseName;
+					_passwordBox.Text = Password.Password;
+					_portBox.Value = Password.Port;
+					_userNameBox.Text = Password.UserName;
+				}
 			} finally
 			{
 				_updateRequired = false;
 				_ignoreUpdate = false;
 			}
 		}
+
+		private void _maskPasswordBox_CheckedChanged(object sender, EventArgs e)
+		{
+			if (_ignoreUpdate)
+			{
+				return;
+			}
+			if (_maskPasswordBox.Checked)
+			{
+				_passwordBox.PasswordChar = '#';
+			} else
+			{
+				_passwordBox.PasswordChar = '\0';
+			}
+		}
+
+		private void _userNameBox_TextChanged(object sender, EventArgs e)
+		{
+			if (_ignoreUpdate)
+			{
+				return;
+			}
+			if (Password != null)
+			{
+				Password.UserName = _userNameBox.Text;
+			}
+		}
+
+		private void _databaseBox_TextChanged(object sender, EventArgs e)
+		{
+			if (_ignoreUpdate)
+			{
+				return;
+			}
+			if (Password != null)
+			{
+				Password.DatabaseName = _databaseBox.Text;
+			}
+		}
+
+		private void _addressBox_TextChanged(object sender, EventArgs e)
+		{
+			if (_ignoreUpdate)
+			{
+				return;
+			}
+			if (Password != null)
+			{
+				Password.Address = _addressBox.Text;
+			}
+		}
+
+		private void _portBox_ValueChanged(object sender, EventArgs e)
+		{
+			if (_ignoreUpdate)
+			{
+				return;
+			}
+			if (Password != null)
+			{
+				Password.Port = (int)_portBox.Value;
+			}
+		}
+
+		private void _passwordBox_TextChanged(object sender, EventArgs e)
+		{
+			if (_ignoreUpdate)
+			{
+				return;
+			}
+			if (Password != null)
+			{
+				Password.Password = _passwordBox.Text;
+			}
+		}
+
 
 	}
 }

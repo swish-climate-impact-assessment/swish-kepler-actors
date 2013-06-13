@@ -26,6 +26,7 @@ namespace Swish.Controls
 		{
 			control.Dock = DockStyle.Fill;
 
+			Application.DoEvents();
 			int controlHeight = control.Size.Height;
 			if (okButton || cancelButton)
 			{

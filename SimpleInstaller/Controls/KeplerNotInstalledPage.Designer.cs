@@ -76,14 +76,14 @@ namespace Swish.SimpleInstaller.Controls
 			this.label3.TabIndex = 6;
 			this.label3.Text = "Kepler installation";
 			// 
-			// VerifyKeplerInstalledPage
+			// KeplerNotInstalledPage
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.StatusBox);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.panel1);
-			this.Name = "VerifyKeplerInstalledPage";
+			this.Name = "KeplerNotInstalledPage";
 			this.Size = new System.Drawing.Size(474, 379);
 			this.Load += new System.EventHandler(this.VerifyKeplerInstalledPage_Load);
 			this.panel1.ResumeLayout(false);

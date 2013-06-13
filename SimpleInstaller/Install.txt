@@ -7,8 +7,8 @@ Copy "%StartupPath%\\SampleData\\Scullin.csv" "C:\\Swish\\SampleData\\Scullin.cs
 Copy "%StartupPath%\\SampleData\\weather stations.csv" "C:\\Swish\\SampleData\\weather stations.csv"
 MakeShortCut "%StartMenu%\\SWISH tools\\Kepler.lnk" "%KeplerBin%\\kepler.exe" "" "Launch Kepler with cmd line"
 MakeShortCut "%StartMenu%\\SWISH tools\\Kepler Debug.lnk" "%KeplerBin%\\kepler.bat" "" "Launch Kepler with cmd line"
+MakeShortCut "%StartMenu%\\SWISH tools\\PostGreSql passwords.lnk" "C:\\Swish\\bin\\Swish.Adapter.exe" ">operation PostGreSqlPasswordFile" "Edit PostGreSql password file"
 AddPath "%KeplerBin%"
 AddPath "%RBin%"
 AddPath "%JavaBin%"
-
 

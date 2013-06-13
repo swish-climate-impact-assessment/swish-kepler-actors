@@ -71,7 +71,14 @@ namespace Swish.SimpleInstaller.Controls
 
 		private void KeplerVerifyPage_Failed(object sender, EventArgs e)
 		{
-			Close();
+			//Close();
+
+			// hack it didn't recognise r 2, so just ignore for now
+			Controls.Clear();
+			progressPage1.Dock = DockStyle.Fill;
+			Controls.Add(progressPage1);
+			progressPage1.Install();
+
 		}
 
 	}

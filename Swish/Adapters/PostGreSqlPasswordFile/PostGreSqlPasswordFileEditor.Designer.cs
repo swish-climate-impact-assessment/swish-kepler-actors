@@ -57,7 +57,7 @@ namespace Swish.Adapters.PostGreSqlPasswordFile
 			this._passwordBox.MultiSelect = false;
 			this._passwordBox.Name = "_passwordBox";
 			this._passwordBox.ShowGroups = false;
-			this._passwordBox.Size = new System.Drawing.Size(396, 127);
+			this._passwordBox.Size = new System.Drawing.Size(392, 158);
 			this._passwordBox.TabIndex = 0;
 			this._passwordBox.UseCompatibleStateImageBehavior = false;
 			this._passwordBox.View = System.Windows.Forms.View.Details;
@@ -93,9 +93,9 @@ namespace Swish.Adapters.PostGreSqlPasswordFile
 			this.panel1.Controls.Add(this._editButton);
 			this.panel1.Controls.Add(this._addButton);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel1.Location = new System.Drawing.Point(0, 127);
+			this.panel1.Location = new System.Drawing.Point(0, 158);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(396, 23);
+			this.panel1.Size = new System.Drawing.Size(392, 23);
 			this.panel1.TabIndex = 1;
 			// 
 			// _removeButton
@@ -138,7 +138,7 @@ namespace Swish.Adapters.PostGreSqlPasswordFile
 			this.Controls.Add(this._passwordBox);
 			this.Controls.Add(this.panel1);
 			this.Name = "PostGreSqlPasswordFileEditor";
-			this.Size = new System.Drawing.Size(396, 150);
+			this.Size = new System.Drawing.Size(392, 181);
 			this.Load += new System.EventHandler(this.PostGreSqlPasswordFileEditor_Load);
 			this.VisibleChanged += new System.EventHandler(this.PostGreSqlPasswordFileEditor_VisibleChanged);
 			this.panel1.ResumeLayout(false);

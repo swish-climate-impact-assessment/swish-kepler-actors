@@ -133,7 +133,7 @@ namespace Swish.Adapters.PostGreSqlPasswordFile
 			values.Add(new ListViewItem.ListViewSubItem(item, password.Port.ToString()));
 			values.Add(new ListViewItem.ListViewSubItem(item, password.DatabaseName));
 			values.Add(new ListViewItem.ListViewSubItem(item, password.UserName));
-			values.Add(new ListViewItem.ListViewSubItem(item, password.Password));
+			values.Add(new ListViewItem.ListViewSubItem(item, "########"));
 
 			item.SubItems.Clear();
 			item.SubItems.AddRange(values.ToArray());
@@ -149,12 +149,17 @@ namespace Swish.Adapters.PostGreSqlPasswordFile
 			}
 
 			_passwords.Add(password);
+
+			ListViewItem item = new ListViewItem();
+			SetItem(item, password);
+			_passwordBox.Items.Add(item);
 		}
 
 		private static bool EditPassword(ref PostGreSqlPassword password)
 		{
 			using (PostGreSqlPasswordEditor control = new PostGreSqlPasswordEditor())
 			{
+				PostGreSqlPassword copy = Copy(password);
 				control.Password = password;
 				if (!DisplayForm.Display(control, "Edit password", true, true))
 				{
@@ -163,6 +168,17 @@ namespace Swish.Adapters.PostGreSqlPasswordFile
 				password = control.Password;
 			}
 			return true;
+		}
+
+		private static PostGreSqlPassword Copy(PostGreSqlPassword password)
+		{
+			PostGreSqlPassword copy = new PostGreSqlPassword();
+			copy.Address = password.Address;
+			copy.DatabaseName = password.DatabaseName;
+			copy.Password = password.Password;
+			copy.Port = password.Port;
+			copy.UserName = password.UserName;
+			return copy;
 		}
 
 		private void _editButton_Click(object sender, EventArgs e)

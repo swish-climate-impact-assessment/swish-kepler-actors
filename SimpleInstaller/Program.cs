@@ -22,7 +22,7 @@ namespace Swish.SimpleInstaller
 
 				Arguments splitArguments = new Arguments(arguments);
 				ExceptionFunctions.ForceVerbose = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "verbose");
-				ExceptionFunctions.VerboseFileOperations = true;
+				ExceptionFunctions.VerboseFileOperations = false;
 				bool noGui = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "silent") || splitArguments.Exists(Arguments.DefaultArgumentPrefix + "nogui");
 				bool clean = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "clean");
 				bool launch = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "launch") || splitArguments.Exists(Arguments.DefaultArgumentPrefix + "luanch");
