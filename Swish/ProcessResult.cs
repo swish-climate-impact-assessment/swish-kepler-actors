@@ -37,7 +37,6 @@ namespace Swish
 			}
 		}
 
-
 		internal void ErrorDataReceived(object sender, DataReceivedEventArgs e)
 		{
 			if (!string.IsNullOrWhiteSpace(e.Data))

@@ -147,7 +147,7 @@ namespace Swish
 			return _value;
 		}
 
-		internal static bool TryRead(out int value, ref string line)
+		public static bool TryRead(out int value, ref string line)
 		{
 			string[] parts = line.Split(' ', '\t', ')', '(', ',', '{', '}', '[', ']');
 			if (parts.Length == 0)
@@ -165,7 +165,7 @@ namespace Swish
 			return true;
 		}
 
-		internal static bool TryRead(out double value, ref string line)
+		public static bool TryRead(out double value, ref string line)
 		{
 			string[] parts = line.Split(' ', '\t', ')', '(', ',', '{', '}', '[', ']');
 			if (parts.Length == 0)
@@ -181,6 +181,11 @@ namespace Swish
 
 			line = line.Substring(parts[0].Length, line.Length - parts[0].Length);
 			return true;
+		}
+
+		public static bool TryReadToken(out string token, ref string line)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

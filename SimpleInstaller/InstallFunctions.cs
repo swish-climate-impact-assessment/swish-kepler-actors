@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.Win32;
@@ -13,6 +14,7 @@ namespace Swish.SimpleInstaller
 			_symbols.Add(new Tuple<string, string>("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)));
 			_symbols.Add(new Tuple<string, string>("%StartupPath%", Application.StartupPath));
 			_symbols.Add(new Tuple<string, string>("%StartMenu%", Environment.GetFolderPath(Environment.SpecialFolder.CommonPrograms)));
+			_symbols.Add(new Tuple<string, string>("%SystemStartup%", Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup)));
 			_symbols.Add(new Tuple<string, string>("%KeplerBin%", KeplerFunctions.BinDirectory));
 			_symbols.Add(new Tuple<string, string>("%RBin%", RFunctions.BinDirectory));
 			_symbols.Add(new Tuple<string, string>("%JavaBin%", JavaFunctions.BinDirectory));
@@ -71,7 +73,51 @@ namespace Swish.SimpleInstaller
 
 			string whiteSpace;
 			StringIO.SkipWhiteSpace(out whiteSpace, ref line);
-			if (StringIO.TryRead("CopyFilesAndDirectories", ref line))
+			if (StringIO.TryRead("DeleteFilesAndDirectories", ref line))
+			{
+				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+				string directory;
+				if (!StringIO.TryReadString(out directory, ref line))
+				{
+					throw new Exception("could not read line \"" + line + "\"");
+				}
+
+				FileFunctions.DeleteDirectoryAndContents(directory, ReportMessage);
+			} else if (StringIO.TryRead("Delete", ref line))
+			{
+				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+				string sourceFileName;
+				if (!StringIO.TryReadString(out sourceFileName, ref line))
+				{
+					throw new Exception("could not read line \"" + line + "\"");
+				}
+
+				FileFunctions.DeleteFile(sourceFileName, ReportMessage);
+			} else if (StringIO.TryRead("DateAfter", ref line))
+			{
+				DateTime date = ReadDate(ref line);
+				if (DateTime.Now.Date > date)
+				{
+					RunLine(line, clean, null);
+				}
+			} else if (StringIO.TryRead("DateBefore", ref line))
+			{
+				DateTime date = ReadDate(ref line);
+				if (DateTime.Now.Date < date)
+				{
+					RunLine(line, clean,  null);
+				}
+			} else if (StringIO.TryRead("RunProcess", ref line))
+			{
+				string process;
+				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+				if (!StringIO.TryReadString(out process, ref line))
+				{
+					throw new Exception("could not read line \"" + line + "\"");
+				}
+
+				using (Process.Start(process)) { }
+			} else if (StringIO.TryRead("CopyFilesAndDirectories", ref line))
 			{
 				string sourceDirectory;
 				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
@@ -243,6 +289,34 @@ namespace Swish.SimpleInstaller
 			{
 				throw new Exception("could not read line \"" + line + "\"");
 			}
+		}
+
+		private static DateTime ReadDate(ref string line)
+		{
+			int year;
+			int month;
+			int day;
+			string whiteSpace;
+			StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+			if (!StringIO.TryRead(out year, ref line))
+			{
+				throw new Exception("could not read line \"" + line + "\"");
+			}
+
+			StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+			if (!StringIO.TryRead(out month, ref line))
+			{
+				throw new Exception("could not read line \"" + line + "\"");
+			}
+
+			StringIO.SkipWhiteSpace(out whiteSpace, ref line);
+			if (!StringIO.TryRead(out day, ref line))
+			{
+				throw new Exception("could not read line \"" + line + "\"");
+			}
+
+			DateTime date = new DateTime(year, month, day);
+			return date;
 		}
 
 		private static void AddPath(string keyPath, string binPath)

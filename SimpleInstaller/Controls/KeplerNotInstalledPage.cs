@@ -53,7 +53,7 @@ namespace Swish.SimpleInstaller.Controls
 				NextButton.Text = "Next";
 			} else
 			{
-				NextButton.Text = "Exit";
+				NextButton.Text = "Ignore";
 			}
 		}
 

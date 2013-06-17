@@ -326,7 +326,6 @@ namespace Swish
 				throw new Exception("Argument value missing \"" + name + "\"");
 			}
 
-
 			return value;
 		}
 

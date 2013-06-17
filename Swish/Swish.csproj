@@ -45,6 +45,23 @@
     <Compile Include="AdapterFunctions.cs" />
     <Compile Include="Adapters\AdapterArguments.cs" />
     <Compile Include="Adapters\ConvertToGridAdapter.cs" />
+    <Compile Include="Adapters\CodeAdapter.cs" />
+    <Compile Include="Adapters\PostGreSqlPasswordFile\PostGreSqlPasswordEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Adapters\PostGreSqlPasswordFile\PostGreSqlPasswordEditor.Designer.cs">
+      <DependentUpon>PostGreSqlPasswordEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Adapters\PostGreSqlPasswordFile\PostGreSqlPasswordFileFunctions.cs" />
+    <Compile Include="Adapters\PostGreSqlPasswordFile\PostGreSqlPasswordFileEditAdapter.cs" />
+    <Compile Include="Adapters\PostGreSqlPasswordFile\PostGreSqlPassword.cs" />
+    <Compile Include="Adapters\PostGreSqlPasswordFile\PostGreSqlPasswordFileEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Adapters\PostGreSqlPasswordFile\PostGreSqlPasswordFileEditor.Designer.cs">
+      <DependentUpon>PostGreSqlPasswordFileEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Adapters\RunCodeAdapter.cs" />
     <Compile Include="Adapters\SplitByVariableAdapter.cs" />
     <Compile Include="Adapters\ViewGridClientAdapter.cs" />
     <Compile Include="Adapters\ViewGridAdapter.cs" />
@@ -168,6 +185,12 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Adapters\PostGreSqlPasswordFile\PostGreSqlPasswordEditor.resx">
+      <DependentUpon>PostGreSqlPasswordEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Adapters\PostGreSqlPasswordFile\PostGreSqlPasswordFileEditor.resx">
+      <DependentUpon>PostGreSqlPasswordFileEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\GridView.resx">
       <DependentUpon>GridView.cs</DependentUpon>
     </EmbeddedResource>
