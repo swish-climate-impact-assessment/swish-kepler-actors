@@ -67,7 +67,19 @@ namespace Swish.Adapters.PostGreSqlPasswordFile
 				lines.Add(line);
 			}
 
-			File.WriteAllLines(fileName, lines);
+			using (FileStream file = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+			{
+				for (int lineIndex = 0; lineIndex < lines.Count; lineIndex++)
+				{
+					string line = lines[lineIndex];
+					byte[] buffer = System.Text.ASCIIEncoding.ASCII.GetBytes(line);
+					file.Write(buffer, 0, buffer.Length);
+					if (lineIndex + 1 < lines.Count)
+					{
+						file.WriteByte((byte)'\n');
+					}
+				}
+			}
 		}
 	}
 }

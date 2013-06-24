@@ -109,29 +109,44 @@ namespace Swish
 							}
 							for (int versionIndex = 0; versionIndex < versionDirectories.Count; versionIndex++)
 							{
-								string versionDirectory = versionDirectories[versionIndex];
-								testDirectory = Path.Combine(driveLetter, programFiles, rDirectory, versionDirectory);
-								if (!Directory.Exists(testDirectory))
+								string _versionDirectory = versionDirectories[versionIndex];
+
+								List<string> actualVersionDirectories = new List<string>();
+								if (!_versionDirectory.Contains("*"))
 								{
-									continue;
+									string actualVersionDirectory = Path.Combine(driveLetter, programFiles, rDirectory, _versionDirectory);
+									actualVersionDirectories.Add(actualVersionDirectory);
+								} else
+								{
+									string searchPath = Path.Combine(driveLetter, programFiles, rDirectory);
+									string[] _actualVersionDirectories = Directory.GetDirectories(searchPath, _versionDirectory);
+									actualVersionDirectories.AddRange(_actualVersionDirectories);
 								}
-								for (int binIndex = 0; binIndex < binDirectories.Count; binIndex++)
+								for (int actualVersionDirectoryIndex = 0; actualVersionDirectoryIndex < actualVersionDirectories.Count; actualVersionDirectoryIndex++)
 								{
-									string binDirectory = binDirectories[binIndex];
-									testDirectory = Path.Combine(driveLetter, programFiles, rDirectory, versionDirectory, binDirectory);
-									if (!Directory.Exists(testDirectory))
+									string versionDirectory = actualVersionDirectories[actualVersionDirectoryIndex];
+									if (!Directory.Exists(versionDirectory))
 									{
 										continue;
 									}
-									for (int buildIndex = 0; buildIndex < binDirectories.Count; buildIndex++)
+									for (int binIndex = 0; binIndex < binDirectories.Count; binIndex++)
 									{
-										string buildDirectory = buildDirectories[buildIndex];
-										testDirectory = Path.Combine(driveLetter, programFiles, rDirectory, versionDirectory, binDirectory, buildDirectory);
+										string binDirectory = binDirectories[binIndex];
+										testDirectory = Path.Combine(versionDirectory, binDirectory);
 										if (!Directory.Exists(testDirectory))
 										{
 											continue;
 										}
-										locations.Add(testDirectory);
+										for (int buildIndex = 0; buildIndex < binDirectories.Count; buildIndex++)
+										{
+											string buildDirectory = buildDirectories[buildIndex];
+											testDirectory = Path.Combine(versionDirectory, binDirectory, buildDirectory);
+											if (!Directory.Exists(testDirectory))
+											{
+												continue;
+											}
+											locations.Add(testDirectory);
+										}
 									}
 								}
 							}

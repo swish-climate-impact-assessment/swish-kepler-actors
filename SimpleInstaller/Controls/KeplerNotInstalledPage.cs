@@ -29,7 +29,15 @@ namespace Swish.SimpleInstaller.Controls
 				StatusBox.Text += "Kepler location: " + KeplerFunctions.BinDirectory + Environment.NewLine;
 			} else
 			{
-				StatusBox.Text += "Kepler not found, Kepler must be installed to continue" + Environment.NewLine;
+				StatusBox.Text += "Kepler not found, Kepler must be installed to use SWISH Kepler Actors" + Environment.NewLine;
+			}
+
+			if (StataFunctions.Installed)
+			{
+				StatusBox.Text += "Stata location: " + StataFunctions.BinDirectory + Environment.NewLine;
+			} else
+			{
+				StatusBox.Text += "Stata not found, Stata is required to use most SWISH Kepler Actors" + Environment.NewLine;
 			}
 
 			if (RFunctions.Installed)
@@ -37,7 +45,7 @@ namespace Swish.SimpleInstaller.Controls
 				StatusBox.Text += "R location: " + RFunctions.BinDirectory + Environment.NewLine;
 			} else
 			{
-				StatusBox.Text += "R not found, R must be installed to continue" + Environment.NewLine;
+				StatusBox.Text += "R not found, R is used by some SWISH Kepler Actors" + Environment.NewLine;
 			}
 
 			if (JavaFunctions.Installed)
@@ -45,10 +53,10 @@ namespace Swish.SimpleInstaller.Controls
 				StatusBox.Text += "Java location: " + JavaFunctions.BinDirectory + Environment.NewLine;
 			} else
 			{
-				StatusBox.Text += "Java not found, Java must be installed to continue" + Environment.NewLine;
+				StatusBox.Text += "Java not found, Java is required to run Kepler" + Environment.NewLine;
 			}
 
-			if (KeplerFunctions.Installed && RFunctions.Installed && JavaFunctions.Installed)
+			if (KeplerFunctions.Installed && RFunctions.Installed && JavaFunctions.Installed && StataFunctions.Installed)
 			{
 				NextButton.Text = "Next";
 			} else
@@ -56,7 +64,6 @@ namespace Swish.SimpleInstaller.Controls
 				NextButton.Text = "Ignore";
 			}
 		}
-
 	}
 }
 

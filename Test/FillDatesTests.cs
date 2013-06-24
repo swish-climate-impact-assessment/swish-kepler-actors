@@ -17,7 +17,7 @@ namespace Swish.Tests
 			DateTime startDate = new DateTime(2000, 1, 1);
 			DateTime endDate = new DateTime(2000, 12, 31);
 
-			string dateVariableName = "Date";
+			string dateVariableName = "date";
 
 			string inputFileName = GenerateInputData(startDate, endDate);
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
@@ -41,8 +41,8 @@ namespace Swish.Tests
 		{
 			string inputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			Csv table = new Csv();
-			table.Headers.Add("Date");
-			table.Headers.Add("Other");
+			table.Headers.Add("date");
+			table.Headers.Add("other");
 
 			double aValue; List<string> record;
 

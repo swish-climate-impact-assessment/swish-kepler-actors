@@ -11,13 +11,13 @@ namespace Swish.SimpleInstaller
 	{
 		static InstallFunctions()
 		{
-			_symbols.Add(new Tuple<string, string>("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)));
-			_symbols.Add(new Tuple<string, string>("%StartupPath%", Application.StartupPath));
-			_symbols.Add(new Tuple<string, string>("%StartMenu%", Environment.GetFolderPath(Environment.SpecialFolder.CommonPrograms)));
-			_symbols.Add(new Tuple<string, string>("%SystemStartup%", Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup)));
-			_symbols.Add(new Tuple<string, string>("%KeplerBin%", KeplerFunctions.BinDirectory));
-			_symbols.Add(new Tuple<string, string>("%RBin%", RFunctions.BinDirectory));
-			_symbols.Add(new Tuple<string, string>("%JavaBin%", JavaFunctions.BinDirectory));
+			try { _symbols.Add(new Tuple<string, string>("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile))); } catch { }
+			try { _symbols.Add(new Tuple<string, string>("%StartupPath%", Application.StartupPath)); } catch { }
+			try { _symbols.Add(new Tuple<string, string>("%StartMenu%", Environment.GetFolderPath(Environment.SpecialFolder.CommonPrograms))); } catch { }
+			try { _symbols.Add(new Tuple<string, string>("%SystemStartup%", Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup))); } catch { }
+			try { _symbols.Add(new Tuple<string, string>("%KeplerBin%", KeplerFunctions.BinDirectory)); } catch { }
+			try { _symbols.Add(new Tuple<string, string>("%RBin%", RFunctions.BinDirectory)); } catch { }
+			try { _symbols.Add(new Tuple<string, string>("%JavaBin%", JavaFunctions.BinDirectory)); } catch { }
 		}
 
 		internal static void Install(bool clean, ReportProgressFunction ReportMessage)
@@ -46,7 +46,7 @@ namespace Swish.SimpleInstaller
 			while (_pending.Count > 0)
 			{
 				string line;
-				if (clean)
+				if (!clean)
 				{
 					line = _pending[0];
 					_pending.RemoveAt(0);
@@ -86,13 +86,13 @@ namespace Swish.SimpleInstaller
 			} else if (StringIO.TryRead("Delete", ref line))
 			{
 				StringIO.SkipWhiteSpace(out whiteSpace, ref line);
-				string sourceFileName;
-				if (!StringIO.TryReadString(out sourceFileName, ref line))
+				string fileName;
+				if (!StringIO.TryReadString(out fileName, ref line))
 				{
 					throw new Exception("could not read line \"" + line + "\"");
 				}
 
-				FileFunctions.DeleteFile(sourceFileName, ReportMessage);
+				FileFunctions.DeleteFile(fileName, ReportMessage);
 			} else if (StringIO.TryRead("DateAfter", ref line))
 			{
 				DateTime date = ReadDate(ref line);
@@ -105,7 +105,7 @@ namespace Swish.SimpleInstaller
 				DateTime date = ReadDate(ref line);
 				if (DateTime.Now.Date < date)
 				{
-					RunLine(line, clean,  null);
+					RunLine(line, clean, null);
 				}
 			} else if (StringIO.TryRead("RunProcess", ref line))
 			{
@@ -115,8 +115,9 @@ namespace Swish.SimpleInstaller
 				{
 					throw new Exception("could not read line \"" + line + "\"");
 				}
+				string arguments = line;
 
-				using (Process.Start(process)) { }
+				using (Process.Start(process, arguments)) { }
 			} else if (StringIO.TryRead("CopyFilesAndDirectories", ref line))
 			{
 				string sourceDirectory;
@@ -238,8 +239,8 @@ namespace Swish.SimpleInstaller
 
 				if (!clean)
 				{
-					string keyUserPath = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment";
 					string keySystemPath = @"HKEY_CURRENT_USER\Environment";
+					string keyUserPath = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment";
 
 					try
 					{

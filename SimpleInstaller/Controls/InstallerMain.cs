@@ -18,7 +18,7 @@ namespace Swish.SimpleInstaller.Controls
 
 		private void welcomePage1_Install(object sender, EventArgs e)
 		{
-			if (!KeplerFunctions.Installed || !RFunctions.Installed || !JavaFunctions.Installed)
+			if (!KeplerFunctions.Installed || !RFunctions.Installed || !JavaFunctions.Installed || !StataFunctions.Installed)
 			{
 				Controls.Clear();
 				KeplerVerifyPage.Dock = DockStyle.Fill;

@@ -112,6 +112,21 @@ namespace Swish
 			set { _executablePath = value; }
 		}
 
+
+		private static string _binDirectory = null;
+		public static string BinDirectory
+		{
+			get
+			{
+				if (string.IsNullOrWhiteSpace(_binDirectory))
+				{
+					_binDirectory = Path.GetDirectoryName(ExecutablePath);
+				}
+				return _binDirectory;
+			}
+			set { _binDirectory = value; }
+		}
+
 		private static string _executablePath = null;
 		private static void FindExecutablePath()
 		{
@@ -160,7 +175,7 @@ namespace Swish
 			_executablePath = null;
 		}
 
-		public static bool StataInstalled
+		public static bool Installed
 		{
 			get
 			{

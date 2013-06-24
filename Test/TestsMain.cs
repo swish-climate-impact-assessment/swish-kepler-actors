@@ -66,10 +66,9 @@ namespace Swish.Tests
 				//new PostGreSqlPasswordFileEditTests().Manual();
 				//new CodeAdapterTests().MessageBox();
 
-				new GridFunctionsTests().ConvertLarge();
+				new RFunctionsTests().RVersion();
 				new GridFunctionsTests().LayerIO();
 				new GridFunctionsTests().ConvertToLayer();
-				new GraphingAdapterTest().ManualTSGraph();
 				new GetVariableNamesTests().Names();
 				new CountOfPreviousDaysTests().Count();
 				new FillDatesTests().Fill();
@@ -90,7 +89,7 @@ namespace Swish.Tests
 				new StringIOTests().TryReadStringEscapedCharacters();
 				new ArgumentFunctionsTests().ArgumentInQuotes();
 
-				if (!StataFunctions.StataInstalled)
+				if (!StataFunctions.Installed)
 				{
 					Console.WriteLine("Stata not found!");
 					Console.WriteLine("Ignoring stata tests");
@@ -120,7 +119,6 @@ namespace Swish.Tests
 				new AdapterTests().RemoveMergeColoumn();
 				new StataFunctionsTests().StataBatchMode();
 
-				new TimeSeriesFillTests().Fill();
 
 			} catch (Exception error)
 			{

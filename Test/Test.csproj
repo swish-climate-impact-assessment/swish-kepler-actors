@@ -49,9 +49,9 @@
     <Compile Include="GetVariableNamesTests.cs" />
     <Compile Include="GridFunctionsTests.cs" />
     <Compile Include="PostGreSqlPasswordFileEditTests.cs" />
-    <Compile Include="TimeSeriesFillTests.cs" />
     <Compile Include="ProcessorFunctionsTests.cs" />
     <Compile Include="MetadataTests.cs" />
+    <Compile Include="RFunctionsTests.cs" />
     <Compile Include="TestException.cs" />
     <Compile Include="KarFunctionsTests.cs" />
     <Compile Include="StataScriptFunctionsTests.cs" />

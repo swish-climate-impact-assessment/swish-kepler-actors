@@ -135,7 +135,6 @@
     <Compile Include="ScriptGenerators\GreaterThanValueScriptGenerator.cs" />
     <Compile Include="Adapters\FileNameWithoutExtensionAdapter.cs" />
     <Compile Include="Adapters\FileNameAdapter.cs" />
-    <Compile Include="Adapters\FillCategoryTimeSeriesAdapter.cs" />
     <Compile Include="ScriptGenerators\GenerateScriptGenerator.cs" />
     <Compile Include="Adapters\SaveTableAdapter.cs" />
     <Compile Include="ScriptGenerators\SelectRecordsScriptGenerator.cs" />

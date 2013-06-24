@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Swish.SimpleInstaller.Controls
 {
@@ -8,6 +9,12 @@ namespace Swish.SimpleInstaller.Controls
 		public WelcomePage()
 		{
 			InitializeComponent();
+			string installerVersionTextFileName = Path.Combine(Application.StartupPath, "Version.txt");
+			if (File.Exists(installerVersionTextFileName ))
+			{
+				string version = File.ReadAllText(installerVersionTextFileName);
+				this._versionBox.Text = version;
+			}
 		}
 
 		public event EventHandler Install;

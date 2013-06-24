@@ -18,3 +18,5 @@ TestResults
 /MakeDirectory/*.suo
 /MakeDirectory/*.sln
 /Swish/*.user
+
+/Delete/*.user

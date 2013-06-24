@@ -136,6 +136,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Version.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Install.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -157,6 +160,9 @@
     <PostBuildEvent>"$(ProjectDir)\MakeDirectory.exe" "Actors"
 "$(ProjectDir)\MakeDirectory.exe" "Scripts"
 del /Q .\Actors\*
+"$(ProjectDir)\Delete.exe" "$(TargetDir)\*.vshost.exe"
+"$(ProjectDir)\Delete.exe" "$(TargetDir)\*.manifest"
+"$(ProjectDir)\Delete.exe" "$(TargetDir)\*.pdb"
 copy "$(ProjectDir)\Actors\*" "Actors\"
 copy "$(TargetDir)\*" "$(TargetDir)\SwishBin\"
 copy "$(ProjectDir)\Scripts\*" "Scripts\"

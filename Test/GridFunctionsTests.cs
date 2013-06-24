@@ -134,17 +134,7 @@ namespace Swish.Tests
 
 		}
 
-		internal void ConvertLarge()
-		{
-			string fileName = @"C:\Users\Ian\Desktop\GetWeatherGrid\MinMaxDayLatLong.csv";
 
-			Csv table = CsvFunctions.Read(fileName);
 
-			int latitudeColumnIndex = table.ColumnIndex("lat", true);
-			int longitudeColumnIndex = table.ColumnIndex("long", true);
-			int valueColumnIndex = table.ColumnIndex("maxave", true);
-
-			GridLayer layer = GridFunctions.ConvertToLayer(table, longitudeColumnIndex, latitudeColumnIndex, valueColumnIndex);
-		}
 	}
 }
