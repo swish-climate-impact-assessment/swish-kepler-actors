@@ -39,6 +39,7 @@ namespace Swish.Controls
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.XMaximum = new System.Windows.Forms.Label();
 			this.XMinimumBox = new System.Windows.Forms.Label();
+			this._nameBox = new System.Windows.Forms.Label();
 			this.Table.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.GraphBox)).BeginInit();
 			this.panel2.SuspendLayout();
@@ -53,13 +54,15 @@ namespace Swish.Controls
 			this.Table.ColumnCount = 2;
 			this.Table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
 			this.Table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.Table.Controls.Add(this.GraphBox, 1, 0);
-			this.Table.Controls.Add(this.panel2, 0, 0);
-			this.Table.Controls.Add(this.panel1, 1, 1);
+			this.Table.Controls.Add(this.GraphBox, 1, 1);
+			this.Table.Controls.Add(this.panel2, 0, 1);
+			this.Table.Controls.Add(this.panel1, 1, 2);
+			this.Table.Controls.Add(this._nameBox, 1, 0);
 			this.Table.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.Table.Location = new System.Drawing.Point(0, 0);
 			this.Table.Name = "Table";
-			this.Table.RowCount = 2;
+			this.Table.RowCount = 3;
+			this.Table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.Table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.Table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
 			this.Table.Size = new System.Drawing.Size(347, 303);
@@ -68,9 +71,9 @@ namespace Swish.Controls
 			// GraphBox
 			// 
 			this.GraphBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.GraphBox.Location = new System.Drawing.Point(29, 3);
+			this.GraphBox.Location = new System.Drawing.Point(29, 23);
 			this.GraphBox.Name = "GraphBox";
-			this.GraphBox.Size = new System.Drawing.Size(315, 177);
+			this.GraphBox.Size = new System.Drawing.Size(315, 157);
 			this.GraphBox.TabIndex = 16;
 			this.GraphBox.TabStop = false;
 			// 
@@ -79,9 +82,9 @@ namespace Swish.Controls
 			this.panel2.Controls.Add(this.YMinimumBox);
 			this.panel2.Controls.Add(this.YMaximum);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel2.Location = new System.Drawing.Point(3, 3);
+			this.panel2.Location = new System.Drawing.Point(3, 23);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(20, 177);
+			this.panel2.Size = new System.Drawing.Size(20, 157);
 			this.panel2.TabIndex = 1;
 			// 
 			// YMinimumBox
@@ -89,7 +92,7 @@ namespace Swish.Controls
 			this.YMinimumBox.Alignment = Swish.Controls.VerticalLabel.AlignmentCode.Top;
 			this.YMinimumBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.YMinimumBox.AutoSize = true;
-			this.YMinimumBox.Location = new System.Drawing.Point(0, 122);
+			this.YMinimumBox.Location = new System.Drawing.Point(0, 102);
 			this.YMinimumBox.Name = "YMinimumBox";
 			this.YMinimumBox.Orientation = Swish.Controls.VerticalLabel.OrientationCode.Right;
 			this.YMinimumBox.Size = new System.Drawing.Size(52, 52);
@@ -172,6 +175,15 @@ namespace Swish.Controls
 			this.XMinimumBox.TabIndex = 0;
 			this.XMinimumBox.Text = "label1";
 			// 
+			// _nameBox
+			// 
+			this._nameBox.AutoSize = true;
+			this._nameBox.Location = new System.Drawing.Point(29, 0);
+			this._nameBox.Name = "_nameBox";
+			this._nameBox.Size = new System.Drawing.Size(35, 13);
+			this._nameBox.TabIndex = 17;
+			this._nameBox.Text = "label1";
+			// 
 			// TableView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -183,6 +195,7 @@ namespace Swish.Controls
 			this.VisibleChanged += new System.EventHandler(this.TableView_VisibleChanged);
 			this.Resize += new System.EventHandler(this.TableView_Resize);
 			this.Table.ResumeLayout(false);
+			this.Table.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.GraphBox)).EndInit();
 			this.panel2.ResumeLayout(false);
 			this.panel2.PerformLayout();
@@ -209,6 +222,7 @@ namespace Swish.Controls
 		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.Label XMaximum;
 		private System.Windows.Forms.Label XMinimumBox;
+		private System.Windows.Forms.Label _nameBox;
 
 	}
 }

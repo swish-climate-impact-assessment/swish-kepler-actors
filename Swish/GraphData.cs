@@ -36,6 +36,8 @@ namespace Swish
 				_name = value;
 			}
 		}
+
+		public Tuple<string, Color> Colour { get; set; }
 	}
 
 }

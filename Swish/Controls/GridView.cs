@@ -108,8 +108,25 @@ namespace Swish.Controls
 					image = GenerateImage(Layer, PictureBox.Width, PictureBox.Height);
 					if (Layer.Longitudes.Count > 0)
 					{
-						XMinimumBox.Text = Layer.Longitudes[0];
-						XMaximum.Text = Layer.Longitudes[Layer.Longitudes.Count - 1];
+						double xMinimum;
+						if (double.TryParse(Layer.Longitudes[0], out xMinimum))
+						{
+							xMinimum = Math.Round(xMinimum, 3, MidpointRounding.AwayFromZero);
+							XMinimumBox.Text = xMinimum.ToString();
+						} else
+						{
+							XMinimumBox.Text = string.Empty;
+						}
+
+						double xMaximum;
+						if (double.TryParse(Layer.Longitudes[Layer.Longitudes.Count - 1], out xMaximum))
+						{
+							xMaximum = Math.Round(xMaximum, 3, MidpointRounding.AwayFromZero);
+							XMaximum.Text = xMaximum.ToString();
+						} else
+						{
+							XMaximum.Text = string.Empty;
+						}
 					} else
 					{
 						XMinimumBox.Text = string.Empty;
@@ -117,8 +134,25 @@ namespace Swish.Controls
 					}
 					if (Layer.Latitudes.Count > 0)
 					{
-						YMinimumBox.Text = Layer.Latitudes[0];
-						YMaximum.Text = Layer.Latitudes[Layer.Latitudes.Count - 1];
+						double yMinimum;
+						if (double.TryParse(Layer.Latitudes[0], out yMinimum))
+						{
+							yMinimum = Math.Round(yMinimum, 3, MidpointRounding.AwayFromZero);
+							YMinimumBox.Text = yMinimum.ToString();
+						} else
+						{
+							YMinimumBox.Text = string.Empty;
+						}
+
+						double yMaximum;
+						if (double.TryParse(Layer.Latitudes[Layer.Latitudes.Count - 1], out yMaximum))
+						{
+							yMaximum = Math.Round(yMaximum, 3, MidpointRounding.AwayFromZero);
+							YMaximum.Text = yMaximum.ToString();
+						} else
+						{
+							YMaximum.Text = string.Empty;
+						}
 					} else
 					{
 						YMinimumBox.Text = string.Empty;

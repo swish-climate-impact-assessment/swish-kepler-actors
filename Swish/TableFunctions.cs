@@ -206,7 +206,6 @@ namespace Swish
 
 		public static void GraphSeries(string inputFileName, List<string> variables)
 		{
-
 			Arguments arguments = new Arguments();
 			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			arguments.StringList(StataScriptFunctions.VariableNamesToken, variables);

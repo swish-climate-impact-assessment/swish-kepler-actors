@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace Swish.Controls
 {
@@ -89,7 +90,7 @@ namespace Swish.Controls
 			try
 			{
 				RangeStartBar.Value = 0;
-				if (_data.Count >0)
+				if (_data.Count > 0)
 				{
 					RangeEndBar.Maximum = _data[0].Values.Count;
 					RangeEndBar.Value = _data[0].Values.Count;
@@ -97,6 +98,7 @@ namespace Swish.Controls
 				{
 					RangeEndBar.Value = 0;
 				}
+
 				PopulateGraph();
 			} finally
 			{
@@ -124,19 +126,38 @@ namespace Swish.Controls
 			{
 				graphics.FillRectangle(new SolidBrush(Color.White), 0, 0, GraphBox.Width, GraphBox.Height);
 			}
+
+			Random random = new Random();
+			string title = string.Empty;
 			for (int dataIndex = 0; dataIndex < _data.Count; dataIndex++)
 			{
 				GraphData dataItem = _data[dataIndex];
 
-				int colourIndex = (dataIndex + 1) % 8;
-				int red = (colourIndex & 0x1) * 0xff;
-				int green = ((colourIndex & 0x2) >> 1) * 0xff;
-				int blue = ((colourIndex & 0x4) >> 2) * 0xff;
-				Color colour = Color.FromArgb(0xff, red, green, blue);
+				if (dataItem.Colour == null)
+				{
+					dataItem.Colour = PickColour(random);
+				}
+
+				Color colour = dataItem.Colour.Item2;
 
 				List<double> values = dataItem.Values;
 				GraphFunctions.DrawLines(values, RangeStartBar.Value, RangeEndBar.Value - RangeStartBar.Value, colour, image);
+
+				title += dataItem.Colour.Item1 + ": ";
+				if (!string.IsNullOrWhiteSpace(dataItem.Name))
+				{
+					title += dataItem.Name;
+				} else
+				{
+					title += "Unknown";
+				}
+				if (dataIndex + 1 < _data.Count)
+				{
+					title += ", ";
+				}
 			}
+
+			_nameBox.Text = title;
 
 			GraphBox.Image = image;
 
@@ -187,6 +208,37 @@ namespace Swish.Controls
 				YMaximum.Text = string.Empty;
 			}
 
+		}
+
+		private List<Tuple<string, Color>> _colours;
+
+		private Tuple<string, Color> PickColour(Random random)
+		{
+			if (_colours == null)
+			{
+				_colours = new List<Tuple<string, Color>>();
+
+
+				PropertyInfo[] properties = typeof(Color).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+				for (int colourIndex = 0; colourIndex < properties.Length; colourIndex++)
+				{
+					PropertyInfo property = properties[colourIndex];
+					if (property.CanWrite || property.PropertyType != typeof(Color))
+					{
+						continue;
+					}
+
+					string name = property.Name;
+
+					Color colour = (Color)property.GetValue(null, null);
+					_colours.Add(new Tuple<string, Color>(name, colour));
+				}
+			}
+
+			int index = random.Next(_colours.Count);
+
+			Tuple<string, Color> colourChoice = _colours[index];
+			return colourChoice;
 		}
 
 		private List<double> Average20Days(List<double> values)

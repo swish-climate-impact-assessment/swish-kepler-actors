@@ -21,21 +21,8 @@ namespace Swish.Adapters
 		public static void Display(string inputFileName)
 		{
 			string extension = Path.GetExtension(inputFileName);
-			string useFileName;
-
 			try
 			{
-				if (extension.ToLower() == SwishFunctions.CsvFileExtension)
-				{
-					useFileName = inputFileName;
-				} else
-				{
-					useFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
-					SaveTableAdapter.Save(inputFileName, useFileName);
-				}
-
-				Csv table = CsvFunctions.Read(useFileName);
-
 				using (GridView control = new GridView())
 				{
 					GridLayer layer = GridFunctions.Read(inputFileName);

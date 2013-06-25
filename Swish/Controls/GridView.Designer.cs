@@ -47,7 +47,7 @@ namespace Swish.Controls
 			this.PictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.PictureBox.Location = new System.Drawing.Point(29, 3);
 			this.PictureBox.Name = "PictureBox";
-			this.PictureBox.Size = new System.Drawing.Size(180, 142);
+			this.PictureBox.Size = new System.Drawing.Size(178, 154);
 			this.PictureBox.TabIndex = 0;
 			this.PictureBox.TabStop = false;
 			// 
@@ -56,16 +56,16 @@ namespace Swish.Controls
 			this.panel1.Controls.Add(this.XMaximum);
 			this.panel1.Controls.Add(this.XMinimumBox);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(29, 151);
+			this.panel1.Location = new System.Drawing.Point(29, 163);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(180, 14);
+			this.panel1.Size = new System.Drawing.Size(178, 14);
 			this.panel1.TabIndex = 1;
 			// 
 			// XMaximum
 			// 
 			this.XMaximum.AutoSize = true;
 			this.XMaximum.Dock = System.Windows.Forms.DockStyle.Right;
-			this.XMaximum.Location = new System.Drawing.Point(145, 0);
+			this.XMaximum.Location = new System.Drawing.Point(143, 0);
 			this.XMaximum.Name = "XMaximum";
 			this.XMaximum.Size = new System.Drawing.Size(35, 13);
 			this.XMaximum.TabIndex = 1;
@@ -88,7 +88,7 @@ namespace Swish.Controls
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel2.Location = new System.Drawing.Point(3, 3);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(20, 142);
+			this.panel2.Size = new System.Drawing.Size(20, 154);
 			this.panel2.TabIndex = 1;
 			// 
 			// YMinimumBox
@@ -96,7 +96,7 @@ namespace Swish.Controls
 			this.YMinimumBox.Alignment = Swish.Controls.VerticalLabel.AlignmentCode.Top;
 			this.YMinimumBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.YMinimumBox.AutoSize = true;
-			this.YMinimumBox.Location = new System.Drawing.Point(0, 87);
+			this.YMinimumBox.Location = new System.Drawing.Point(0, 99);
 			this.YMinimumBox.Name = "YMinimumBox";
 			this.YMinimumBox.Orientation = Swish.Controls.VerticalLabel.OrientationCode.Right;
 			this.YMinimumBox.Size = new System.Drawing.Size(52, 52);
@@ -123,12 +123,13 @@ namespace Swish.Controls
 			this.Table.Controls.Add(this.PictureBox, 1, 0);
 			this.Table.Controls.Add(this.panel2, 0, 0);
 			this.Table.Controls.Add(this.panel1, 1, 1);
-			this.Table.Location = new System.Drawing.Point(84, 87);
+			this.Table.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.Table.Location = new System.Drawing.Point(0, 0);
 			this.Table.Name = "Table";
 			this.Table.RowCount = 2;
 			this.Table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.Table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.Table.Size = new System.Drawing.Size(212, 168);
+			this.Table.Size = new System.Drawing.Size(210, 180);
 			this.Table.TabIndex = 2;
 			// 
 			// GridView
@@ -139,7 +140,7 @@ namespace Swish.Controls
 			this.Controls.Add(this.Table);
 			this.DoubleBuffered = true;
 			this.Name = "GridView";
-			this.Size = new System.Drawing.Size(394, 364);
+			this.Size = new System.Drawing.Size(210, 180);
 			this.Load += new System.EventHandler(this.GridView_Load);
 			this.Resize += new System.EventHandler(this.GridView_Resize);
 			((System.ComponentModel.ISupportInitialize)(this.PictureBox)).EndInit();
