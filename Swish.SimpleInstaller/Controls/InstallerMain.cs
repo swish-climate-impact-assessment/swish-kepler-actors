@@ -1,0 +1,87 @@
+using System;
+using System.Windows.Forms;
+using Swish.Kepler;
+using Swish.Stata;
+
+namespace Swish.SimpleInstaller.Controls
+{
+	public partial class InstallerMain: Form
+	{
+		public InstallerMain()
+		{
+			InitializeComponent();
+
+		}
+
+		private void welcomePage1_Cancel(object sender, EventArgs e)
+		{
+			Close();
+		}
+
+		private void welcomePage1_Install(object sender, EventArgs e)
+		{
+			if (!KeplerFunctions.Installed || !RFunctions.Installed || !JavaFunctions.Installed || !StataFunctions.Installed)
+			{
+				Controls.Clear();
+				KeplerVerifyPage.Dock = DockStyle.Fill;
+				Controls.Add(KeplerVerifyPage);
+			} else
+			{
+				Controls.Clear();
+				progressPage1.Dock = DockStyle.Fill;
+				Controls.Add(progressPage1);
+				progressPage1.Install();
+			}
+		}
+
+		private void progressPage1_Next(object sender, EventArgs e)
+		{
+			Controls.Clear();
+			finishedPage1.Dock = DockStyle.Fill;
+			Controls.Add(finishedPage1);
+		}
+
+		private void finishedPage1_Exit(object sender, EventArgs e)
+		{
+			Close();
+		}
+
+		private void InstallerMain_Load(object sender, EventArgs e)
+		{
+			if (Clean)
+			{
+				this.Text = "Uninstall";
+			} else
+			{
+				this.Text = "Install";
+			}
+			Controls.Clear();
+			welcomePage1.Dock = DockStyle.Fill;
+			Controls.Add(welcomePage1);
+
+		}
+
+		public bool Clean
+		{
+			get { return progressPage1.Clean; }
+			set
+			{
+				progressPage1.Clean = value;
+				this.welcomePage1.Clean = value;
+			}
+		}
+
+		private void KeplerVerifyPage_Failed(object sender, EventArgs e)
+		{
+			//Close();
+
+			// hack it didn't recognise r 2, so just ignore for now
+			Controls.Clear();
+			progressPage1.Dock = DockStyle.Fill;
+			Controls.Add(progressPage1);
+			progressPage1.Install();
+
+		}
+
+	}
+}

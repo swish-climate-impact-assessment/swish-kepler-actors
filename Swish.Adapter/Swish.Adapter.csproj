@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B8033E78-6AD7-4C76-A30B-489F5ED82ED3}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Swish</RootNamespace>
+    <AssemblyName>Swish.Adapter</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1607</NoWarn>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="OperationArguments.cs" />
+    <Compile Include="OperationFunctions.cs" />
+    <Compile Include="Arguments.cs" />
+    <Compile Include="CSharpCompiler.cs" />
+    <Compile Include="EqualFunctions.cs" />
+    <Compile Include="ExceptionFunctions.cs" />
+    <Compile Include="IOperation.cs" />
+    <Compile Include="IO\Table.cs" />
+    <Compile Include="IO\CsvFunctions.cs" />
+    <Compile Include="IO\FileFunctions.cs" />
+    <Compile Include="IO\GridFunctions.cs" />
+    <Compile Include="IO\GridLayer.cs" />
+    <Compile Include="IO\StreamFunctions.cs" />
+    <Compile Include="IO\StringIO.cs" />
+    <Compile Include="IO\TextAsStream.cs" />
+    <Compile Include="IO\TextCodedStream.cs" />
+    <Compile Include="JavaFunctions.cs" />
+    <Compile Include="Kepler\KarFile.cs" />
+    <Compile Include="Kepler\KarFunctions.cs" />
+    <Compile Include="Kepler\KeplerFunctions.cs" />
+    <Compile Include="ListFunctions.cs" />
+    <Compile Include="MetadataFunctions.cs" />
+    <Compile Include="MetadataRecord.cs" />
+    <Compile Include="ProcessFunctions.cs" />
+    <Compile Include="ProcessResult.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="ReportProgressFunction.cs" />
+    <Compile Include="RFunctions.cs" />
+    <Compile Include="Stata\CollapseOpperation.cs" />
+    <Compile Include="Stata\MergeRecordResult.cs" />
+    <Compile Include="Stata\StataDataType.cs" />
+    <Compile Include="Stata\StataFunctions.cs" />
+    <Compile Include="Stata\StataScriptFunctions.cs" />
+    <Compile Include="SwishFunctions.cs" />
+    <Compile Include="TypeFunctions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)*" "C:\Swish\bin\"
+
+</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
