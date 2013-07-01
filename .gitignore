@@ -20,3 +20,5 @@ TestResults
 /Swish/*.user
 
 /Delete/*.user
+/Swish.Adapter/*.user
+/Swish.Operations/*.user
