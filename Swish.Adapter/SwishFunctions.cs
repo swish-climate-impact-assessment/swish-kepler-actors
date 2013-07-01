@@ -50,6 +50,7 @@ namespace Swish
 			textBox.ScrollBars = ScrollBars.Both;
 			textBox.Size = new Size(400, 400);
 			textBox.Dock = DockStyle.Fill;
+			textBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			Size size = textBox.Size;
 			int controlHeight = size.Height;
 

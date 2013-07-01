@@ -131,6 +131,18 @@ namespace Swish
 
 			return -(start + 2);
 		}
-	
+
+		public static bool TryAddSorted<Record>(Record record, List<Record> list, CompareFunction<Record> Compare)
+		{
+			int listIndex = IndexOf(record, list, Compare);
+			if (listIndex >= 0)
+			{
+				return false;
+			}
+			listIndex = -(listIndex + 1);
+			list.Insert(listIndex, record);
+			return true;
+		}
+
 	}
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 
 namespace Swish.Adapter
 {
@@ -24,11 +25,20 @@ namespace Swish.Adapter
 				string message = string.Empty
 					+ Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose) + Environment.NewLine
 					+ "Arguments: " + string.Join(" ", arguments) + Environment.NewLine;
-				//if (ExceptionFunctions.ForceVerbose)
-				//{
-				//    message += ProcessFunctions.WriteProcessHeritage() + Environment.NewLine;
-				//    message += ProcessFunctions.WriteSystemVariables() + Environment.NewLine;
-				//}
+				if (ExceptionFunctions.ForceVerbose)
+				{
+					string assemblyMessage = "Loaded assemblies" + Environment.NewLine;
+					for (int assemblyIndex = 0; assemblyIndex < TypeFunctions.Assemblies.Count; assemblyIndex++)
+					{
+						Assembly assembly = TypeFunctions.Assemblies[assemblyIndex];
+						assemblyMessage += assembly.FullName + Environment.NewLine;
+					}
+
+					message += assemblyMessage;
+					message += ProcessFunctions.WriteProcessHeritage() + Environment.NewLine;
+					message += ProcessFunctions.WriteSystemVariables() + Environment.NewLine;
+
+				}
 				Console.Write(message);
 				if (ExceptionFunctions.ForceVerbose)
 				{

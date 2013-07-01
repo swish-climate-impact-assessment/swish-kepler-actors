@@ -22,3 +22,5 @@ TestResults
 /Delete/*.user
 /Swish.Adapter/*.user
 /Swish.Operations/*.user
+
+/SimpleInstaller/SampleData/tmpB2AD.tmp8.csv
