@@ -85,6 +85,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ScriptGenerators\ConvertVariableToDateScriptGenerator.cs" />
+    <Compile Include="ScriptGenerators\ReshapeWideScriptGenerator.cs" />
+    <Compile Include="ScriptGenerators\ReshapeLongScriptGenerator.cs" />
     <Compile Include="ScriptGenerators\LegacyRemoveColumnsScriptGenerator.cs" />
     <Compile Include="ScriptGenerators\MergeAndFillZeroScriptGenerator.cs" />
     <Compile Include="ScriptGenerators\JoinbyScriptGenerator.cs" />

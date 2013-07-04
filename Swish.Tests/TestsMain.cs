@@ -62,6 +62,8 @@ namespace Swish.Tests
 
 			try
 			{
+				new AdapterTests().Reshape();
+
 				new CountOfPreviousDaysTests().Count();
 				new GenerateDateRangeOperationTests().GenerateDateRange();
 				new FillDatesTests().Fill();

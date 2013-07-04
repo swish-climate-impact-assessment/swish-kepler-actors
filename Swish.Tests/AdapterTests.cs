@@ -37,7 +37,7 @@ namespace Swish.Tests
 
 			Table result = CsvFunctions.Read(outputFileName);
 
-			if (!CsvFunctions.Equal(table, result))
+			if (!EqualFunctions.Equal(table, result))
 			{
 				throw new TestException();
 			}
@@ -415,5 +415,81 @@ namespace Swish.Tests
 			}
 		}
 
+
+		internal void Reshape()
+		{
+			Table wideTable = new Table();
+			wideTable.Headers.Add("i");
+			wideTable.Headers.Add("stub1");
+			wideTable.Headers.Add("stub2");
+
+			wideTable.Records.Add(new List<string>(new string[] { "1", "4.1", "4.5" }));
+			wideTable.Records.Add(new List<string>(new string[] { "2", "3.3", "3.0" }));
+
+			Table longTable = new Table();
+			longTable.Headers.Add("i");
+			longTable.Headers.Add("j");
+			longTable.Headers.Add("stub");
+
+			longTable.Records.Add(new List<string>(new string[] { "1", "1", "4.1" }));
+			longTable.Records.Add(new List<string>(new string[] { "1", "2", "4.5" }));
+			longTable.Records.Add(new List<string>(new string[] { "2", "1", "3.3" }));
+			longTable.Records.Add(new List<string>(new string[] { "2", "2", "3.0" }));
+
+			//              long
+			//+------------+                  wide
+			//| i  j  stub |                 +----------------+
+			//|------------|                 | i  stub1 stub2 |
+			//| 1  1   4.1 |     reshape     |----------------|
+			//| 1  2   4.5 |   <--------->   | 1    4.1   4.5 |
+			//| 2  1   3.3 |                 | 2    3.3   3.0 |
+			//| 2  2   3.0 |                 +----------------+
+			//+------------+
+
+			string inputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			CsvFunctions.Write(inputFileName, wideTable);
+
+			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
+
+
+			string variableNamePrefix = "stub";
+			string i = "i";
+			string j = "j";
+
+			TableFunctions.ReshapeLong(inputFileName, outputFileName, variableNamePrefix, i, j);
+
+			if (!File.Exists(outputFileName))
+			{
+				throw new Exception();
+			}
+
+			Table outputTable = CsvFunctions.Read(outputFileName);
+
+			if (!EqualFunctions.Equal(outputTable, longTable))
+			{
+				throw new Exception();
+			}
+
+			inputFileName = FileFunctions.TempoaryOutputFileName(".csv");
+			CsvFunctions.Write(inputFileName, longTable);
+
+			outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
+
+			i = "i";
+			j = "j";
+			TableFunctions.ReshapeWide(inputFileName, outputFileName, variableNamePrefix, i, j);
+
+			if (!File.Exists(outputFileName))
+			{
+				throw new Exception();
+			}
+
+			outputTable = CsvFunctions.Read(outputFileName);
+
+			if (!EqualFunctions.Equal(outputTable, wideTable))
+			{
+				throw new Exception();
+			}
+		}
 	}
 }

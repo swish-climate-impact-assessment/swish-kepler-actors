@@ -30,10 +30,10 @@ namespace Swish.SimpleInstaller.Controls
 		{
 			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.PendingBox = new System.Windows.Forms.TextBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.ExitButton = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
+			this._launchBox = new System.Windows.Forms.CheckBox();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -58,16 +58,6 @@ namespace Swish.SimpleInstaller.Controls
 			this.label2.Size = new System.Drawing.Size(0, 29);
 			this.label2.TabIndex = 8;
 			// 
-			// PendingBox
-			// 
-			this.PendingBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.PendingBox.Location = new System.Drawing.Point(0, 66);
-			this.PendingBox.Multiline = true;
-			this.PendingBox.Name = "PendingBox";
-			this.PendingBox.ReadOnly = true;
-			this.PendingBox.Size = new System.Drawing.Size(425, 228);
-			this.PendingBox.TabIndex = 9;
-			// 
 			// panel1
 			// 
 			this.panel1.Controls.Add(this.ExitButton);
@@ -91,7 +81,7 @@ namespace Swish.SimpleInstaller.Controls
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.label1.Location = new System.Drawing.Point(0, 66);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(332, 26);
@@ -99,12 +89,25 @@ namespace Swish.SimpleInstaller.Controls
 			this.label1.Text = "SWISH Kepler actors have been installed.\r\nNote that it may be necessary to restar" +
     "t for all changes to take effect.";
 			// 
+			// _launchBox
+			// 
+			this._launchBox.AutoSize = true;
+			this._launchBox.Checked = true;
+			this._launchBox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this._launchBox.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this._launchBox.Location = new System.Drawing.Point(0, 277);
+			this._launchBox.Name = "_launchBox";
+			this._launchBox.Size = new System.Drawing.Size(425, 17);
+			this._launchBox.TabIndex = 12;
+			this._launchBox.Text = "launch Kepler";
+			this._launchBox.UseVisualStyleBackColor = true;
+			// 
 			// FinishedPage
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.PendingBox);
+			this.Controls.Add(this._launchBox);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label3);
@@ -120,9 +123,9 @@ namespace Swish.SimpleInstaller.Controls
 
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TextBox PendingBox;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Button ExitButton;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.CheckBox _launchBox;
 	}
 }

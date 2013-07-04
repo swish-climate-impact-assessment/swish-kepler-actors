@@ -186,5 +186,42 @@ namespace Swish
 		{
 			OperationFunctions.RunOperation(Swish.Adapters.PostGreSqlPasswordFile.PostGreSqlPasswordFileEditAdapter.OperationName, new OperationArguments(new Arguments()));
 		}
+
+		public static void ReshapeLong(string inputFileName, string outputFileName, string variableNamePrefix, string i, string j)
+		{
+			Arguments arguments = new Arguments();
+			inputFileName = SwishFunctions.ConvertInput(inputFileName);
+			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
+
+			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
+			arguments.String(StataScriptFunctions.OutputFileNameToken, intermediateFileName);
+
+			arguments.String(ReshapeLongScriptGenerator.VariableNamePrefixToken, variableNamePrefix);
+			arguments.String(ReshapeLongScriptGenerator.IToken, i);
+			arguments.String(ReshapeLongScriptGenerator.JToken, j);
+
+			OperationFunctions.RunOperation(ReshapeLongScriptGenerator.NameString, new OperationArguments(arguments));
+
+			SwishFunctions.ConvertOutput(outputFileName, intermediateFileName);
+		}
+
+		public static void ReshapeWide(string inputFileName, string outputFileName, string variableNamePrefix, string i, string j)
+		{
+			Arguments arguments = new Arguments();
+			inputFileName = SwishFunctions.ConvertInput(inputFileName);
+			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
+
+			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
+			arguments.String(StataScriptFunctions.OutputFileNameToken, intermediateFileName);
+
+			arguments.String(ReshapeLongScriptGenerator.VariableNamePrefixToken, variableNamePrefix);
+			arguments.String(ReshapeLongScriptGenerator.IToken, i);
+			arguments.String(ReshapeLongScriptGenerator.JToken, j);
+
+			OperationFunctions.RunOperation(ReshapeWideScriptGenerator.NameString, new OperationArguments(arguments));
+
+			SwishFunctions.ConvertOutput(outputFileName, intermediateFileName);
+		}
+
 	}
 }

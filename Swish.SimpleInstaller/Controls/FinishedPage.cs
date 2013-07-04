@@ -10,7 +10,7 @@ namespace Swish.SimpleInstaller.Controls
 			InitializeComponent();
 		}
 
-			public event EventHandler Exit;
+		public event EventHandler Exit;
 		private void ExitButton_Click(object sender, EventArgs e)
 		{
 			if (Exit != null)
@@ -19,6 +19,12 @@ namespace Swish.SimpleInstaller.Controls
 			}
 		}
 
-	
+
+
+		public bool Launch
+		{
+			get { return _launchBox.Checked; }
+			set { _launchBox.Checked = value; }
+		}
 	}
 }

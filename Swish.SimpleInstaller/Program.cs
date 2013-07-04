@@ -49,7 +49,9 @@ namespace Swish.SimpleInstaller
 					using (InstallerMain control = new InstallerMain())
 					{
 						control.Clean = clean;
+						control.Launch = launch;
 						Application.Run(control);
+						launch = control.Launch;
 					}
 				} else
 				{

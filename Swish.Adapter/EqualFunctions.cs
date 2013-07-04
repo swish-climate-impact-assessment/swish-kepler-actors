@@ -1,6 +1,6 @@
-using System.IO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Swish
 {
@@ -173,6 +173,54 @@ namespace Swish
 			//    throw new Exception();
 			//}
 			return left == right;
+		}
+
+		public static bool Equal(Table left, Table right)
+		{
+			if (left == null)
+			{
+				if (right == null)
+				{
+					return true;
+				}
+				return false;
+			}
+			if (right == null)
+			{
+				return false;
+			}
+			if (left.Headers.Count != right.Headers.Count || left.Records.Count != right.Records.Count)
+			{
+				return false;
+			}
+
+			for (int headerIndex = 0; headerIndex < left.Headers.Count; headerIndex++)
+			{
+				string leftName = left.Headers[headerIndex];
+				string rightName = right.Headers[headerIndex];
+				if (leftName != rightName)
+				{
+					return false;
+				}
+			}
+
+			for (int recordIndex = 0; recordIndex < left.Records.Count; recordIndex++)
+			{
+				List<string> leftRecord = left.Records[recordIndex];
+				List<string> rightRecord = right.Records[recordIndex];
+				for (int valueIndex = 0; valueIndex < leftRecord.Count; valueIndex++)
+				{
+
+					string leftItem = left.Headers[valueIndex];
+					string rightItem = right.Headers[valueIndex];
+					if (leftItem != rightItem)
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
 		}
 
 

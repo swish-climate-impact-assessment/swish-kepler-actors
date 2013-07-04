@@ -1,5 +1,4 @@
-﻿Copy "%StartupPath%\\Swish.dll" "C:\\Swish\\bin\\Swish.dll"
-CopyFiles "%StartupPath%\\Actors\\" "%UserProfile%\\KeplerData\\workflows\\MyWorkflows\\"
+﻿CopyFiles "%StartupPath%\\Actors\\" "%UserProfile%\\KeplerData\\workflows\\MyWorkflows\\"
 CopyFiles "%StartupPath%\\SwishBin\\" "C:\\Swish\\bin\\"
 CopyFiles "%StartupPath%\\Scripts\\" "C:\\Swish\\StataScripts\\"
 Copy "%StartupPath%\\SampleData\\Kaleen.csv" "C:\\Swish\\SampleData\\Kaleen.csv"

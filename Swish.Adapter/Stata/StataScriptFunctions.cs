@@ -97,9 +97,11 @@ namespace Swish.Stata
 
 				string defaultValue;
 				StringIO.SkipWhiteSpace(out buffer, ref line);
-				if (StringIO.TryReadUntill(out defaultValue, out buffer, new string[] { " ", "\t", "\r", "\n" }, ref line))
+				if (StringIO.TryReadString(out defaultValue, ref line))
 				{
-				} else
+				}else if (StringIO.TryReadUntill(out defaultValue, out buffer, new string[] { " ", "\t", "\r", "\n" }, ref line))
+				{
+				} else 
 				{
 					defaultValue = line;
 				}
@@ -470,6 +472,7 @@ namespace Swish.Stata
 		{
 			lines.Add("replace " + value + " if " + expression);
 		}
+
 	}
 }
 

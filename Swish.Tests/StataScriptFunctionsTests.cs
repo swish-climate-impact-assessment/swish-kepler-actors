@@ -76,7 +76,7 @@ namespace Swish.Tests
 			}
 
 			Table table = CsvFunctions.Read(outputFileName);
-			if (!CsvFunctions.Equal(table, expectedTable))
+			if (!EqualFunctions.Equal(table, expectedTable))
 			{
 				throw new TestException();
 			}

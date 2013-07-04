@@ -52,11 +52,11 @@
     <Compile Include="EqualFunctions.cs" />
     <Compile Include="ExceptionFunctions.cs" />
     <Compile Include="IOperation.cs" />
-    <Compile Include="IO\Table.cs" />
+    <Compile Include="Table.cs" />
     <Compile Include="IO\CsvFunctions.cs" />
     <Compile Include="IO\FileFunctions.cs" />
     <Compile Include="IO\GridFunctions.cs" />
-    <Compile Include="IO\GridLayer.cs" />
+    <Compile Include="GridLayer.cs" />
     <Compile Include="IO\StreamFunctions.cs" />
     <Compile Include="IO\StringIO.cs" />
     <Compile Include="IO\TextAsStream.cs" />

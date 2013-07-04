@@ -83,5 +83,11 @@ namespace Swish.SimpleInstaller.Controls
 
 		}
 
+
+		public bool Launch
+		{
+			get { return finishedPage1.Launch; }
+			set { finishedPage1.Launch = value; }
+		}
 	}
 }
