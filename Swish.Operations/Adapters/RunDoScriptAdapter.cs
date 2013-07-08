@@ -8,7 +8,7 @@ namespace Swish.Adapters
 		public string Name { get { return "doScript"; } }
 		public string Run(OperationArguments splitArguments)
 		{
-			string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.DefaultArgumentPrefix + "filename", true));
+			string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(ArgumentParser.DefaultArgumentPrefix + "filename", true));
 			string log = StataFunctions.RunScript(inputFileName, false);
 			return log;
 		}

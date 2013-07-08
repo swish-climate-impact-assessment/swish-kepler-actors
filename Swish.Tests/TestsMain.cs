@@ -62,6 +62,13 @@ namespace Swish.Tests
 
 			try
 			{
+
+				new AdapterTests().LowerCaseVariableNamesUsed();
+
+				new AdapterTests().Rename();
+				new AdapterTests().MultiArguments();
+				new ArgumentFunctionsTests().NoStray0x34s();
+
 				new AdapterTests().Reshape();
 
 				new CountOfPreviousDaysTests().Count();

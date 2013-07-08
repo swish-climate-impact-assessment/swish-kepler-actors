@@ -19,8 +19,8 @@ namespace Swish.Adapters
 		public static void Display(string inputFileName)
 		{
 			string arguments = string.Join(" ",
-				Arguments.DefaultArgumentPrefix + Arguments.OperationArgument, DisplayTableClientAdapter.OperationName,
-				Arguments.DefaultArgumentPrefix + Arguments.InputArgument, inputFileName
+				ArgumentParser.DefaultArgumentPrefix + ArgumentParser.OperationArgument, DisplayTableClientAdapter.OperationName,
+				ArgumentParser.DefaultArgumentPrefix + ArgumentParser.InputArgument, inputFileName
 			);
 			ProcessFunctions.Run(Application.ExecutablePath, arguments, Environment.CurrentDirectory, true, TimeSpan.Zero, false, false, true);
 		}

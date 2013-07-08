@@ -11,7 +11,7 @@ namespace Swish
 	{
 		public static void Merge(string inputFileNameA, string inputFileNameB, List<string> mergeVariables, string outputFileName, bool keepMergeColumn)
 		{
-			Arguments arguments = new Arguments();
+			Arguments arguments = ArgumentParser.Empty;
 			inputFileNameA = SwishFunctions.ConvertInput(inputFileNameA);
 			inputFileNameB = SwishFunctions.ConvertInput(inputFileNameB);
 			arguments.String(StataScriptFunctions.Input1FileNameToken, inputFileNameA);
@@ -38,7 +38,7 @@ namespace Swish
 
 		public static void Append(string inputFileNameA, string inputFileNameB, string outputFileName)
 		{
-			Arguments arguments = new Arguments();
+			Arguments arguments = ArgumentParser.Empty;
 			inputFileNameA = SwishFunctions.ConvertInput(inputFileNameA);
 			inputFileNameB = SwishFunctions.ConvertInput(inputFileNameB);
 			arguments.String(StataScriptFunctions.Input1FileNameToken, inputFileNameA);
@@ -53,7 +53,7 @@ namespace Swish
 
 		public static void Generate(string inputFileName, string outputFileName, string variableName, StataDataType type, string expression)
 		{
-			Arguments arguments = new Arguments();
+			Arguments arguments = ArgumentParser.Empty;
 			inputFileName = SwishFunctions.ConvertInput(inputFileName);
 			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
@@ -73,7 +73,7 @@ namespace Swish
 
 		public static void Replace(string inputFileName, string outputFileName, string condition, string value)
 		{
-			Arguments arguments = new Arguments();
+			Arguments arguments = ArgumentParser.Empty;
 			inputFileName = SwishFunctions.ConvertInput(inputFileName);
 			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
@@ -88,7 +88,7 @@ namespace Swish
 
 		public static void SelectRecords(string inputFileName, string outputFileName, string expression)
 		{
-			Arguments arguments = new Arguments();
+			Arguments arguments = ArgumentParser.Empty;
 			inputFileName = SwishFunctions.ConvertInput(inputFileName);
 			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
@@ -103,7 +103,7 @@ namespace Swish
 
 		public static void SelectVariables(string inputFileName, string outputFileName, List<string> variables)
 		{
-			Arguments arguments = new Arguments();
+			Arguments arguments = ArgumentParser.Empty;
 			inputFileName = SwishFunctions.ConvertInput(inputFileName);
 			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
@@ -118,7 +118,7 @@ namespace Swish
 
 		public static void Sort(string inputFileName, List<string> variables, string outputFileName)
 		{
-			Arguments arguments = new Arguments();
+			Arguments arguments = ArgumentParser.Empty;
 			inputFileName = SwishFunctions.ConvertInput(inputFileName);
 			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
@@ -133,7 +133,7 @@ namespace Swish
 
 		public static void Transpose(string inputFileName, string outputFileName)
 		{
-			Arguments arguments = new Arguments();
+			Arguments arguments = ArgumentParser.Empty;
 			inputFileName = SwishFunctions.ConvertInput(inputFileName);
 			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
@@ -146,7 +146,7 @@ namespace Swish
 
 		public static void FillDate(string inputFileName, string outputFileName, string dateVariableName)
 		{
-			Arguments arguments = new Arguments();
+			Arguments arguments = ArgumentParser.Empty;
 			inputFileName = SwishFunctions.ConvertInput(inputFileName);
 			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
@@ -160,7 +160,7 @@ namespace Swish
 
 		public static void DateRange(string outputFileName, string variableName, DateTime startDate, DateTime endDate)
 		{
-			Arguments arguments = new Arguments();
+			Arguments arguments = ArgumentParser.Empty;
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
 			arguments.String(StataScriptFunctions.OutputFileNameToken, intermediateFileName);
 
@@ -175,7 +175,7 @@ namespace Swish
 
 		public static void GraphSeries(string inputFileName, List<string> variables)
 		{
-			Arguments arguments = new Arguments();
+			Arguments arguments = ArgumentParser.Empty;
 			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 			arguments.StringList(StataScriptFunctions.VariableNamesToken, variables);
 
@@ -184,12 +184,12 @@ namespace Swish
 
 		public static void EditPostGreSqlPasswordFile()
 		{
-			OperationFunctions.RunOperation(Swish.Adapters.PostGreSqlPasswordFile.PostGreSqlPasswordFileEditAdapter.OperationName, new OperationArguments(new Arguments()));
+			OperationFunctions.RunOperation(Swish.Adapters.PostGreSqlPasswordFile.PostGreSqlPasswordFileEditAdapter.OperationName, new OperationArguments(ArgumentParser.Empty));
 		}
 
 		public static void ReshapeLong(string inputFileName, string outputFileName, string variableNamePrefix, string i, string j)
 		{
-			Arguments arguments = new Arguments();
+			Arguments arguments = ArgumentParser.Empty;
 			inputFileName = SwishFunctions.ConvertInput(inputFileName);
 			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 
@@ -207,7 +207,7 @@ namespace Swish
 
 		public static void ReshapeWide(string inputFileName, string outputFileName, string variableNamePrefix, string i, string j)
 		{
-			Arguments arguments = new Arguments();
+			Arguments arguments = ArgumentParser.Empty;
 			inputFileName = SwishFunctions.ConvertInput(inputFileName);
 			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
 
@@ -219,6 +219,22 @@ namespace Swish
 			arguments.String(ReshapeLongScriptGenerator.JToken, j);
 
 			OperationFunctions.RunOperation(ReshapeWideScriptGenerator.NameString, new OperationArguments(arguments));
+
+			SwishFunctions.ConvertOutput(outputFileName, intermediateFileName);
+		}
+
+		public static void Rename(string inputFileName, string outputFileName, string variableName, string newVariableName)
+		{
+			Arguments arguments = ArgumentParser.Empty;
+			inputFileName = SwishFunctions.ConvertInput(inputFileName);
+			arguments.String(StataScriptFunctions.InputFileNameToken, inputFileName);
+
+			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
+			arguments.String(StataScriptFunctions.OutputFileNameToken, intermediateFileName);
+			arguments.String(StataScriptFunctions.VariableNameToken, variableName);
+			arguments.String(RenameVariableScriptGenerator.NewVariableNameToken, newVariableName);
+
+			OperationFunctions.RunOperation(RenameVariableScriptGenerator.NameString, new OperationArguments(arguments));
 
 			SwishFunctions.ConvertOutput(outputFileName, intermediateFileName);
 		}

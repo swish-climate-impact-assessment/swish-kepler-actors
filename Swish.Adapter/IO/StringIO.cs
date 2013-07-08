@@ -3,14 +3,14 @@ namespace Swish.IO
 {
 	public static class StringIO
 	{
-		public static bool TryRead(string search, ref string line)
+		public static bool TryRead(string value, ref string line)
 		{
-			if (!line.StartsWith(search))
+			if (!line.StartsWith(value))
 			{
 				return false;
 			}
 
-			line = line.Substring(search.Length);
+			line = line.Substring(value.Length);
 			return true;
 		}
 

@@ -42,6 +42,7 @@
     <Compile Include="ArgumentFunctionsTests.cs" />
     <Compile Include="AdapterTests.cs" />
     <Compile Include="CodeAdapterTests.cs" />
+    <Compile Include="GenerateTestData.cs" />
     <Compile Include="GraphingAdapterTest.cs" />
     <Compile Include="CountOfPreviousDaysTests.cs" />
     <Compile Include="FillDatesTests.cs" />

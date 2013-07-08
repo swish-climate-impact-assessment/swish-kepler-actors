@@ -55,10 +55,10 @@ namespace Swish.Tests
 			/// This test verifies that scripts can be written using stata files as input
 			/// 
 
-			Table expectedTable = StataFunctionsTests.CarData();
+			Table expectedTable = GenerateTestData.CarData();
 
 			List<string> lines = new List<string>();
-			StataScriptFunctions.LoadFileCommand(lines, StataFunctionsTests.CarsDataFileName);
+			StataScriptFunctions.LoadFileCommand(lines, GenerateTestData.CarsDataFileName);
 
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(outputFileName))
@@ -80,34 +80,6 @@ namespace Swish.Tests
 			{
 				throw new TestException();
 			}
-		}
-
-		private static void GenerateMergeDoFile(string doFileName)
-		{
-			List<string> variableNames = new List<string>();
-			variableNames.Add("head4");
-			List<string> lines = new List<string>();
-			StataScriptFunctions.WriteHeadder(lines);
-
-			StataScriptFunctions.LoadFileCommand(lines, @"C:\Swish\SampleData\MergeTable1.csv");
-
-			StataScriptFunctions.SortCommand(lines, StataScriptFunctions.VariableList(variableNames));
-			StataScriptFunctions.SaveFileCommand(lines, @"C:\Swish\SampleData\MergeTableTemp.dta");
-
-			lines.Add("clear");
-			StataScriptFunctions.LoadFileCommand(lines, @"C:\Swish\SampleData\MergeTable2.csv");
-
-			StataScriptFunctions.SortCommand(lines, StataScriptFunctions.VariableList(variableNames));
-			lines.Add("merge 1:1 " + StataScriptFunctions.VariableList(variableNames) + " using \"" + @"C:\Swish\SampleData\MergeTableTemp.dta" + "\"");
-			lines.Add("drop " + StataScriptFunctions.MergeColumnName);
-			StataScriptFunctions.SaveFileCommand(lines, @"C:\Swish\SampleData\MergeTableOut.csv");
-
-			StataScriptFunctions.WriteFooter(lines);
-
-			File.WriteAllLines(doFileName, lines.ToArray());
-
-
-
 		}
 
 	}

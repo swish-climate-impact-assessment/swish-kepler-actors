@@ -18,7 +18,7 @@ namespace Swish.Tests
 
 			string dateVariableName = "date";
 
-			string inputFileName = GenerateInputData(startDate, endDate);
+			string inputFileName = GenerateTestData.GenerateFillDateInputData(startDate, endDate);
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 
 			TableFunctions.FillDate(inputFileName, outputFileName, dateVariableName);
@@ -36,49 +36,5 @@ namespace Swish.Tests
 			}
 		}
 
-		private static string GenerateInputData(DateTime startDate, DateTime endDate)
-		{
-			string inputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
-			Table table = new Table();
-			table.Headers.Add("date");
-			table.Headers.Add("other");
-
-			double aValue;
-			List<string> record;
-
-			DateTime date = startDate.AddDays(1);
-			Random random = new Random();
-			while (date.AddDays(1) <= endDate)
-			{
-				aValue = random.NextDouble();
-				record = new List<string>();
-				record.Add(date.ToShortDateString());
-				record.Add(aValue.ToString());
-				table.Records.Add(record);
-				date = date.AddDays(1);
-			}
-
-			int daysInYear = (int)((endDate - startDate).TotalDays) + 1;
-			while (table.Records.Count > daysInYear / 2)
-			{
-				int number = random.Next(table.Records.Count);
-				table.Records.RemoveAt(number);
-			}
-
-			aValue = random.NextDouble();
-			record = new List<string>();
-			record.Add(startDate.ToShortDateString());
-			record.Add(aValue.ToString());
-			table.Records.Add(record);
-
-			aValue = random.NextDouble();
-			record = new List<string>();
-			record.Add(endDate.ToShortDateString());
-			record.Add(aValue.ToString());
-			table.Records.Add(record);
-
-			CsvFunctions.Write(inputFileName, table);
-			return inputFileName;
-		}
 	}
 }

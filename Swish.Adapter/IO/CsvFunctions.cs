@@ -52,10 +52,10 @@ namespace Swish.IO
 				string header = table.Headers[columnIndex];
 				if (columnIndex + 1 < table.Headers.Count)
 				{
-					line += header + ",";
+					line += header.ToLower() + ",";
 				} else
 				{
-					line += header;
+					line += header.ToLower();
 				}
 			}
 			if (!string.IsNullOrWhiteSpace(line))

@@ -12,8 +12,8 @@ namespace Swish.Adapters
 
 		public string Run(OperationArguments splitArguments)
 		{
-			string prompt = splitArguments.String(Arguments.DefaultArgumentPrefix + "prompt", false);
-			bool requireEntry = splitArguments.Bool(Arguments.DefaultArgumentPrefix + "ignoreCache", false);
+			string prompt = splitArguments.String(ArgumentParser.DefaultArgumentPrefix + "prompt", false);
+			bool requireEntry = splitArguments.Bool(ArgumentParser.DefaultArgumentPrefix + "ignoreCache", false);
 			string password = Password(prompt, requireEntry);
 			return password;
 		}

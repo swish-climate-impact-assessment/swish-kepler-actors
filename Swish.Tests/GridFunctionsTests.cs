@@ -8,7 +8,7 @@ namespace Swish.Tests
 	{
 		internal void ConvertToLayer()
 		{
-			Table table = GenerateGridTable();
+			Table table = GenerateTestData.GenerateGridTable();
 
 			int latitudeColumnIndex = 0;
 			int longitudeColumnIndex = 1;
@@ -25,65 +25,9 @@ namespace Swish.Tests
 			}
 		}
 
-		public static Table GenerateGridTable()
-		{
-			List<string> latitudes = new List<string>(new string[] { "1", "2", "3", "4", "5", });
-			List<string> longitudes = new List<string>(new string[] { "1", "2", "3", "4", "5", });
-
-			Table table = new Table();
-			table.Headers.Add("Latitude");
-			table.Headers.Add("Longitude");
-			table.Headers.Add("Value");
-
-			for (int longitudeIndex = 0; longitudeIndex < longitudes.Count; longitudeIndex++)
-			{
-				string longitude = longitudes[longitudeIndex];
-				for (int latitudeIndex = 0; latitudeIndex < latitudes.Count; latitudeIndex++)
-				{
-					string latitude = latitudes[latitudeIndex];
-
-					//double valueA = longitudeIndex / (longitudes.Count - 1.0);
-					//double valueB = latitudeIndex / (latitudes.Count - 1.0);
-					//double value = 1 - Math.Sqrt(valueA * valueA + valueB * valueB);
-
-					double value = latitudeIndex * longitudes.Count + longitudeIndex;
-					List<string> record = new List<string>(new string[] { latitude, longitude, value.ToString() });
-
-					table.Records.Add(record);
-				}
-			}
-			return table;
-		}
-
-		public static GridLayer GenerateGrid()
-		{
-			List<string> latitudes = new List<string>(new string[] { "1", "2", "3", "4", "5", });
-			List<string> longitudes = new List<string>(new string[] { "1", "2", "3", "4", "5", });
-
-			GridLayer layer = new GridLayer();
-			layer.Latitudes = latitudes;
-			layer.Longitudes = longitudes;
-
-			for (int longitudeIndex = 0; longitudeIndex < longitudes.Count; longitudeIndex++)
-			{
-				string longitude = longitudes[longitudeIndex];
-				for (int latitudeIndex = 0; latitudeIndex < latitudes.Count; latitudeIndex++)
-				{
-					string latitude = latitudes[latitudeIndex];
-
-					double valueA = longitudeIndex / (longitudes.Count - 1.0);
-					double valueB = latitudeIndex / (latitudes.Count - 1.0);
-					double value = 1 - Math.Sqrt(valueA * valueA + valueB * valueB);
-
-					layer.Values.Add(value);
-				}
-			}
-			return layer;
-		}
-
 		internal void LayerIO()
 		{
-			GridLayer layer = GenerateGrid();
+			GridLayer layer = GenerateTestData.GenerateGrid();
 			string fileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.AscGridFileExtension);
 			GridFunctions.Write(fileName, layer);
 

@@ -14,7 +14,7 @@ namespace Swish.Adapters
 		{
 			string inputFileName = splitArguments.InputFileName();
 			string variableName = splitArguments.VariableName();
-			string dateVariableName = splitArguments.String(Arguments.DefaultArgumentPrefix + "dateVariable", true);
+			string dateVariableName = splitArguments.String(ArgumentParser.DefaultArgumentPrefix + "dateVariable", true);
 			int days = splitArguments.Int("days", true);
 			string outputFileName = splitArguments.OutputFileName(SwishFunctions.DataFileExtension);
 			string resultVariableName = splitArguments.ResultVariableName();

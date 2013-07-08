@@ -8,7 +8,7 @@ namespace Swish.Tests
 	{
 		internal void ManualTSGraph()
 		{
-			string inputFileName = StataFunctionsTests.GenerateRandomDateIndexIntegerDoubleData();
+			string inputFileName = GenerateTestData.GenerateRandomDateIndexIntegerDoubleData();
 			List<string> variables = new List<string>();
 			variables.Add("integerValue");
 			variables.Add("doubleValue");
@@ -18,7 +18,7 @@ namespace Swish.Tests
 
 		internal void GraphGrid()
 		{
-			GridLayer layer = GridFunctionsTests.GenerateGrid();
+			GridLayer layer = GenerateTestData.GenerateGrid();
 
 			using (GridView control = new GridView())
 			{

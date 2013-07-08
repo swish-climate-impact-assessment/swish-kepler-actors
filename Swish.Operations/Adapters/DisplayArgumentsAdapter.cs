@@ -11,7 +11,7 @@ namespace Swish.Adapters
 
 		public string Run(OperationArguments splitArguments)
 		{
-			bool silent = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "silent");
+			bool silent = splitArguments.Exists(ArgumentParser.DefaultArgumentPrefix + "silent");
 
 			List<string> lines = new List<string>();
 			lines.Add("Arguments: " + splitArguments.ArgumentString);

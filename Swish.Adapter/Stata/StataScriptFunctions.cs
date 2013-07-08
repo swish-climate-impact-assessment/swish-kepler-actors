@@ -157,35 +157,73 @@ namespace Swish.Stata
 
 				case VariableNamesType:
 					{
-						string stringValue;
+						string variableNames;
 						if (adapterArguments.Exists(name))
 						{
-							List<string> variableNames = adapterArguments.StringList(name, optional, !optional);
-							stringValue = StataScriptFunctions.VariableList(variableNames);
+							List<string> variableNameList = adapterArguments.StringList(name, optional, !optional);
+							variableNames = StataScriptFunctions.VariableList(variableNameList);
 						} else
 						{
-							stringValue = string.Empty;
+							variableNames = string.Empty;
 						}
 
-						if (string.IsNullOrWhiteSpace(stringValue))
+						if (string.IsNullOrWhiteSpace(variableNames))
 						{
 							if (!optional)
 							{
 								throw new Exception("Variables \"" + name + "\" missing");
 							}
-							stringValue = defaultValue;
+							variableNames = defaultValue;
 						}
 
-						if (!string.IsNullOrWhiteSpace(stringValue))
+						if (!string.IsNullOrWhiteSpace(variableNames))
 						{
-							symbols.Add(new Tuple<string, string>(name, stringValue));
+							symbols.Add(new Tuple<string, string>(name, variableNames));
+						}
+					}
+					break;
+
+				case VariableNameType:
+					{
+						string variableName;
+						if (adapterArguments.Exists(name))
+						{
+							variableName = adapterArguments.String(name, !optional);
+						} else
+						{
+							variableName = string.Empty;
+						}
+
+						if (string.IsNullOrWhiteSpace(variableName))
+						{
+							if (!optional)
+							{
+								throw new Exception(name + "Variable name missing");
+							}
+							variableName = defaultValue;
+						}
+
+						if (!string.IsNullOrWhiteSpace(variableName))
+						{
+							if (type == TokenType || type == VariableNameType)
+							{
+								string[] fragments = variableName.Trim().Split(new char[] { '\t', ' ' });
+								if (fragments.Length != 1)
+								{
+									throw new Exception("Expected variable name, found \"" + variableName + "\"");
+								}
+								variableName = variableName.Trim();
+							}
+							symbols.Add(new Tuple<string, string>(name, variableName.ToLower()));
+						} else if (optional)
+						{
+							symbols.Add(new Tuple<string, string>(name, defaultValue.ToLower()));
 						}
 					}
 					break;
 
 				case StringType:
 				case TokenType:
-				case VariableNameType:
 					{
 						string stringValue;
 						if (adapterArguments.Exists(name))
@@ -200,7 +238,7 @@ namespace Swish.Stata
 						{
 							if (!optional)
 							{
-								throw new Exception(name + " String, token or variable name missing");
+								throw new Exception(name + " String or token  name missing");
 							}
 							stringValue = defaultValue;
 						}
@@ -312,7 +350,7 @@ namespace Swish.Stata
 			{
 				string variable = variableNames[variableIndex];
 
-				line += variable;
+				line += variable.ToLower();
 				if (variableIndex + 1 < variableNames.Count)
 				{
 					line += " ";

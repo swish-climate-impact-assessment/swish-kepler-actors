@@ -85,7 +85,7 @@ namespace Swish
 
 		public string InputFileName()
 		{
-			string fileName = _arguments.String(Arguments.InputArgument, true);
+			string fileName = _arguments.String(ArgumentParser.InputArgument, true);
 			fileName = FileFunctions.AdjustFileName(fileName);
 			return fileName;
 		}
@@ -95,16 +95,16 @@ namespace Swish
 			List<string> variables;
 			if (Exists("variables"))
 			{
-				variables = _arguments.StringList(Arguments.DefaultArgumentPrefix + "variables", true, true);
+				variables = _arguments.StringList(ArgumentParser.DefaultArgumentPrefix + "variables", true, true);
 			} else if (Exists("Variables"))
 			{
-				variables = _arguments.StringList(Arguments.DefaultArgumentPrefix + "Variables", true, true);
+				variables = _arguments.StringList(ArgumentParser.DefaultArgumentPrefix + "Variables", true, true);
 			} else if (Exists("variableNames"))
 			{
-				variables = _arguments.StringList(Arguments.DefaultArgumentPrefix + "variableNames", true, true);
+				variables = _arguments.StringList(ArgumentParser.DefaultArgumentPrefix + "variableNames", true, true);
 			} else if (Exists("VariableNames"))
 			{
-				variables = _arguments.StringList(Arguments.DefaultArgumentPrefix + "VariableNames", true, true);
+				variables = _arguments.StringList(ArgumentParser.DefaultArgumentPrefix + "VariableNames", true, true);
 			} else
 			{
 				throw new Exception("Argument  \"VariableNames\" not found");
@@ -114,7 +114,7 @@ namespace Swish
 
 		public string InputFileName(int number)
 		{
-			string variableName = Arguments.InputArgument + number.ToString();
+			string variableName = ArgumentParser.InputArgument + number.ToString();
 			string fileName = _arguments.String(variableName, true);
 			fileName = FileFunctions.AdjustFileName(fileName);
 			return fileName;
@@ -122,7 +122,7 @@ namespace Swish
 
 		public string VariableName()
 		{
-			string variableName = _arguments.String(Arguments.DefaultArgumentPrefix + "variable", true);
+			string variableName = _arguments.String(ArgumentParser.DefaultArgumentPrefix + "variable", true);
 			return variableName;
 		}
 
@@ -140,12 +140,12 @@ namespace Swish
 
 		public string ResultVariableName()
 		{
-			string resultVariableName = _arguments.String(Arguments.DefaultArgumentPrefix + "resultVariable", false);
+			string resultVariableName = _arguments.String(ArgumentParser.DefaultArgumentPrefix + "resultVariable", false);
 			if (!string.IsNullOrWhiteSpace(resultVariableName))
 			{
 				return resultVariableName;
 			}
-			resultVariableName = _arguments.String(Arguments.DefaultArgumentPrefix + "ResultVariableName", false);
+			resultVariableName = _arguments.String(ArgumentParser.DefaultArgumentPrefix + "ResultVariableName", false);
 			if (!string.IsNullOrWhiteSpace(resultVariableName))
 			{
 				return resultVariableName;
@@ -158,7 +158,6 @@ namespace Swish
 		{
 			get { return _arguments.SplitArguments; }
 		}
-
 
 		public void Remove(string name)
 		{

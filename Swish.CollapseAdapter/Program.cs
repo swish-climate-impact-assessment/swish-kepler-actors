@@ -10,11 +10,11 @@ namespace Swish.CollapseAdapterExecutable
 		{
 			try
 			{
-				Arguments splitArguments = new Arguments(arguments);
-				ExceptionFunctions.ForceVerbose = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "verbose");
-				string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(Arguments.InputArgument, true));
-				string variable = splitArguments.String(Arguments.DefaultArgumentPrefix + "variable", true);
-				string operation = splitArguments.String(Arguments.DefaultArgumentPrefix + "operation", false);
+				Arguments splitArguments = ArgumentParser.Read(arguments);
+				ExceptionFunctions.ForceVerbose = splitArguments.Exists(ArgumentParser.DefaultArgumentPrefix + "verbose");
+				string inputFileName = FileFunctions.AdjustFileName(splitArguments.String(ArgumentParser.InputArgument, true));
+				string variable = splitArguments.String(ArgumentParser.DefaultArgumentPrefix + "variable", true);
+				string operation = splitArguments.String(ArgumentParser.DefaultArgumentPrefix + ArgumentParser.OperationArgument, false);
 
 				if (string.IsNullOrWhiteSpace(operation))
 				{
@@ -29,7 +29,7 @@ namespace Swish.CollapseAdapterExecutable
 				return 0;
 			} catch (Exception error)
 			{
-				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
+				string message = ArgumentParser.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
 				//if (ExceptionFunctions.ForceVerbose)
 				//{
 				//    message += ProcessFunctions.WriteProcessHeritage();

@@ -45,6 +45,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgumentParser.cs" />
     <Compile Include="OperationArguments.cs" />
     <Compile Include="OperationFunctions.cs" />
     <Compile Include="Arguments.cs" />

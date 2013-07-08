@@ -6,12 +6,6 @@ namespace Swish
 {
 	public class Arguments
 	{
-		public const string DefaultArgumentPrefix = ">";
-
-		public const string ErrorArgument = "SwishError";
-		public const string InputArgument = "input";
-		public const string OperationArgument = "operation";
-
 		private string _argumentPrefix;
 		public string ArgumentPrefix { get { return _argumentPrefix; } }
 
@@ -51,170 +45,18 @@ namespace Swish
 			}
 		}
 
-		public Arguments()
+		public Arguments(string argumentPrefix, List<Tuple<string, string>> arguments)
 		{
-			_argumentPrefix = DefaultArgumentPrefix;
-			_splitArguments = new List<Tuple<string, string>>();
-		}
-
-		public Arguments(string[] arguments)
-		{
+			if (string.IsNullOrWhiteSpace(argumentPrefix))
+			{
+				throw new ArgumentNullException("argumentPrefix");
+			}
 			if (arguments == null)
 			{
 				throw new ArgumentNullException("arguments");
 			}
-
-			_argumentPrefix = DefaultArgumentPrefix;
-
-			string stringArguments = string.Join(" ", arguments);
-			_splitArguments = Split(stringArguments, _argumentPrefix);
-		}
-
-		public Arguments(string arguments)
-		{
-			if (string.IsNullOrWhiteSpace(arguments))
-			{
-				throw new ArgumentNullException("arguments");
-			}
-			_argumentPrefix = DefaultArgumentPrefix;
-			_splitArguments = Split(arguments, _argumentPrefix);
-		}
-
-		private static List<Tuple<string, string>> Split(string arguments, string argumentPrefix)
-		{
-			string usedArguments = arguments;
-			List<Tuple<string, string>> splitArguments = new List<Tuple<string, string>>();
-			while (true)
-			{
-				string buffer;
-				StringIO.SkipWhiteSpace(out buffer, ref usedArguments);
-				if (usedArguments.Length == 0)
-				{
-					break;
-				}
-
-				if (!StringIO.TryRead(argumentPrefix, ref usedArguments))
-				{
-					throw new Exception("Malformed arguments 1: \"" + arguments + "\"");
-				}
-
-				StringIO.SkipWhiteSpace(out buffer, ref usedArguments);
-				string name = ReadArgumentName(ref usedArguments, argumentPrefix);
-
-				StringIO.SkipWhiteSpace(out buffer, ref usedArguments);
-				string value = ReadArgumentValue(ref usedArguments, argumentPrefix);
-
-				splitArguments.Add(new Tuple<string, string>(name, value));
-			}
-
-			return splitArguments;
-		}
-
-		private static string ReadArgumentName(ref string line, string argumentPrefix)
-		{
-			string name;
-			string stopString;
-			if (StringIO.TryReadString(out name, ref line))
-			{
-
-			} else if (!StringIO.TryReadUntill(out name, out stopString, new string[] { " " }, ref line))
-			{
-				name = line;
-				line = string.Empty;
-			}
-			name = Clean(name);
-			name = argumentPrefix + name;
-
-			name = name.Trim().ToLower();
-			if (name.StartsWith(argumentPrefix))
-			{
-				name = name.Substring(1);
-			}
-			name = name.Trim('\"');
-			return name;
-		}
-
-		private static string Clean(string text)
-		{
-			while (true)
-			{
-				string startValue = text;
-				text = text.Trim();
-				text = text.Trim('\"');
-				if (text == startValue)
-				{
-					break;
-				}
-			}
-			return text;
-		}
-
-		private static string ReadArgumentValue(ref string arguments, string argumentPrefix)
-		{
-			string usedArguments = arguments;
-			string value;
-
-			if (StringIO.TryReadString(out value, ref usedArguments))
-			{
-				arguments = usedArguments;
-				value = Decode(value);
-				value = Clean(value);
-				return value;
-			}
-
-			string stopString;
-			if (!StringIO.TryReadUntill(out value, out stopString, new string[] { argumentPrefix }, ref usedArguments))
-			{
-				value = usedArguments.Trim();
-				arguments = string.Empty;
-				value = Decode(value);
-				value = Clean(value);
-				return value;
-			}
-
-			arguments = usedArguments;
-			value = Decode(value);
-			value = Clean(value);
-			return value;
-		}
-
-		private static string Decode(string value)
-		{
-			string decodedValue = string.Empty;
-
-			while (true)
-			{
-				if (value.Length == 0)
-				{
-					break;
-				}
-
-				if (StringIO.TryRead("<", ref value))
-				{
-					if (value.Length < 3)
-					{
-						throw new Exception("Expected ### following escape character '<'");
-					}
-
-					string code = value.Substring(0, 3);
-					value = value.Substring(3, value.Length - 3);
-					char character = (char)uint.Parse(code);
-					decodedValue += character;
-					continue;
-				}
-
-				string buffer;
-				string stopString;
-				if (!StringIO.TryReadUntill(out buffer, out stopString, new string[] { "<" }, ref value))
-				{
-					decodedValue += value;
-					value = string.Empty;
-					continue;
-				}
-				decodedValue += buffer;
-			}
-
-			return decodedValue;
+			_argumentPrefix = argumentPrefix;
+			_splitArguments = arguments;
 		}
 
 		private int IndexOf(string name)

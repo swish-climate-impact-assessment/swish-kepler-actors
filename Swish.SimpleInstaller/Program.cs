@@ -22,12 +22,12 @@ namespace Swish.SimpleInstaller
 					File.Delete(logFileName);
 				}
 
-				Arguments splitArguments = new Arguments(arguments);
-				ExceptionFunctions.ForceVerbose = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "verbose");
+				Arguments splitArguments = ArgumentParser.Read(arguments);
+				ExceptionFunctions.ForceVerbose = splitArguments.Exists(ArgumentParser.DefaultArgumentPrefix + "verbose");
 				ExceptionFunctions.VerboseFileOperations = false;
-				bool noGui = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "silent") || splitArguments.Exists(Arguments.DefaultArgumentPrefix + "nogui");
-				bool clean = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "clean");
-				bool launch = splitArguments.Exists(Arguments.DefaultArgumentPrefix + "launch") || splitArguments.Exists(Arguments.DefaultArgumentPrefix + "luanch");
+				bool noGui = splitArguments.Exists(ArgumentParser.DefaultArgumentPrefix + "silent") || splitArguments.Exists(ArgumentParser.DefaultArgumentPrefix + "nogui");
+				bool clean = splitArguments.Exists(ArgumentParser.DefaultArgumentPrefix + "clean");
+				bool launch = splitArguments.Exists(ArgumentParser.DefaultArgumentPrefix + "launch") || splitArguments.Exists(ArgumentParser.DefaultArgumentPrefix + "luanch");
 
 				/// adding actor steps
 				/// Adapter
@@ -64,7 +64,7 @@ namespace Swish.SimpleInstaller
 				}
 			} catch (Exception error)
 			{
-				string message = Arguments.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
+				string message = ArgumentParser.ErrorArgument + " " + ExceptionFunctions.Write(error, !ExceptionFunctions.ForceVerbose);
 				if (ExceptionFunctions.ForceVerbose)
 				{
 					//message += ProcessFunctions.WriteProcessHeritage();

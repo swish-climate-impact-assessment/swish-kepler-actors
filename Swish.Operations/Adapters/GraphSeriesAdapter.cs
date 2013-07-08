@@ -19,9 +19,9 @@ namespace Swish.Adapters
 		public static void Display(string inputFileName, List<string> variableNames)
 		{
 			string arguments = string.Join(" ",
-				Arguments.DefaultArgumentPrefix + Arguments.OperationArgument, GraphSeriesClientAdapter.OperationName,
-				Arguments.DefaultArgumentPrefix + Arguments.InputArgument, inputFileName,
-				Arguments.DefaultArgumentPrefix + "VariableNames", string.Join(" ", variableNames)
+				ArgumentParser.DefaultArgumentPrefix + ArgumentParser.OperationArgument, GraphSeriesClientAdapter.OperationName,
+				ArgumentParser.DefaultArgumentPrefix + ArgumentParser.InputArgument, inputFileName,
+				ArgumentParser.DefaultArgumentPrefix + "VariableNames", string.Join(" ", variableNames)
 				);
 			ProcessFunctions.Run(Application.ExecutablePath, arguments, Environment.CurrentDirectory, true, TimeSpan.Zero, false, false, true);
 		}

@@ -13,7 +13,7 @@ namespace Swish.Tests
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			string metadataFileName = MetadataFunctions.FileName(outputFileName);
 
-			string inputFileName = StataFunctionsTests.GenerateMeanInputFile();
+			string inputFileName = GenerateTestData.GenerateMeanInputFile();
 			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 
 			TableFunctions.Sort(inputFileName, new List<string>(new string[] { "head4" }), intermediateFileName);
@@ -202,18 +202,18 @@ namespace Swish.Tests
 		{
 			string inputFileName1;
 			string inputFileName2;
-			StataFunctionsTests.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2, false);
+			GenerateTestData.GenerateMergeInputFiles(out  inputFileName1, out  inputFileName2, false);
 
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 
 			List<string> variables = new List<string>();
-			variables.Add(StataFunctionsTests.MergeVariable);
+			variables.Add(GenerateTestData.MergeVariable);
 			TableFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false);
 
 			string metadataFileName = MetadataFunctions.FileName(outputFileName);
 			string text = File.ReadAllText(metadataFileName);
 
-			if (!text.Contains(StataFunctionsTests.MergeVariable))
+			if (!text.Contains(GenerateTestData.MergeVariable))
 			{
 				throw new Exception();
 			}
