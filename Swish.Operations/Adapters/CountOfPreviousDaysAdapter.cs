@@ -35,7 +35,7 @@ namespace Swish.Adapters
 			string intermediateInput = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			SwishFunctions.Save(inputFileName, intermediateInput);
 
-			Table table = CsvFunctions.Read(intermediateInput);
+			Table table = CsvFunctions.Read(intermediateInput, true);
 
 			int columnIndex = table.ColumnIndex(variableName, true);
 			List<double> values = table.ColunmAsDoubles(columnIndex);

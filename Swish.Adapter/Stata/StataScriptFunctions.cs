@@ -38,84 +38,147 @@ namespace Swish.Stata
 		public const string DoubleType = "double";
 		public const string DateType = "date";
 
-		public static void ResloveSymbols(out string outputFileName, out SortedList<string, string> inputFileNames, out List<string> newLines, out List<Tuple<string, string>> symbols, List<string> lines, string intermediateFileName, OperationArguments adapterArguments)
+		internal static SortedList<string, ScriptSymbol> ReadSymbols(List<string> lines)
 		{
-			newLines = new List<string>();
-			symbols = new List<Tuple<string, string>>();
-			symbols.Add(new Tuple<string, string>("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)));
-			symbols.Add(new Tuple<string, string>("%StartupPath%", Application.StartupPath));
-
-			outputFileName = string.Empty;
-			inputFileNames = new SortedList<string, string>();
+			SortedList<string, ScriptSymbol> symbols = new SortedList<string, ScriptSymbol>();
 			for (int lineIndex = 0; lineIndex < lines.Count; lineIndex++)
 			{
-				string _line = lines[lineIndex];
-				string line = _line;
-				string buffer;
-				StringIO.SkipWhiteSpace(out buffer, ref line);
-				if (!StringIO.TryRead("//", ref line))
+				string line = lines[lineIndex];
+
+				ScriptSymbol symbol;
+				if (!TryReadSymbol(line, out symbol))
 				{
-					newLines.Add(line);
 					continue;
 				}
 
-				StringIO.SkipWhiteSpace(out buffer, ref line);
-				if (!StringIO.TryRead("define", ref line))
-				{
-					newLines.Add("//" + buffer + line);
-					continue;
-				}
+				symbols.Add(symbol.Name, symbol);
+			}
+			return symbols;
+		}
 
-				StringIO.SkipWhiteSpace(out buffer, ref line);
-				string type;
-				if (!StringIO.TryReadUntill(out type, out buffer, new string[] { " ", "\t", "\r", "\n" }, ref line))
-				{
-					throw new Exception("Could not read line: \"" + _line + "\"");
-				}
+		private static bool TryReadSymbol(string line, out ScriptSymbol symbol)
+		{
+			bool optional;
+			string name;
+			string defaultValue;
 
-				bool optional;
-				StringIO.SkipWhiteSpace(out buffer, ref line);
-				optional = StringIO.TryRead("optional", ref line);
+			string buffer;
+			StringIO.SkipWhiteSpace(out buffer, ref line);
+			if (!StringIO.TryRead("//", ref line))
+			{
+				symbol = null;
+				return false;
+			}
 
-				StringIO.SkipWhiteSpace(out buffer, ref line);
-				string name;
-				if (StringIO.TryReadUntill(out name, out buffer, new string[] { " ", "\t", "\r", "\n" }, ref line))
-				{
-				} else
-				{
-					name = line.Trim();
-					line = string.Empty;
-				}
-				if (string.IsNullOrWhiteSpace(name))
-				{
-					throw new Exception("Could not read line: \"" + _line + "\"");
-				}
-				if (!name.StartsWith("%") && !name.EndsWith("%"))
-				{
-					name = "%" + name + "%";
-				}
+			StringIO.SkipWhiteSpace(out buffer, ref line);
+			if (!StringIO.TryRead("define", ref line))
+			{
+				symbol = null;
+				return false;
+			}
 
-				string defaultValue;
-				StringIO.SkipWhiteSpace(out buffer, ref line);
-				if (StringIO.TryReadString(out defaultValue, ref line))
-				{
-				}else if (StringIO.TryReadUntill(out defaultValue, out buffer, new string[] { " ", "\t", "\r", "\n" }, ref line))
-				{
-				} else 
-				{
-					defaultValue = line;
-				}
+			StringIO.SkipWhiteSpace(out buffer, ref line);
+			SymbolType type = SymbolType.Unknown;
+			if (StringIO.TryRead(TemporaryFileType, ref line))
+			{
+				type = SymbolType.TemporaryFile;
+			} else if (StringIO.TryRead(OutputType, ref line))
+			{
+				type = SymbolType.Output;
+			} else if (StringIO.TryRead(InputType, ref line))
+			{
+				type = SymbolType.Input;
+			} else if (StringIO.TryRead(VariableNamesType, ref line))
+			{
+				type = SymbolType.VariableNameList;
+			} else if (StringIO.TryRead(VariableNameType, ref line))
+			{
+				type = SymbolType.VariableName;
+			} else if (StringIO.TryRead(StringType, ref line))
+			{
+				type = SymbolType.String;
+			} else if (StringIO.TryRead(TokenType, ref line))
+			{
+				type = SymbolType.Token;
+			} else if (StringIO.TryRead(BoolType, ref line))
+			{
+				type = SymbolType.Bool;
+			} else if (StringIO.TryRead(DoubleType, ref line))
+			{
+				type = SymbolType.Double;
+			} else if (StringIO.TryRead(DateType, ref line))
+			{
+				type = SymbolType.Date;
+			} else
+			{
+				symbol = null;
+				return false;
+			}
 
-				switch (type)
+			StringIO.SkipWhiteSpace(out buffer, ref line);
+			optional = StringIO.TryRead("optional", ref line);
+
+			if (type == SymbolType.Input && optional)
+			{
+				throw new Exception("inputFile cannot be optional");
+			}
+
+			StringIO.SkipWhiteSpace(out buffer, ref line);
+			if (StringIO.TryReadUntill(out name, out buffer, new string[] { " ", "\t", "\r", "\n" }, ref line))
+			{
+			} else
+			{
+				name = line.Trim();
+				line = string.Empty;
+			}
+			if (string.IsNullOrWhiteSpace(name))
+			{
+				throw new Exception("Could not read line: \"" + line + "\"");
+			}
+			if (!name.StartsWith("%") && !name.EndsWith("%"))
+			{
+				name = "%" + name + "%";
+			}
+
+			StringIO.SkipWhiteSpace(out buffer, ref line);
+			if (StringIO.TryReadString(out defaultValue, ref line))
+			{
+			} else if (StringIO.TryReadUntill(out defaultValue, out buffer, new string[] { " ", "\t", "\r", "\n" }, ref line))
+			{
+			} else
+			{
+				defaultValue = line;
+			}
+
+			symbol = new ScriptSymbol(type, optional, name, defaultValue);
+			return true;
+		}
+
+		internal static List<ScriptArguments> SortInputs(SortedList<string, ScriptSymbol> symbols, OperationArguments adapterArguments)
+		{
+			List<ScriptArguments> argumentList = new List<ScriptArguments>();
+
+			// test if the arguments have multiple sets of inputs
+
+
+			ScriptArguments arguments = new ScriptArguments();
+			arguments.Symbols = symbols;
+
+			for (int symbolIndex = 0; symbolIndex < symbols.Count; symbolIndex++)
+			{
+				string name = symbols.Keys[symbolIndex];
+				ScriptSymbol symbol = symbols[name];
+
+				switch (symbol.Type)
 				{
-				case TemporaryFileType:
+				case SymbolType.TemporaryFile:
 					{
 						string fileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
-						symbols.Add(new Tuple<string, string>(name, fileName));
+						arguments.Value(symbol.Name, fileName);
 					}
 					break;
 
-				case OutputType:
+				case SymbolType.Output:
 					{
 						string _outputFileName = adapterArguments.String(OutputFileNameToken, false);
 						if (string.IsNullOrWhiteSpace(_outputFileName) || _outputFileName.ToLower() == "none" || _outputFileName.ToLower() == "temp")
@@ -125,208 +188,146 @@ namespace Swish.Stata
 						{
 							_outputFileName = FileFunctions.AdjustFileName(_outputFileName);
 						}
-
-						if (!string.IsNullOrWhiteSpace(outputFileName))
+						string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
+						arguments.Value(symbol.Name, intermediateFileName);
+						if (!string.IsNullOrWhiteSpace(arguments.FinalOutputFileName))
 						{
 							throw new Exception("outputFile defined multiple times");
 						}
-						outputFileName = _outputFileName;
-						symbols.Add(new Tuple<string, string>(name, intermediateFileName));
+						arguments.FinalOutputFileName = _outputFileName;
 					}
 					break;
 
-				case InputType:
+				case SymbolType.Input:
 					{
-						if (optional)
-						{
-							throw new Exception("inputFile cannot be optional");
-						}
-
-						string fileName = adapterArguments.String(name, !optional);
+						string fileName = adapterArguments.String(symbol.Name, true);
 						fileName = FileFunctions.AdjustFileName(fileName);
-						if (string.IsNullOrWhiteSpace(fileName) || !FileFunctions.FileExists(fileName))
+						if (!FileFunctions.FileExists(fileName))
 						{
 							throw new ArgumentException(fileName + " not found");
 						}
 
 						string usedFileName = SwishFunctions.ConvertInput(fileName);
-						symbols.Add(new Tuple<string, string>(name, usedFileName));
-						inputFileNames.Add(name, fileName);
+						arguments.Value(symbol.Name, usedFileName);
 					}
 					break;
 
-				case VariableNamesType:
+				case SymbolType.VariableNameList:
 					{
-						string variableNames;
-						if (adapterArguments.Exists(name))
-						{
-							List<string> variableNameList = adapterArguments.StringList(name, optional, !optional);
-							variableNames = StataScriptFunctions.VariableList(variableNameList);
-						} else
-						{
-							variableNames = string.Empty;
-						}
+						List<string> variableNameList = adapterArguments.StringList(symbol.Name, symbol.Optional, !symbol.Optional);
+						string variableNames = StataScriptFunctions.VariableList(variableNameList);
 
 						if (string.IsNullOrWhiteSpace(variableNames))
 						{
-							if (!optional)
-							{
-								throw new Exception("Variables \"" + name + "\" missing");
-							}
-							variableNames = defaultValue;
+							variableNames = symbol.DefaultValue;
 						}
-
-						if (!string.IsNullOrWhiteSpace(variableNames))
-						{
-							symbols.Add(new Tuple<string, string>(name, variableNames));
-						}
+						arguments.Value(symbol.Name, variableNames);
 					}
 					break;
 
-				case VariableNameType:
+				case SymbolType.VariableName:
 					{
-						string variableName;
-						if (adapterArguments.Exists(name))
-						{
-							variableName = adapterArguments.String(name, !optional);
-						} else
-						{
-							variableName = string.Empty;
-						}
+						string variableName = adapterArguments.String(symbol.Name, !symbol.Optional);
 
 						if (string.IsNullOrWhiteSpace(variableName))
 						{
-							if (!optional)
-							{
-								throw new Exception(name + "Variable name missing");
-							}
-							variableName = defaultValue;
+							variableName = symbol.DefaultValue;
 						}
 
 						if (!string.IsNullOrWhiteSpace(variableName))
 						{
-							if (type == TokenType || type == VariableNameType)
+							string[] fragments = variableName.Trim().Split(new char[] { '\t', ' ' });
+							if (fragments.Length != 1)
 							{
-								string[] fragments = variableName.Trim().Split(new char[] { '\t', ' ' });
-								if (fragments.Length != 1)
-								{
-									throw new Exception("Expected variable name, found \"" + variableName + "\"");
-								}
-								variableName = variableName.Trim();
+								throw new Exception("Expected variable symbol.Name, found \"" + variableName + "\"");
 							}
-							symbols.Add(new Tuple<string, string>(name, variableName.ToLower()));
-						} else if (optional)
-						{
-							symbols.Add(new Tuple<string, string>(name, defaultValue.ToLower()));
 						}
+						arguments.Value(symbol.Name, variableName.ToLower());
 					}
 					break;
 
-				case StringType:
-				case TokenType:
+				case SymbolType.String:
+				case SymbolType.Token:
 					{
-						string stringValue;
-						if (adapterArguments.Exists(name))
-						{
-							stringValue = adapterArguments.String(name, !optional);
-						} else
-						{
-							stringValue = string.Empty;
-						}
+						string stringValue = adapterArguments.String(symbol.Name, !symbol.Optional);
 
 						if (string.IsNullOrWhiteSpace(stringValue))
 						{
-							if (!optional)
-							{
-								throw new Exception(name + " String or token  name missing");
-							}
-							stringValue = defaultValue;
+							stringValue = symbol.DefaultValue;
 						}
 
 						if (!string.IsNullOrWhiteSpace(stringValue))
 						{
-							if (type == TokenType || type == VariableNameType)
+							if (symbol.Type == SymbolType.Token)
 							{
 								string[] fragments = stringValue.Trim().Split(new char[] { '\t', ' ' });
 								if (fragments.Length != 1)
 								{
-									throw new Exception("Expected variable name or token, found \"" + stringValue + "\"");
+									throw new Exception("Expected variable symbol.Name or token, found \"" + stringValue + "\"");
 								}
 								stringValue = stringValue.Trim();
 							}
-							symbols.Add(new Tuple<string, string>(name, stringValue));
-						} else if (optional)
-						{
-							symbols.Add(new Tuple<string, string>(name, defaultValue));
 						}
+						arguments.Value(symbol.Name, stringValue);
 					}
 					break;
 
-				case BoolType:
-				case DoubleType:
-				case DateType:
+				case SymbolType.Bool:
+				case SymbolType.Double:
+				case SymbolType.Date:
 					{
-						string stringValue;
-
-						if (adapterArguments.Exists(name))
-						{
-							stringValue = adapterArguments.String(name, !optional);
-						} else
-						{
-							stringValue = string.Empty;
-						}
+						string stringValue = adapterArguments.String(symbol.Name, !symbol.Optional);
 
 						if (string.IsNullOrWhiteSpace(stringValue))
 						{
-							if (!optional)
-							{
-								throw new Exception(name + "Boolean double or date missing");
-							}
-							stringValue = defaultValue;
+							stringValue = symbol.DefaultValue;
 						}
 
-						if (type == BoolType)
+						if (symbol.Type == SymbolType.Bool)
 						{
 							if (!string.IsNullOrWhiteSpace(stringValue))
 							{
 								bool value = bool.Parse(stringValue.ToLower());
-								symbols.Add(new Tuple<string, string>(name, stringValue));
+								arguments.Value(symbol.Name, stringValue);
 							} else
 							{
 								bool value = false;
-								symbols.Add(new Tuple<string, string>(name, value.ToString()));
+								arguments.Value(symbol.Name, value.ToString());
 							}
-
-						} else if (type == DoubleType)
+						} else if (symbol.Type == SymbolType.Double)
 						{
 							if (!string.IsNullOrWhiteSpace(stringValue))
 							{
 								double value = double.Parse(stringValue);
-								symbols.Add(new Tuple<string, string>(name, stringValue));
+								arguments.Value(symbol.Name, stringValue);
 							} else
 							{
 								double value = 0;
-								symbols.Add(new Tuple<string, string>(name, value.ToString()));
+								arguments.Value(symbol.Name, value.ToString());
 							}
-						} else if (type == DateType)
+						} else if (symbol.Type == SymbolType.Date)
 						{
 							if (!string.IsNullOrWhiteSpace(stringValue))
 							{
 								DateTime value = DateTime.Parse(stringValue);
-								symbols.Add(new Tuple<string, string>(name, stringValue));
+								arguments.Value(symbol.Name, stringValue);
 							} else
 							{
 								DateTime value = new DateTime();
-								symbols.Add(new Tuple<string, string>(name, value.ToShortDateString()));
+								arguments.Value(symbol.Name, value.ToShortDateString());
 							}
 						}
 					}
 					break;
 
+				case SymbolType.Unknown:
 				default:
-					throw new Exception("Unknown argument type \"" + type + "\" ");
+					throw new Exception("Unknown argument symbol.Type \"" + symbol.Type + "\" ");
 				}
 			}
+			argumentList.Add(arguments);
+
+			return argumentList;
 		}
 
 		public const string MergeColumnName = "_merge";

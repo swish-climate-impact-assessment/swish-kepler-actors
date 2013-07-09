@@ -31,7 +31,7 @@ namespace Swish.Adapters
 			}
 
 			string useInput = SwishFunctions.ConvertToCsvFile(inputFileName);
-			Table table = CsvFunctions.Read(useInput);
+			Table table = CsvFunctions.Read(useInput, true);
 
 			int columnIndex = table.ColumnIndex(variableName, true);
 

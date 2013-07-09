@@ -5,6 +5,8 @@ namespace Swish
 {
 	public class Table
 	{
+		public bool LowercaseHeaders { get; set; }
+
 		private List<string> _headder = new List<string>();
 		private List<List<string>> _records = new List<List<string>>();
 
@@ -18,7 +20,19 @@ namespace Swish
 					_headder = new List<string>();
 					return;
 				}
-				_headder = new List<string>(value);
+				if (!LowercaseHeaders)
+				{
+					_headder = new List<string>(value);
+
+				} else
+				{
+					_headder = new List<string>();
+					for (int index = 0; index < value.Count; index++)
+					{
+						string name = value[index];
+						_headder.Add(name.ToLower());
+					}
+				}
 			}
 		}
 
@@ -38,6 +52,10 @@ namespace Swish
 
 		public int ColumnIndex(string variableName, bool throwOnMissing)
 		{
+			if (LowercaseHeaders)
+			{
+				variableName = variableName.ToLower();
+			} 
 			int headderIndex = -1;
 			for (int columnIndex = 0; columnIndex < Headers.Count; columnIndex++)
 			{
@@ -117,6 +135,11 @@ namespace Swish
 			{
 				throw new Exception("");
 			}
+
+			if (LowercaseHeaders)
+			{
+				variableName = variableName.ToLower();
+			} 
 			_headder.Add(variableName);
 			if (values == null || values.Count != _records.Count)
 			{

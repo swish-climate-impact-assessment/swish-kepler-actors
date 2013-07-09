@@ -15,7 +15,7 @@ namespace Swish.Tests
 			string expression = "head4>=10";
 			// 17 records >= 10
 			string inputFileName = GenerateTestData.GenerateMeanInputFile();
-			Table table = CsvFunctions.Read(inputFileName);
+			Table table = CsvFunctions.Read(inputFileName, true);
 
 			int head4Index = table.ColumnIndex("head4", true);
 			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
@@ -35,7 +35,7 @@ namespace Swish.Tests
 			}
 			TableFunctions.SelectRecords(inputFileName, outputFileName, expression);
 
-			Table result = CsvFunctions.Read(outputFileName);
+			Table result = CsvFunctions.Read(outputFileName, true);
 
 			if (!EqualFunctions.Equal(table, result))
 			{
@@ -59,7 +59,7 @@ namespace Swish.Tests
 
 			TableFunctions.SelectVariables(inputFileName, outputFileName, variables);
 
-			Table result = CsvFunctions.Read(outputFileName);
+			Table result = CsvFunctions.Read(outputFileName, true);
 			if (result.Headers.Count != 2 || !result.Headers.Contains("head4") || !result.Headers.Contains("head6"))
 			{
 				throw new TestException();
@@ -83,7 +83,7 @@ namespace Swish.Tests
 			variables.Add(GenerateTestData.MergeVariable);
 			TableFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false);
 
-			Table table = CsvFunctions.Read(outputFileName);
+			Table table = CsvFunctions.Read(outputFileName, true);
 			string name = GenerateTestData.MergeVariable;
 			int head4Index = table.ColumnIndex(name, true);
 
@@ -121,7 +121,7 @@ namespace Swish.Tests
 			variables.Add(GenerateTestData.MergeVariable);
 			TableFunctions.Merge(inputFileName1, inputFileName2, variables, outputFileName, false);
 
-			Table table = CsvFunctions.Read(outputFileName);
+			Table table = CsvFunctions.Read(outputFileName, true);
 
 			string name = StataScriptFunctions.MergeColumnName;
 			int head4Index = table.ColumnIndex(name, false);
@@ -137,7 +137,7 @@ namespace Swish.Tests
 			/// actor simply read input change rows and columns and save 
 
 			string inputFileName = GenerateTestData.GenerateMeanInputFile();
-			Table table = CsvFunctions.Read(inputFileName);
+			Table table = CsvFunctions.Read(inputFileName, true);
 
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(outputFileName))
@@ -146,7 +146,7 @@ namespace Swish.Tests
 			}
 			TableFunctions.Transpose(inputFileName, outputFileName);
 
-			Table result = CsvFunctions.Read(outputFileName);
+			Table result = CsvFunctions.Read(outputFileName, true);
 
 			for (int x = 0; x < table.Headers.Count - 1; x++)
 			{
@@ -206,7 +206,7 @@ namespace Swish.Tests
 
 			TableFunctions.Append(inputFileName1, inputFileName2, outputFileName);
 
-			Table table = CsvFunctions.Read(outputFileName);
+			Table table = CsvFunctions.Read(outputFileName, true);
 
 			if (table.Records.Count != 14 - 1 + 15 - 1)
 			{
@@ -255,7 +255,7 @@ namespace Swish.Tests
 			string value = "head2=1";
 			TableFunctions.Replace(inputFileName, outputFileName, condition, value);
 
-			Table table = CsvFunctions.Read(outputFileName);
+			Table table = CsvFunctions.Read(outputFileName, true);
 
 			int head2Index = table.ColumnIndex("head2", true);
 			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
@@ -322,7 +322,7 @@ namespace Swish.Tests
 			//ReplaceAdapter.Replace(intermediateFileName2, outputFileName, "_merge==\"master only (1)\"", "head6=\"0\"");
 			TableFunctions.Replace(intermediateFileName2, outputFileName, "_merge==1", "head6=\"0\"");
 
-			Table table = CsvFunctions.Read(outputFileName);
+			Table table = CsvFunctions.Read(outputFileName, true);
 
 			if (table.Records.Count != 26)
 			{
@@ -400,7 +400,7 @@ namespace Swish.Tests
 			{
 				throw new TestException();
 			}
-			Table table = CsvFunctions.Read(outputFileName);
+			Table table = CsvFunctions.Read(outputFileName, true);
 
 			int index = table.ColumnIndex(variableName, true);
 			for (int recordIndex = 0; recordIndex < table.Records.Count; recordIndex++)
@@ -463,7 +463,7 @@ namespace Swish.Tests
 				throw new Exception();
 			}
 
-			Table outputTable = CsvFunctions.Read(outputFileName);
+			Table outputTable = CsvFunctions.Read(outputFileName, true);
 
 			if (!EqualFunctions.Equal(outputTable, longTable))
 			{
@@ -484,7 +484,7 @@ namespace Swish.Tests
 				throw new Exception();
 			}
 
-			outputTable = CsvFunctions.Read(outputFileName);
+			outputTable = CsvFunctions.Read(outputFileName, true);
 
 			if (!EqualFunctions.Equal(outputTable, wideTable))
 			{
@@ -511,7 +511,7 @@ namespace Swish.Tests
 				throw new Exception();
 			}
 
-			Table outputTable = CsvFunctions.Read(outputFileName);
+			Table outputTable = CsvFunctions.Read(outputFileName, true);
 			if (!outputTable.Headers.Contains(newVariableName))
 			{
 				throw new Exception();
@@ -529,7 +529,7 @@ namespace Swish.Tests
 			splitArguments.String(StataScriptFunctions.InputFileNameToken, fileName);
 			splitArguments.String(StataScriptFunctions.OutputFileNameToken, outputFileName);
 			splitArguments.String(StataScriptFunctions.VariableNameToken, GenerateTestData.LatitudeVariableName + " " + GenerateTestData.LongitudeVariableName);
-			splitArguments.String(RenameVariableScriptGenerator.NewVariableNameToken, GenerateTestData.LatitudeVariableName + "2" + " " + GenerateTestData.LongitudeVariableName + "2");
+			splitArguments.String(RenameVariableScriptGenerator.NewVariableNameToken, "\"" + GenerateTestData.LatitudeVariableName + "2" + "\"" + " " + "\"" + GenerateTestData.LongitudeVariableName + "2" + "\"");
 
 			string outputString = OperationFunctions.RunOperation(RenameVariableScriptGenerator.NameString, new OperationArguments(splitArguments));
 
@@ -538,7 +538,7 @@ namespace Swish.Tests
 				throw new Exception();
 			}
 
-			Table outputTable = CsvFunctions.Read(outputFileName);
+			Table outputTable = CsvFunctions.Read(outputFileName, true);
 			if (!outputTable.Headers.Contains(GenerateTestData.LatitudeVariableName + "2") || !outputTable.Headers.Contains(GenerateTestData.LongitudeVariableName + "2"))
 			{
 				throw new Exception();
@@ -552,7 +552,7 @@ namespace Swish.Tests
 			string fileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			CsvFunctions.Write(fileName, table);
 
-			 const string LatitudeVariableName  = "Latitude";
+			const string LatitudeVariableName = "Latitude";
 			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 
 			string newVariableName = LatitudeVariableName + "2";
@@ -563,7 +563,7 @@ namespace Swish.Tests
 				throw new Exception();
 			}
 
-			Table outputTable = CsvFunctions.Read(outputFileName);
+			Table outputTable = CsvFunctions.Read(outputFileName, true);
 			if (!outputTable.Headers.Contains(newVariableName.ToLower()))
 			{
 				throw new Exception();

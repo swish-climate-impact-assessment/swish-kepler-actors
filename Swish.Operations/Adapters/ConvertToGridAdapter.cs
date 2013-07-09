@@ -35,7 +35,7 @@ namespace Swish.Adapters
 				SwishFunctions.Save(inputFileName, useFileName);
 			}
 
-			Table table = CsvFunctions.Read(useFileName);
+			Table table = CsvFunctions.Read(useFileName, true);
 
 			int valueColumnIndex = table.ColumnIndex(variableName, true);
 			int longitudeColumnIndex = table.ColumnIndex(longitudeName, true);

@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Swish.IO
 {
@@ -186,6 +189,46 @@ namespace Swish.IO
 		public static bool TryReadToken(out string token, ref string line)
 		{
 			throw new System.NotImplementedException();
+		}
+
+		class StringLengthAlphaComparer: IComparer<string>
+		{
+			public int Compare(string x, string y)
+			{
+				// order the largest length first, then alphabetically
+				int result = y.Length - x.Length;
+				if (result != 0)
+				{
+					return result;
+				}
+
+				return string.Compare(x, y);
+			}
+		}
+
+		internal static bool TryReadEnum<EnumType>(out EnumType type, ref string line)
+		{
+			Array _symbols = Enum.GetValues(typeof(EnumType));
+
+			SortedList<string, EnumType> symbols = new SortedList<string, EnumType>(new StringLengthAlphaComparer());
+			for (int symbolIndex = 0; symbolIndex < symbols.Count; symbolIndex++)
+			{
+				EnumType symbol = (EnumType)_symbols.GetValue(symbolIndex);
+				symbols.Add(symbol.ToString(), symbol);
+			}
+			for (int symbolIndex = 0; symbolIndex < symbols.Count; symbolIndex++)
+			{
+				string symbol = symbols.Keys[symbolIndex];
+
+				if (TryRead(symbol, ref line))
+				{
+					type = symbols[symbol];
+					return true;
+				}
+			}
+
+			type = default(EnumType);
+			return false;
 		}
 	}
 }

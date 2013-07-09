@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Swish.IO;
 using Swish.Stata;
+using System.Windows.Forms;
 
 namespace Swish
 {
@@ -44,40 +45,48 @@ namespace Swish
 		private static string RunScriptTemplate(string operationName, string scriptFile, OperationArguments adapterArguments)
 		{
 			string[] _lines = File.ReadAllLines(scriptFile);
-			List<string> lines = new List<string>(_lines);
-			string intermediateFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DataFileExtension);
+			List<string> originalLines = new List<string>(_lines);
 
-			string outputFileName;
-			SortedList<string, string> inputFileNames;
+			string outputFileName = null;
 
-			List<string> newLines;
-			List<Tuple<string, string>> symbols;
-			StataScriptFunctions.ResloveSymbols(out outputFileName, out inputFileNames, out newLines, out symbols, lines, intermediateFileName, adapterArguments);
-			lines = SwishFunctions.ConvertLines(newLines, symbols, null, true, false, false);
+			SortedList<string, ScriptSymbol> definedSymbols = StataScriptFunctions.ReadSymbols(originalLines);
+			definedSymbols.Add("%UserProfile%", new ScriptSymbol(SymbolType.String, true, "%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)));
+			definedSymbols.Add("%StartupPath%", new ScriptSymbol(SymbolType.String, true, "%StartupPath%", Application.StartupPath));
 
-			string tempScriptFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DoFileExtension);
-			File.WriteAllLines(tempScriptFileName, lines);
+			List<ScriptArguments> inputValueSets = StataScriptFunctions.SortInputs(definedSymbols, adapterArguments);
 
-			string log = StataFunctions.RunScript(tempScriptFileName, false);
-
-			if (!FileFunctions.FileExists(intermediateFileName))
+			for (int inputSet = 0; inputSet < inputValueSets.Count; inputSet++)
 			{
-				throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "\"" + scriptFile + "\"" + Environment.NewLine);
-			}
+				ScriptArguments scriptArguments = inputValueSets[inputSet];
 
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
+				List<Tuple<string, string>> symbols = scriptArguments.GetTranslations();
+				List<string> lines = SwishFunctions.ConvertLines(originalLines, symbols, null, true, false, false);
 
-			File.Move(intermediateFileName, outputFileName);
+				string tempScriptFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.DoFileExtension);
+				File.WriteAllLines(tempScriptFileName, lines);
 
-			/// delete script file
-			File.Delete(tempScriptFileName);
+				string log = StataFunctions.RunScript(tempScriptFileName, false);
 
-			if (ExceptionFunctions.ForceVerbose)
-			{
-				ExportMetadata(operationName, adapterArguments, inputFileNames, outputFileName, lines);
+				if (!FileFunctions.FileExists(scriptArguments.IntermediateOutputFileName))
+				{
+					throw new Exception("Output file was not created" + Environment.NewLine + log + Environment.NewLine + "\"" + scriptFile + "\"" + Environment.NewLine);
+				}
+
+				if (FileFunctions.FileExists(scriptArguments.FinalOutputFileName))
+				{
+					File.Delete(scriptArguments.FinalOutputFileName);
+				}
+
+				File.Move(scriptArguments.IntermediateOutputFileName, scriptArguments.FinalOutputFileName);
+
+				/// delete script file
+				File.Delete(tempScriptFileName);
+
+				if (ExceptionFunctions.ForceVerbose)
+				{
+					ExportMetadata(operationName, adapterArguments, scriptArguments.InputFileNames, scriptArguments.FinalOutputFileName, lines);
+				}
+				outputFileName = scriptArguments.FinalOutputFileName;
 			}
 
 			return outputFileName;

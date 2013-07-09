@@ -35,7 +35,7 @@ namespace Swish.Adapters
 					SwishFunctions.Save(inputFileName, useFileName);
 				}
 
-				Table table = CsvFunctions.Read(useFileName);
+				Table table = CsvFunctions.Read(useFileName, true);
 
 				using (TableView control = new TableView())
 				{

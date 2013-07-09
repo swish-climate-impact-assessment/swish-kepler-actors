@@ -6,9 +6,10 @@ namespace Swish.IO
 {
 	public static class CsvFunctions
 	{
-		public static Table Read(string fileName)
+		public static Table Read(string fileName, bool lowercaseHeaders)
 		{
 			Table table = new Table();
+			table.LowercaseHeaders = lowercaseHeaders;
 			string[] _lines = File.ReadAllLines(fileName);
 
 			List<string> lines = new List<string>(_lines);

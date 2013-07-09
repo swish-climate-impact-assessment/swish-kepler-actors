@@ -23,7 +23,7 @@ namespace Swish.Tests
 
 			TableFunctions.FillDate(inputFileName, outputFileName, dateVariableName);
 
-			Table output = CsvFunctions.Read(outputFileName);
+			Table output = CsvFunctions.Read(outputFileName, true);
 
 			if (output.Headers.Count != 2)
 			{

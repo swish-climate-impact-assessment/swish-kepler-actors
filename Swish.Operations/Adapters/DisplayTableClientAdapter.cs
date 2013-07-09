@@ -33,7 +33,7 @@ namespace Swish.Adapters
 					SwishFunctions.Save(inputFileName, useFileName);
 				}
 
-				Table table = CsvFunctions.Read(useFileName);
+				Table table = CsvFunctions.Read(useFileName, true);
 
 				int recordCount = Math.Min(table.Records.Count, 1000);
 				int[] columnCharacterWidth = new int[table.Headers.Count];

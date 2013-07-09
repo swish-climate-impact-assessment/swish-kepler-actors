@@ -35,7 +35,7 @@ namespace Swish.Tests
 				throw new Exception("");
 			}
 
-			table = CsvFunctions.Read(outputFileName);
+			table = CsvFunctions.Read(outputFileName, true);
 			if (table.Headers.Count != 3 || table.Records.Count != recordCount)
 			{
 				throw new Exception("");

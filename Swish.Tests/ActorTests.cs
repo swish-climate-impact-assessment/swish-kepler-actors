@@ -41,7 +41,7 @@ namespace Swish.Tests
 
 			KeplerFunctions.RunWorkflow(worflowFileName, parameters);
 
-			Table table = CsvFunctions.Read(outputFileName);
+			Table table = CsvFunctions.Read(outputFileName, true);
 
 			if (table.Records.Count != 14 - 1 + 15 - 1)
 			{

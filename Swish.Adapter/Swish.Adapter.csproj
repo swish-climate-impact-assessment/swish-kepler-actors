@@ -53,6 +53,9 @@
     <Compile Include="EqualFunctions.cs" />
     <Compile Include="ExceptionFunctions.cs" />
     <Compile Include="IOperation.cs" />
+    <Compile Include="Stata\ScriptArguments.cs" />
+    <Compile Include="Stata\SymbolType.cs" />
+    <Compile Include="Stata\ScriptSymbol.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="IO\CsvFunctions.cs" />
     <Compile Include="IO\FileFunctions.cs" />

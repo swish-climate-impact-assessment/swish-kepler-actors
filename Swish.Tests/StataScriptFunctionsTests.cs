@@ -75,7 +75,7 @@ namespace Swish.Tests
 				throw new TestException("Output file was not created" + log);
 			}
 
-			Table table = CsvFunctions.Read(outputFileName);
+			Table table = CsvFunctions.Read(outputFileName, true);
 			if (!EqualFunctions.Equal(table, expectedTable))
 			{
 				throw new TestException();

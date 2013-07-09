@@ -27,7 +27,7 @@ namespace Swish.Tests
 
 			string[] lines = File.ReadAllLines(outputFileName);
 			if (lines.Length != 32
-				|| lines[0] != variableName
+				|| lines[0] != variableName.ToLower()
 				|| DateTime.Parse(lines[1]) != new DateTime(2000, 01, 1)
 				|| DateTime.Parse(lines[2]) != new DateTime(2000, 01, 2)
 				|| DateTime.Parse(lines[3]) != new DateTime(2000, 01, 3)

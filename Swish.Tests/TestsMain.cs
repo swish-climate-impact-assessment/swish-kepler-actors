@@ -66,7 +66,7 @@ namespace Swish.Tests
 				new AdapterTests().LowerCaseVariableNamesUsed();
 
 				new AdapterTests().Rename();
-				new AdapterTests().MultiArguments();
+				//new AdapterTests().MultiArguments();
 				new ArgumentFunctionsTests().NoStray0x34s();
 
 				new AdapterTests().Reshape();
@@ -172,9 +172,9 @@ namespace Swish.Tests
 
 		private static bool TablesSomewhatEqulivilent(string leftFileName, string rightFileName)
 		{
-			Table left = CsvFunctions.Read(leftFileName);
+			Table left = CsvFunctions.Read(leftFileName, true);
 
-			Table right = CsvFunctions.Read(rightFileName);
+			Table right = CsvFunctions.Read(rightFileName, true);
 
 			if (false
 				|| left.Headers.Count != right.Headers.Count
