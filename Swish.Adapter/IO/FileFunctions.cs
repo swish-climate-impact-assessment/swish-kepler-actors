@@ -239,11 +239,16 @@ namespace Swish.IO
 		{
 			if (string.IsNullOrWhiteSpace(_tempoaryFileBase))
 			{
-				_tempoaryFileBase = Path.GetTempFileName();
-				if (FileFunctions.FileExists(_tempoaryFileBase))
+				string fileName = Path.GetTempFileName();
+				if (FileFunctions.FileExists(fileName))
 				{
-					File.Delete(_tempoaryFileBase);
+					File.Delete(fileName);
 				}
+				string name = Path.GetFileName(fileName);
+
+				name = name.Replace('.', '_');
+				string directory = Path.GetDirectoryName(fileName);
+				_tempoaryFileBase = Path.Combine(directory, name);
 			}
 			_tempoaryFileCount++;
 			return _tempoaryFileBase + _tempoaryFileCount;
@@ -278,15 +283,7 @@ namespace Swish.IO
 		public static string TempoaryOutputFileName(string extension)
 		{
 			string tempOutputFileName = TempoaryFileName();
-			if (FileFunctions.FileExists(tempOutputFileName))
-			{
-				File.Delete(tempOutputFileName);
-			}
 			string outputFileName = tempOutputFileName + extension;
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
 			return outputFileName;
 		}
 

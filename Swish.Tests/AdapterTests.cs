@@ -160,22 +160,6 @@ namespace Swish.Tests
 			}
 		}
 
-		public void CommandScript()
-		{
-			// this is a test that the outputted script contains the command
-
-			string inputFileName = GenerateTestData.GenerateMeanInputFile();
-			string outputFileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
-			if (FileFunctions.FileExists(outputFileName))
-			{
-				File.Delete(outputFileName);
-			}
-
-			string command = "xpose, clear";
-
-			StataCommandAdapter.StataCommand(inputFileName, outputFileName, command);
-		}
-
 		private bool LinesContain(string command, List<string> lines)
 		{
 			for (int lineIndex = 0; lineIndex < lines.Count; lineIndex++)
@@ -565,6 +549,21 @@ namespace Swish.Tests
 
 			Table outputTable = CsvFunctions.Read(outputFileName, true);
 			if (!outputTable.Headers.Contains(newVariableName.ToLower()))
+			{
+				throw new Exception();
+			}
+		}
+
+		internal void MultiLineCommand()
+		{
+			string graphFileName = FileFunctions.TempoaryOutputFileName(".gph");
+			string arguments = ">operation\"StataCommandSansInput\" >command\"sysuse uslifeexp2, clear<013<010twoway scatter le year<013<010graph save " + StringIO.Escape(graphFileName) + "\"";
+
+			Arguments splitArguments = ArgumentParser.Read(arguments);
+			string operation = splitArguments.String(ArgumentParser.OperationArgument, true);
+			string output = OperationFunctions.RunOperation(operation, new OperationArguments(splitArguments));
+
+			if (!File.Exists(graphFileName))
 			{
 				throw new Exception();
 			}

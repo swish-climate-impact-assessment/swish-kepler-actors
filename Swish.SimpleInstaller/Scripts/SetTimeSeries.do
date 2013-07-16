@@ -5,5 +5,5 @@ set output proc
 // define variableNames %VariableNames%
 clear
 use "%Input%"
-keep %VariableNames%
+tsset  %VariableNames%
 save "%Output%"

@@ -8,16 +8,17 @@ namespace Swish.ScriptGenerators
 		public const string NameString = "StataCommand";
 		public string Name { get { return NameString; } }
 
+		public const string CommandToken = "%Command%";
 		public void GenerateScript(List<string> lines)
 		{
 			lines.Add("// define " + StataScriptFunctions.InputType + " " + StataScriptFunctions.InputFileNameToken);
 			lines.Add("// define " + StataScriptFunctions.OutputType + " " + StataScriptFunctions.OutputFileNameToken);
 
-			lines.Add("// define " + StataScriptFunctions.StringType + " " + StataScriptFunctions.ExpressionToken);
+			lines.Add("// define " + StataScriptFunctions.StringType + " " + CommandToken);
 
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameToken);
 
-			lines.Add(StataScriptFunctions.ExpressionToken);
+			lines.Add(CommandToken);
 
 			StataScriptFunctions.SaveFileCommand(lines, StataScriptFunctions.OutputFileNameToken);
 		}

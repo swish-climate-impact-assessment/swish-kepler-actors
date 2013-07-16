@@ -40,9 +40,7 @@ namespace Swish
 			}
 
 			List<Tuple<string, string>> splitArguments = Split(arguments, DefaultArgumentPrefix);
-
 			return new Arguments(DefaultArgumentPrefix, splitArguments);
-
 		}
 
 		private static List<Tuple<string, string>> Split(string arguments, string argumentPrefix)
@@ -71,7 +69,6 @@ namespace Swish
 
 				splitArguments.Add(new Tuple<string, string>(name, value));
 			}
-
 
 			return splitArguments;
 		}
@@ -154,7 +151,41 @@ namespace Swish
 					break;
 				}
 			}
+			text = Decode(text);
 			return text;
+		}
+
+		private static string Decode(string line)
+		{
+			char character;
+
+			string decodedText = string.Empty;
+			string subBuffer;
+			while (true)
+			{
+				if (line.Length == 0)
+				{
+					break;
+				}
+
+				if (TryReadEncodedCharacter(out character, ref line))
+				{
+					decodedText += character;
+					continue;
+				}
+
+				string stopString;
+				if (!StringIO.TryReadUntill(out subBuffer, out stopString, new string[] { "<" }, ref line))
+				{
+					decodedText += line;
+					line = string.Empty;
+					break;
+				}
+
+				decodedText += subBuffer;
+			}
+
+			return decodedText;
 		}
 
 		private static bool TryReadWrappedStrings(out string buffer, ref string line)

@@ -46,8 +46,8 @@ namespace Swish.Tests
 				try
 				{
 					GenerateScripts(@"C:\Swish\StataScripts");
-					GenerateScripts(@"..\..\..\SimpleInstaller\Scripts");
-					GenerateScripts(@"..\..\..\SimpleInstaller\bin\Debug\Scripts");
+					GenerateScripts(@"..\..\..\Swish.SimpleInstaller\Scripts");
+					GenerateScripts(@"..\..\..\Swish.SimpleInstaller\bin\Debug\Scripts");
 				} catch (Exception error)
 				{
 					string message = ExceptionFunctions.Write(error, false);
@@ -62,7 +62,7 @@ namespace Swish.Tests
 
 			try
 			{
-
+				new AdapterTests().MultiLineCommand();
 				new AdapterTests().LowerCaseVariableNamesUsed();
 
 				new AdapterTests().Rename();
@@ -112,7 +112,6 @@ namespace Swish.Tests
 				new AdapterTests().MergeZero();
 				new AdapterTests().Replace_1();
 				new AdapterTests().Replace_2();
-				new AdapterTests().CommandScript();
 				new AdapterTests().SelectExpression();
 				new AdapterTests().SelectColumns();
 				new AdapterTests().TransposeTable();

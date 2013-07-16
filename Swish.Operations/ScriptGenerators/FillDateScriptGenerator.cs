@@ -18,8 +18,10 @@ namespace Swish.ScriptGenerators
 
 			StataScriptFunctions.LoadFileCommand(lines, StataScriptFunctions.InputFileNameToken);
 			string workingDateVariableName = StataScriptFunctions.TemporaryVariableName();
+			
 			string expression = "date(" + VariableNameToken + ", \"DMY\")";
 			StataScriptFunctions.Generate(lines, StataDataType.Unknown, workingDateVariableName, expression);
+			
 			StataScriptFunctions.Format(lines, workingDateVariableName, "%td");
 			lines.Add("tsset " + workingDateVariableName);
 			lines.Add("tsfill");

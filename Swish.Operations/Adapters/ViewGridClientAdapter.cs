@@ -27,7 +27,7 @@ namespace Swish.Adapters
 					GridLayer layer = GridFunctions.Read(inputFileName);
 
 					control.Layer = layer;
-					DisplayForm.Display(control, "Data", true, false);
+					DisplayForm.Display(control, inputFileName, true, false);
 				}
 			} catch (Exception error)
 			{

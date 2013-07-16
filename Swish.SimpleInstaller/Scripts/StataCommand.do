@@ -2,8 +2,8 @@ set more off
 set output proc
 // define input %Input%
 // define output %Output%
-// define string %Expression%
+// define string %Command%
 clear
 use "%Input%"
-%Expression%
+%Command%
 save "%Output%"

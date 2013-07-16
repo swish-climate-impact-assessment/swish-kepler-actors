@@ -38,6 +38,8 @@
   <ItemGroup>
     <Compile Include="Adapters\ConvertToGridAdapter.cs" />
     <Compile Include="Adapters\CodeAdapter.cs" />
+    <Compile Include="Adapters\SansInputStataCommandAdapter.cs" />
+    <Compile Include="Adapters\StataOutputCommandAdapter.cs" />
     <Compile Include="Adapters\PostGreSqlPasswordFile\PostGreSqlPasswordEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -85,6 +87,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ScriptGenerators\ConvertVariableToDateScriptGenerator.cs" />
+    <Compile Include="ScriptGenerators\SetTimeSeriesScriptGenerator.cs" />
     <Compile Include="ScriptGenerators\ReshapeWideScriptGenerator.cs" />
     <Compile Include="ScriptGenerators\ReshapeLongScriptGenerator.cs" />
     <Compile Include="ScriptGenerators\LegacyRemoveColumnsScriptGenerator.cs" />
@@ -137,7 +140,6 @@
     <Compile Include="Adapters\RunDoScriptAdapter.cs" />
     <Compile Include="Adapters\DisplayTableAdapter.cs" />
     <Compile Include="Adapters\DisplayTableClientAdapter.cs" />
-    <Compile Include="Adapters\StataCommandAdapter.cs" />
     <Compile Include="ScriptGenerators\ReplaceScriptGenerator.cs" />
     <Compile Include="ScriptGenerators\FormatScriptGenerator.cs" />
   </ItemGroup>
