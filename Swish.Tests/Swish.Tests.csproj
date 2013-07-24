@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{66A10434-68EC-43E2-BCE0-3D3785C8B203}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Swish.Tests</RootNamespace>
+    <AssemblyName>Swish.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1607</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActorTests.cs" />
+    <Compile Include="ArgumentFunctionsTests.cs" />
+    <Compile Include="AdapterTests.cs" />
+    <Compile Include="CodeAdapterTests.cs" />
+    <Compile Include="GenerateTestData.cs" />
+    <Compile Include="GraphingAdapterTest.cs" />
+    <Compile Include="CountOfPreviousDaysTests.cs" />
+    <Compile Include="FillDatesTests.cs" />
+    <Compile Include="GenerateDateRangeOperationTests.cs" />
+    <Compile Include="GetVariableNamesTests.cs" />
+    <Compile Include="GridFunctionsTests.cs" />
+    <Compile Include="PostGreSqlPasswordFileEditTests.cs" />
+    <Compile Include="ProcessorFunctionsTests.cs" />
+    <Compile Include="MetadataTests.cs" />
+    <Compile Include="RFunctionsTests.cs" />
+    <Compile Include="TestException.cs" />
+    <Compile Include="KarFunctionsTests.cs" />
+    <Compile Include="StataScriptFunctionsTests.cs" />
+    <Compile Include="TestFunctions.cs" />
+    <Compile Include="StataFunctionsTests.cs" />
+    <Compile Include="StringIOTests.cs" />
+    <Compile Include="SwishFunctionsTests.cs" />
+    <Compile Include="TestsMain.cs" />
+    <Compile Include="VerticalLabelTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\carsdata.dta">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\DumpKar.kar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\RemovePort.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\RemovePortResult.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Swish.Adapter\Swish.Adapter.csproj">
+      <Project>{b8033e78-6ad7-4c76-a30b-489f5ed82ed3}</Project>
+      <Name>Swish.Adapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Swish.CollapseAdapter\Swish.CollapseAdapter.csproj">
+      <Project>{a2a5f03e-552b-40e3-8956-5e365aeb600f}</Project>
+      <Name>Swish.CollapseAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Swish.Operations\Swish.Operations.csproj">
+      <Project>{ebb44164-34a5-434f-8edb-6c0ac6f4bae4}</Project>
+      <Name>Swish.Operations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Swish.SimpleInstaller\Swish.SimpleInstaller.csproj">
+      <Project>{00e06061-e315-4ecd-bebc-fce4631f7ff7}</Project>
+      <Name>Swish.SimpleInstaller</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"$(TargetPath)" Generate</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
