@@ -16,7 +16,7 @@ basedir <- "Swish.SimpleInstaller/Actors"
 filelist <- dir(basedir)
 for(fname in filelist)
 {
-  filelist
+  #filelist
   file.copy(file.path(basedir,fname), file.path(destination, fname))
 }
 basedir <- "SimpleInstaller/SampleData"
