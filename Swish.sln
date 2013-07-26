@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swish.Operations", "Swish.Operations\Swish.Operations.csproj", "{EBB44164-34A5-434F-8EDB-6C0AC6F4BAE4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swish.CollapseAdapter", "Swish.CollapseAdapter\Swish.CollapseAdapter.csproj", "{A2A5F03E-552B-40E3-8956-5E365AEB600F}"
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swish.Adapter", "Swish.Adapter\Swish.Adapter.csproj", "{B8033E78-6AD7-4C76-A30B-489F5ED82ED3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swish.Tests", "Swish.Tests\Swish.Tests.csproj", "{66A10434-68EC-43E2-BCE0-3D3785C8B203}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swish.PostGreSqlPasswordFileEditor", "Swish.PostGreSqlPasswordFileEditor\Swish.PostGreSqlPasswordFileEditor.csproj", "{0BAA3BA7-21C6-4F47-A277-D3B0FD40D4BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,9 @@ Global
 		{66A10434-68EC-43E2-BCE0-3D3785C8B203}.Debug|x86.Build.0 = Debug|x86
 		{66A10434-68EC-43E2-BCE0-3D3785C8B203}.Release|x86.ActiveCfg = Debug|x86
 		{66A10434-68EC-43E2-BCE0-3D3785C8B203}.Release|x86.Build.0 = Debug|x86
+		{0BAA3BA7-21C6-4F47-A277-D3B0FD40D4BE}.Debug|x86.ActiveCfg = Debug|x86
+		{0BAA3BA7-21C6-4F47-A277-D3B0FD40D4BE}.Debug|x86.Build.0 = Debug|x86
+		{0BAA3BA7-21C6-4F47-A277-D3B0FD40D4BE}.Release|x86.ActiveCfg = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -184,7 +184,7 @@ namespace Swish
 
 		public static void EditPostGreSqlPasswordFile()
 		{
-			OperationFunctions.RunOperation(Swish.Adapters.PostGreSqlPasswordFile.PostGreSqlPasswordFileEditAdapter.OperationName, new OperationArguments(ArgumentParser.Empty));
+			OperationFunctions.RunOperation(PostGreSqlPasswordFileEditAdapter.OperationName, new OperationArguments(ArgumentParser.Empty));
 		}
 
 		public static void ReshapeLong(string inputFileName, string outputFileName, string variableNamePrefix, string i, string j)

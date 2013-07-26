@@ -1,6 +1,5 @@
-﻿using System;
-
-namespace Swish.Adapters.PostGreSqlPasswordFile
+﻿
+namespace Swish.PostGreSqlPasswordFileEditor
 {
 	class PostGreSqlPassword
 	{

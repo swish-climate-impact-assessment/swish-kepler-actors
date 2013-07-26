@@ -1,15 +1,20 @@
 using System.Collections.Generic;
 using System.IO;
-using Swish.Controls;
+using System.Windows.Forms;
+using System.Drawing;
+using System;
 
-namespace Swish.Adapters.PostGreSqlPasswordFile
+namespace Swish.PostGreSqlPasswordFileEditor
 {
-	public class PostGreSqlPasswordFileEditAdapter: IOperation
+	public static class Program
 	{
-		public const string OperationName = "PostGreSqlPasswordFile";
-		public string Name { get { return OperationName; } }
+		static int Main(string[] arguments)
+		{
+			Run();
+			return 0;
+		}
 
-		public string Run(OperationArguments splitArguments)
+		public static void Run()
 		{
 			string fileName = PostGreSqlPasswordFileFunctions.FileName();
 
@@ -28,15 +33,14 @@ namespace Swish.Adapters.PostGreSqlPasswordFile
 
 				if (!DisplayForm.Display(control, "Edit Post Gre Sql Password file", true, true))
 				{
-					return string.Empty;
+					return;
 				}
 
 				passwords = control.Passwords;
 			}
 
 			PostGreSqlPasswordFileFunctions.Write(fileName, passwords);
-
-			return string.Empty;
 		}
+
 	}
 }

@@ -161,6 +161,9 @@
       <Project>{ebb44164-34a5-434f-8edb-6c0ac6f4bae4}</Project>
       <Name>Swish.Operations</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Swish.PostGreSqlPasswordFileEditor\Swish.PostGreSqlPasswordFileEditor.csproj">
+      <Name>Swish.PostGreSqlPasswordFileEditor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
