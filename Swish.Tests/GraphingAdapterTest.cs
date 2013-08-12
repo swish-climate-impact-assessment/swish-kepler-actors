@@ -8,10 +8,12 @@ namespace Swish.Tests
 	{
 		internal void ManualTSGraph()
 		{
-			string inputFileName = GenerateTestData.GenerateRandomDateIndexIntegerDoubleData();
+			string integerVariableName = "heatindex";
+			string doubleVariableName = "epiindex";
+			string inputFileName = GenerateTestData.GenerateRandomDateIndexIntegerDoubleData(integerVariableName, doubleVariableName);
 			List<string> variables = new List<string>();
-			variables.Add("integerValue");
-			variables.Add("doubleValue");
+			variables.Add(integerVariableName);
+			variables.Add(doubleVariableName);
 
 			TableFunctions.GraphSeries(inputFileName, variables);
 		}

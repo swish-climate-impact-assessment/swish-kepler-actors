@@ -262,7 +262,7 @@ namespace Swish.Tests
 			return fileName;
 		}
 
-		public static string GenerateRandomDateIndexIntegerDoubleData()
+		public static string GenerateRandomDateIndexIntegerDoubleData(string integerVariableName, string doubleVariableName)
 		{
 			string fileName = FileFunctions.TempoaryOutputFileName(SwishFunctions.CsvFileExtension);
 			if (FileFunctions.FileExists(fileName))
@@ -273,7 +273,7 @@ namespace Swish.Tests
 			List<string> lines = new List<string>();
 
 			int count = 1000;
-			lines.Add("dateValue,indexValue,integerValue,doubleValue");
+			lines.Add("dateValue,indexValue," + integerVariableName + "," + doubleVariableName);
 			Random random = new Random();
 			for (int index = 0; index < count; index++)
 			{
@@ -344,7 +344,7 @@ namespace Swish.Tests
 			return layer;
 		}
 
-		public const string LatitudeVariableName  = "latitude";
+		public const string LatitudeVariableName = "latitude";
 		public const string LongitudeVariableName = "longitude";
 		public static Table GenerateGridTable()
 		{
