@@ -36,6 +36,7 @@ namespace Swish.SimpleInstaller.Controls
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.InstallButton = new System.Windows.Forms.Button();
 			this.CancelButton = new System.Windows.Forms.Button();
+			this.label3 = new System.Windows.Forms.TextBox();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
@@ -73,14 +74,14 @@ namespace Swish.SimpleInstaller.Controls
 			this.label2.TabIndex = 1;
 			this.label2.Text = "Kepler table tools installer";
 			// 
-			// label3
+			// _versionBox
 			// 
 			this._versionBox.AutoSize = true;
 			this._versionBox.Dock = System.Windows.Forms.DockStyle.Top;
 			this._versionBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this._versionBox.Location = new System.Drawing.Point(0, 181);
-			this._versionBox.Name = "label3";
-			this._versionBox.Size = new System.Drawing.Size(309, 20);
+			this._versionBox.Name = "_versionBox";
+			this._versionBox.Size = new System.Drawing.Size(246, 20);
 			this._versionBox.TabIndex = 2;
 			this._versionBox.Text = "Version read from file .\\Version.txt";
 			// 
@@ -89,7 +90,7 @@ namespace Swish.SimpleInstaller.Controls
 			this.panel1.Controls.Add(this.InstallButton);
 			this.panel1.Controls.Add(this.CancelButton);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel1.Location = new System.Drawing.Point(0, 225);
+			this.panel1.Location = new System.Drawing.Point(0, 372);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(514, 23);
 			this.panel1.TabIndex = 3;
@@ -116,17 +117,32 @@ namespace Swish.SimpleInstaller.Controls
 			this.CancelButton.UseVisualStyleBackColor = true;
 			this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
 			// 
+			// label3
+			// 
+			this.label3.BackColor = System.Drawing.SystemColors.Window;
+			this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label3.Location = new System.Drawing.Point(0, 201);
+			this.label3.Multiline = true;
+			this.label3.Name = "label3";
+			this.label3.ReadOnly = true;
+			this.label3.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.label3.Size = new System.Drawing.Size(514, 171);
+			this.label3.TabIndex = 4;
+			this.label3.Text = resources.GetString("label3.Text");
+			// 
 			// WelcomePage
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this._versionBox);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.pictureBox1);
 			this.Name = "WelcomePage";
-			this.Size = new System.Drawing.Size(514, 248);
+			this.Size = new System.Drawing.Size(514, 395);
 			this.Load += new System.EventHandler(this.WelcomePage_Load);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.panel1.ResumeLayout(false);
@@ -144,5 +160,6 @@ namespace Swish.SimpleInstaller.Controls
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Button InstallButton;
 		private System.Windows.Forms.Button CancelButton;
+		private System.Windows.Forms.TextBox label3;
 	}
 }

@@ -2034,4 +2034,13 @@
         YAAAAABJRU5ErkJggg==
 </value>
   </data>
+  <data name="label3.Text" xml:space="preserve">
+    <value>This project is supported by the Australian National Data Service (ANDS). ANDS is supported by the Australian Government through the National Collaborative Research Infrastructure Strategy Program and the Education Investment Fund (EIF) Super Science Initiative, as well as through The Australian National University.
+
+http://ands.org.au/
+
+The software is licensed under the Creative Commons Australia Attribution 3.0 Licence.  Access to the EWEBD is available but requires NCEPH collaborations to be set up.  Interested users are invited to contact the NCEPH Data Manager for more info.
+
+http://creativecommons.org/licenses/by/3.0/au/legalcode</value>
+  </data>
 </root>

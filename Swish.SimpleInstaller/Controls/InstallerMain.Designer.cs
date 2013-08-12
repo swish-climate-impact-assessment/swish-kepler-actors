@@ -36,6 +36,7 @@ namespace Swish.SimpleInstaller.Controls
 			// 
 			// finishedPage1
 			// 
+			this.finishedPage1.Launch = true;
 			this.finishedPage1.Location = new System.Drawing.Point(148, 118);
 			this.finishedPage1.Name = "finishedPage1";
 			this.finishedPage1.Size = new System.Drawing.Size(425, 317);
@@ -73,7 +74,7 @@ namespace Swish.SimpleInstaller.Controls
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(534, 362);
+			this.ClientSize = new System.Drawing.Size(534, 422);
 			this.Controls.Add(this.KeplerVerifyPage);
 			this.Controls.Add(this.finishedPage1);
 			this.Controls.Add(this.progressPage1);

@@ -9,6 +9,7 @@ namespace Swish.SimpleInstaller.Controls
 		public WelcomePage()
 		{
 			InitializeComponent();
+
 			string installerVersionTextFileName = Path.Combine(Application.StartupPath, "Version.txt");
 			if (File.Exists(installerVersionTextFileName ))
 			{
@@ -46,5 +47,7 @@ namespace Swish.SimpleInstaller.Controls
 
 
 		public bool Clean { get; set; }
+
+
 	}
 }
